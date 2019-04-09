@@ -1,8 +1,9 @@
-# Q-tool <travis-badge> <greenkeeper-badge>
+# Q Locator Map [![Build Status](https://travis-ci.com/nzzdev/Q-locator-map.svg?branch=dev)](https://travis-ci.com/nzzdev/Q-locator-map)
 
-**maintainer**: <maintainer>
+**Maintainer**: [manuelroth](https://github.com/manuelroth)
 
-Short description of tool and link to either [demo](https://editor.q.tools/) or [playground](https://q-playground.st.nzz.ch).
+Q locator map is one tool of the Q toolbox to locator maps.
+Test it in the [demo](https://q-demo.st.nzz.ch/).
 
 ## Table of contents
 
@@ -16,9 +17,9 @@ Short description of tool and link to either [demo](https://editor.q.tools/) or 
 
 ## Installation
 
-```
-git clone git@github.com:nzzdev/Q-tool.git
-cd ./Q-xxxx
+```bash
+git clone git@github.com:nzzdev/Q-locator-map.git
+cd ./Q-locator-map
 nvm use
 npm install
 npm run build
@@ -28,20 +29,81 @@ npm run build
 
 ## Configuration
 
-If env variables, explained here
+`LAYER_CONFIGS` must be specified as an environment parameter when starting the tool. Please have a look at `dev-config/server-config.js` for examples on what this environment parameter should look like.
+
+Add an env.json file in repository root with the following content and adjust mapbox tokens, map ids and target names (here: `nzz_ch` and `nzzas`) accordingly:
+
+```json
+{
+  "mapboxTokens": {
+    "nzz_ch": "token 1",
+    "nzzas": "token 2"
+  },
+  "mapIds": {
+    "nzz_ch": {
+      "standard": {
+        "full": "map id",
+        "background": "map id",
+        "labels": "map id"
+      },
+      "lessLabels": {
+        "full": "map id",
+        "background": "map id",
+        "labels": "map id"
+      },
+      "terrain": {
+        "full": "map id",
+        "background": "map id",
+        "labels": "map id"
+      },
+      "reduced": {
+        "full": "map id",
+        "background": "map id",
+        "labels": "map id"
+      }
+    },
+    "nzzas": {
+      "standard": {
+        "full": "map id",
+        "background": "map id",
+        "labels": "map id"
+      },
+      "lessLabels": {
+        "full": "map id",
+        "background": "map id",
+        "labels": "map id"
+      },
+      "terrain": {
+        "full": "map id",
+        "background": "map id",
+        "labels": "map id"
+      },
+      "reduced": {
+        "full": "map id",
+        "background": "map id",
+        "labels": "map id"
+      }
+    }
+  }
+}
+```
+
+Of course with another mapbox configuration you have to adjust the LAYER_CONFIGS defintion as well so that it fits your needs.
+
+[to the top](#table-of-contents)
 
 ## Development
 
 Start the Q dev server:
 
 ```
-npx @nzz/q-cli server
+npx @nzz/q-cli server -c ./dev-config/server-config.js
 ```
 
 Run the Q tool:
 
 ```
-node index.js
+node dev.js
 ```
 
 [to the top](#table-of-contents)
@@ -67,16 +129,16 @@ When changing or implementing...
 
 ## Deployment
 
-We provide automatically built docker images at https://hub.docker.com/r/nzzonline/q-xxx/.
+We provide automatically built docker images at https://hub.docker.com/r/nzzonline/q-map/.
 There are three options for deployment:
 
-- Use the provided images
-- Build your own docker images
-- Deploy the service using another technology
+- use the provided images
+- build your own docker images
+- deploy the service using another technology
 
 ### Use the provided docker images
 
-1. Deploy `nzzonline/q-xxx` to a docker environment
+1. Deploy `nzzonline/q-map` to a docker environment
 2. Set the ENV variables as described in the [configuration section](#configuration)
 
 [to the top](#table-of-contents)
@@ -85,20 +147,48 @@ There are three options for deployment:
 
 The tool structure follows the general structure of each Q tool. Further information can be found in [Q server documentation - Developing tools](https://nzzdev.github.io/Q-server/developing-tools.html).
 
-Here are all features listed which will have an impact on the tool but are not options. For example spacing issues. If there's a visual aspect, a printscreen would be nice.
-The printscreen can be implemented as following:
-<img src="/doc/card-layout.png" align="right" width=300 height=355>
-
-[to the top](#table-of-contents)
+Q Map uses the [svelte framework](https://svelte.technology/guide) to render the markup on server-side. Additionally a jspm bundle is transpiled for all interactive parts on client-side.
 
 ### Options
 
-All options should be listed and explained. The varieties should be listed. If there's a visual aspect, a printscreen would be nice. The options should be listed as they are named in the `schema`
-The printscreen can be implemented as following:
-<img src="/doc/card-layout.png" align="right" width=300 height=355>
+#### baselayer
+
+This option allows to switch between six different basemaps.
+
+#### initialZoomLevel
+
+Allows to specify the zoomlevel of the basemap.
+
+#### minimap and minimapInitialZoomOffset
+
+Show a minimap and specify a minimap zoomlevel.
+
+#### labelsBelowMap
+
+Allows to show the marker labels below the map.
+
+#### showLegend
+
+This options allows to show the legend. The legend only shows something if features where added as geojson.
+
+#### Display Options
+
+Display options can be set before embedding the graphic in the article.
+
+##### hideTitle
+
+Allows to hide the title
+
+##### allowInteraction
+
+Allows to zoom in/out of the map
 
 [to the top](#table-of-contents)
 
-## License (if open source)
+## License
 
-Adding the license + updating the year.
+Copyright (c) 2019 Neue Zürcher Zeitung. All rights reserved.
+
+This software is published under the [MIT](LICENSE) license.
+
+[to the top](#table-of-contents)
