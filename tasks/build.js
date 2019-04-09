@@ -7,8 +7,12 @@ const postcss = require("postcss");
 const postcssImport = require("postcss-import");
 const autoprefixer = require("autoprefixer");
 const cssnano = require("cssnano");
+const rollup = require("rollup");
+const buble = require("rollup-plugin-buble");
+const { terser } = require("rollup-plugin-terser");
 
 const stylesDir = path.join(__dirname, "/../styles_src/");
+const scriptsDir = path.join(__dirname, "/../scripts_src/");
 
 function writeHashmap(hashmapPath, files, fileext) {
   const hashMap = {};
@@ -88,7 +92,38 @@ async function buildStyles() {
   }
 }
 
-Promise.all([buildStyles()])
+async function buildScripts() {
+  try {
+    const filename = "default";
+    const inputOptions = {
+      input: `${scriptsDir}${filename}.js`,
+      plugins: [buble(), terser()]
+    };
+    const outputOptions = {
+      format: "iife",
+      name: "window._q_locator_map.LocatorMap",
+      file: `scripts/${filename}.js`
+    };
+    // create the bundle and write it to disk
+    const bundle = await rollup.rollup(inputOptions);
+    const { output } = await bundle.generate(outputOptions);
+    await bundle.write(outputOptions);
+
+    const scriptFiles = [
+      {
+        name: filename,
+        content: output[0].code
+      }
+    ];
+
+    writeHashmap("scripts/hashMap.json", scriptFiles, "js");
+  } catch (err) {
+    console.error(err);
+    process.exit(1);
+  }
+}
+
+Promise.all([buildScripts(), buildStyles()])
   .then(res => {
     console.log("build complete");
   })

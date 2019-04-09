@@ -4,6 +4,12 @@ const path = require("path");
 
 const stylesDir = path.join(__dirname, "/../../styles/");
 const styleHashMap = require(path.join(stylesDir, "hashMap.json"));
+const scriptsDir = `${__dirname}/../../scripts/`;
+const scriptHashMap = require(`${scriptsDir}/hashMap.json`);
+const viewsDir = `${__dirname}/../../views/`;
+
+require("svelte/ssr/register");
+const template = require(`${viewsDir}/locator-map.html`);
 
 // POSTed item will be validated against given schema
 // hence we fetch the JSON schema...
@@ -50,23 +56,40 @@ module.exports = {
   },
   handler: async function(request, h) {
     const item = request.payload.item;
+    item.id = request.query._id;
+
+    const context = {
+      item: item,
+      displayOptions: request.payload.toolRuntimeConfig.displayOptions || {},
+      id: `q_locator_map_${request.query._id}_${Math.floor(
+        Math.random() * 100000
+      )}`.replace(/-/g, "")
+    };
 
     const renderingInfo = {
       polyfills: ["Promise"],
       stylesheets: [
         {
           name: styleHashMap["default"]
+        },
+        {
+          url: "https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css"
         }
       ],
       scripts: [
         {
-          content:
-            'var p = new Promise(function(resolve) { resolve(); }) p.then(function() { console.log ("Q-locator-map script executed")});'
+          url: "https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js"
+        },
+        {
+          name: scriptHashMap["default"]
+        },
+        {
+          content: `new window._q_locator_map.LocatorMap(${`${
+            context.id
+          }_container`})`
         }
       ],
-      markup: `<h1>${item.title}</h1><h2>${
-        item.subtitle
-      }</h2><p>rendered by Q-locator-map`
+      markup: template.render(context).html
     };
 
     return renderingInfo;
