@@ -1,4 +1,4 @@
-# Q Locator Map [![Build Status](https://travis-ci.com/nzzdev/Q-locator-map.svg?branch=dev)](https://travis-ci.com/nzzdev/Q-locator-map)
+# Q Locator Map [![Build Status](https://travis-ci.com/nzzdev/Q-locator-map.svg?token=bwR7zbPTTpEoDxbY2dJR&branch=dev)](https://travis-ci.com/nzzdev/Q-locator-map)
 
 **Maintainer**: [manuelroth](https://github.com/manuelroth)
 
