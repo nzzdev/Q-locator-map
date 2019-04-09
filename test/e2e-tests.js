@@ -143,7 +143,7 @@ lab.experiment("rendering-info", () => {
 lab.experiment("assets", () => {
   it("returnes stylesheet", async () => {
     const fixture = fs.readFileSync(
-      `${__dirname}/../resources/fixtures/data/basic.json`,
+      `${__dirname}/../resources/fixtures/data/point.json`,
       { encoding: "utf-8" }
     );
     const res = await server.inject({
