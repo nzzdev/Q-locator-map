@@ -1,0 +1,30 @@
+{
+  "title": "FIXTURE: basic map with one point (top/heavyLabel) and default options",
+  "subtitle": "subtitle",
+  "sources": [],
+  "notes": "Standardfall: Karte mit einem Punkt",
+  "acronym": "abc",
+  "geojsonList": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [26.1, 44.43333333]
+      },
+      "properties": {
+        "label": "Bukarest",
+        "type": "pointHeavyLabel",
+        "labelPosition": "top",
+        "useForInitialView": true
+      }
+    }
+  ],
+  "options": {
+    "baseLayer": "streets",
+    "initialZoomLevel": -1,
+    "minimapInitialZoomOffset": 0,
+    "minimap": true,
+    "labelsBelowMap": false,
+    "showLegend": true
+  }
+}

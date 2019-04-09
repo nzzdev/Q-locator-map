@@ -1,0 +1,28 @@
+{
+  "title": "FIXTURE: basic map with one feature (line string two points) and default options",
+  "subtitle": "subtitle",
+  "sources": [],
+  "notes": "Eine Linie verbindet zwei Punkte",
+  "acronym": "abc",
+  "geojsonList": [
+    {
+      "type": "Feature",
+      "properties": {
+        "useForInitialView": true,
+        "label": "Line capitals"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[23.316667, 42.69959515809203], [26.1, 44.43333333]]
+      }
+    }
+  ],
+  "options": {
+    "baseLayer": "streets",
+    "initialZoomLevel": -1,
+    "minimapInitialZoomOffset": 0,
+    "minimap": true,
+    "labelsBelowMap": false,
+    "showLegend": true
+  }
+}

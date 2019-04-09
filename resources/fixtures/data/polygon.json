@@ -1,0 +1,76 @@
+{
+  "title": "FIXTURE: basic map with one feature collection (two polygons) and default options",
+  "subtitle": "subtitle",
+  "sources": [],
+  "notes": "Zwei Polygone stehen im Raum",
+  "acronym": "abc",
+  "geojsonList": [
+    {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "useForInitialView": true,
+            "label": "Polygon orange",
+            "stroke": "#ffbe3d",
+            "stroke-width": 2,
+            "stroke-opacity": 1,
+            "fill": "#ffbe3d",
+            "fill-opacity": 0.5
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [19.35791015625, 46.649436163350245],
+                [16.85302734375, 45.1510532655634],
+                [18.74267578125, 43.35713822211053],
+                [21.59912109375, 43.26120612479979],
+                [22.34619140625, 44.98034238084973],
+                [22.17041015625, 46.30140615437332],
+                [19.35791015625, 46.649436163350245]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "useForInitialView": true,
+            "label": "Polygon grün",
+            "stroke": "#36e058",
+            "stroke-width": 2,
+            "stroke-opacity": 1,
+            "fill": "#36e058",
+            "fill-opacity": 0.5
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [10.0634765625, 49.095452162534826],
+                [7.998046875, 47.724544549099676],
+                [8.8330078125, 46.042735653846506],
+                [10.37109375, 45.36758436884978],
+                [12.568359375, 45.36758436884978],
+                [13.3154296875, 45.98169518512228],
+                [13.271484375, 47.18971246448421],
+                [12.65625, 48.516604348867475],
+                [10.0634765625, 49.095452162534826]
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "options": {
+    "baseLayer": "streets",
+    "initialZoomLevel": -1,
+    "minimapInitialZoomOffset": 0,
+    "minimap": true,
+    "labelsBelowMap": false,
+    "showLegend": true
+  }
+}

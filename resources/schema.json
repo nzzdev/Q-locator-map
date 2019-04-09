@@ -1,16 +1,449 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Locator Map",
   "type": "object",
-  "title": "Q-locator-map",
   "properties": {
     "title": {
-      "title": "Titel",
-      "type": "string"
+      "type": "string",
+      "title": "Titel"
     },
     "subtitle": {
+      "type": "string",
       "title": "Untertitel",
+      "Q:options": {
+        "placeholder": "Wird nur bei komplexeren Karten benötigt&#46;"
+      }
+    },
+    "geojsonList": {
+      "title": "Elemente auf der Karte",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          { "$ref": "#/definitions/geojson-point" },
+          { "$ref": "#/definitions/geojson-feature" },
+          { "$ref": "#/definitions/geojson-featureCollection" }
+        ]
+      },
+      "minItems": 1,
+      "Q:options": {
+        "compact": true,
+        "expandable": {
+          "itemLabelProperty": "properties.label"
+        }
+      }
+    },
+    "sources": {
+      "title": "Quelle(n)",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "title": "Quelle",
+        "properties": {
+          "text": {
+            "title": "Quelle",
+            "type": "string"
+          },
+          "link": {
+            "Q:type": "link",
+            "title": "Link",
+            "type": "object",
+            "Q:options": {
+              "placeholder": "Direktlink zur Quelle, http://..."
+            },
+            "properties": {
+              "url": {
+                "title": "Link",
+                "type": "string"
+              },
+              "isValid": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "required": ["text"]
+      }
+    },
+    "notes": {
+      "title": "Anmerkungen",
       "type": "string"
+    },
+    "options": {
+      "title": "Kartenoptionen",
+      "type": "object",
+      "properties": {
+        "baseLayer": {
+          "title": "Basiskarte",
+          "type": "string",
+          "default": "streets",
+          "enum": ["streets"],
+          "Q:options": {
+            "enum_titles": ["Strassenkarte"]
+          }
+        },
+        "initialZoomLevel": {
+          "title": "Zoomlevel",
+          "type": "number",
+          "default": -1,
+          "enum": [
+            -1,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18
+          ],
+          "Q:options": {
+            "enum_titles": [
+              "automatisch",
+              "1 - Welt",
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              "18 - Haus"
+            ]
+          }
+        },
+        "minimap": {
+          "title": "Minimap anzeigen",
+          "type": "boolean",
+          "default": true
+        },
+        "minimapInitialZoomOffset": {
+          "title": "Minimap-Zoomlevel (Differenz zur Hauptkarte)",
+          "type": "number",
+          "default": 0,
+          "Q:options": {
+            "dynamicEnum": {
+              "type": "ToolEndpoint",
+              "config": {
+                "endpoint": "dynamic-enum/minimapInitialZoomOffset",
+                "fields": ["options.initialZoomLevel"]
+              }
+            },
+            "availabilityChecks": [
+              {
+                "type": "ToolEndpoint",
+                "config": {
+                  "endpoint": "option-availability/minimapInitialZoomOffset",
+                  "fields": ["options.minimap"]
+                }
+              }
+            ]
+          }
+        },
+        "labelsBelowMap": {
+          "title": "Beschriftungen unter der Karte anzeigen",
+          "type": "boolean",
+          "default": false
+        },
+        "labelsBelowMapOneRow": {
+          "title": "Beschriftungen unter der Karte ohne Zeilenumbruch",
+          "type": "boolean",
+          "default": false,
+          "Q:options": {
+            "availabilityChecks": [
+              {
+                "type": "ToolEndpoint",
+                "config": {
+                  "endpoint": "option-availability/labelsBelowMapOneRow",
+                  "fields": ["options.labelsBelowMap", "geojsonList"]
+                }
+              }
+            ]
+          }
+        },
+        "showLegend": {
+          "title": "Legende anzeigen",
+          "type": "boolean",
+          "default": false,
+          "Q:options": {
+            "availabilityChecks": [
+              {
+                "type": "UserHasRole",
+                "config": {
+                  "role": "expert-map"
+                }
+              }
+            ]
+          }
+        },
+        "hideTitle": {
+          "type": "boolean",
+          "default": false,
+          "Q:deprecated": true,
+          "Q:options": {
+            "hideInEditor": true
+          }
+        }
+      },
+      "required": ["baseLayer", "initialZoomLevel", "minimap", "labelsBelowMap"]
     }
   },
-  "required": ["title"]
+  "required": ["title"],
+  "definitions": {
+    "geojson-point": {
+      "type": "object",
+      "title": "Punkt",
+      "Q:type": "geojsonPoint",
+      "required": ["type", "properties"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "default": "Feature",
+          "enum": ["Feature"]
+        },
+        "geometry": {
+          "type": "object",
+          "required": ["type", "coordinates"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "default": "Point",
+              "enum": ["Point"]
+            },
+            "coordinates": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "properties": {
+          "type": "object",
+          "required": ["type", "labelPosition"],
+          "properties": {
+            "label": {
+              "title": "Beschriftung des Punkts",
+              "type": "string",
+              "default": ""
+            },
+            "type": {
+              "title": "Markertyp",
+              "type": "string",
+              "default": "pointHeavyLabel",
+              "enum": [
+                "pointHeavyLabel",
+                "pointLightLabel",
+                "pointOnly",
+                "label",
+                "event",
+                "epicenter"
+              ],
+              "Q:options": {
+                "enum_titles": [
+                  "Punkt mit Beschriftung",
+                  "Punkt mit Beschriftung (klein)",
+                  "Punkt ohne Beschriftung",
+                  "Gebiet",
+                  "Ereignis",
+                  "Epizentrum"
+                ]
+              }
+            },
+            "labelPosition": {
+              "title": "Position der Beschriftung",
+              "type": "string",
+              "default": "top",
+              "enum": [
+                "top",
+                "bottom",
+                "left",
+                "right",
+                "topleft",
+                "topright",
+                "bottomleft",
+                "bottomright"
+              ],
+              "Q:options": {
+                "enum_titles": [
+                  "oben",
+                  "unten",
+                  "links",
+                  "rechts",
+                  "oben links",
+                  "oben rechts",
+                  "unten links",
+                  "unten rechts"
+                ]
+              }
+            },
+            "useForInitialView": {
+              "title": "Für die Berechnung der initialen Ansicht einbeziehen",
+              "type": "boolean",
+              "default": true,
+              "Q:options": {
+                "hideInEditor": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "geojson-featureCollection": {
+      "type": "object",
+      "Q:type": "json",
+      "title": "GeoJSON FeatureCollection",
+      "required": ["features"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "default": "FeatureCollection",
+          "enum": ["FeatureCollection"]
+        },
+        "features": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/geojson-feature" }
+        }
+      },
+      "Q:options": {
+        "availabilityChecks": [
+          {
+            "type": "UserHasRole",
+            "config": {
+              "role": "expert-map"
+            }
+          }
+        ]
+      }
+    },
+    "geojson-feature": {
+      "type": "object",
+      "Q:type": "json",
+      "title": "GeoJSON Feature",
+      "Q:options": {
+        "availabilityChecks": [
+          {
+            "type": "UserHasRole",
+            "config": {
+              "role": "expert-map"
+            }
+          }
+        ]
+      },
+      "properties": {
+        "type": {
+          "type": "string",
+          "default": "Feature",
+          "enum": ["Feature"]
+        },
+        "geometry": {
+          "title": "geometry",
+          "description": "One geometry as defined by GeoJSON",
+          "type": "object",
+          "oneOf": [
+            {
+              "title": "Point",
+              "type": "object",
+              "properties": {
+                "type": { "enum": ["Point"] },
+                "coordinates": { "$ref": "#/definitions/position" }
+              }
+            },
+            {
+              "title": "MultiPoint",
+              "type": "object",
+              "properties": {
+                "type": { "enum": ["MultiPoint"] },
+                "coordinates": { "$ref": "#/definitions/positionArray" }
+              }
+            },
+            {
+              "title": "LineString",
+              "type": "object",
+              "properties": {
+                "type": { "enum": ["LineString"] },
+                "coordinates": { "$ref": "#/definitions/lineString" }
+              }
+            },
+            {
+              "title": "MultiLineString",
+              "type": "object",
+              "properties": {
+                "type": { "enum": ["MultiLineString"] },
+                "coordinates": {
+                  "type": "array",
+                  "items": { "$ref": "#/definitions/lineString" }
+                }
+              }
+            },
+            {
+              "title": "Polygon",
+              "type": "object",
+              "properties": {
+                "type": { "enum": ["Polygon"] },
+                "coordinates": { "$ref": "#/definitions/polygon" }
+              }
+            },
+            {
+              "title": "MultiPolygon",
+              "type": "object",
+              "properties": {
+                "type": { "enum": ["MultiPolygon"] },
+                "coordinates": {
+                  "type": "array",
+                  "items": { "$ref": "#/definitions/polygon" }
+                }
+              }
+            }
+          ]
+        },
+        "properties": {
+          "type": "object"
+        }
+      }
+    },
+    "position": {
+      "description": "A single position",
+      "type": "array",
+      "minItems": 2,
+      "items": [{ "type": "number" }, { "type": "number" }],
+      "additionalItems": false
+    },
+    "positionArray": {
+      "description": "An array of positions",
+      "type": "array",
+      "items": { "$ref": "#/definitions/position" }
+    },
+    "lineString": {
+      "description": "An array of two or more positions",
+      "allOf": [{ "$ref": "#/definitions/positionArray" }, { "minItems": 2 }]
+    },
+    "linearRing": {
+      "description": "An array of four positions where the first equals the last",
+      "allOf": [{ "$ref": "#/definitions/positionArray" }, { "minItems": 4 }]
+    },
+    "polygon": {
+      "description": "An array of linear rings",
+      "type": "array",
+      "items": { "$ref": "#/definitions/linearRing" }
+    }
+  }
 }
