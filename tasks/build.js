@@ -97,7 +97,7 @@ async function buildScripts() {
     const filename = "default";
     const inputOptions = {
       input: `${scriptsDir}${filename}.js`,
-      plugins: [buble(), terser()]
+      plugins: []
     };
     const outputOptions = {
       format: "iife",

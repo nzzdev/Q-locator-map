@@ -7,6 +7,7 @@ const styleHashMap = require(path.join(stylesDir, "hashMap.json"));
 const scriptsDir = `${__dirname}/../../scripts/`;
 const scriptHashMap = require(`${scriptsDir}/hashMap.json`);
 const viewsDir = `${__dirname}/../../views/`;
+const helpers = require(path.join(__dirname, "/../../helpers/helpers.js"));
 
 require("svelte/ssr/register");
 const template = require(`${viewsDir}/locator-map.html`);
@@ -63,7 +64,8 @@ module.exports = {
       displayOptions: request.payload.toolRuntimeConfig.displayOptions || {},
       id: `q_locator_map_${request.query._id}_${Math.floor(
         Math.random() * 100000
-      )}`.replace(/-/g, "")
+      )}`.replace(/-/g, ""),
+      ...helpers.getMapConfig(item)
     };
 
     const renderingInfo = {
@@ -84,9 +86,9 @@ module.exports = {
           name: scriptHashMap["default"]
         },
         {
-          content: `new window._q_locator_map.LocatorMap(${`${
+          content: `new window._q_locator_map.LocatorMap('${`${
             context.id
-          }_container`})`
+          }_container`}', '${JSON.stringify(context)}')`
         }
       ],
       markup: template.render(context).html
