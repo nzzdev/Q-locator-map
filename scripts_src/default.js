@@ -75,7 +75,7 @@ export default class LocatorMap {
         });
 
         map.addLayer({
-          id: "linestring-${i}",
+          id: `linestring-${i}`,
           type: "line",
           source: {
             type: "geojson",
