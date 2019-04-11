@@ -55,7 +55,8 @@ export default class LocatorMap {
           },
           paint: {
             "text-halo-color": "#ffffff",
-            "text-halo-width": 4
+            "text-halo-width": 4,
+            "text-halo-blur": 4
           },
           filter: ["==", "$type", "Point"]
         });
