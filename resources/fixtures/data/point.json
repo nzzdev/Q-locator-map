@@ -12,7 +12,7 @@
         "coordinates": [26.1, 44.43333333]
       },
       "properties": {
-        "label": "Bukarest this should be a label",
+        "label": "Bukarest Label",
         "type": "pointHeavyLabel",
         "labelPosition": "top",
         "useForInitialView": true
