@@ -11,6 +11,9 @@ const before = lab.before;
 const after = lab.after;
 const it = lab.it;
 
+process.env.MAP_CONFIG =
+  '{"nzz_ch":{"accessToken":"test","streets":{"style":"test"},"streetsFewLabels":{"style":"test"},"streetsNoLabels":{"style":"test"},"terrain":{"style":"test"},"terrainNoLabels":{"style":"test"},"aerial":{"style":"test"}}}';
+
 const routes = require("../routes/routes.js");
 
 let server;

@@ -65,7 +65,10 @@ module.exports = {
       id: `q_locator_map_${request.query._id}_${Math.floor(
         Math.random() * 100000
       )}`.replace(/-/g, ""),
-      ...helpers.getMapConfig(item)
+      mapConfig: {
+        ...JSON.parse(process.env.MAP_CONFIG),
+        ...helpers.getMapConfig(item)
+      }
     };
 
     const renderingInfo = {

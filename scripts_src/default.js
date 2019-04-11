@@ -6,17 +6,19 @@ export default class LocatorMap {
   }
 
   render() {
-    mapboxgl.accessToken =
-      "pk.eyJ1IjoibWFudWVscm90aCIsImEiOiJQUFk4RmtvIn0.sxUONBlaOlyYSR3XMJ3uJg";
+    mapboxgl.accessToken = this.context.mapConfig.nzz_ch.accessToken;
     const mapConfig = {
       container: this.element,
-      style: "mapbox://styles/mapbox/streets-v11",
+      style: this.context.mapConfig.nzz_ch[this.context.item.options.baseLayer]
+        .style,
       interactive: false
     };
-    if (this.context.bounds) {
-      mapConfig.bounds = new mapboxgl.LngLatBounds(this.context.bounds);
+    if (this.context.mapConfig.bounds) {
+      mapConfig.bounds = new mapboxgl.LngLatBounds(
+        this.context.mapConfig.bounds
+      );
     } else {
-      mapConfig.center = this.context.center;
+      mapConfig.center = this.context.mapConfig.center;
       const initialZoomLevel = this.context.item.options.initialZoomLevel;
       if (this.context.item.options.initialZoomLevel !== -1) {
         mapConfig.zoom = initialZoomLevel;
@@ -26,7 +28,7 @@ export default class LocatorMap {
     }
 
     const map = new mapboxgl.Map(mapConfig);
-    if (this.context.bounds) {
+    if (this.context.mapConfig.bounds) {
       map.fitBounds(mapConfig.bounds, { padding: 100 });
     }
     map.on("load", () => {
