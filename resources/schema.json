@@ -76,9 +76,23 @@
           "title": "Basiskarte",
           "type": "string",
           "default": "streets",
-          "enum": ["streets"],
+          "enum": [
+            "streets",
+            "streetsFewLabels",
+            "streetsNoLabels",
+            "terrain",
+            "terrainNoLabels",
+            "aerial"
+          ],
           "Q:options": {
-            "enum_titles": ["Strassenkarte"]
+            "enum_titles": [
+              "Strassenkarte",
+              "Strassenkarte wenig Labels",
+              "Strassenkarte ohne Labels",
+              "Terrain",
+              "Terrain ohne Labels",
+              "Satellit"
+            ]
           }
         },
         "initialZoomLevel": {
