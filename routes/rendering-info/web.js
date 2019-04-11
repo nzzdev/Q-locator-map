@@ -89,9 +89,9 @@ module.exports = {
           name: scriptHashMap["default"]
         },
         {
-          content: `new window._q_locator_map.LocatorMap('${`${
+          content: `new window._q_locator_map.LocatorMap(document.querySelector('#${
             context.id
-          }_container`}', '${JSON.stringify(context)}')`
+          }_container'),'${JSON.stringify(context)}')`
         }
       ],
       markup: template.render(context).html
