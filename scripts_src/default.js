@@ -40,58 +40,6 @@ export default class LocatorMap {
           data: geojson
         });
 
-        map.addLayer({
-          id: `label-${i}`,
-          type: "symbol",
-          source: `source-${i}`,
-          layout: {
-            "text-field": "{label}",
-            "text-size": 13,
-            "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
-            "text-line-height": 1.1,
-            "text-offset": [0, -2],
-            "text-anchor": ["string", ["get", "labelPosition"], "center"]
-          },
-          paint: {
-            "text-halo-color": "#ffffff",
-            "text-halo-width": 4,
-            "text-halo-blur": 4
-          },
-          filter: ["==", "$type", "Point"]
-        });
-
-        map.addLayer({
-          id: `point-${i}`,
-          type: "circle",
-          source: `source-${i}`,
-          paint: {
-            "circle-radius": 5,
-            "circle-color": "#000000",
-            "circle-stroke-width": 2,
-            "circle-stroke-color": "#ffffff"
-          },
-          filter: ["==", "$type", "Point"]
-        });
-
-        map.addLayer({
-          id: `linestring-${i}`,
-          type: "line",
-          source: {
-            type: "geojson",
-            data: geojson
-          },
-          paint: {
-            "line-color": ["string", ["get", "stroke"], "#c31906"],
-            "line-width": ["number", ["get", "stroke-width"], 2],
-            "line-opacity": ["number", ["get", "stroke-opacity"], 1]
-          },
-          layout: {
-            "line-cap": "round",
-            "line-join": "round"
-          },
-          filter: ["==", "$type", "LineString"]
-        });
-
         map.addLayer(
           {
             id: `polygon-${i}`,
@@ -120,6 +68,58 @@ export default class LocatorMap {
           },
           firstSymbolLayer.id
         );
+
+        map.addLayer({
+          id: `linestring-${i}`,
+          type: "line",
+          source: {
+            type: "geojson",
+            data: geojson
+          },
+          paint: {
+            "line-color": ["string", ["get", "stroke"], "#c31906"],
+            "line-width": ["number", ["get", "stroke-width"], 2],
+            "line-opacity": ["number", ["get", "stroke-opacity"], 1]
+          },
+          layout: {
+            "line-cap": "round",
+            "line-join": "round"
+          },
+          filter: ["==", "$type", "LineString"]
+        });
+
+        map.addLayer({
+          id: `point-${i}`,
+          type: "circle",
+          source: `source-${i}`,
+          paint: {
+            "circle-radius": 5,
+            "circle-color": "#000000",
+            "circle-stroke-width": 2,
+            "circle-stroke-color": "#ffffff"
+          },
+          filter: ["==", "$type", "Point"]
+        });
+
+        map.addLayer({
+          id: `label-${i}`,
+          type: "symbol",
+          source: `source-${i}`,
+          layout: {
+            "text-field": "{label}",
+            "text-size": 13,
+            "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+            "text-line-height": 1.1,
+            "text-offset": [0, -2],
+            "text-anchor": ["string", ["get", "labelPosition"], "center"]
+          },
+          paint: {
+            "text-halo-color": "#ffffff",
+            "text-halo-width": 4,
+            "text-halo-blur": 4
+          },
+          filter: ["==", "$type", "Point"]
+        });
       }
     });
   }
