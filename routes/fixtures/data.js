@@ -5,7 +5,8 @@ const fixtureDataDirectory = "../../resources/fixtures/data";
 const fixtureData = [
   require(`${fixtureDataDirectory}/point.json`),
   require(`${fixtureDataDirectory}/linestring.json`),
-  require(`${fixtureDataDirectory}/polygon.json`)
+  require(`${fixtureDataDirectory}/polygon.json`),
+  require(`${fixtureDataDirectory}/mixed-nolabel.json`)
 ];
 
 module.exports = {

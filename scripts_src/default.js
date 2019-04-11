@@ -32,9 +32,8 @@ export default class LocatorMap {
       map.fitBounds(mapConfig.bounds, { padding: 100 });
     }
     map.on("load", () => {
-      const firstSymbolLayer = map
-        .getStyle()
-        .layers.find(layer => layer.type === "symbol");
+      const firstSymbolLayer =
+        map.getStyle().layers.find(layer => layer.type === "symbol") || {};
       for (const [i, geojson] of this.context.item.geojsonList.entries()) {
         map.addSource(`source-${i}`, {
           type: "geojson",
@@ -85,6 +84,10 @@ export default class LocatorMap {
             "line-color": ["string", ["get", "stroke"], "#c31906"],
             "line-width": ["number", ["get", "stroke-width"], 2],
             "line-opacity": ["number", ["get", "stroke-opacity"], 1]
+          },
+          layout: {
+            "line-cap": "round",
+            "line-join": "round"
           },
           filter: ["==", "$type", "LineString"]
         });
