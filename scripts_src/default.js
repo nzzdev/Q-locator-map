@@ -2,7 +2,15 @@ export default class LocatorMap {
   constructor(element, context = {}) {
     this.element = element;
     this.context = JSON.parse(context);
+    this.width =
+      this.context.width || this.element.getBoundingClientRect().width;
+    this.setHeight();
     this.render();
+  }
+
+  setHeight() {
+    const aspectRatio = this.width > 450 ? 9 / 16 : 1;
+    this.element.style.height = `${this.width * aspectRatio}px`;
   }
 
   render() {

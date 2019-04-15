@@ -68,7 +68,8 @@ module.exports = {
       mapConfig: {
         ...JSON.parse(process.env.MAP_CONFIG),
         ...helpers.getMapConfig(item)
-      }
+      },
+      width: helpers.getExactPixelWidth(request.payload.toolRuntimeConfig)
     };
 
     const renderingInfo = {
