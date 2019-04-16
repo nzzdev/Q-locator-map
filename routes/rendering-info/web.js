@@ -65,10 +65,10 @@ module.exports = {
       id: `q_locator_map_${request.query._id}_${Math.floor(
         Math.random() * 100000
       )}`.replace(/-/g, ""),
-      mapConfig: {
-        ...JSON.parse(process.env.MAP_CONFIG),
-        ...helpers.getMapConfig(item)
-      },
+      mapConfig: await helpers.getMapConfig(
+        item,
+        JSON.parse(process.env.MAP_CONFIG)
+      ),
       width: helpers.getExactPixelWidth(request.payload.toolRuntimeConfig)
     };
 

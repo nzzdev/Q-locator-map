@@ -1,7 +1,7 @@
 const turf = require("@turf/turf");
+const fetch = require("node-fetch");
 
-function getMapConfig(item) {
-  const mapConfig = {};
+async function getMapConfig(item, mapConfig) {
   const geojsonList = item.geojsonList;
   if (
     geojsonList.length === 1 &&
@@ -20,7 +20,103 @@ function getMapConfig(item) {
     ).geometry.coordinates;
   }
 
+  for (let config of Object.values(mapConfig.nzz_ch.styles)) {
+    config.style = await getStyle(config, mapConfig.nzz_ch.accessToken);
+    const firstSymbolLayerIndex = config.style.layers.findIndex(
+      layer => layer.type === "symbol"
+    );
+    for (const [i, geojson] of item.geojsonList.entries()) {
+      config.style.sources[`source-${i}`] = {
+        type: "geojson",
+        data: geojson
+      };
+
+      config.style.layers.splice(firstSymbolLayerIndex, 0, {
+        id: `polygon-${i}`,
+        type: "fill",
+        source: `source-${i}`,
+        paint: {
+          "fill-color": ["string", ["get", "fill"], "#c31906"],
+          "fill-opacity": ["number", ["get", "fill-opacity"], 0.35]
+        },
+        filter: ["==", "$type", "Polygon"]
+      });
+
+      config.style.layers.splice(firstSymbolLayerIndex, 0, {
+        id: `polygon-outline-${i}`,
+        type: "line",
+        source: `source-${i}`,
+        paint: {
+          "line-color": ["string", ["get", "stroke"], "#c31906"],
+          "line-width": ["number", ["get", "stroke-width"], 0],
+          "line-opacity": ["number", ["get", "stroke-opacity"], 1]
+        },
+        filter: ["==", "$type", "Polygon"]
+      });
+
+      config.style.layers.push({
+        id: `linestring-${i}`,
+        type: "line",
+        source: `source-${i}`,
+        paint: {
+          "line-color": ["string", ["get", "stroke"], "#c31906"],
+          "line-width": ["number", ["get", "stroke-width"], 2],
+          "line-opacity": ["number", ["get", "stroke-opacity"], 1]
+        },
+        layout: {
+          "line-cap": "round",
+          "line-join": "round"
+        },
+        filter: ["==", "$type", "LineString"]
+      });
+
+      config.style.layers.push({
+        id: `point-${i}`,
+        type: "circle",
+        source: `source-${i}`,
+        paint: {
+          "circle-radius": 5,
+          "circle-color": "#000000",
+          "circle-stroke-width": 2,
+          "circle-stroke-color": "#ffffff"
+        },
+        filter: ["==", "$type", "Point"]
+      });
+
+      config.style.layers.push({
+        id: `label-${i}`,
+        type: "symbol",
+        source: `source-${i}`,
+        layout: {
+          "text-field": "{label}",
+          "text-size": 13,
+          "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+          "text-line-height": 1.1,
+          "text-offset": [0, -2],
+          "text-anchor": ["string", ["get", "labelPosition"], "center"]
+        },
+        paint: {
+          "text-halo-color": "#ffffff",
+          "text-halo-width": 4,
+          "text-halo-blur": 4
+        },
+        filter: ["==", "$type", "Point"]
+      });
+    }
+  }
   return mapConfig;
+}
+
+async function getStyle(config, access_token) {
+  const response = await fetch(
+    `https://api.mapbox.com/styles/v1/${
+      config.styleId
+    }?access_token=${access_token}`
+  );
+  if (response) {
+    const style = await response.json();
+    return style;
+  }
 }
 
 function getExactPixelWidth(toolRuntimeConfig) {
