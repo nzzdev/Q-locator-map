@@ -21,14 +21,19 @@ export default class LocatorMap {
         .style,
       interactive: false
     };
+    const initialZoomLevel = this.context.item.options.initialZoomLevel;
     if (this.context.mapConfig.bounds) {
-      mapConfig.bounds = new mapboxgl.LngLatBounds(
-        this.context.mapConfig.bounds
-      );
+      if (initialZoomLevel !== -1) {
+        mapConfig.zoom = initialZoomLevel;
+        mapConfig.center = this.context.mapConfig.center;
+      } else {
+        mapConfig.bounds = new mapboxgl.LngLatBounds(
+          this.context.mapConfig.bounds
+        );
+      }
     } else {
       mapConfig.center = this.context.mapConfig.center;
-      const initialZoomLevel = this.context.item.options.initialZoomLevel;
-      if (this.context.item.options.initialZoomLevel !== -1) {
+      if (initialZoomLevel !== -1) {
         mapConfig.zoom = initialZoomLevel;
       } else {
         mapConfig.zoom = 9;
