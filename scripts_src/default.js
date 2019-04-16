@@ -43,7 +43,7 @@ export default class LocatorMap {
 
     const map = new mapboxgl.Map(mapConfig);
     if (this.context.mapConfig.bounds && initialZoomLevel === -1) {
-      map.fitBounds(mapConfig.bounds, { padding: 100 });
+      map.fitBounds(mapConfig.bounds, { padding: 100, duration: 0 });
     }
   }
 }
