@@ -14,9 +14,10 @@ function getMapConfig(item) {
       return turf.bboxPolygon(turf.bbox(geojson));
     });
 
-    const bbox = turf.bbox(turf.featureCollection(bboxPolygons));
-    mapConfig.bounds = bbox;
-    mapConfig.center = turf.center(bbox);
+    mapConfig.bounds = turf.bbox(turf.featureCollection(bboxPolygons));
+    mapConfig.center = turf.center(
+      turf.featureCollection(bboxPolygons)
+    ).geometry.coordinates;
   }
 
   return mapConfig;
