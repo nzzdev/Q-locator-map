@@ -163,7 +163,7 @@ async function getStyle(config, access_token) {
   const response = await fetch(
     `https://api.mapbox.com/styles/v1/${
       config.styleId
-    }?access_token=${access_token}`
+    }?access_token=${access_token}&optimize=true`
   );
   if (response) {
     const style = await response.json();
