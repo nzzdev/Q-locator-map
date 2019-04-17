@@ -57,6 +57,7 @@ module.exports = {
   },
   handler: async function(request, h) {
     const item = request.payload.item;
+    const toolRuntimeConfig = request.payload.toolRuntimeConfig;
     item.id = request.query._id;
 
     const context = {
@@ -66,8 +67,10 @@ module.exports = {
         Math.random() * 100000
       )}`.replace(/-/g, ""),
       mapConfig: await helpers.getMapConfig(
+        JSON.parse(process.env.MAP_CONFIG),
         item,
-        JSON.parse(process.env.MAP_CONFIG)
+        toolRuntimeConfig,
+        request.query._id
       ),
       width: helpers.getExactPixelWidth(request.payload.toolRuntimeConfig)
     };
