@@ -51,9 +51,6 @@ async function getMapConfig(styleConfig, item, toolRuntimeConfig, qId) {
     entry => entry[0] === item.options.baseLayer
   )[0][1];
   mapConfig.style = await getStyle(style, styleConfig.nzz_ch.accessToken);
-  const firstSymbolLayerIndex = mapConfig.style.layers.findIndex(
-    layer => layer.type === "symbol"
-  );
   for (const [i, geojson] of item.geojsonList.entries()) {
     const type = "vector";
     const tilesetUrl = await getTilesetUrl(
@@ -77,6 +74,31 @@ async function getMapConfig(styleConfig, item, toolRuntimeConfig, qId) {
         maxzoom: 18
       };
     }
+
+    mapConfig.style.layers.push({
+      id: `label-${i}`,
+      type: "symbol",
+      source: `source-${i}`,
+      "source-layer": `source-${i}`,
+      layout: {
+        "text-field": "{label}",
+        "text-size": 13,
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-line-height": 1.1,
+        "text-offset": [0, -2],
+        "text-anchor": ["string", ["get", "labelPosition"], "center"]
+      },
+      paint: {
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 4,
+        "text-halo-blur": 4
+      },
+      filter: ["==", "$type", "Point"]
+    });
+
+    const firstSymbolLayerIndex = mapConfig.style.layers.findIndex(
+      layer => layer.type === "symbol"
+    );
 
     mapConfig.style.layers.splice(firstSymbolLayerIndex, 0, {
       id: `polygon-${i}`,
@@ -103,7 +125,7 @@ async function getMapConfig(styleConfig, item, toolRuntimeConfig, qId) {
       filter: ["==", "$type", "Polygon"]
     });
 
-    mapConfig.style.layers.push({
+    mapConfig.style.layers.splice(firstSymbolLayerIndex, 0, {
       id: `linestring-${i}`,
       type: "line",
       source: `source-${i}`,
@@ -120,7 +142,7 @@ async function getMapConfig(styleConfig, item, toolRuntimeConfig, qId) {
       filter: ["==", "$type", "LineString"]
     });
 
-    mapConfig.style.layers.push({
+    mapConfig.style.layers.splice(firstSymbolLayerIndex, 0, {
       id: `point-${i}`,
       type: "circle",
       source: `source-${i}`,
@@ -130,27 +152,6 @@ async function getMapConfig(styleConfig, item, toolRuntimeConfig, qId) {
         "circle-color": "#000000",
         "circle-stroke-width": 2,
         "circle-stroke-color": "#ffffff"
-      },
-      filter: ["==", "$type", "Point"]
-    });
-
-    mapConfig.style.layers.push({
-      id: `label-${i}`,
-      type: "symbol",
-      source: `source-${i}`,
-      "source-layer": `source-${i}`,
-      layout: {
-        "text-field": "{label}",
-        "text-size": 13,
-        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
-        "text-line-height": 1.1,
-        "text-offset": [0, -2],
-        "text-anchor": ["string", ["get", "labelPosition"], "center"]
-      },
-      paint: {
-        "text-halo-color": "#ffffff",
-        "text-halo-width": 4,
-        "text-halo-blur": 4
       },
       filter: ["==", "$type", "Point"]
     });

@@ -78,7 +78,7 @@
   "sources": [],
   "options": {
     "baseLayer": "streetsNoLabels",
-    "initialZoomLevel": 13,
+    "initialZoomLevel": 10,
     "minimap": false,
     "minimapInitialZoomOffset": 0,
     "labelsBelowMap": false,
