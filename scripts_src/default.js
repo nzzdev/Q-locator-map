@@ -1,9 +1,8 @@
 export default class LocatorMap {
-  constructor(element, context = {}) {
+  constructor(element, data = {}) {
     this.element = element;
-    this.context = JSON.parse(context);
-    this.width =
-      this.context.width || this.element.getBoundingClientRect().width;
+    this.data = JSON.parse(data);
+    this.width = this.data.width || this.element.getBoundingClientRect().width;
     this.setHeight();
     this.render();
   }
@@ -14,26 +13,24 @@ export default class LocatorMap {
   }
 
   render() {
-    mapboxgl.accessToken = this.context.mapConfig.nzz_ch.accessToken;
+    mapboxgl.accessToken = this.data.mapConfig.accessToken;
     const mapConfig = {
       container: this.element,
-      style: this.context.mapConfig.nzz_ch.styles[
-        this.context.item.options.baseLayer
-      ].style,
+      style: this.data.mapConfig.style,
       interactive: false
     };
-    const initialZoomLevel = this.context.item.options.initialZoomLevel;
-    if (this.context.mapConfig.bounds) {
+    const initialZoomLevel = this.data.options.initialZoomLevel;
+    if (this.data.mapConfig.bounds) {
       if (initialZoomLevel !== -1) {
         mapConfig.zoom = initialZoomLevel;
-        mapConfig.center = this.context.mapConfig.center;
+        mapConfig.center = this.data.mapConfig.center;
       } else {
         mapConfig.bounds = new mapboxgl.LngLatBounds(
-          this.context.mapConfig.bounds
+          this.data.mapConfig.bounds
         );
       }
     } else {
-      mapConfig.center = this.context.mapConfig.center;
+      mapConfig.center = this.data.mapConfig.center;
       if (initialZoomLevel !== -1) {
         mapConfig.zoom = initialZoomLevel;
       } else {
@@ -42,7 +39,7 @@ export default class LocatorMap {
     }
 
     const map = new mapboxgl.Map(mapConfig);
-    if (this.context.mapConfig.bounds && initialZoomLevel === -1) {
+    if (this.data.mapConfig.bounds && initialZoomLevel === -1) {
       map.fitBounds(mapConfig.bounds, { padding: 100, duration: 0 });
     }
   }

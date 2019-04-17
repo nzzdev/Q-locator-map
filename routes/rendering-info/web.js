@@ -92,7 +92,11 @@ module.exports = {
         {
           content: `new window._q_locator_map.LocatorMap(document.querySelector('#${
             context.id
-          }_container'),'${JSON.stringify(context)}')`
+          }_container'),'${JSON.stringify({
+            mapConfig: context.mapConfig,
+            options: context.item.options,
+            width: context.width
+          })}')`
         }
       ],
       markup: template.render(context).html
