@@ -26,6 +26,7 @@ module.exports = [
         if (id >= 0 && id < item.geojsonList.length) {
           return h
             .response(item.geojsonList[id])
+            .type("application/geo+json")
             .header(
               "cache-control",
               "max-age=31536000, s-maxage=31536000, stale-while-revalidate=31536000, stale-if-error=31536000, immutable"
@@ -72,7 +73,7 @@ module.exports = [
             );
             return h
               .response(protobuf)
-              .header("Content-Type", "application/x-protobuf")
+              .type("application/x-protobuf")
               .header("Content-Encoding", "gzip")
               .header(
                 "cache-control",
