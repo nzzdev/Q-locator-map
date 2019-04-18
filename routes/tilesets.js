@@ -3,6 +3,29 @@ const Boom = require("boom");
 const vtpbf = require("vt-pbf");
 const geojsonvt = require("geojson-vt");
 const zlib = require("zlib");
+const geojsonPrecition = require("geojson-precision");
+const geojsonPick = require("geojson-pick");
+const PRECISION = 4;
+const PROPERTY_WHITELIST = [
+  "type",
+  "useForInitialView",
+  "label",
+  "labelPosition",
+  "fill",
+  "fill-opacity",
+  "stroke",
+  "stroke-width",
+  "stroke-opacity"
+];
+
+function getCleanGeojson(geojson) {
+  const reducedGeojson = geojsonPick.pickProperties(
+    geojson,
+    PROPERTY_WHITELIST
+  );
+  const trimmedGeojson = geojsonPrecition.parse(reducedGeojson, PRECISION);
+  return trimmedGeojson;
+}
 
 module.exports = [
   {
@@ -24,8 +47,9 @@ module.exports = [
         const item = request.payload.item;
         const id = request.params.id;
         if (id >= 0 && id < item.geojsonList.length) {
+          const geojson = getCleanGeojson(item.geojsonList[id]);
           return h
-            .response(item.geojsonList[id])
+            .response(geojson)
             .type("application/geo+json")
             .header(
               "cache-control",
@@ -63,7 +87,8 @@ module.exports = [
         const y = request.params.y;
 
         if (id >= 0 && id < item.geojsonList.length) {
-          const tileIndex = geojsonvt(item.geojsonList[id]);
+          const geojson = getCleanGeojson(item.geojsonList[id]);
+          const tileIndex = geojsonvt(geojson);
           const tile = tileIndex.getTile(z, x, y);
           if (tile) {
             const tileObject = {};
