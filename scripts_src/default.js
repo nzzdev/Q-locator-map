@@ -16,7 +16,7 @@ export default class LocatorMap {
     mapboxgl.accessToken = this.data.mapConfig.accessToken;
     const mapConfig = {
       container: this.element,
-      style: this.data.mapConfig.style,
+      style: this.data.mapConfig.styleUrl,
       interactive: false
     };
     const initialZoomLevel = this.data.options.initialZoomLevel;
