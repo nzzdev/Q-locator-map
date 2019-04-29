@@ -16,11 +16,9 @@ before_script:
 script:
   - npm run build
   - npm run test
-  - docker build -t $DOCKER_IMAGE_NAME:$DOCKER_TAG .
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then docker build -t $DOCKER_IMAGE_NAME:$DOCKER_TAG .; fi'
 after_success:
-  - echo $DOCKER_PASSWORD | docker login -u="$DOCKER_USERNAME" --password-stdin; docker
-    tag $DOCKER_IMAGE_NAME:$DOCKER_TAG nzzonline/$DOCKER_IMAGE_NAME:$DOCKER_TAG; docker
-    push nzzonline/$DOCKER_IMAGE_NAME:$DOCKER_TAG;
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then echo $DOCKER_PASSWORD | docker login -u="$DOCKER_USERNAME" --password-stdin; docker tag $DOCKER_IMAGE_NAME:$DOCKER_TAG nzzonline/$DOCKER_IMAGE_NAME:$DOCKER_TAG; docker push nzzonline/$DOCKER_IMAGE_NAME:$DOCKER_TAG; fi'
 notifications:
   slack:
     secure: hkNyc9ThjnCfwstig62li65EvGHW67jsuYFVlZNKywoPLwmygM8aWGbuDlDAqVnCzBLWYHxeQlvP4xLRzYaUJ0eomOUceQSgpd45JA64GcZ1dVdWB5fphQUK8GNYTYbz6uyGsKC9SiQpWch9a4xDd1+UINxgZugaUNHn4E9aoZP8uqoWaQc/Yp28bj53wSNhBOvusHbI7uf4LVbXtkwRyeRnIARpspEJD2VEo1Nq/11d7Jek+2ZUJPYM5YTrxvmsAFXBQRL+8is0U06rLwxzABlbZwVC/Rz0a3xD4IyiOHsIsKgemrj2zef7t8tVXNSTIDoeNUUWGwFunG5p7z4auUGED9eNhczQAkFOTNJOXPVsqNW0YXB+nF2VQWSSJg67Yl/+DeV0x0zEAQxCYltq1nGWPnSiUz1ARgl9phRgP6CtH6XbtCHjbcbR6/fHxliw3TYK8ZiPraaTf11hz6E+MgJtdbgz4dv93FJzkOlyj0+QAnEuTaqRXu2tik4loVH7V+Z4nKsrgfvNEEb3KbfGXt42WjCo36+nHyBu3LwHDYknBfwOWQkEC9LbVJ5l6AKRBD7bGdW6qmLmCCLqe/cnH3Q/6Q3vA15RV0abGo/P48PhAii9aFfR7b6XvsQt1x4gzIZnmwNpa5Sl4xuh78YN8t+Ahwx0kO/Xlvdjnpf7zdM=
