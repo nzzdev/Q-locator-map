@@ -1,5 +1,5 @@
-const Joi = require("joi");
-const Boom = require("boom");
+const Joi = require("@hapi/joi");
+const Boom = require("@hapi/boom");
 const vtpbf = require("vt-pbf");
 const geojsonvt = require("geojson-vt");
 const zlib = require("zlib");
