@@ -5,6 +5,16 @@ const fetch = require("node-fetch");
 const helpers = require(path.join(__dirname, "/../helpers/helpers.js"));
 const mapConfig = JSON.parse(process.env.MAP_CONFIG);
 
+async function getBaselayerUrl(url, item, toolRuntimeConfig, qId) {
+  const hash = await helpers.getHash(item, toolRuntimeConfig);
+  const matches = /^\w*:\/\/(.*)\?style=(.*)$/g.exec(url);
+  const id = matches[1];
+  const style = matches[2];
+  return `${
+    toolRuntimeConfig.toolBaseUrl
+  }/tiles/${hash}/${id}/{z}/{x}/{y}.pbf?appendItemToPayload=${qId}&style=${style}`;
+}
+
 async function getDataUrl(id, item, toolRuntimeConfig, type, qId) {
   const hash = await helpers.getHash(item, toolRuntimeConfig);
   if (type === "geojson") {
@@ -36,6 +46,17 @@ async function getBaselayerStyle(id) {
 async function getStyle(id, item, toolRuntimeConfig, qId) {
   const style = await getBaselayerStyle(id);
   if (style) {
+    for (let value of Object.values(style.sources)) {
+      const baselayerUrl = await getBaselayerUrl(
+        value.url,
+        item,
+        toolRuntimeConfig,
+        qId
+      );
+      delete value.url;
+      value.tiles = [baselayerUrl];
+    }
+
     for (const [i, geojson] of item.geojsonList.entries()) {
       const type = "vector";
       const dataUrl = await getDataUrl(i, item, toolRuntimeConfig, type, qId);

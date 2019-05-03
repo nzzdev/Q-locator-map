@@ -1,5 +1,4 @@
 const turf = require("@turf/turf");
-const fetch = require("node-fetch");
 const hasha = require("hasha");
 
 async function getHash(item, toolRuntimeConfig) {
