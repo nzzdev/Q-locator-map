@@ -5,13 +5,16 @@ const fetch = require("node-fetch");
 const helpers = require(path.join(__dirname, "/../helpers/helpers.js"));
 const mapConfig = JSON.parse(process.env.MAP_CONFIG);
 
-async function getTilesetUrl(id, item, toolRuntimeConfig, type, qId) {
+async function getDataUrl(id, item, toolRuntimeConfig, type, qId) {
   const hash = await helpers.getHash(item, toolRuntimeConfig);
-  const baseUrl = `${toolRuntimeConfig.toolBaseUrl}/tilesets/${hash}/${id}`;
   if (type === "geojson") {
-    return `${baseUrl}.${type}?appendItemToPayload=${qId}`;
+    return `${
+      toolRuntimeConfig.toolBaseUrl
+    }/datasets/${hash}/${id}.${type}?appendItemToPayload=${qId}`;
   } else if (type === "vector") {
-    return `${baseUrl}/{z}/{x}/{y}.pbf?appendItemToPayload=${qId}`;
+    return `${
+      toolRuntimeConfig.toolBaseUrl
+    }/tilesets/${hash}/${id}/{z}/{x}/{y}.pbf?appendItemToPayload=${qId}`;
   }
 }
 
@@ -35,23 +38,17 @@ async function getStyle(id, item, toolRuntimeConfig, qId) {
   if (style) {
     for (const [i, geojson] of item.geojsonList.entries()) {
       const type = "vector";
-      const tilesetUrl = await getTilesetUrl(
-        i,
-        item,
-        toolRuntimeConfig,
-        type,
-        qId
-      );
+      const dataUrl = await getDataUrl(i, item, toolRuntimeConfig, type, qId);
 
       if (type === "geojson") {
         style.sources[`source-${i}`] = {
           type: type,
-          data: tilesetUrl
+          data: dataUrl
         };
       } else if (type === "vector") {
         style.sources[`source-${i}`] = {
           type: type,
-          tiles: [tilesetUrl],
+          tiles: [dataUrl],
           minzoom: 0,
           maxzoom: 18
         };

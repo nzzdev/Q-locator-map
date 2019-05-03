@@ -5,8 +5,4 @@ module.exports = [
   require("./health.js"),
   require("./fixtures/data.js"),
   require("./locales.js")
-].concat(
-  require("./schema.js"),
-  require("./tilesets.js"),
-  require("./styles.js")
-);
+].concat(require("./schema.js"), require("./data.js"), require("./styles.js"));

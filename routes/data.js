@@ -30,7 +30,7 @@ function getCleanGeojson(geojson) {
 module.exports = [
   {
     method: "POST",
-    path: "/tilesets/{hash}/{id}.geojson",
+    path: "/datasets/{hash}/{id}.geojson",
     options: {
       description: "Returns the tileset in geojson format",
       tags: ["api"],
