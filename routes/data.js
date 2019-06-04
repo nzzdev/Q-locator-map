@@ -1,5 +1,6 @@
 const Joi = require("@hapi/joi");
 const Boom = require("@hapi/boom");
+const mbtiles = util.promisify(require("@mapbox/mbtiles"));
 const vtpbf = require("vt-pbf");
 const geojsonvt = require("geojson-vt");
 const zlib = require("zlib");
@@ -137,19 +138,26 @@ module.exports = [
         }
       },
       handler: async (request, h) => {
-        const item = request.payload.item;
-        const id = request.params.id;
-        const z = request.params.z;
-        const x = request.params.x;
-        const y = request.params.y;
-        const style = request.query.style;
-        const accessToken = JSON.parse(process.env.MAP_CONFIG)["nzz_ch"]
-          .accessToken;
-        const tileUrl = `https://api.mapbox.com/v4/${id}/${z}/${x}/${y}.vector.pbf?style=${style}&access_token=${accessToken}`;
-        const response = await fetch(tileUrl);
-        if (response) {
-          return response.body;
-        } else {
+        try {
+          const item = request.payload.item;
+          const id = request.params.id;
+          const z = request.params.z;
+          const x = request.params.x;
+          const y = request.params.y;
+          const style = request.query.style;
+          const accessToken = JSON.parse(process.env.MAP_CONFIG)["nzz_ch"]
+            .accessToken;
+          const tileUrl = `https://api.mapbox.com/v4/${id}/${z}/${x}/${y}.vector.pbf?style=${style}&access_token=${accessToken}`;
+          const response = await fetch(tileUrl);
+          if (response) {
+            return response.body;
+          } else {
+            return Boom.notFound();
+          }
+          // const mbtilesItem = await mbtiles("./data/world.mbtiles?mode=ro");
+          // const getTile = util.promisify(mbtilesItem.getTile);
+          // return await getTile(z, x, y);
+        } catch (err) {
           return Boom.notFound();
         }
       }
