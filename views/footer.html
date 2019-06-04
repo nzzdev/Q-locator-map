@@ -1,5 +1,5 @@
 <div class="s-q-item__footer">
-  {#if item.notes}
-    <span>{ item.notes }{#if item.sources.length > 0}&nbsp;&ndash;&nbsp; {/if}</span>
-  {/if}
+  {%- if item.notes %}
+    <span>{{ item.notes }}{%- if item.sources.length > 0 %}&nbsp;&ndash;&nbsp;{% endif %}</span>
+  {%- endif %}
 </div>

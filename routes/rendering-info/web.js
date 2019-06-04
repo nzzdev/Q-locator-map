@@ -9,8 +9,9 @@ const scriptHashMap = require(`${scriptsDir}/hashMap.json`);
 const viewsDir = `${__dirname}/../../views/`;
 const helpers = require(path.join(__dirname, "/../../helpers/helpers.js"));
 
-require("svelte/ssr/register");
-const template = require(`${viewsDir}/locator-map.html`);
+// setup nunjucks environment
+const nunjucks = require("nunjucks");
+const nunjucksEnv = new nunjucks.Environment();
 
 // POSTed item will be validated against given schema
 // hence we fetch the JSON schema...
@@ -95,14 +96,14 @@ module.exports = {
         {
           content: `new window._q_locator_map.LocatorMap(document.querySelector('#${
             context.id
-          }_container'),'${JSON.stringify({
+          }_container'), JSON.parse('${JSON.stringify({
             mapConfig: context.mapConfig,
             options: context.item.options,
             width: context.width
-          })}')`
+          })}'))`
         }
       ],
-      markup: template.render(context).html
+      markup: nunjucksEnv.render(`${viewsDir}/locator-map.html`, context)
     };
 
     return renderingInfo;
