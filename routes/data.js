@@ -1,5 +1,6 @@
 const Joi = require("@hapi/joi");
 const Boom = require("@hapi/boom");
+const util = require("util");
 const mbtiles = util.promisify(require("@mapbox/mbtiles"));
 const vtpbf = require("vt-pbf");
 const geojsonvt = require("geojson-vt");
