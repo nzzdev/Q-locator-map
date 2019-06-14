@@ -11,7 +11,11 @@ const server = Hapi.server({
 const routes = require("./routes/routes.js");
 
 async function init() {
-  server.app.mbtiles = await helpers.getMbtiles();
+  try {
+    server.app.mbtiles = await helpers.getMbtiles();
+  } catch (error) {
+    console.log(error);
+  }
   await server.register(require("@hapi/inert"));
   server.route(routes);
   await server.start();
