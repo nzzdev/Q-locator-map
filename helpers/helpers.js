@@ -1,5 +1,6 @@
 const turf = require("@turf/turf");
 const hasha = require("hasha");
+const mbtiles = require("@mapbox/mbtiles");
 
 async function getHash(item, toolRuntimeConfig) {
   // This hash ensures that the response of the endpoint request can be cached forever
@@ -71,8 +72,22 @@ function getExactPixelWidth(toolRuntimeConfig) {
   return undefined;
 }
 
+function getMbtiles() {
+  const mbtilesPath = "../data/planet.mbtiles?mode=ro";
+  return new Promise(function(resolve, reject) {
+    new mbtiles(mbtilesPath, function(err, mbtiles) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(mbtiles);
+      }
+    });
+  });
+}
+
 module.exports = {
   getMapConfig: getMapConfig,
   getExactPixelWidth: getExactPixelWidth,
-  getHash: getHash
+  getHash: getHash,
+  getMbtiles: getMbtiles
 };
