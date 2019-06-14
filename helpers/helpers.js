@@ -73,7 +73,7 @@ function getExactPixelWidth(toolRuntimeConfig) {
 }
 
 function getMbtiles() {
-  const mbtilesPath = "../data/planet.mbtiles?mode=ro";
+  const mbtilesPath = `${process.env.MBTILES_PATH}?mode=ro`;
   return new Promise(function(resolve, reject) {
     new mbtiles(mbtilesPath, function(err, mbtiles) {
       if (err) {
