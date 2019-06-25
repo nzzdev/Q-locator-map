@@ -214,20 +214,6 @@
       "type": "fill"
     },
     {
-      "filter": ["==", "$type", "Point"],
-      "id": "housenumber",
-      "layout": {
-        "text-field": "{housenumber}",
-        "text-font": ["Noto Sans Regular"],
-        "text-size": 10
-      },
-      "minzoom": 17,
-      "paint": { "text-color": "rgba(212, 177, 146, 1)" },
-      "source": "openmaptiles",
-      "source-layer": "housenumber",
-      "type": "symbol"
-    },
-    {
       "id": "road_area_pier",
       "type": "fill",
       "metadata": {},
@@ -604,6 +590,20 @@
       "source": "openmaptiles",
       "source-layer": "boundary",
       "type": "line"
+    },
+    {
+      "filter": ["==", "$type", "Point"],
+      "id": "housenumber",
+      "layout": {
+        "text-field": "{housenumber}",
+        "text-font": ["Noto Sans Regular"],
+        "text-size": 10
+      },
+      "minzoom": 17,
+      "paint": { "text-color": "rgba(212, 177, 146, 1)" },
+      "source": "openmaptiles",
+      "source-layer": "housenumber",
+      "type": "symbol"
     },
     {
       "filter": ["all", ["==", "$type", "Point"], ["==", "rank", 1]],
