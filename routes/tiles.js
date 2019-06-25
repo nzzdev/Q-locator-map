@@ -3,7 +3,7 @@ const Boom = require("@hapi/boom");
 const fetch = require("node-fetch");
 
 module.exports = {
-  method: "POST",
+  method: "GET",
   path: "/tiles/{z}/{x}/{y}.pbf",
   options: {
     description: "Returns the tiles in pbf format",
