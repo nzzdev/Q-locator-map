@@ -1,13 +1,12 @@
 const Boom = require("@hapi/boom");
 const fs = require("fs");
-const path = require("path");
 
-const stylesDir = path.join(__dirname, "/../../styles/");
-const styleHashMap = require(path.join(stylesDir, "hashMap.json"));
-const scriptsDir = `${__dirname}/../../scripts/`;
+const stylesDir = "../../styles/";
+const styleHashMap = require(`${stylesDir}hashMap.json`);
+const scriptsDir = "../../scripts/";
 const scriptHashMap = require(`${scriptsDir}/hashMap.json`);
 const viewsDir = `${__dirname}/../../views/`;
-const helpers = require(path.join(__dirname, "/../../helpers/helpers.js"));
+const helpers = require("../../helpers/helpers.js");
 
 // setup nunjucks environment
 const nunjucks = require("nunjucks");
@@ -16,7 +15,7 @@ const nunjucksEnv = new nunjucks.Environment();
 // POSTed item will be validated against given schema
 // hence we fetch the JSON schema...
 const schemaString = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "../../resources/", "schema.json"), {
+  fs.readFileSync(`${__dirname}/../../resources/schema.json`, {
     encoding: "utf-8"
   })
 );

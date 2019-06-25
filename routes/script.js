@@ -1,12 +1,10 @@
-const path = require("path");
-
 module.exports = {
   method: "GET",
   path: "/script/{filename}.{hash}.{extension}",
   options: {
     cors: true,
     files: {
-      relativeTo: path.join(__dirname, "/../scripts/")
+      relativeTo: `${__dirname}/../scripts/`
     }
   },
   handler: function(request, h) {
