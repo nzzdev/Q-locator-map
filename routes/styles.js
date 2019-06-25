@@ -1,79 +1,37 @@
 const Joi = require("@hapi/joi");
 const Boom = require("@hapi/boom");
-const path = require("path");
-const fetch = require("node-fetch");
-const helpers = require(path.join(__dirname, "/../helpers/helpers.js"));
-const mapConfig = JSON.parse(process.env.MAP_CONFIG);
+const helpers = require(`${__dirname}/../helpers/helpers.js`);
+const resourcesDir = `${__dirname}/../resources/`;
+const basicStyle = require(`${resourcesDir}styles/basic/style.json`);
 
-async function getBaselayerUrl(url, item, toolRuntimeConfig, qId) {
+async function getDataUrl(id, item, toolRuntimeConfig, qId) {
   const hash = await helpers.getHash(item, toolRuntimeConfig);
-  const matches = /^\w*:\/\/(.*)\?style=(.*)$/g.exec(url);
-  const id = matches[1];
-  const style = matches[2];
   return `${
     toolRuntimeConfig.toolBaseUrl
-  }/tiles/${hash}/${id}/{z}/{x}/{y}.pbf?appendItemToPayload=${qId}&style=${style}`;
-}
-
-async function getDataUrl(id, item, toolRuntimeConfig, type, qId) {
-  const hash = await helpers.getHash(item, toolRuntimeConfig);
-  if (type === "geojson") {
-    return `${
-      toolRuntimeConfig.toolBaseUrl
-    }/datasets/${hash}/${id}.${type}?appendItemToPayload=${qId}`;
-  } else if (type === "vector") {
-    return `${
-      toolRuntimeConfig.toolBaseUrl
-    }/tilesets/${hash}/${id}/{z}/{x}/{y}.pbf?appendItemToPayload=${qId}`;
-  }
-}
-
-async function getBaselayerStyle(id) {
-  const accessToken = mapConfig.nzz_ch.accessToken;
-  const style = Object.entries(mapConfig.nzz_ch.styles).filter(
-    entry => entry[0] === id
-  )[0][1];
-  const response = await fetch(
-    `https://api.mapbox.com/styles/v1/${
-      style.styleId
-    }?access_token=${accessToken}&optimize=true`
-  );
-  if (response) {
-    return await response.json();
-  }
+  }/tilesets/${hash}/${id}/{z}/{x}/{y}.pbf?appendItemToPayload=${qId}`;
 }
 
 async function getStyle(id, item, toolRuntimeConfig, qId) {
-  const style = await getBaselayerStyle(id);
+  let style = JSON.stringify(basicStyle);
+  style = JSON.parse(
+    style.replace(/\${access_token}/g, process.env.ACCESS_TOKEN)
+  );
+
   if (style) {
-    for (let value of Object.values(style.sources)) {
-      const baselayerUrl = await getBaselayerUrl(
-        value.url,
-        item,
-        toolRuntimeConfig,
-        qId
-      );
-      delete value.url;
-      value.tiles = [baselayerUrl];
-    }
-
+    style.sources.openmaptiles = {
+      type: "vector",
+      tiles: [`${toolRuntimeConfig.toolBaseUrl}/tiles/${id}/{z}/{x}/{y}.pbf`],
+      minzoom: 0,
+      maxzoom: 18
+    };
     for (const [i, geojson] of item.geojsonList.entries()) {
-      const type = "vector";
-      const dataUrl = await getDataUrl(i, item, toolRuntimeConfig, type, qId);
-
-      if (type === "geojson") {
-        style.sources[`source-${i}`] = {
-          type: type,
-          data: dataUrl
-        };
-      } else if (type === "vector") {
-        style.sources[`source-${i}`] = {
-          type: type,
-          tiles: [dataUrl],
-          minzoom: 0,
-          maxzoom: 18
-        };
-      }
+      const dataUrl = await getDataUrl(i, item, toolRuntimeConfig, qId);
+      style.sources[`source-${i}`] = {
+        type: "vector",
+        tiles: [dataUrl],
+        minzoom: 0,
+        maxzoom: 18
+      };
 
       style.layers.push({
         id: `label-${i}`,
@@ -163,13 +121,12 @@ async function getStyle(id, item, toolRuntimeConfig, qId) {
 module.exports = [
   {
     method: "POST",
-    path: "/styles/{hash}/{id}",
+    path: "/styles/{id}",
     options: {
       description: "Returns a map style",
       tags: ["api"],
       validate: {
         params: {
-          hash: Joi.string().required(),
           id: Joi.string().required()
         },
         query: {

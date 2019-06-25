@@ -13,7 +13,6 @@ export default class LocatorMap {
   }
 
   render() {
-    mapboxgl.accessToken = this.data.mapConfig.accessToken;
     const mapConfig = {
       container: this.element,
       style: this.data.mapConfig.styleUrl,

@@ -68,7 +68,6 @@ module.exports = {
         Math.random() * 100000
       )}`.replace(/-/g, ""),
       mapConfig: await helpers.getMapConfig(
-        JSON.parse(process.env.MAP_CONFIG),
         item,
         toolRuntimeConfig,
         request.query._id

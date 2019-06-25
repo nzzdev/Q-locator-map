@@ -16,18 +16,16 @@ async function getHash(item, toolRuntimeConfig) {
   );
 }
 
-async function getStyleUrl(id, item, toolRuntimeConfig, qId) {
-  const hash = await getHash(item, toolRuntimeConfig);
+async function getStyleUrl(id, toolRuntimeConfig, qId) {
   return `${
     toolRuntimeConfig.toolBaseUrl
-  }/styles/${hash}/${id}?appendItemToPayload=${qId}&qId=${qId}&toolRuntimeConfig=${encodeURIComponent(
+  }/styles/${id}?appendItemToPayload=${qId}&qId=${qId}&toolRuntimeConfig=${encodeURIComponent(
     JSON.stringify(toolRuntimeConfig)
   )}`;
 }
 
-async function getMapConfig(styleConfig, item, toolRuntimeConfig, qId) {
+async function getMapConfig(item, toolRuntimeConfig, qId) {
   const mapConfig = {};
-  mapConfig.accessToken = styleConfig.nzz_ch.accessToken;
   const geojsonList = item.geojsonList;
   if (
     geojsonList.length === 1 &&
@@ -48,7 +46,6 @@ async function getMapConfig(styleConfig, item, toolRuntimeConfig, qId) {
 
   mapConfig.styleUrl = await getStyleUrl(
     item.options.baseLayer,
-    item,
     toolRuntimeConfig,
     qId
   );
@@ -73,16 +70,19 @@ function getExactPixelWidth(toolRuntimeConfig) {
 }
 
 function getMbtiles() {
-  const mbtilesPath = `${process.env.MBTILES_PATH}?mode=ro`;
-  return new Promise(function(resolve, reject) {
-    new mbtiles(mbtilesPath, function(err, mbtiles) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(mbtiles);
-      }
+  if (process.env.MBTILES_PATH) {
+    const mbtilesPath = `${process.env.MBTILES_PATH}?mode=ro`;
+    return new Promise(function(resolve, reject) {
+      new mbtiles(mbtilesPath, function(err, mbtiles) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(mbtiles);
+        }
+      });
     });
-  });
+  }
+  return {};
 }
 
 module.exports = {
