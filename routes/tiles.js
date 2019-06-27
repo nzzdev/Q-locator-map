@@ -1,6 +1,5 @@
 const Joi = require("@hapi/joi");
 const Boom = require("@hapi/boom");
-const fetch = require("node-fetch");
 
 module.exports = {
   method: "GET",
@@ -23,34 +22,28 @@ module.exports = {
       const x = request.params.x;
       const y = request.params.y;
 
-      if (process.env.TILE_URL) {
-        const tileUrl = `${process.env.TILE_URL}/${z}/${x}/${y}.pbf`;
-        const response = await fetch(tileUrl);
-        if (response) {
-          return response.body;
+      try {
+        if (process.env.TILE_URL) {
+          const tileUrl = `${process.env.TILE_URL}/${z}/${x}/${y}.pbf`;
+          const response = await fetch(tileUrl);
+          if (response.ok) {
+            return response.body;
+          } else {
+            return new Error();
+          }
         } else {
-          return Boom.notFound();
+          const tile = await request.server.methods.getTile(z, x, y);
+          return h
+            .response(tile)
+            .type("application/x-protobuf")
+            .header("Content-Encoding", "gzip")
+            .header(
+              "cache-control",
+              "max-age=31536000, s-maxage=31536000, stale-while-revalidate=31536000, stale-if-error=31536000, immutable"
+            );
         }
-      } else {
-        const mbtiles = request.server.app.mbtiles;
-        return new Promise((resolve, reject) => {
-          mbtiles.getTile(z, x, y, (err, data) => {
-            if (err) {
-              resolve(Boom.notFound());
-            } else {
-              resolve(
-                h
-                  .response(data)
-                  .type("application/x-protobuf")
-                  .header("Content-Encoding", "gzip")
-                  .header(
-                    "cache-control",
-                    "max-age=31536000, s-maxage=31536000, stale-while-revalidate=31536000, stale-if-error=31536000, immutable"
-                  )
-              );
-            }
-          });
-        });
+      } catch (error) {
+        return Boom.notFound();
       }
     }
   }

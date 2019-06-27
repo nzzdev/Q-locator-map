@@ -1,6 +1,7 @@
 const turf = require("@turf/turf");
 const hasha = require("hasha");
 const mbtiles = require("@mapbox/mbtiles");
+const fetch = require("node-fetch");
 
 async function getHash(item, toolRuntimeConfig) {
   // This hash ensures that the response of the endpoint request can be cached forever
@@ -85,9 +86,22 @@ function getMbtiles() {
   return {};
 }
 
+async function getTile(z, x, y) {
+  return await new Promise((resolve, reject) => {
+    this.getTile(z, x, y, (err, tile) => {
+      if (err) {
+        reject(new Error());
+      } else {
+        resolve(tile);
+      }
+    });
+  });
+}
+
 module.exports = {
   getMapConfig: getMapConfig,
   getExactPixelWidth: getExactPixelWidth,
   getHash: getHash,
-  getMbtiles: getMbtiles
+  getMbtiles: getMbtiles,
+  getTile: getTile
 };

@@ -12,7 +12,8 @@ const routes = require("./routes/routes.js");
 
 async function init() {
   try {
-    server.app.mbtiles = await helpers.getMbtiles();
+    const mbtiles = await helpers.getMbtiles();
+    server.method("getTile", helpers.getTile, { bind: mbtiles });
   } catch (error) {
     console.log(error);
   }
