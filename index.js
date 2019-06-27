@@ -13,12 +13,25 @@ const routes = require("./routes/routes.js");
 async function init() {
   try {
     const mbtiles = await helpers.getMbtiles();
-    server.method("getTile", helpers.getTile, { bind: mbtiles });
+    server.method("getTile", helpers.getTile, {
+      bind: mbtiles,
+      cache: { expiresIn: 60000, generateTimeout: 100 }
+    });
   } catch (error) {
     console.log(error);
   }
   await server.register(require("@hapi/inert"));
   server.route(routes);
+  server.cache.provision({
+    provider: {
+      constructor: require("@hapi/catbox-memory"),
+      options: {
+        maxByteSize: 1000000000 // ~ 1GB
+      }
+    },
+    name: "memoryCache"
+  });
+
   await server.start();
   console.log("server running ", server.info.uri);
 }
