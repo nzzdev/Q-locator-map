@@ -8,6 +8,11 @@ const server = Hapi.server({
   }
 });
 
+const plugins = [
+  {
+    plugin: require("./plugins/geodata/index.js")
+  }
+];
 const routes = require("./routes/routes.js");
 
 async function init() {
@@ -21,6 +26,7 @@ async function init() {
     console.log(error);
   }
   await server.register(require("@hapi/inert"));
+  await server.register(plugins);
   server.route(routes);
   server.cache.provision({
     provider: {

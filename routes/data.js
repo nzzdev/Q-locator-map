@@ -5,6 +5,7 @@ const geojsonvt = require("geojson-vt");
 const zlib = require("zlib");
 const geojsonPrecition = require("geojson-precision");
 const geojsonPick = require("geojson-pick");
+const querystring = require("querystring");
 
 const PRECISION = 4;
 const PROPERTY_WHITELIST = [
@@ -75,6 +76,47 @@ module.exports = [
           } else {
             return Boom.notFound();
           }
+        } else {
+          return Boom.notFound();
+        }
+      }
+    }
+  },
+  {
+    method: "GET",
+    path: "/datasets/{id}.geojson",
+    options: {
+      description: "Returns the dataset in geojson format",
+      tags: ["api"],
+      validate: {
+        params: {
+          id: Joi.string().required()
+        },
+        query: {
+          version: Joi.number().optional()
+        },
+        options: {
+          allowUnknown: true
+        }
+      },
+      handler: async (request, h) => {
+        const id = request.params.id;
+        let url = `/geodata/${id}.geojson`;
+        if (request.query.version) {
+          const query = querystring.stringify({
+            version: request.query.version
+          });
+          url = `${url}?${query}`;
+        }
+        const response = await request.server.inject(url);
+        if (response.statusCode === 200) {
+          return h
+            .response(response.result)
+            .type("application/geo+json")
+            .header(
+              "cache-control",
+              "max-age=31536000, s-maxage=31536000, stale-while-revalidate=31536000, stale-if-error=31536000, immutable"
+            );
         } else {
           return Boom.notFound();
         }
