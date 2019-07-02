@@ -149,27 +149,70 @@
           "type": "boolean",
           "default": true
         },
-        "minimapInitialZoomOffset": {
-          "title": "Minimap-Zoomlevel (Differenz zur Hauptkarte)",
-          "type": "number",
-          "default": 0,
+        "minimapOptions": {
+          "title": "Minimap Optionen",
+          "type": "object",
           "Q:options": {
-            "dynamicEnum": {
-              "type": "ToolEndpoint",
-              "config": {
-                "endpoint": "dynamic-enum/minimapInitialZoomOffset",
-                "fields": ["options.initialZoomLevel"]
-              }
-            },
             "availabilityChecks": [
               {
                 "type": "ToolEndpoint",
                 "config": {
-                  "endpoint": "option-availability/minimapInitialZoomOffset",
+                  "endpoint": "option-availability/minimapOptions",
                   "fields": ["options.minimap"]
                 }
               }
-            ]
+            ],
+            "expandable": true
+          },
+          "properties": {
+            "type": {
+              "title": "Typ",
+              "type": "string",
+              "enum": ["globe", "region"],
+              "Q:options": {
+                "selectType": "radio",
+                "enum_titles": ["Globus", "Region"]
+              },
+              "default": "region"
+            },
+            "region": {
+              "title": "Region",
+              "type": "string",
+              "Q:options": {
+                "selectType": "select",
+                "dynamicSchema": {
+                  "type": "ToolEndpoint",
+                  "config": {
+                    "endpoint": "dynamic-schema/region",
+                    "fields": ["geojsonList"]
+                  }
+                },
+                "availabilityChecks": [
+                  {
+                    "type": "ToolEndpoint",
+                    "config": {
+                      "endpoint": "option-availability/region",
+                      "fields": ["options.minimapOptions.type"]
+                    }
+                  }
+                ]
+              }
+            },
+            "position": {
+              "title": "Position",
+              "type": "string",
+              "enum": ["topLeft", "topRight", "bottomLeft", "bottomRight"],
+              "Q:options": {
+                "selectType": "select",
+                "enum_titles": [
+                  "links oben",
+                  "rechts oben",
+                  "links unten",
+                  "rechts unten"
+                ]
+              },
+              "default": "bottomRight"
+            }
           }
         },
         "labelsBelowMap": {
