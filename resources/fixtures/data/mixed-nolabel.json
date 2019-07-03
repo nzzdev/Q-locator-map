@@ -79,7 +79,7 @@
   "options": {
     "baseLayer": "streetsNoLabels",
     "initialZoomLevel": 10,
-    "minimap": false,
+    "minimap": true,
     "minimapInitialZoomOffset": 0,
     "labelsBelowMap": false,
     "labelsBelowMapOneRow": false,

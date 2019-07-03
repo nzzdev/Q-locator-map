@@ -1,0 +1,36 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "autosize": "none",
+  "signals": [],
+  "data": [],
+
+  "projections": [
+    {
+      "name": "projection",
+      "scale": { "signal": "scale" },
+      "center": { "signal": "center" },
+      "type": "mercator",
+      "translate": { "signal": "[width/2, height/2]" }
+    }
+  ],
+
+  "marks": [
+    {
+      "type": "shape",
+      "from": { "data": "region" },
+      "encode": {
+        "update": {
+          "fill": { "value": "white" },
+          "stroke": { "value": "black" },
+          "strokeWidth": { "value": 0.5 }
+        }
+      },
+      "transform": [
+        {
+          "type": "geoshape",
+          "projection": "projection"
+        }
+      ]
+    }
+  ]
+}

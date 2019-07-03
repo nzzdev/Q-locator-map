@@ -24,6 +24,11 @@
     "initialZoomLevel": -1,
     "minimapInitialZoomOffset": 0,
     "minimap": true,
+    "minimapOptions": {
+      "type": "region",
+      "position": "bottom-right",
+      "region": "Q39"
+    },
     "labelsBelowMap": false,
     "showLegend": true
   }

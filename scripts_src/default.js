@@ -1,3 +1,5 @@
+import MinimapControl from "./minimap.js";
+
 export default class LocatorMap {
   constructor(element, data = {}) {
     this.element = element;
@@ -38,6 +40,17 @@ export default class LocatorMap {
     }
 
     const map = new mapboxgl.Map(mapConfig);
+    if (this.data.options.minimap) {
+      const minimapOptions = this.data.options.minimapOptions || {};
+      const position = minimapOptions.position || "bottom-right";
+      map.addControl(
+        new MinimapControl({
+          minimapMarkup: this.data.mapConfig.minimapMarkup
+        }),
+        position
+      );
+    }
+
     if (this.data.mapConfig.bounds && initialZoomLevel === -1) {
       map.fitBounds(mapConfig.bounds, { padding: 60, duration: 0 });
     }
