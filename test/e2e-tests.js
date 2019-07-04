@@ -3,14 +3,13 @@ const Lab = require("@hapi/lab");
 const Code = require("@hapi/code");
 const Hapi = require("@hapi/hapi");
 const lab = (exports.lab = Lab.script());
-
 const glob = require("glob");
+process.env.OPENCAGE_APIKEY = "test";
 
 const expect = Code.expect;
 const before = lab.before;
 const after = lab.after;
 const it = lab.it;
-const dev = require("../dev.js");
 
 const routes = require("../routes/routes.js");
 
@@ -103,9 +102,11 @@ lab.experiment("stylesheets endpoint", () => {
 
 // all the fixtures render
 lab.experiment("all fixtures render", async () => {
-  const fixtureFiles = glob.sync(
-    `${__dirname}/../resources/fixtures/data/*.json`
-  );
+  const fixtureFiles = [
+    `../resources/fixtures/data/linestring.json`,
+    `../resources/fixtures/data/mixed-nolabel.json`,
+    `../resources/fixtures/data/polygon.json`
+  ];
   for (let fixtureFile of fixtureFiles) {
     const fixture = require(fixtureFile);
     it(`doesnt fail in rendering fixture ${fixture.title}`, async () => {
@@ -148,7 +149,7 @@ lab.experiment("rendering-info", () => {
 lab.experiment("assets", () => {
   it("returnes stylesheet", async () => {
     const fixture = fs.readFileSync(
-      `${__dirname}/../resources/fixtures/data/point.json`,
+      `${__dirname}/../resources/fixtures/data/polygon.json`,
       { encoding: "utf-8" }
     );
     const res = await server.inject({
