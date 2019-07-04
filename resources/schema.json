@@ -211,7 +211,7 @@
                   "rechts unten"
                 ]
               },
-              "default": "bottomRight"
+              "default": "bottom-right"
             }
           }
         },
@@ -223,18 +223,7 @@
         "labelsBelowMapOneRow": {
           "title": "Beschriftungen unter der Karte ohne Zeilenumbruch",
           "type": "boolean",
-          "default": false,
-          "Q:options": {
-            "availabilityChecks": [
-              {
-                "type": "ToolEndpoint",
-                "config": {
-                  "endpoint": "option-availability/labelsBelowMapOneRow",
-                  "fields": ["options.labelsBelowMap", "geojsonList"]
-                }
-              }
-            ]
-          }
+          "default": false
         },
         "showLegend": {
           "title": "Legende anzeigen",

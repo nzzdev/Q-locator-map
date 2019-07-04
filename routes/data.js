@@ -32,13 +32,12 @@ function getCleanGeojson(geojson) {
 module.exports = [
   {
     method: "POST",
-    path: "/tilesets/{hash}/{id}/{z}/{x}/{y}.pbf",
+    path: "/tilesets/{id}/{z}/{x}/{y}.pbf",
     options: {
       description: "Returns the tileset in pbf format",
       tags: ["api"],
       validate: {
         params: {
-          hash: Joi.string().required(),
           id: Joi.number().required(),
           z: Joi.number().required(),
           x: Joi.number().required(),
@@ -68,11 +67,7 @@ module.exports = [
             return h
               .response(protobuf)
               .type("application/x-protobuf")
-              .header("Content-Encoding", "gzip")
-              .header(
-                "cache-control",
-                "max-age=31536000, s-maxage=31536000, stale-while-revalidate=31536000, stale-if-error=31536000, immutable"
-              );
+              .header("Content-Encoding", "gzip");
           } else {
             return Boom.notFound();
           }

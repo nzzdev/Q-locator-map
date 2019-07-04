@@ -40,14 +40,18 @@ export default class LocatorMap {
     }
 
     const map = new mapboxgl.Map(mapConfig);
-    if (this.data.options.minimap) {
-      const minimapOptions = this.data.options.minimapOptions || {};
-      const position = minimapOptions.position || "bottom-right";
+    const minimapOptions = this.data.options.minimapOptions || {};
+    if (
+      (this.data.options.minimap && minimapOptions.type === "globe") ||
+      (this.data.options.minimap &&
+        minimapOptions.type === "region" &&
+        minimapOptions.region)
+    ) {
       map.addControl(
         new MinimapControl({
           minimapMarkup: this.data.mapConfig.minimapMarkup
         }),
-        position
+        minimapOptions.position
       );
     }
 

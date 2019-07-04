@@ -3,6 +3,8 @@ const hasha = require("hasha");
 const mbtiles = require("@mapbox/mbtiles");
 const vega = require("vega");
 const fetch = require("node-fetch");
+const minimapRegionVegaSpec = require("../resources/config/minimapRegionVegaSpec.json");
+const minimapGlobeVegaSpec = require("../resources/config/minimapGlobeVegaSpec.json");
 
 async function getHash(item, toolRuntimeConfig) {
   // This hash ensures that the response of the endpoint request can be cached forever
@@ -19,19 +21,27 @@ async function getHash(item, toolRuntimeConfig) {
 }
 
 async function getStyleUrl(id, toolRuntimeConfig, qId) {
-  return `${
-    toolRuntimeConfig.toolBaseUrl
-  }/styles/${id}?appendItemToPayload=${qId}&qId=${qId}&toolRuntimeConfig=${encodeURIComponent(
-    JSON.stringify(toolRuntimeConfig)
-  )}`;
+  if (qId) {
+    return `${
+      toolRuntimeConfig.toolBaseUrl
+    }/styles/${id}?appendItemToPayload=${qId}&qId=${qId}&toolRuntimeConfig=${encodeURIComponent(
+      JSON.stringify(toolRuntimeConfig)
+    )}`;
+  } else {
+    return `${
+      toolRuntimeConfig.toolBaseUrl
+    }/styles/${id}?toolRuntimeConfig=${encodeURIComponent(
+      JSON.stringify(toolRuntimeConfig)
+    )}`;
+  }
 }
 
 async function getMinimapMarkup(minimapOptions, mapConfig, toolRuntimeConfig) {
-  let spec = {};
   const height = 100;
   const width = 100;
+  let spec;
   if (minimapOptions.type === "region") {
-    spec = require("../resources/config/minimapRegionVegaSpec.json");
+    spec = JSON.parse(JSON.stringify(minimapRegionVegaSpec));
     const geoDataUrl = `${toolRuntimeConfig.toolBaseUrl}/datasets/${
       minimapOptions.region
     }.geojson`;
@@ -66,7 +76,7 @@ async function getMinimapMarkup(minimapOptions, mapConfig, toolRuntimeConfig) {
       });
     }
   } else {
-    spec = require("../resources/config/minimapGlobeVegaSpec.json");
+    spec = JSON.parse(JSON.stringify(minimapGlobeVegaSpec));
     let bboxPolygon;
     if (mapConfig.bounds) {
       bbox = turf.bboxPolygon(mapConfig.bounds);
@@ -126,8 +136,13 @@ async function getMapConfig(item, toolRuntimeConfig, qId) {
     qId
   );
 
-  if (item.options.minimap) {
-    const minimapOptions = item.options.minimapOptions || {};
+  const minimapOptions = item.options.minimapOptions || {};
+  if (
+    (item.options.minimap && minimapOptions.type === "globe") ||
+    (item.options.minimap &&
+      minimapOptions.type === "region" &&
+      minimapOptions.region)
+  ) {
     mapConfig.minimapMarkup = await getMinimapMarkup(
       minimapOptions,
       mapConfig,

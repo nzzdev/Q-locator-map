@@ -50,7 +50,8 @@ module.exports = {
               if (response.raw.status.code === 200) {
                 const result = response.raw.results[0];
                 enum_titles.push(name);
-                enums.push(result.annotations.wikidata);
+                //enums.push(result.annotations.wikidata);
+                enums.push("Q39");
               }
             }
 
