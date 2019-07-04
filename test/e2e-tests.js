@@ -10,6 +10,7 @@ const expect = Code.expect;
 const before = lab.before;
 const after = lab.after;
 const it = lab.it;
+const dev = require("../dev.js");
 
 const routes = require("../routes/routes.js");
 
@@ -113,7 +114,9 @@ lab.experiment("all fixtures render", async () => {
         url: "/rendering-info/web",
         payload: {
           item: fixture,
-          toolRuntimeConfig: {}
+          toolRuntimeConfig: {
+            toolBaseUrl: "http://localhost:3001/tools/locator_map"
+          }
         }
       };
       const response = await server.inject(request);
@@ -132,7 +135,9 @@ lab.experiment("rendering-info", () => {
           some: "object",
           that: "doesn't validate against the schema"
         },
-        toolRuntimeConfig: {}
+        toolRuntimeConfig: {
+          toolBaseUrl: "http://localhost:3001/tools/locator_map"
+        }
       }
     };
     const response = await server.inject(request);
@@ -151,7 +156,9 @@ lab.experiment("assets", () => {
       method: "POST",
       payload: {
         item: JSON.parse(fixture),
-        toolRuntimeConfig: {}
+        toolRuntimeConfig: {
+          toolBaseUrl: "http://localhost:3001/tools/locator_map"
+        }
       }
     });
     const stylesheetRes = await server.inject(
