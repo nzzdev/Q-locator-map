@@ -105,13 +105,7 @@ module.exports = [
         }
         const response = await request.server.inject(url);
         if (response.statusCode === 200) {
-          return h
-            .response(response.result)
-            .type("application/geo+json")
-            .header(
-              "cache-control",
-              "max-age=31536000, s-maxage=31536000, stale-while-revalidate=31536000, stale-if-error=31536000, immutable"
-            );
+          return h.response(response.result).type("application/geo+json");
         } else {
           return Boom.notFound();
         }

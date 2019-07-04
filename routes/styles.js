@@ -1,6 +1,5 @@
 const Joi = require("@hapi/joi");
 const Boom = require("@hapi/boom");
-const helpers = require(`${__dirname}/../helpers/helpers.js`);
 const resourcesDir = "../resources/";
 const basicStyle = require(`${resourcesDir}styles/basic/style.json`);
 
