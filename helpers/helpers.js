@@ -169,25 +169,22 @@ function getExactPixelWidth(toolRuntimeConfig) {
   return undefined;
 }
 
-function getMbtiles() {
-  if (process.env.MBTILES_PATH) {
-    const mbtilesPath = `${process.env.MBTILES_PATH}?mode=ro`;
-    return new Promise(function(resolve, reject) {
-      new mbtiles(mbtilesPath, function(err, mbtiles) {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(mbtiles);
-        }
-      });
+function getTileset(path) {
+  const tilesetPath = `${path}?mode=ro`;
+  return new Promise(function(resolve, reject) {
+    new mbtiles(tilesetPath, function(err, tileset) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(tileset);
+      }
     });
-  }
-  return {};
+  });
 }
 
-async function getTile(z, x, y) {
+async function getTile(tileset, z, x, y) {
   return await new Promise((resolve, reject) => {
-    this.getTile(z, x, y, (err, tile) => {
+    this.tilesets[tileset].getTile(z, x, y, (err, tile) => {
       if (err) {
         reject(new Error());
       } else {
@@ -201,6 +198,6 @@ module.exports = {
   getMapConfig: getMapConfig,
   getExactPixelWidth: getExactPixelWidth,
   getHash: getHash,
-  getMbtiles: getMbtiles,
+  getTileset: getTileset,
   getTile: getTile
 };

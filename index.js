@@ -17,9 +17,17 @@ const routes = require("./routes/routes.js");
 
 async function init() {
   try {
-    const mbtiles = await helpers.getMbtiles();
+    const tilesets = JSON.parse(process.env.TILESETS);
+    for (let [key, value] of Object.entries(tilesets)) {
+      if (value.path) {
+        server.app.tilesets = server.app.tilesets || {};
+        server.app.tilesets[key] = await helpers.getTileset(value.path);
+      }
+    }
     server.method("getTile", helpers.getTile, {
-      bind: mbtiles,
+      bind: {
+        tilesets: server.app.tilesets
+      },
       cache: { expiresIn: 60000, generateTimeout: 100 }
     });
   } catch (error) {

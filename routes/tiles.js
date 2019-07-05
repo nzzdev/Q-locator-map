@@ -1,14 +1,16 @@
 const Joi = require("@hapi/joi");
 const Boom = require("@hapi/boom");
+const fetch = require("node-fetch");
 
 module.exports = {
   method: "GET",
-  path: "/tiles/{z}/{x}/{y}.pbf",
+  path: "/tiles/{id}/{z}/{x}/{y}.pbf",
   options: {
     description: "Returns the tiles in pbf format",
     tags: ["api"],
     validate: {
       params: {
+        id: Joi.string().required(),
         z: Joi.number().required(),
         x: Joi.number().required(),
         y: Joi.number().required()
@@ -18,13 +20,18 @@ module.exports = {
       }
     },
     handler: async (request, h) => {
+      const id = request.params.id;
       const z = request.params.z;
       const x = request.params.x;
       const y = request.params.y;
+      const tilesets = JSON.parse(process.env.TILESETS);
 
       try {
-        if (process.env.TILE_URL) {
-          const tileUrl = `${process.env.TILE_URL}/${z}/${x}/${y}.pbf`;
+        if (tilesets[id] && tilesets[id].url) {
+          const tileUrl = tilesets[id].url
+            .replace("{z}", z)
+            .replace("{x}", x)
+            .replace("{y}", y);
           const response = await fetch(tileUrl);
           if (response.ok) {
             return response.body;
@@ -32,7 +39,7 @@ module.exports = {
             return new Error();
           }
         } else {
-          const tile = await request.server.methods.getTile(z, x, y);
+          const tile = await request.server.methods.getTile(id, z, x, y);
           return h
             .response(tile)
             .type("application/x-protobuf")

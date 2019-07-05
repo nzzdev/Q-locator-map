@@ -18,7 +18,9 @@ async function getStyle(id, item, toolRuntimeConfig, qId) {
   if (style) {
     style.sources.openmaptiles = {
       type: "vector",
-      tiles: [`${toolRuntimeConfig.toolBaseUrl}/tiles/{z}/{x}/{y}.pbf`],
+      tiles: [
+        `${toolRuntimeConfig.toolBaseUrl}/tiles/openmaptiles/{z}/{x}/{y}.pbf`
+      ],
       minzoom: 0,
       maxzoom: 18
     };
