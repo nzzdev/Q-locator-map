@@ -2,11 +2,14 @@ import MinimapControl from "./minimap.js";
 
 export default class LocatorMap {
   constructor(element, data = {}) {
-    this.element = element;
-    this.data = data;
-    this.width = this.data.width || this.element.getBoundingClientRect().width;
-    this.setHeight();
-    this.render();
+    if (element) {
+      this.element = element;
+      this.data = data;
+      this.width =
+        this.data.width || this.element.getBoundingClientRect().width;
+      this.setHeight();
+      this.render();
+    }
   }
 
   setHeight() {
