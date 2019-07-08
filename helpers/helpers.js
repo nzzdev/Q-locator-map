@@ -24,15 +24,13 @@ async function getStyleUrl(id, toolRuntimeConfig, qId) {
   if (qId) {
     return `${
       toolRuntimeConfig.toolBaseUrl
-    }/styles/${id}?appendItemToPayload=${qId}&qId=${qId}&toolRuntimeConfig=${encodeURIComponent(
-      JSON.stringify(toolRuntimeConfig)
-    )}`;
-  } else {
-    return `${
+    }/styles/${id}?appendItemToPayload=${qId}&qId=${qId}&toolBaseUrl=${
       toolRuntimeConfig.toolBaseUrl
-    }/styles/${id}?toolRuntimeConfig=${encodeURIComponent(
-      JSON.stringify(toolRuntimeConfig)
-    )}`;
+    }`;
+  } else {
+    return `${toolRuntimeConfig.toolBaseUrl}/styles/${id}?toolBaseUrl=${
+      toolRuntimeConfig.toolBaseUrl
+    }`;
   }
 }
 

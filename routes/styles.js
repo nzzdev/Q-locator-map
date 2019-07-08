@@ -3,13 +3,11 @@ const Boom = require("@hapi/boom");
 const resourcesDir = "../resources/";
 const basicStyle = require(`${resourcesDir}styles/basic/style.json`);
 
-async function getDataUrl(id, toolRuntimeConfig, qId) {
-  return `${
-    toolRuntimeConfig.toolBaseUrl
-  }/tilesets/${id}/{z}/{x}/{y}.pbf?appendItemToPayload=${qId}`;
+async function getDataUrl(id, toolBaseUrl, qId) {
+  return `${toolBaseUrl}/tilesets/${id}/{z}/{x}/{y}.pbf?appendItemToPayload=${qId}`;
 }
 
-async function getStyle(id, item, toolRuntimeConfig, qId) {
+async function getStyle(id, item, toolBaseUrl, qId) {
   let style = JSON.stringify(basicStyle);
   style = JSON.parse(
     style.replace(/\${access_token}/g, process.env.ACCESS_TOKEN)
@@ -18,15 +16,13 @@ async function getStyle(id, item, toolRuntimeConfig, qId) {
   if (style) {
     style.sources.openmaptiles = {
       type: "vector",
-      tiles: [
-        `${toolRuntimeConfig.toolBaseUrl}/tiles/openmaptiles/{z}/{x}/{y}.pbf`
-      ],
+      tiles: [`${toolBaseUrl}/tiles/openmaptiles/{z}/{x}/{y}.pbf`],
       minzoom: 0,
       maxzoom: 18
     };
     if (item) {
       for (const [i, geojson] of item.geojsonList.entries()) {
-        const dataUrl = await getDataUrl(i, toolRuntimeConfig, qId);
+        const dataUrl = await getDataUrl(i, toolBaseUrl, qId);
         style.sources[`source-${i}`] = {
           type: "vector",
           tiles: [dataUrl],
@@ -132,16 +128,16 @@ module.exports = [
           id: Joi.string().required()
         },
         query: {
-          toolRuntimeConfig: Joi.object().required()
+          toolBaseUrl: Joi.string().required()
         }
       },
       handler: async (request, h) => {
         const id = request.params.id;
-        const toolRuntimeConfig = request.query.toolRuntimeConfig;
+        const toolBaseUrl = request.query.toolBaseUrl;
         let item;
         let qId;
 
-        const style = await getStyle(id, item, toolRuntimeConfig, qId);
+        const style = await getStyle(id, item, toolBaseUrl, qId);
         if (style) {
           return style;
         } else {
@@ -161,7 +157,7 @@ module.exports = [
           id: Joi.string().required()
         },
         query: {
-          toolRuntimeConfig: Joi.object().required(),
+          toolBaseUrl: Joi.string().required(),
           qId: Joi.string().required()
         },
         options: {
@@ -171,10 +167,10 @@ module.exports = [
       handler: async (request, h) => {
         const id = request.params.id;
         const item = request.payload.item;
-        const toolRuntimeConfig = request.query.toolRuntimeConfig;
+        const toolBaseUrl = request.query.toolBaseUrl;
         const qId = request.query.qId;
 
-        const style = await getStyle(id, item, toolRuntimeConfig, qId);
+        const style = await getStyle(id, item, toolBaseUrl, qId);
         if (style) {
           return style;
         } else {

@@ -62,7 +62,7 @@ module.exports = {
 
     const context = {
       item: item,
-      displayOptions: request.payload.toolRuntimeConfig.displayOptions || {},
+      displayOptions: toolRuntimeConfig.displayOptions || {},
       id: `q_locator_map_${request.query._id}_${Math.floor(
         Math.random() * 100000
       )}`.replace(/-/g, ""),
@@ -71,7 +71,7 @@ module.exports = {
         toolRuntimeConfig,
         request.query._id
       ),
-      width: helpers.getExactPixelWidth(request.payload.toolRuntimeConfig)
+      width: helpers.getExactPixelWidth(toolRuntimeConfig)
     };
 
     const renderingInfo = {
