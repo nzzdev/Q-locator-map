@@ -7,7 +7,7 @@
   "projections": [
     {
       "name": "projection",
-      "scale": { "signal": "scale" },
+      "scale": { "signal": "scaleFactor" },
       "center": { "signal": "center" },
       "type": "mercator",
       "translate": { "signal": "[width/2, height/2]" }

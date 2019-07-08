@@ -52,11 +52,11 @@ async function getMinimapMarkup(minimapOptions, mapConfig, toolRuntimeConfig) {
       const distance = turf.distance([bbox[0], bbox[1]], [bbox[2], bbox[3]], {
         units: "radians"
       });
-      const scale = height / distance / Math.sqrt(2);
+      const scaleFactor = height / distance / Math.sqrt(2);
 
       spec.signals.push({
-        name: "scale",
-        value: scale
+        name: "scaleFactor",
+        value: scaleFactor
       });
 
       spec.signals.push({
