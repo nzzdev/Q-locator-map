@@ -9,6 +9,8 @@ const cssnano = require("cssnano");
 const rollup = require("rollup");
 const buble = require("rollup-plugin-buble");
 const { terser } = require("rollup-plugin-terser");
+const resolve = require("rollup-plugin-node-resolve");
+const commonjs = require("rollup-plugin-commonjs");
 
 const stylesDir = `${__dirname}/../styles_src/`;
 const scriptsDir = `${__dirname}/../scripts_src/`;
@@ -96,7 +98,7 @@ async function buildScripts() {
     const filename = "default";
     const inputOptions = {
       input: `${scriptsDir}${filename}.js`,
-      plugins: [buble(), terser()]
+      plugins: [resolve({ browser: true }), commonjs(), buble(), terser()]
     };
     const outputOptions = {
       format: "iife",

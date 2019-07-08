@@ -79,15 +79,9 @@ module.exports = {
       stylesheets: [
         {
           name: styleHashMap["default"]
-        },
-        {
-          url: "https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css"
         }
       ],
       scripts: [
-        {
-          url: "https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js"
-        },
         {
           name: scriptHashMap["default"]
         },

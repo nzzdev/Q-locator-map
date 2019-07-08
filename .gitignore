@@ -1,5 +1,5 @@
 node_modules
 .DS_STORE
 scripts
-./styles/
+./styles/*
 dev.js

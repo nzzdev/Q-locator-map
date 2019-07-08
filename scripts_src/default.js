@@ -1,3 +1,4 @@
+import mapboxgl from "mapbox-gl";
 import MinimapControl from "./minimap.js";
 
 export default class LocatorMap {
