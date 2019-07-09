@@ -10,16 +10,12 @@ async function getDataUrl(id, toolBaseUrl, qId) {
 async function getStyle(id, item, toolBaseUrl, qId) {
   let style = JSON.stringify(basicStyle);
   style = JSON.parse(
-    style.replace(/\${access_token}/g, process.env.ACCESS_TOKEN)
+    style
+      .replace(/\${access_token}/g, process.env.ACCESS_TOKEN)
+      .replace(/\${toolBaseUrl}/g, toolBaseUrl)
   );
 
   if (style) {
-    style.sources.openmaptiles = {
-      type: "vector",
-      tiles: [`${toolBaseUrl}/tiles/openmaptiles/{z}/{x}/{y}.pbf`],
-      minzoom: 0,
-      maxzoom: 18
-    };
     if (item) {
       for (const [i, geojson] of item.geojsonList.entries()) {
         const dataUrl = await getDataUrl(i, toolBaseUrl, qId);
