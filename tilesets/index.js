@@ -29,7 +29,7 @@ async function downloadTileset(url, path, size) {
   }
 }
 
-async function deleteOldTileset(path) {
+async function deleteTileset(path) {
   console.log(`Deleting ${path}...`);
   await unlink(path);
   console.log(`Deleted ${path}.`);
@@ -56,7 +56,7 @@ async function main() {
             tileset.delete &&
             fs.existsSync(tilesetPath)
           ) {
-            await deleteOldTileset(tilesetPath);
+            await deleteTileset(tilesetPath);
           }
         }
       }
