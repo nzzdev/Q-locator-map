@@ -1,10 +1,10 @@
 const fs = require("fs");
-const Lab = require("lab");
-const Code = require("code");
-const Hapi = require("hapi");
+const Lab = require("@hapi/lab");
+const Code = require("@hapi/code");
+const Hapi = require("@hapi/hapi");
 const lab = (exports.lab = Lab.script());
-
 const glob = require("glob");
+process.env.OPENCAGE_APIKEY = "test";
 
 const expect = Code.expect;
 const before = lab.before;
@@ -23,7 +23,7 @@ before(async () => {
         cors: true
       }
     });
-    await server.register(require("inert"));
+    await server.register(require("@hapi/inert"));
     server.route(routes);
   } catch (err) {
     expect(err).to.not.exist();
@@ -102,9 +102,11 @@ lab.experiment("stylesheets endpoint", () => {
 
 // all the fixtures render
 lab.experiment("all fixtures render", async () => {
-  const fixtureFiles = glob.sync(
-    `${__dirname}/../resources/fixtures/data/*.json`
-  );
+  const fixtureFiles = [
+    `../resources/fixtures/data/linestring.json`,
+    `../resources/fixtures/data/mixed-nolabel.json`,
+    `../resources/fixtures/data/polygon.json`
+  ];
   for (let fixtureFile of fixtureFiles) {
     const fixture = require(fixtureFile);
     it(`doesnt fail in rendering fixture ${fixture.title}`, async () => {
@@ -113,7 +115,9 @@ lab.experiment("all fixtures render", async () => {
         url: "/rendering-info/web",
         payload: {
           item: fixture,
-          toolRuntimeConfig: {}
+          toolRuntimeConfig: {
+            toolBaseUrl: "http://localhost:3001/tools/locator_map"
+          }
         }
       };
       const response = await server.inject(request);
@@ -132,7 +136,9 @@ lab.experiment("rendering-info", () => {
           some: "object",
           that: "doesn't validate against the schema"
         },
-        toolRuntimeConfig: {}
+        toolRuntimeConfig: {
+          toolBaseUrl: "http://localhost:3001/tools/locator_map"
+        }
       }
     };
     const response = await server.inject(request);
@@ -143,7 +149,7 @@ lab.experiment("rendering-info", () => {
 lab.experiment("assets", () => {
   it("returnes stylesheet", async () => {
     const fixture = fs.readFileSync(
-      `${__dirname}/../resources/fixtures/data/basic.json`,
+      `${__dirname}/../resources/fixtures/data/polygon.json`,
       { encoding: "utf-8" }
     );
     const res = await server.inject({
@@ -151,7 +157,9 @@ lab.experiment("assets", () => {
       method: "POST",
       payload: {
         item: JSON.parse(fixture),
-        toolRuntimeConfig: {}
+        toolRuntimeConfig: {
+          toolBaseUrl: "http://localhost:3001/tools/locator_map"
+        }
       }
     });
     const stylesheetRes = await server.inject(

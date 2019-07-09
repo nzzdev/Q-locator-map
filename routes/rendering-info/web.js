@@ -1,20 +1,21 @@
-const Boom = require("boom");
+const Boom = require("@hapi/boom");
 const fs = require("fs");
-const path = require("path");
 
-const stylesDir = path.join(__dirname, "/../../styles/");
-const styleHashMap = require(path.join(stylesDir, "hashMap.json"));
-const scriptsDir = `${__dirname}/../../scripts/`;
+const stylesDir = "../../styles/";
+const styleHashMap = require(`${stylesDir}hashMap.json`);
+const scriptsDir = "../../scripts/";
 const scriptHashMap = require(`${scriptsDir}/hashMap.json`);
 const viewsDir = `${__dirname}/../../views/`;
+const helpers = require("../../helpers/helpers.js");
 
-require("svelte/ssr/register");
-const template = require(`${viewsDir}/locator-map.html`);
+// setup nunjucks environment
+const nunjucks = require("nunjucks");
+const nunjucksEnv = new nunjucks.Environment();
 
 // POSTed item will be validated against given schema
 // hence we fetch the JSON schema...
 const schemaString = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "../../resources/", "schema.json"), {
+  fs.readFileSync(`${__dirname}/../../resources/schema.json`, {
     encoding: "utf-8"
   })
 );
@@ -56,14 +57,21 @@ module.exports = {
   },
   handler: async function(request, h) {
     const item = request.payload.item;
+    const toolRuntimeConfig = request.payload.toolRuntimeConfig;
     item.id = request.query._id;
 
     const context = {
       item: item,
-      displayOptions: request.payload.toolRuntimeConfig.displayOptions || {},
+      displayOptions: toolRuntimeConfig.displayOptions || {},
       id: `q_locator_map_${request.query._id}_${Math.floor(
         Math.random() * 100000
-      )}`.replace(/-/g, "")
+      )}`.replace(/-/g, ""),
+      mapConfig: await helpers.getMapConfig(
+        item,
+        toolRuntimeConfig,
+        request.query._id
+      ),
+      width: helpers.getExactPixelWidth(toolRuntimeConfig)
     };
 
     const renderingInfo = {
@@ -71,25 +79,23 @@ module.exports = {
       stylesheets: [
         {
           name: styleHashMap["default"]
-        },
-        {
-          url: "https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css"
         }
       ],
       scripts: [
         {
-          url: "https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js"
-        },
-        {
           name: scriptHashMap["default"]
         },
         {
-          content: `new window._q_locator_map.LocatorMap(${`${
+          content: `new window._q_locator_map.LocatorMap(document.querySelector('#${
             context.id
-          }_container`})`
+          }_container'), JSON.parse('${JSON.stringify({
+            mapConfig: context.mapConfig,
+            options: context.item.options,
+            width: context.width
+          })}'))`
         }
       ],
-      markup: template.render(context).html
+      markup: nunjucksEnv.render(`${viewsDir}/locator-map.html`, context)
     };
 
     return renderingInfo;

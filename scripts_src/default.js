@@ -1,63 +1,66 @@
+import mapboxgl from "mapbox-gl";
+import MinimapControl from "./minimap.js";
+
 export default class LocatorMap {
-  constructor(element, data = {}, config = {}) {
-    this.element = element;
-    this.data = data;
-    this.config = config;
-    this.render();
+  constructor(element, data = {}) {
+    if (element) {
+      this.element = element;
+      this.data = data;
+      this.width =
+        this.data.width || this.element.getBoundingClientRect().width;
+      this.setHeight();
+      this.render();
+    }
+  }
+
+  setHeight() {
+    const aspectRatio = this.width > 450 ? 9 / 16 : 1;
+    this.element.style.height = `${this.width * aspectRatio}px`;
   }
 
   render() {
-    mapboxgl.accessToken =
-      "pk.eyJ1IjoibWFudWVscm90aCIsImEiOiJQUFk4RmtvIn0.sxUONBlaOlyYSR3XMJ3uJg";
-    const map = new mapboxgl.Map({
+    const mapConfig = {
       container: this.element,
-      style: "mapbox://styles/mapbox/streets-v11",
-      center: [-68.13734351262877, 45.137451890638886],
-      zoom: 5
-    });
-    map.on("load", function() {
-      map.addLayer({
-        id: "maine",
-        type: "fill",
-        source: {
-          type: "geojson",
-          data: {
-            type: "Feature",
-            geometry: {
-              type: "Polygon",
-              coordinates: [
-                [
-                  [-67.13734351262877, 45.137451890638886],
-                  [-66.96466, 44.8097],
-                  [-68.03252, 44.3252],
-                  [-69.06, 43.98],
-                  [-70.11617, 43.68405],
-                  [-70.64573401557249, 43.090083319667144],
-                  [-70.75102474636725, 43.08003225358635],
-                  [-70.79761105007827, 43.21973948828747],
-                  [-70.98176001655037, 43.36789581966826],
-                  [-70.94416541205806, 43.46633942318431],
-                  [-71.08482, 45.3052400000002],
-                  [-70.6600225491012, 45.46022288673396],
-                  [-70.30495378282376, 45.914794623389355],
-                  [-70.00014034695016, 46.69317088478567],
-                  [-69.23708614772835, 47.44777598732787],
-                  [-68.90478084987546, 47.184794623394396],
-                  [-68.23430497910454, 47.35462921812177],
-                  [-67.79035274928509, 47.066248887716995],
-                  [-67.79141211614706, 45.702585354182816],
-                  [-67.13734351262877, 45.137451890638886]
-                ]
-              ]
-            }
-          }
-        },
-        layout: {},
-        paint: {
-          "fill-color": "#088",
-          "fill-opacity": 0.8
-        }
-      });
-    });
+      style: this.data.mapConfig.styleUrl,
+      interactive: false
+    };
+    const initialZoomLevel = this.data.options.initialZoomLevel;
+    if (this.data.mapConfig.bounds) {
+      if (initialZoomLevel !== -1) {
+        mapConfig.zoom = initialZoomLevel;
+        mapConfig.center = this.data.mapConfig.center;
+      } else {
+        mapConfig.bounds = new mapboxgl.LngLatBounds(
+          this.data.mapConfig.bounds
+        );
+      }
+    } else {
+      mapConfig.center = this.data.mapConfig.center;
+      if (initialZoomLevel !== -1) {
+        mapConfig.zoom = initialZoomLevel;
+      } else {
+        mapConfig.zoom = 9;
+      }
+    }
+
+    const map = new mapboxgl.Map(mapConfig);
+    const minimapOptions = this.data.options.minimapOptions || {};
+    if (
+      (this.data.options.minimap && minimapOptions.type === "globe") ||
+      (this.data.options.minimap &&
+        minimapOptions.type === "region" &&
+        minimapOptions.region)
+    ) {
+      map.addControl(
+        new MinimapControl({
+          minimapMarkup: this.data.mapConfig.minimapMarkup
+        }),
+        minimapOptions.position
+      );
+    }
+
+    if (this.data.mapConfig.bounds && initialZoomLevel === -1) {
+      map.fitBounds(mapConfig.bounds, { padding: 60, duration: 0 });
+    }
   }
 }

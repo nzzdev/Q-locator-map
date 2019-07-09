@@ -1,0 +1,83 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "padding": 10,
+  "autosize": "none",
+  "signals": [],
+  "data": [
+    {
+      "name": "sphere",
+      "values": [{ "type": "Sphere" }]
+    },
+    {
+      "name": "world",
+      "url": "https://vega.github.io/vega/data/world-110m.json",
+      "format": {
+        "type": "topojson",
+        "feature": "countries"
+      }
+    }
+  ],
+
+  "projections": [
+    {
+      "name": "projection",
+      "scale": { "signal": "width/2" },
+      "type": "orthographic",
+      "translate": { "signal": "[width/2, height/2]" },
+      "rotate": [{ "signal": "rotate0" }, { "signal": "rotate1" }, 0]
+    }
+  ],
+
+  "marks": [
+    {
+      "type": "shape",
+      "from": { "data": "sphere" },
+      "encode": {
+        "update": {
+          "fill": { "value": "lightblue" },
+          "stroke": { "value": "black" },
+          "strokeWidth": { "value": 1.5 }
+        }
+      },
+      "transform": [
+        {
+          "type": "geoshape",
+          "projection": "projection"
+        }
+      ]
+    },
+    {
+      "type": "shape",
+      "from": { "data": "world" },
+      "encode": {
+        "update": {
+          "fill": { "value": "white" },
+          "stroke": { "value": "black" },
+          "strokeWidth": { "value": 0.5 }
+        }
+      },
+      "transform": [
+        {
+          "type": "geoshape",
+          "projection": "projection"
+        }
+      ]
+    },
+    {
+      "type": "shape",
+      "from": { "data": "bbox" },
+      "encode": {
+        "update": {
+          "stroke": { "value": "red" },
+          "strokeWidth": { "value": 1 }
+        }
+      },
+      "transform": [
+        {
+          "type": "geoshape",
+          "projection": "projection"
+        }
+      ]
+    }
+  ]
+}
