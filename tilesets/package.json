@@ -1,0 +1,17 @@
+{
+  "name": "q-locator-map-tilesets",
+  "version": "1.0.0",
+  "description": "Service to manage tilesets for the q-locator-maps tool",
+  "main": "index.js",
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nzzdev/Q-locator-map.git"
+  },
+  "dependencies": {
+    "fs-extra": "^8.1.0",
+    "node-fetch": "^2.6.0",
+    "progress-stream": "^2.0.0"
+  }
+}
