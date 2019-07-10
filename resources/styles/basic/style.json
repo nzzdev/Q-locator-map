@@ -11,7 +11,7 @@
       "attribution": "<a href=\"https://www.maptiler.com/copyright/\" target=\"_blank\">&copy; MapTiler</a> <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">&copy; OpenStreetMap contributors</a>"
     }
   },
-  "glyphs": "https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=${access_token}",
+  "glyphs": "https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=${maptiler_access_token}",
   "layers": [
     {
       "id": "background",
@@ -773,6 +773,5 @@
       "source-layer": "place",
       "type": "symbol"
     }
-  ],
-  "id": "basic"
+  ]
 }

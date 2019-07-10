@@ -3,6 +3,7 @@ const Boom = require("@hapi/boom");
 const resourcesDir = "../resources/";
 const basicStyle = require(`${resourcesDir}styles/basic/style.json`);
 const topoStyle = require(`${resourcesDir}styles/topo/style.json`);
+const satelliteStyle = require(`${resourcesDir}styles/satellite/style.json`);
 
 async function getDataUrl(id, toolBaseUrl, qId) {
   return `${toolBaseUrl}/tilesets/${id}/{z}/{x}/{y}.pbf?appendItemToPayload=${qId}`;
@@ -12,12 +13,15 @@ async function getStyle(id, item, toolBaseUrl, qId) {
   let style;
   if (["terrain", "terrainNoLabels"].includes(id)) {
     style = JSON.stringify(topoStyle);
+  } else if (id === "aerial") {
+    style = JSON.stringify(satelliteStyle);
   } else {
     style = JSON.stringify(basicStyle);
   }
   style = JSON.parse(
     style
-      .replace(/\${access_token}/g, process.env.ACCESS_TOKEN)
+      .replace(/\${maptiler_access_token}/g, process.env.MAPTILER_ACCESS_TOKEN)
+      .replace(/\${mapbox_access_token}/g, process.env.MAPBOX_ACCESS_TOKEN)
       .replace(/\${toolBaseUrl}/g, toolBaseUrl)
   );
 

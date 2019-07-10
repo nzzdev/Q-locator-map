@@ -20,7 +20,7 @@
     },
     "landcover": {
       "type": "vector",
-      "url": "https://api.maptiler.com/tiles/landcover/tiles.json?key=${access_token}"
+      "url": "https://api.maptiler.com/tiles/landcover/tiles.json?key=${maptiler_access_token}"
     },
     "hillshade": {
       "type": "raster",
@@ -33,7 +33,7 @@
     }
   },
   "sprite": "https://cloud.maptiler.com/api/sprites/14b8afeb-5468-42af-855b-823f7aa89b9a",
-  "glyphs": "https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=${access_token}",
+  "glyphs": "https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=${maptiler_access_token}",
   "layers": [
     {
       "id": "background",
@@ -2263,10 +2263,5 @@
         "text-halo-width": 1
       }
     }
-  ],
-  "id": "+topo",
-  "center": [0, 2.842170943040401e-14],
-  "zoom": 0.31967210048900335,
-  "bearing": 0,
-  "pitch": 0
+  ]
 }
