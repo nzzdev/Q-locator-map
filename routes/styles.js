@@ -44,7 +44,7 @@ async function getStyle(id, item, toolBaseUrl, qId) {
           layout: {
             "text-field": "{label}",
             "text-size": 13,
-            "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+            "text-font": ["Noto Sans Bold"],
             "text-line-height": 1.1,
             "text-offset": [0, -2],
             "text-anchor": ["string", ["get", "labelPosition"], "center"]

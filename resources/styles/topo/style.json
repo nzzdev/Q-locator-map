@@ -33,7 +33,7 @@
     }
   },
   "sprite": "${toolBaseUrl}/sprites/topo",
-  "glyphs": "https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=${maptiler_access_token}",
+  "glyphs": "${toolBaseUrl}/fonts/{fontstack}/{range}.pbf",
   "layers": [
     {
       "id": "background",
@@ -1712,7 +1712,7 @@
       "filter": ["all", ["==", "$type", "LineString"]],
       "layout": {
         "text-field": "{name:latin}\n{name:nonlatin}",
-        "text-font": ["Roboto Regular", "Noto Sans Regular"],
+        "text-font": ["Noto Sans Regular"],
         "text-max-width": 5,
         "text-size": 12,
         "symbol-placement": "line",
@@ -1802,7 +1802,7 @@
         "symbol-placement": "line",
         "text-anchor": "center",
         "text-field": "{name:latin} {name:nonlatin}",
-        "text-font": ["Roboto Regular", "Noto Sans Regular"],
+        "text-font": ["Noto Sans Regular"],
         "text-offset": [0, 0.15],
         "text-size": { "base": 1, "stops": [[13, 12], [14, 13]] },
         "visibility": "visible"
@@ -1825,7 +1825,7 @@
         "symbol-placement": "line",
         "text-anchor": "center",
         "text-field": "{name:latin} {name:nonlatin}",
-        "text-font": ["Roboto Regular", "Noto Sans Regular"],
+        "text-font": ["Noto Sans Regular"],
         "text-offset": [0, 0.15],
         "text-size": { "base": 1, "stops": [[13, 10], [14, 12]] },
         "visibility": "visible"
@@ -1936,7 +1936,7 @@
       ],
       "layout": {
         "text-field": "{name:latin}\n{name:nonlatin}",
-        "text-font": ["Roboto Medium", "Noto Sans Regular"],
+        "text-font": ["Noto Sans Regular"],
         "text-letter-spacing": 0.1,
         "text-max-width": 9,
         "text-size": { "base": 1.2, "stops": [[12, 10], [15, 14]] },
@@ -2020,7 +2020,7 @@
       "filter": ["all", ["==", "class", "village"]],
       "layout": {
         "text-field": "{name:latin}\n{name:nonlatin}",
-        "text-font": ["Roboto Regular", "Noto Sans Regular"],
+        "text-font": ["Noto Sans Regular"],
         "text-max-width": 8,
         "text-size": { "base": 1.2, "stops": [[10, 12], [15, 22]] }
       },
@@ -2043,7 +2043,7 @@
         "icon-image": { "base": 1, "stops": [[0, "dot_9"], [10, ""]] },
         "text-anchor": { "stops": [[6, "bottom"], [10, "center"]] },
         "text-field": "{name:latin}\n{name:nonlatin}",
-        "text-font": ["Roboto Regular", "Noto Sans Regular"],
+        "text-font": ["Noto Sans Regular"],
         "text-max-width": 8,
         "text-offset": [0, 0],
         "text-size": { "base": 1.2, "stops": [[7, 8], [11, 20]] },
@@ -2073,7 +2073,7 @@
         "icon-image": { "base": 1, "stops": [[0, "dot_9"], [10, ""]] },
         "text-anchor": { "stops": [[6, "bottom"], [10, "center"]] },
         "text-field": "{name:latin}\n{name:nonlatin}",
-        "text-font": ["Roboto Medium", "Noto Sans Regular"],
+        "text-font": ["Noto Sans Regular"],
         "text-max-width": 8,
         "text-offset": [0, 0],
         "text-size": { "base": 1.2, "stops": [[7, 14], [11, 24]] },
@@ -2100,7 +2100,7 @@
         "icon-image": { "base": 1, "stops": [[0, "dot_11"], [8, ""]] },
         "text-anchor": { "stops": [[6, "bottom"], [8, "center"]] },
         "text-field": "{name:latin}\n{name:nonlatin}",
-        "text-font": ["Roboto Medium", "Noto Sans Regular"],
+        "text-font": ["Noto Sans Regular"],
         "text-max-width": 8,
         "text-offset": [0, 0],
         "text-size": { "base": 1.2, "stops": [[7, 18], [11, 28]] },
@@ -2124,7 +2124,7 @@
       "filter": ["all", ["==", "class", "state"]],
       "layout": {
         "text-field": "{name:latin}\n{name:nonlatin}",
-        "text-font": ["Roboto Medium", "Noto Sans Regular"],
+        "text-font": ["Noto Sans Regular"],
         "text-size": { "stops": [[4, 11], [6, 15]] },
         "text-transform": "uppercase",
         "visibility": "visible"

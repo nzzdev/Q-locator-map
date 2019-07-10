@@ -8,7 +8,7 @@
       "tileSize": 256
     }
   },
-  "glyphs": "https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=${maptiler_access_token}",
+  "glyphs": "${toolBaseUrl}/fonts/{fontstack}/{range}.pbf",
   "layers": [
     {
       "id": "background",
