@@ -4,7 +4,7 @@ const fetch = require("node-fetch");
 
 module.exports = {
   method: "GET",
-  path: "/tiles/{id}/{z}/{x}/{y}.{type}",
+  path: "/tiles/{id}/{z}/{x}/{y}.{extension}",
   options: {
     description: "Returns the tiles in pbf format",
     tags: ["api"],
@@ -14,7 +14,7 @@ module.exports = {
         z: Joi.number().required(),
         x: Joi.number().required(),
         y: Joi.number().required(),
-        type: Joi.string().required()
+        extension: Joi.string().required()
       },
       options: {
         allowUnknown: true
@@ -25,7 +25,7 @@ module.exports = {
       const z = request.params.z;
       const x = request.params.x;
       const y = request.params.y;
-      const type = request.params.type;
+      const extension = request.params.extension;
       const tilesets = JSON.parse(process.env.TILESETS);
 
       try {
@@ -36,7 +36,7 @@ module.exports = {
             .replace("{y}", y);
           const response = await fetch(tileUrl);
           if (response.ok) {
-            if (type === "png") {
+            if (extension === "png") {
               return h.response(response.body).type("image/png");
             } else {
               return h.response(response.body).type("application/x-protobuf");
@@ -46,7 +46,7 @@ module.exports = {
           }
         } else {
           const tile = await request.server.methods.getTile(id, z, x, y);
-          if (type === "png") {
+          if (extension === "png") {
             return h.response(tile).type("image/png");
           } else {
             return h

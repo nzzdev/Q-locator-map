@@ -32,7 +32,7 @@
       "attribution": "<a href=\"https://www.maptiler.com/copyright/\" target=\"_blank\">&copy; MapTiler</a> <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">&copy; OpenStreetMap contributors</a>"
     }
   },
-  "sprite": "https://cloud.maptiler.com/api/sprites/14b8afeb-5468-42af-855b-823f7aa89b9a",
+  "sprite": "${toolBaseUrl}/sprites/topo",
   "glyphs": "https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=${maptiler_access_token}",
   "layers": [
     {

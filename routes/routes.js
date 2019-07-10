@@ -7,5 +7,6 @@ module.exports = [
   require("./locales.js"),
   require("./option-availability.js"),
   require("./dynamic-schema.js"),
-  require("./tiles.js")
+  require("./tiles.js"),
+  require("./sprites.js")
 ].concat(require("./schema.js"), require("./data.js"), require("./styles.js"));
