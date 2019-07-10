@@ -2,13 +2,19 @@ const Joi = require("@hapi/joi");
 const Boom = require("@hapi/boom");
 const resourcesDir = "../resources/";
 const basicStyle = require(`${resourcesDir}styles/basic/style.json`);
+const topoStyle = require(`${resourcesDir}styles/topo/style.json`);
 
 async function getDataUrl(id, toolBaseUrl, qId) {
   return `${toolBaseUrl}/tilesets/${id}/{z}/{x}/{y}.pbf?appendItemToPayload=${qId}`;
 }
 
 async function getStyle(id, item, toolBaseUrl, qId) {
-  let style = JSON.stringify(basicStyle);
+  let style;
+  if (["terrain", "terrainNoLabels"].includes(id)) {
+    style = JSON.stringify(topoStyle);
+  } else {
+    style = JSON.stringify(basicStyle);
+  }
   style = JSON.parse(
     style
       .replace(/\${access_token}/g, process.env.ACCESS_TOKEN)

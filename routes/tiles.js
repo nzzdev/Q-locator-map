@@ -4,7 +4,7 @@ const fetch = require("node-fetch");
 
 module.exports = {
   method: "GET",
-  path: "/tiles/{id}/{z}/{x}/{y}.pbf",
+  path: "/tiles/{id}/{z}/{x}/{y}.{type}",
   options: {
     description: "Returns the tiles in pbf format",
     tags: ["api"],
@@ -13,7 +13,8 @@ module.exports = {
         id: Joi.string().required(),
         z: Joi.number().required(),
         x: Joi.number().required(),
-        y: Joi.number().required()
+        y: Joi.number().required(),
+        type: Joi.string().required()
       },
       options: {
         allowUnknown: true
@@ -24,6 +25,7 @@ module.exports = {
       const z = request.params.z;
       const x = request.params.x;
       const y = request.params.y;
+      const type = request.params.type;
       const tilesets = JSON.parse(process.env.TILESETS);
 
       try {
@@ -40,10 +42,17 @@ module.exports = {
           }
         } else {
           const tile = await request.server.methods.getTile(id, z, x, y);
-          return h
-            .response(tile)
-            .type("application/x-protobuf")
-            .header("Content-Encoding", "gzip");
+          if (type === png) {
+            return h
+              .response(tile)
+              .type("image/png")
+              .header("Content-Encoding", "gzip");
+          } else {
+            return h
+              .response(tile)
+              .type("application/x-protobuf")
+              .header("Content-Encoding", "gzip");
+          }
         }
       } catch (error) {
         return Boom.notFound();
