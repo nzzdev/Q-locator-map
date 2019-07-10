@@ -22,12 +22,13 @@
       "type": "vector",
       "url": "https://api.maptiler.com/tiles/landcover/tiles.json?key=${access_token}"
     },
-    "terrain-rgb": {
-      "type": "raster-dem",
+    "hillshade": {
+      "type": "raster",
       "tiles": ["${toolBaseUrl}/tiles/hillshade/{z}/{x}/{y}.png"],
       "minzoom": 0,
-      "maxzoom": 10,
-      "bounds": [-180, -84.999983, 180, 85],
+      "maxzoom": 12,
+      "bounds": [-179.98067, -57.000384, 179.972533, 72.000695],
+      "tileSize": 256,
       "attribution": "<a href=\"https://www.maptiler.com/copyright/\" target=\"_blank\">&copy; MapTiler</a> <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">&copy; OpenStreetMap contributors</a>"
     }
   },
@@ -240,12 +241,16 @@
     },
     {
       "id": "hillshade",
-      "type": "hillshade",
-      "source": "terrain-rgb",
+      "type": "raster",
+      "source": "hillshade",
       "layout": { "visibility": "visible" },
       "paint": {
-        "hillshade-shadow-color": "rgba(49, 49, 49, 1)",
-        "hillshade-exaggeration": 0.6
+        "raster-opacity": {
+          "base": 0.5,
+          "stops": [[3, 0], [5, 0.15], [12, 0.15]]
+        },
+        "raster-fade-duration": 300,
+        "raster-contrast": 0
       }
     },
     {

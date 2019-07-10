@@ -36,17 +36,18 @@ module.exports = {
             .replace("{y}", y);
           const response = await fetch(tileUrl);
           if (response.ok) {
-            return response.body;
+            if (type === "png") {
+              return h.response(response.body).type("image/png");
+            } else {
+              return h.response(response.body).type("application/x-protobuf");
+            }
           } else {
             return new Error();
           }
         } else {
           const tile = await request.server.methods.getTile(id, z, x, y);
           if (type === "png") {
-            return h
-              .response(tile)
-              .type("image/png")
-              .header("Content-Encoding", "gzip");
+            return h.response(tile).type("image/png");
           } else {
             return h
               .response(tile)
