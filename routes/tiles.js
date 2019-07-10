@@ -42,7 +42,7 @@ module.exports = {
           }
         } else {
           const tile = await request.server.methods.getTile(id, z, x, y);
-          if (type === png) {
+          if (type === "png") {
             return h
               .response(tile)
               .type("image/png")
