@@ -3,6 +3,7 @@ const hasha = require("hasha");
 const mbtiles = require("@mapbox/mbtiles");
 const vega = require("vega");
 const fetch = require("node-fetch");
+const Boom = require("@hapi/boom");
 const minimapRegionVegaSpec = require("../resources/config/minimapRegionVegaSpec.json");
 const minimapGlobeVegaSpec = require("../resources/config/minimapGlobeVegaSpec.json");
 
@@ -182,9 +183,9 @@ function getTileset(path) {
 
 async function getTile(tileset, z, x, y) {
   return await new Promise((resolve, reject) => {
-    this.tilesets[tileset].getTile(z, x, y, (err, tile) => {
-      if (err) {
-        reject(new Error());
+    this.tilesets[tileset].getTile(z, x, y, (error, tile) => {
+      if (error) {
+        reject(Boom.notFound());
       } else {
         resolve(tile);
       }
