@@ -1,5 +1,6 @@
 const path = require("path");
 const Joi = require("@hapi/joi");
+const Boom = require("@hapi/boom");
 const stylesDir = `${__dirname}/../resources/styles/`;
 
 module.exports = {
@@ -16,9 +17,17 @@ module.exports = {
     }
   },
   handler: function(request, h) {
-    const id = request.params.id;
-    const extension = request.params.extension;
-    const spritePath = path.join(stylesDir, id, `sprites/sprites.${extension}`);
-    return h.file(spritePath);
+    try {
+      const id = request.params.id;
+      const extension = request.params.extension;
+      const spritePath = path.join(
+        stylesDir,
+        id,
+        `sprites/sprites.${extension}`
+      );
+      return h.file(spritePath);
+    } catch (error) {
+      return Boom.notFound();
+    }
   }
 };
