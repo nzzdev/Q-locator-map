@@ -22,7 +22,8 @@ export default class LocatorMap {
     const mapConfig = {
       container: this.element,
       style: this.data.mapConfig.styleUrl,
-      interactive: false
+      interactive: false,
+      attributionControl: false
     };
     const initialZoomLevel = this.data.options.initialZoomLevel;
     if (this.data.mapConfig.bounds) {
@@ -58,6 +59,14 @@ export default class LocatorMap {
         minimapOptions.position
       );
     }
+
+    let attributionPosition;
+    if (minimapOptions.position === "bottom-right") {
+      attributionPosition = "bottom-left";
+    } else {
+      attributionPosition = "bottom-right";
+    }
+    map.addControl(new mapboxgl.AttributionControl(), attributionPosition);
 
     if (this.data.mapConfig.bounds && initialZoomLevel === -1) {
       map.fitBounds(mapConfig.bounds, { padding: 60, duration: 0 });
