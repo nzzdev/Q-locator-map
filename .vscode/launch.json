@@ -7,8 +7,14 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug tool",
+      "name": "Debug locator map tool",
       "program": "${workspaceFolder}/dev.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug import-geodata script",
+      "program": "${workspaceFolder}/plugins/geodata/import-geodata/dev.js"
     }
   ]
 }

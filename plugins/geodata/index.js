@@ -55,7 +55,71 @@ module.exports = {
           } else {
             throw Error();
           }
-        } catch (err) {
+        } catch (error) {
+          return Boom.notFound();
+        }
+      }
+    });
+    server.route({
+      path: "/geodata/{id}",
+      method: "POST",
+      options: {
+        tags: ["api"],
+        validate: {
+          params: {
+            id: Joi.string().required()
+          }
+        }
+      },
+      handler: async function(request, h) {
+        try {
+          const id = request.params.id;
+          const version = request.payload;
+
+          const response = await db.get(id);
+          if (response.docs.length === 0) {
+            version.version = 1;
+            const doc = {
+              id: id,
+              versions: [version]
+            };
+            return await db.insert(doc);
+          } else {
+            const doc = response.docs.pop();
+            if (version.version) {
+              const index = doc.versions.findIndex(
+                entry => entry.version === version.version
+              );
+              if (index !== -1) {
+                doc.versions[index] = version;
+              }
+            } else {
+              version.version = doc.versions.length + 1;
+              doc.versions.push(version);
+            }
+            return await db.insert(doc);
+          }
+        } catch (error) {
+          return Boom.notFound();
+        }
+      }
+    });
+    server.route({
+      path: "/geodata/{id}",
+      method: "DELETE",
+      options: {
+        tags: ["api"],
+        validate: {
+          params: {
+            id: Joi.string().required()
+          }
+        }
+      },
+      handler: async function(request, h) {
+        try {
+          const id = request.params.id;
+          return await db.remove(id);
+        } catch (error) {
           return Boom.notFound();
         }
       }
