@@ -6,7 +6,7 @@ const geocoder = NodeGeocoder({
   provider: "opencage",
   apiKey: process.env.OPENCAGE_APIKEY
 });
-const componentWhitelist = ["country", "state"];
+const allowedComponents = ["country", "state", "county"];
 
 module.exports = {
   method: "POST",
@@ -30,38 +30,52 @@ module.exports = {
         );
         const coordinates = turf.getCoords(center);
 
-        const response = await geocoder.geocode(
-          `${coordinates[1]}, ${coordinates[0]}`
-        );
+        const response = await geocoder.geocode({
+          address: `${coordinates[1]}, ${coordinates[0]}`,
+          limit: 1
+        });
 
-        if (response.raw.status.code === 200) {
-          if (response.raw.results.length > 0) {
-            const result = response.raw.results.pop();
-            const components = Object.entries(result.components).filter(
-              ([key, value]) => {
-                return componentWhitelist.includes(key);
-              }
-            );
-            const enums = [];
-            const enum_titles = [];
-            for (let component of components) {
-              const name = component[1];
-              const response = await geocoder.geocode(name);
-              if (response.raw.status.code === 200) {
-                const result = response.raw.results[0];
-                enum_titles.push(name);
-                //enums.push(result.annotations.wikidata);
-                enums.push("Q39");
+        if (
+          response.raw.status.code === 200 &&
+          response.raw.results.length > 0
+        ) {
+          const result = response.raw.results.pop();
+          const keys = Object.keys(result.components).filter(key => {
+            return allowedComponents.includes(key);
+          });
+          const enums = [];
+          const enum_titles = [];
+          for (let key of keys) {
+            const geocoderResponse = await geocoder.geocode({
+              address: result.components[key],
+              countryCode: result.components["country_code"]
+            });
+            if (
+              geocoderResponse.raw.status.code === 200 &&
+              geocoderResponse.raw.results.length > 0
+            ) {
+              for (let geocoderResult of geocoderResponse.raw.results) {
+                const id = geocoderResult.annotations.wikidata;
+                const geodataResponse = await request.server.inject(
+                  `/geodata/${id}`
+                );
+                if (geodataResponse.statusCode === 200) {
+                  const version = geodataResponse.result.versions.pop();
+                  if (!enums.includes(id)) {
+                    enum_titles.push(version.label);
+                    enums.push(id);
+                  }
+                }
               }
             }
-
-            return {
-              enum: enums,
-              "Q:options": {
-                enum_titles: enum_titles
-              }
-            };
           }
+
+          return {
+            enum: enums,
+            "Q:options": {
+              enum_titles: enum_titles
+            }
+          };
         } else {
           throw Error();
         }

@@ -69,8 +69,7 @@ async function getMinimapMarkup(minimapOptions, mapConfig, toolRuntimeConfig) {
         name: "region",
         values: region,
         format: {
-          type: "json",
-          property: "features"
+          type: "json"
         }
       });
     }
