@@ -8,16 +8,12 @@ const datasets = JSON.parse(process.env.DATASETS);
 
 async function getGeojsons(shp, dbf) {
   try {
-    return new Promise((resolve, reject) => {
-      shapefile
-        .read(shp, dbf, {
-          encoding: "utf-8"
-        })
-        .then(result => {
-          if (result) resolve(result.features);
-        })
-        .catch(error => reject(error.stack));
+    const result = await shapefile.read(shp, dbf, {
+      encoding: "utf-8"
     });
+    if (result) {
+      return result.features;
+    }
   } catch (error) {
     console.error(error);
   }
