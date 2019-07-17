@@ -4,17 +4,10 @@ const Boom = require("@hapi/boom");
 const fetch = require("node-fetch");
 
 function getValidGeodataUrl(geodataEntry, version) {
-  const versions = geodataEntry.versions.sort((a, b) => a.version - b.version);
-  if (version) {
-    const entry = versions.find(entry => entry.version === version);
-    if (entry) {
-      return entry.format.geojson;
-    } else {
-      const entry = versions.pop();
-      return entry.format.geojson;
-    }
+  if (Number.isInteger(version) && geodataEntry.versions[version]) {
+    return entry.format.geojson;
   } else {
-    const entry = versions.pop();
+    const entry = geodataEntry.versions.pop();
     return entry.format.geojson;
   }
 }
@@ -41,13 +34,11 @@ module.exports = {
       },
       handler: async function(request, h) {
         try {
+          const version = request.query.version - 1;
           const response = await db.get(request.params.id);
           const geodataEntry = response.docs.pop();
           if (geodataEntry) {
-            const geodataUrl = getValidGeodataUrl(
-              geodataEntry,
-              request.query.version
-            );
+            const geodataUrl = getValidGeodataUrl(geodataEntry, version);
             const response = await fetch(geodataUrl);
             if (response.ok) {
               return await response.json();
@@ -93,34 +84,31 @@ module.exports = {
         validate: {
           params: {
             id: Joi.string().required()
+          },
+          query: {
+            version: Joi.number().optional()
           }
         }
       },
       handler: async function(request, h) {
         try {
           const id = request.params.id;
-          const version = request.payload;
+          const version = request.query.version - 1;
+          const versionMetadata = request.payload;
 
           const response = await db.get(id);
           if (response.docs.length === 0) {
-            version.version = 1;
             const doc = {
               id: id,
-              versions: [version]
+              versions: [versionMetadata]
             };
             return await db.insert(doc);
           } else {
             const doc = response.docs.pop();
-            if (version.version) {
-              const index = doc.versions.findIndex(
-                entry => entry.version === version.version
-              );
-              if (index !== -1) {
-                doc.versions[index] = version;
-              }
+            if (Number.isInteger(version) && doc.versions[version]) {
+              doc.versions[version] = versionMetadata;
             } else {
-              version.version = doc.versions.length + 1;
-              doc.versions.push(version);
+              doc.versions.push(versionMetadata);
             }
             return await db.insert(doc);
           }

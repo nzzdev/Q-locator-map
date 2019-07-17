@@ -3,6 +3,7 @@ const shapefile = require("shapefile");
 const FormData = require("form-data");
 const fetch = require("node-fetch");
 const promptly = require("promptly");
+const querystring = require("querystring");
 
 const datasets = JSON.parse(process.env.DATASETS);
 
@@ -47,9 +48,13 @@ async function saveGeojson(id, geojson, bearer) {
   }
 }
 
-async function saveVersion(id, version) {
+async function saveVersion(id, version, dataset) {
   try {
-    return await fetch(`${process.env.Q_TOOL_BASE_URL}/geodata/${id}`, {
+    let url = `${process.env.Q_TOOL_BASE_URL}/geodata/${id}`;
+    if (Number.isInteger(dataset.version)) {
+      url = `${url}?${querystring.stringify({ version: dataset.version })}`;
+    }
+    return await fetch(url, {
       method: "POST",
       body: JSON.stringify(version),
       headers: {
@@ -72,29 +77,36 @@ async function deleteVersion(id) {
 }
 
 async function getBearerToken() {
-  const password = await promptly.password("Enter your livingdocs password: ", {
-    replace: "*"
-  });
-
-  const response = await fetch(
-    `${process.env.Q_SERVER_BASE_URL}/authenticate`,
-    {
-      method: "POST",
-      body: JSON.stringify({
-        username: process.env.LD_USERNAME,
-        password: password.trim()
-      })
-    }
-  );
-  if (response.ok) {
-    const body = await response.json();
-    return `Bearer ${body.access_token}`;
-  } else {
-    throw new Error(
-      `Error occured while authenticating: (${response.status}) ${
-        response.statusText
-      }`
+  if (!process.env.Q_SERVER_AUTH) {
+    const password = await promptly.password(
+      "Enter your livingdocs password: ",
+      {
+        replace: "*"
+      }
     );
+
+    const response = await fetch(
+      `${process.env.Q_SERVER_BASE_URL}/authenticate`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          username: process.env.LD_USERNAME,
+          password: password.trim()
+        })
+      }
+    );
+    if (response.ok) {
+      const body = await response.json();
+      return `Bearer ${body.access_token}`;
+    } else {
+      throw new Error(
+        `Error occured while authenticating: (${response.status}) ${
+          response.statusText
+        }`
+      );
+    }
+  } else {
+    return `Bearer ${process.env.Q_SERVER_AUTH}`;
   }
 }
 
@@ -113,20 +125,17 @@ async function saveGeodata(geojson, dataset, bearer) {
       const url = await saveGeojson(id, geojson, bearer);
       const version = {
         label: label,
-        description: "Gültig ab 24.05.2018",
-        validFrom: "Thu May 24 2018 00:00:00 GMT+0000 (CET)",
+        description: dataset.description,
+        validFrom: dataset.validFrom,
         source: {
-          url: "https://www.naturalearthdata.com",
-          label: "Natural Earth"
+          url: dataset.source.url,
+          label: dataset.source.label
         },
         format: {
           geojson: url
         }
       };
-      if (dataset.version) {
-        version.version = dataset.version;
-      }
-      const response = await saveVersion(id, version);
+      const response = await saveVersion(id, version, dataset);
       if (response.ok) {
         console.log(`Successfully stored ${id}`);
       } else {
