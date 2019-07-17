@@ -75,27 +75,42 @@ async function getMinimapMarkup(minimapOptions, mapConfig, toolRuntimeConfig) {
     }
   } else {
     spec = JSON.parse(JSON.stringify(minimapGlobeVegaSpec));
-    let bboxPolygon;
-    if (mapConfig.bounds) {
-      bbox = turf.bboxPolygon(mapConfig.bounds);
-    } else {
-      bbox = turf.point(mapConfig.center);
-    }
-    spec.signals.push({
-      name: "rotate0",
-      value: mapConfig.center[1]
-    });
-    spec.signals.push({
-      name: "rotate1",
-      value: -5
-    });
-    spec.data.push({
-      name: "bbox",
-      values: bbox,
-      format: {
-        type: "json"
+    const geoDataUrl = `${
+      toolRuntimeConfig.toolBaseUrl
+    }/datasets/Q11081619.geojson`;
+
+    const response = await fetch(geoDataUrl);
+    if (response.ok) {
+      const region = await response.json();
+      let bboxPolygon;
+      if (mapConfig.bounds) {
+        bbox = turf.bboxPolygon(mapConfig.bounds);
+      } else {
+        bbox = turf.point(mapConfig.center);
       }
-    });
+      spec.signals.push({
+        name: "rotate0",
+        value: mapConfig.center[1]
+      });
+      spec.signals.push({
+        name: "rotate1",
+        value: -5
+      });
+      spec.data.push({
+        name: "world",
+        values: region,
+        format: {
+          type: "json"
+        }
+      });
+      spec.data.push({
+        name: "bbox",
+        values: bbox,
+        format: {
+          type: "json"
+        }
+      });
+    }
   }
   spec.height = height;
   spec.width = width;
