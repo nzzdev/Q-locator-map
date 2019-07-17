@@ -24,6 +24,12 @@ process.env.DATASETS = `[
     version: 1,
     item: "Q252",
     path: "/data/ne_10m_admin_0_countries/ne_10m_admin_0_countries",
+    "description": "Gültig ab 24.05.2018",
+    "validFrom": "Thu May 24 2018 00:00:00 GMT+0000 (CET)",
+    "source": {
+      "url": "https://www.naturalearthdata.com",
+      "label": "Natural Earth"
+    },
     properties: {
       wikidataid: "WIKIDATAID",
       name: "NAME",
@@ -43,6 +49,12 @@ process.env.DATASETS = `[
     disable: true,
     version: 1,
     path: "/data/ne_10m_admin_0_countries/ne_10m_admin_0_countries",
+    "description": "Gültig ab 24.05.2018",
+    "validFrom": "Thu May 24 2018 00:00:00 GMT+0000 (CET)",
+    "source": {
+      "url": "https://www.naturalearthdata.com",
+      "label": "Natural Earth"
+    },
     properties: {
       wikidataid: "WIKIDATAID",
       name: "NAME",
@@ -64,6 +76,12 @@ process.env.DATASETS = `[
     item: "Q752346",
     path:
       "/data/ne_10m_admin_1_states_provinces/ne_10m_admin_1_states_provinces",
+    "description": "Gültig ab 24.05.2018",
+    "validFrom": "Thu May 24 2018 00:00:00 GMT+0000 (CET)",
+    "source": {
+      "url": "https://www.naturalearthdata.com",
+      "label": "Natural Earth"
+    },
     properties: {
       wikidataid: "wikidataid",
       name: "name",
@@ -82,6 +100,12 @@ process.env.DATASETS = `[
     version: 1,
     path:
       "/data/ne_10m_admin_1_states_provinces/ne_10m_admin_1_states_provinces",
+    "description": "Gültig ab 24.05.2018",
+    "validFrom": "Thu May 24 2018 00:00:00 GMT+0000 (CET)",
+    "source": {
+      "url": "https://www.naturalearthdata.com",
+      "label": "Natural Earth"
+    },
     properties: {
       wikidataid: "wikidataid",
       name: "name",
