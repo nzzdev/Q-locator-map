@@ -4,17 +4,10 @@ const Boom = require("@hapi/boom");
 const fetch = require("node-fetch");
 
 function getValidGeodataUrl(geodataEntry, version) {
-  const versions = geodataEntry.versions.sort((a, b) => a.version - b.version);
-  if (version) {
-    const entry = versions.find(entry => entry.version === version);
-    if (entry) {
-      return entry.format.geojson;
-    } else {
-      const entry = versions.pop();
-      return entry.format.geojson;
-    }
+  if (Number.isInteger(version) && geodataEntry.versions[version]) {
+    return entry.format.geojson;
   } else {
-    const entry = versions.pop();
+    const entry = geodataEntry.versions.pop();
     return entry.format.geojson;
   }
 }
@@ -41,13 +34,11 @@ module.exports = {
       },
       handler: async function(request, h) {
         try {
+          const version = request.query.version - 1;
           const response = await db.get(request.params.id);
           const geodataEntry = response.docs.pop();
           if (geodataEntry) {
-            const geodataUrl = getValidGeodataUrl(
-              geodataEntry,
-              request.query.version
-            );
+            const geodataUrl = getValidGeodataUrl(geodataEntry, version);
             const response = await fetch(geodataUrl);
             if (response.ok) {
               return await response.json();
@@ -55,7 +46,68 @@ module.exports = {
           } else {
             throw Error();
           }
-        } catch (err) {
+        } catch (error) {
+          return Boom.notFound();
+        }
+      }
+    });
+    server.route({
+      path: "/geodata/{id}",
+      method: "POST",
+      options: {
+        tags: ["api"],
+        validate: {
+          params: {
+            id: Joi.string().required()
+          },
+          query: {
+            version: Joi.number().optional()
+          }
+        }
+      },
+      handler: async function(request, h) {
+        try {
+          const id = request.params.id;
+          const version = request.query.version - 1;
+          const versionMetadata = request.payload;
+
+          const response = await db.get(id);
+          if (response.docs.length === 0) {
+            const doc = {
+              id: id,
+              versions: [versionMetadata]
+            };
+            return await db.insert(doc);
+          } else {
+            const doc = response.docs.pop();
+            if (Number.isInteger(version) && doc.versions[version]) {
+              doc.versions[version] = versionMetadata;
+            } else {
+              doc.versions.push(versionMetadata);
+            }
+            return await db.insert(doc);
+          }
+        } catch (error) {
+          return Boom.notFound();
+        }
+      }
+    });
+    server.route({
+      path: "/geodata/{id}",
+      method: "DELETE",
+      options: {
+        tags: ["api"],
+        validate: {
+          params: {
+            id: Joi.string().required()
+          }
+        }
+      },
+      handler: async function(request, h) {
+        try {
+          const id = request.params.id;
+          return await db.remove(id);
+        } catch (error) {
           return Boom.notFound();
         }
       }

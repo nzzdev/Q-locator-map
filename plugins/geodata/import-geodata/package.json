@@ -1,0 +1,14 @@
+{
+  "name": "import-geodata",
+  "version": "1.0.0",
+  "description": "Script to import geodata",
+  "main": "index.js",
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "form-data": "^2.5.0",
+    "node-fetch": "^2.6.0",
+    "promptly": "^3.0.3",
+    "shapefile": "^0.6.6"
+  }
+}
