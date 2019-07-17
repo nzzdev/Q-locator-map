@@ -113,11 +113,11 @@ async function saveGeodata(geojson, dataset, bearer) {
       const url = await saveGeojson(id, geojson, bearer);
       const version = {
         label: label,
-        description: "Gültig ab 24.05.2018",
-        validFrom: "Thu May 24 2018 00:00:00 GMT+0000 (CET)",
+        description: dataset.description,
+        validFrom: dataset.validFrom,
         source: {
-          url: "https://www.naturalearthdata.com",
-          label: "Natural Earth"
+          url: dataset.source.url,
+          label: dataset.source.label
         },
         format: {
           geojson: url
