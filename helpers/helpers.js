@@ -36,8 +36,8 @@ async function getStyleUrl(id, toolRuntimeConfig, qId) {
 }
 
 async function getMinimapMarkup(minimapOptions, mapConfig, toolRuntimeConfig) {
-  const height = 100;
-  const width = 100;
+  const height = 150;
+  const width = 150;
   let spec;
   if (minimapOptions.type === "region") {
     spec = JSON.parse(JSON.stringify(minimapRegionVegaSpec));
@@ -53,7 +53,7 @@ async function getMinimapMarkup(minimapOptions, mapConfig, toolRuntimeConfig) {
       const distance = turf.distance([bbox[0], bbox[1]], [bbox[2], bbox[3]], {
         units: "radians"
       });
-      const scaleFactor = height / distance / Math.sqrt(2);
+      const scaleFactor = height / distance;
 
       spec.signals.push({
         name: "scaleFactor",
@@ -61,8 +61,13 @@ async function getMinimapMarkup(minimapOptions, mapConfig, toolRuntimeConfig) {
       });
 
       spec.signals.push({
-        name: "center",
-        value: center
+        name: "rotate0",
+        value: center[0] * -1
+      });
+
+      spec.signals.push({
+        name: "rotate1",
+        value: center[1] * -1
       });
 
       spec.data.push({
