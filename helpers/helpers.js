@@ -82,19 +82,14 @@ async function getMinimapMarkup(minimapOptions, mapConfig, toolRuntimeConfig) {
     const response = await fetch(geoDataUrl);
     if (response.ok) {
       const region = await response.json();
-      let bboxPolygon;
-      if (mapConfig.bounds) {
-        bbox = turf.bboxPolygon(mapConfig.bounds);
-      } else {
-        bbox = turf.point(mapConfig.center);
-      }
+
       spec.signals.push({
         name: "rotate0",
-        value: mapConfig.center[1]
+        value: mapConfig.center[0] * -1
       });
       spec.signals.push({
         name: "rotate1",
-        value: -5
+        value: mapConfig.center[1] * -1
       });
       spec.data.push({
         name: "world",
@@ -103,6 +98,12 @@ async function getMinimapMarkup(minimapOptions, mapConfig, toolRuntimeConfig) {
           type: "json"
         }
       });
+      let bbox;
+      if (mapConfig.bounds) {
+        bbox = turf.bboxPolygon(mapConfig.bounds);
+      } else {
+        bbox = turf.point(mapConfig.center);
+      }
       spec.data.push({
         name: "bbox",
         values: bbox,
