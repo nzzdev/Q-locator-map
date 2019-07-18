@@ -36,10 +36,12 @@ async function getStyleUrl(id, toolRuntimeConfig, qId) {
 }
 
 async function getMinimapMarkup(minimapOptions, mapConfig, toolRuntimeConfig) {
-  const height = 150;
-  const width = 150;
+  let height = 100;
+  let width = 100;
   let spec;
   if (minimapOptions.type === "region") {
+    height = 150;
+    width = 150;
     spec = JSON.parse(JSON.stringify(minimapRegionVegaSpec));
     const geoDataUrl = `${toolRuntimeConfig.toolBaseUrl}/datasets/${
       minimapOptions.region
