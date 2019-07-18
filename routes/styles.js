@@ -5,10 +5,6 @@ const basicStyle = require(`${resourcesDir}styles/basic/style.json`);
 const topoStyle = require(`${resourcesDir}styles/topo/style.json`);
 const satelliteStyle = require(`${resourcesDir}styles/satellite/style.json`);
 
-async function getDataUrl(id, toolBaseUrl, qId) {
-  return `${toolBaseUrl}/tilesets/${id}/{z}/{x}/{y}.pbf?appendItemToPayload=${qId}`;
-}
-
 async function getStyle(id, item, toolBaseUrl, qId) {
   let style;
   if (["terrain", "terrainNoLabels"].includes(id)) {
@@ -27,11 +23,15 @@ async function getStyle(id, item, toolBaseUrl, qId) {
 
   if (style) {
     if (item) {
+      let = firstSymbolLayerIndex = style.layers.findIndex(
+        layer => layer.type === "symbol"
+      );
       for (const [i, geojson] of item.geojsonList.entries()) {
-        const dataUrl = await getDataUrl(i, toolBaseUrl, qId);
         style.sources[`source-${i}`] = {
           type: "vector",
-          tiles: [dataUrl],
+          tiles: [
+            `${toolBaseUrl}/tilesets/${i}/{z}/{x}/{y}.pbf?appendItemToPayload=${qId}`
+          ],
           minzoom: 0,
           maxzoom: 18
         };
@@ -57,7 +57,7 @@ async function getStyle(id, item, toolBaseUrl, qId) {
           filter: ["==", "$type", "Point"]
         });
 
-        const firstSymbolLayerIndex = style.layers.findIndex(
+        firstSymbolLayerIndex = style.layers.findIndex(
           layer => layer.type === "symbol"
         );
 
@@ -116,6 +116,33 @@ async function getStyle(id, item, toolBaseUrl, qId) {
           },
           filter: ["==", "$type", "Point"]
         });
+      }
+
+      if (
+        item.options.highlightRegion &&
+        item.options.highlightRegion.length > 0
+      ) {
+        for (let highlightRegion of item.options.highlightRegion) {
+          style.sources[`source-${highlightRegion.region}`] = {
+            type: "vector",
+            tiles: [
+              `${toolBaseUrl}/geodata/${highlightRegion.region}/{z}/{x}/{y}.pbf`
+            ],
+            minzoom: 0,
+            maxzoom: 18
+          };
+
+          style.layers.splice(firstSymbolLayerIndex, 0, {
+            id: `highlightedRegion-${highlightRegion.region}`,
+            type: "fill",
+            source: `source-${highlightRegion.region}`,
+            "source-layer": `source-${highlightRegion.region}`,
+            paint: {
+              "fill-color": "#ffffff",
+              "fill-opacity": 0.5
+            }
+          });
+        }
       }
     }
   }

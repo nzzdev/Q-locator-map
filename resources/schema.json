@@ -215,6 +215,33 @@
             }
           }
         },
+        "highlightRegion": {
+          "title": "Region hervorheben",
+          "type": "array",
+          "Q:options": {
+            "layout": "compact",
+            "sortable": false
+          },
+          "items": {
+            "type": "object",
+            "properties": {
+              "region": {
+                "title": "Region",
+                "type": "string",
+                "Q:options": {
+                  "selectType": "select",
+                  "dynamicSchema": {
+                    "type": "ToolEndpoint",
+                    "config": {
+                      "endpoint": "dynamic-schema/region",
+                      "fields": ["geojsonList"]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
         "labelsBelowMap": {
           "title": "Beschriftungen unter der Karte anzeigen",
           "type": "boolean",
