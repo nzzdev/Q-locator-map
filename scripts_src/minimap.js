@@ -5,7 +5,8 @@ export default class MinimapControl {
   onAdd(map) {
     this._map = map;
     this._container = document.createElement("div");
-    this._container.className = "mapboxgl-ctrl";
+    this._container.classList.add("mapboxgl-ctrl");
+    this._container.classList.add("q-locator-map--minimap");
     this._container.innerHTML = this._markup;
     return this._container;
   }

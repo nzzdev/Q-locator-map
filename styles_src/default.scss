@@ -7,3 +7,7 @@
 .q-locator-map-container {
   width: 100%;
 }
+
+.q-locator-map--minimap {
+  filter: drop-shadow(8px 8px 10px rgba(0, 0, 0, 0.2));
+}
