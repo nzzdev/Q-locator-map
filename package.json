@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rm -rf scripts && mkdir scripts && rm -rf styles && mkdir styles && node tasks/build.js",
+    "build": "rm -rf scripts && mkdir scripts && rm -rf styles && mkdir styles && rm -rf resources/fixtures && mkdir -p resources/fixtures/data && node tasks/build.js",
     "test": "lab -a @hapi/code -c -P tests --verbose --leaks"
   },
   "author": "",
@@ -29,7 +29,7 @@
     "nano": "^8.1.0",
     "node-fetch": "^2.6.0",
     "node-geocoder": "^3.23.0",
-    "nunjucks": "^3.2.0",
+    "svelte": "^3.6.7",
     "vega": "^5.4.0",
     "vt-pbf": "^3.1.1",
     "zlib": "^1.0.5"
@@ -39,7 +39,7 @@
     "@hapi/lab": "^18.1.2",
     "autoprefixer": "^9.6.1",
     "cssnano": "^4.1.10",
-    "glob": "^7.1.4",
+    "jsdom": "^15.1.1",
     "mapbox-gl": "^1.1.0",
     "postcss": "^7.0.17",
     "postcss-import": "^12.0.1",

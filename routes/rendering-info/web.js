@@ -7,10 +7,11 @@ const scriptsDir = "../../scripts/";
 const scriptHashMap = require(`${scriptsDir}/hashMap.json`);
 const viewsDir = `${__dirname}/../../views/`;
 const helpers = require("../../helpers/helpers.js");
+const defaultGeojsonStyles = require("../../helpers/helpers.js").getDefaultGeojsonStyles();
 
-// setup nunjucks environment
-const nunjucks = require("nunjucks");
-const nunjucksEnv = new nunjucks.Environment();
+// setup svelte
+require("svelte/register");
+const staticTemplate = require(viewsDir + "LocatorMap.svelte").default;
 
 // POSTed item will be validated against given schema
 // hence we fetch the JSON schema...
@@ -71,7 +72,8 @@ module.exports = {
         toolRuntimeConfig,
         request.query._id
       ),
-      width: helpers.getExactPixelWidth(toolRuntimeConfig)
+      width: helpers.getExactPixelWidth(toolRuntimeConfig),
+      defaultGeojsonStyles: defaultGeojsonStyles
     };
 
     const renderingInfo = {
@@ -95,7 +97,7 @@ module.exports = {
           })}'))`
         }
       ],
-      markup: nunjucksEnv.render(`${viewsDir}/locator-map.html`, context)
+      markup: staticTemplate.render(context).html
     };
 
     return renderingInfo;

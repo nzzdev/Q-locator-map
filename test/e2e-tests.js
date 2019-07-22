@@ -1,9 +1,7 @@
-const fs = require("fs");
 const Lab = require("@hapi/lab");
 const Code = require("@hapi/code");
 const Hapi = require("@hapi/hapi");
 const lab = (exports.lab = Lab.script());
-const glob = require("glob");
 process.env.OPENCAGE_APIKEY = "test";
 
 const expect = Code.expect;
@@ -12,6 +10,12 @@ const after = lab.after;
 const it = lab.it;
 
 const routes = require("../routes/routes.js");
+
+const fixturesDir = "../resources/fixtures/data";
+const fixtureData = require("../tasks/createFixtureData.js");
+const fixtures = Object.keys(fixtureData).map(fixture =>
+  require(`${fixturesDir}/${fixture}.json`)
+);
 
 let server;
 
@@ -82,7 +86,7 @@ lab.experiment("locales endpoint", () => {
 
 lab.experiment("stylesheets endpoint", () => {
   it(
-    "returns existing stylesheet with right cache control header",
+    "returns existing stylesheet with correct cache control header",
     { plan: 2 },
     async () => {
       const filename = require("../styles/hashMap.json").default;
@@ -102,13 +106,7 @@ lab.experiment("stylesheets endpoint", () => {
 
 // all the fixtures render
 lab.experiment("all fixtures render", async () => {
-  const fixtureFiles = [
-    `../resources/fixtures/data/linestring.json`,
-    `../resources/fixtures/data/mixed-nolabel.json`,
-    `../resources/fixtures/data/polygon.json`
-  ];
-  for (let fixtureFile of fixtureFiles) {
-    const fixture = require(fixtureFile);
+  for (let fixture of fixtures) {
     it(`doesnt fail in rendering fixture ${fixture.title}`, async () => {
       const request = {
         method: "POST",
@@ -148,15 +146,11 @@ lab.experiment("rendering-info", () => {
 
 lab.experiment("assets", () => {
   it("returnes stylesheet", async () => {
-    const fixture = fs.readFileSync(
-      `${__dirname}/../resources/fixtures/data/polygon.json`,
-      { encoding: "utf-8" }
-    );
     const res = await server.inject({
       url: "/rendering-info/web",
       method: "POST",
       payload: {
-        item: JSON.parse(fixture),
+        item: fixtures[0],
         toolRuntimeConfig: {
           toolBaseUrl: "http://localhost:3001/tools/locator_map"
         }

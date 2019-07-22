@@ -1,13 +1,9 @@
-const fixtureDataDirectory = "../../resources/fixtures/data";
+const fixtures = require("../../tasks/createFixtureData.js");
+const fixturesDir = "../../resources/fixtures/data";
 
-// provide every fixture data file present in ../../resources/fixtures/data
-// has to be in sync with files created in build task - see ../../tasks/build.js
-const fixtureData = [
-  require(`${fixtureDataDirectory}/point.json`),
-  require(`${fixtureDataDirectory}/linestring.json`),
-  require(`${fixtureDataDirectory}/polygon.json`),
-  require(`${fixtureDataDirectory}/mixed-nolabel.json`)
-];
+const fixtureData = Object.keys(fixtures).map(fixture =>
+  require(`${fixturesDir}/${fixture}.json`)
+);
 
 module.exports = {
   path: "/fixtures/data",

@@ -1,5 +1,6 @@
 const fs = require("fs");
 const crypto = require("crypto");
+const path = require("path");
 
 const sass = require("sass");
 const postcss = require("postcss");
@@ -14,6 +15,7 @@ const commonjs = require("rollup-plugin-commonjs");
 
 const stylesDir = `${__dirname}/../styles_src/`;
 const scriptsDir = `${__dirname}/../scripts_src/`;
+const createFixtureData = require("./createFixtureData.js");
 
 function writeHashmap(hashmapPath, files, fileext) {
   const hashMap = {};
@@ -124,7 +126,16 @@ async function buildScripts() {
   }
 }
 
-Promise.all([buildScripts(), buildStyles()])
+function buildFixtures() {
+  for (let [key, value] of Object.entries(createFixtureData)) {
+    fs.writeFileSync(
+      path.join("resources/fixtures/data/", `${key}.json`),
+      JSON.stringify(value())
+    );
+  }
+}
+
+Promise.all([buildScripts(), buildStyles(), buildFixtures()])
   .then(res => {
     console.log("build complete");
   })

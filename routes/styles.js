@@ -4,6 +4,7 @@ const resourcesDir = "../resources/";
 const basicStyle = require(`${resourcesDir}styles/basic/style.json`);
 const topoStyle = require(`${resourcesDir}styles/topo/style.json`);
 const satelliteStyle = require(`${resourcesDir}styles/satellite/style.json`);
+const defaultGeojsonStyles = require("../helpers/helpers.js").getDefaultGeojsonStyles();
 
 async function getStyle(id, item, toolBaseUrl, qId) {
   let style;
@@ -67,8 +68,8 @@ async function getStyle(id, item, toolBaseUrl, qId) {
           source: `source-${i}`,
           "source-layer": `source-${i}`,
           paint: {
-            "fill-color": ["string", ["get", "fill"], "#c31906"],
-            "fill-opacity": ["number", ["get", "fill-opacity"], 0.35]
+            "fill-color": ["string", ["get", "fill"], defaultGeojsonStyles.polygon.fill],
+            "fill-opacity": ["number", ["get", "fill-opacity"], defaultGeojsonStyles.polygon["fill-opacity"]]
           },
           filter: ["==", "$type", "Polygon"]
         });
@@ -79,9 +80,9 @@ async function getStyle(id, item, toolBaseUrl, qId) {
           source: `source-${i}`,
           "source-layer": `source-${i}`,
           paint: {
-            "line-color": ["string", ["get", "stroke"], "#c31906"],
-            "line-width": ["number", ["get", "stroke-width"], 0],
-            "line-opacity": ["number", ["get", "stroke-opacity"], 1]
+            "line-color": ["string", ["get", "stroke"], defaultGeojsonStyles.line["stroke"]],
+            "line-width": ["number", ["get", "stroke-width"], defaultGeojsonStyles.polygon["stroke-width"]],
+            "line-opacity": ["number", ["get", "stroke-opacity"], defaultGeojsonStyles.line["stroke-opacity"]]
           },
           filter: ["==", "$type", "Polygon"]
         });
@@ -92,9 +93,9 @@ async function getStyle(id, item, toolBaseUrl, qId) {
           source: `source-${i}`,
           "source-layer": `source-${i}`,
           paint: {
-            "line-color": ["string", ["get", "stroke"], "#c31906"],
-            "line-width": ["number", ["get", "stroke-width"], 2],
-            "line-opacity": ["number", ["get", "stroke-opacity"], 1]
+            "line-color": ["string", ["get", "stroke"], defaultGeojsonStyles.line["stroke"]],
+            "line-width": ["number", ["get", "stroke-width"], defaultGeojsonStyles.line["stroke-width"]],
+            "line-opacity": ["number", ["get", "stroke-opacity"], defaultGeojsonStyles.line["stroke-opacity"]]
           },
           layout: {
             "line-cap": "round",
