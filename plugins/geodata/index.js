@@ -53,6 +53,31 @@ module.exports = {
     });
     server.route({
       path: "/geodata/{id}",
+      method: "GET",
+      options: {
+        tags: ["api"],
+        validate: {
+          params: {
+            id: Joi.string().required()
+          }
+        }
+      },
+      handler: async function(request, h) {
+        try {
+          const id = request.params.id;
+          const response = await db.get(id);
+          if (response.docs.length >= 1) {
+            return response.docs.pop();
+          } else {
+            throw Error("Not Found");
+          }
+        } catch (error) {
+          return Boom.notFound();
+        }
+      }
+    });
+    server.route({
+      path: "/geodata/{id}",
       method: "POST",
       options: {
         tags: ["api"],

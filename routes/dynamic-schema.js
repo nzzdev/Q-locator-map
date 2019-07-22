@@ -6,7 +6,61 @@ const geocoder = NodeGeocoder({
   provider: "opencage",
   apiKey: process.env.OPENCAGE_APIKEY
 });
-const componentWhitelist = ["country", "state"];
+const allowedComponents = ["country", "state", "county"];
+
+async function getRegionSuggestions(request, point) {
+  const enums = [];
+  const enum_titles = [];
+  const wikidataIds = new Set();
+
+  const coordinates = turf.getCoords(point);
+
+  const response = await geocoder.geocode({
+    address: `${coordinates[1]}, ${coordinates[0]}`,
+    limit: 1
+  });
+
+  if (response.raw.status.code === 200 && response.raw.results.length > 0) {
+    const result = response.raw.results.pop();
+    const keys = Object.keys(result.components).filter(key => {
+      return allowedComponents.includes(key);
+    });
+
+    for (let key of keys) {
+      const geocoderResponse = await geocoder.geocode({
+        address: result.components[key],
+        countryCode: result.components["country_code"]
+      });
+      if (
+        geocoderResponse.raw.status.code === 200 &&
+        geocoderResponse.raw.results.length > 0
+      ) {
+        for (let geocoderResult of geocoderResponse.raw.results) {
+          const wikidataId = geocoderResult.annotations.wikidata;
+          if (wikidataId) {
+            wikidataIds.add(wikidataId);
+          }
+        }
+      }
+    }
+
+    for (let wikidataId of wikidataIds.values()) {
+      const geodataResponse = await request.server.inject(
+        `/geodata/${wikidataId}`
+      );
+      if (geodataResponse.statusCode === 200) {
+        const version = geodataResponse.result.versions.pop();
+        enum_titles.push(version.label);
+        enums.push(wikidataId);
+      }
+    }
+
+    return {
+      enums: enums,
+      enum_titles: enum_titles
+    };
+  }
+}
 
 module.exports = {
   method: "POST",
@@ -18,56 +72,34 @@ module.exports = {
     cors: true
   },
   handler: async function(request, h) {
-    const item = request.payload.item;
-    if (request.params.optionName === "region") {
-      try {
-        const center = turf.center(
-          turf.featureCollection(
-            item.geojsonList.map(geojson => {
-              return turf.center(geojson);
-            })
-          )
-        );
-        const coordinates = turf.getCoords(center);
+    try {
+      const item = request.payload.item;
+      if (request.params.optionName === "region") {
+        let enums = [];
+        let enum_titles = [];
 
-        const response = await geocoder.geocode(
-          `${coordinates[1]}, ${coordinates[0]}`
-        );
+        const centerPoints = item.geojsonList.map(geojson => {
+          return turf.center(geojson);
+        });
 
-        if (response.raw.status.code === 200) {
-          if (response.raw.results.length > 0) {
-            const result = response.raw.results.pop();
-            const components = Object.entries(result.components).filter(
-              ([key, value]) => {
-                return componentWhitelist.includes(key);
-              }
-            );
-            const enums = [];
-            const enum_titles = [];
-            for (let component of components) {
-              const name = component[1];
-              const response = await geocoder.geocode(name);
-              if (response.raw.status.code === 200) {
-                const result = response.raw.results[0];
-                enum_titles.push(name);
-                //enums.push(result.annotations.wikidata);
-                enums.push("Q39");
-              }
-            }
-
-            return {
-              enum: enums,
-              "Q:options": {
-                enum_titles: enum_titles
-              }
-            };
-          }
-        } else {
-          throw Error();
+        for (const centerPoint of centerPoints) {
+          const regionSuggestions = await getRegionSuggestions(
+            request,
+            centerPoint
+          );
+          enums = enums.concat(regionSuggestions.enums);
+          enum_titles = enum_titles.concat(regionSuggestions.enum_titles);
         }
-      } catch (error) {
-        return Boom.badRequest();
+
+        return {
+          enum: [...new Set(enums)],
+          "Q:options": {
+            enum_titles: [...new Set(enum_titles)]
+          }
+        };
       }
+    } catch (error) {
+      return Boom.badRequest();
     }
     return Boom.badRequest();
   }

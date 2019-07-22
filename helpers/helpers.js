@@ -36,8 +36,8 @@ async function getStyleUrl(id, toolRuntimeConfig, qId) {
 }
 
 async function getMinimapMarkup(minimapOptions, mapConfig, toolRuntimeConfig) {
-  const height = 100;
-  const width = 100;
+  const height = 150;
+  const width = 150;
   let spec;
   if (minimapOptions.type === "region") {
     spec = JSON.parse(JSON.stringify(minimapRegionVegaSpec));
@@ -53,7 +53,7 @@ async function getMinimapMarkup(minimapOptions, mapConfig, toolRuntimeConfig) {
       const distance = turf.distance([bbox[0], bbox[1]], [bbox[2], bbox[3]], {
         units: "radians"
       });
-      const scaleFactor = height / distance / Math.sqrt(2);
+      const scaleFactor = height / distance;
 
       spec.signals.push({
         name: "scaleFactor",
@@ -61,42 +61,62 @@ async function getMinimapMarkup(minimapOptions, mapConfig, toolRuntimeConfig) {
       });
 
       spec.signals.push({
-        name: "center",
-        value: center
+        name: "rotate0",
+        value: center[0] * -1
+      });
+
+      spec.signals.push({
+        name: "rotate1",
+        value: center[1] * -1
       });
 
       spec.data.push({
         name: "region",
         values: region,
         format: {
-          type: "json",
-          property: "features"
+          type: "json"
         }
       });
     }
   } else {
     spec = JSON.parse(JSON.stringify(minimapGlobeVegaSpec));
-    let bboxPolygon;
-    if (mapConfig.bounds) {
-      bbox = turf.bboxPolygon(mapConfig.bounds);
-    } else {
-      bbox = turf.point(mapConfig.center);
-    }
-    spec.signals.push({
-      name: "rotate0",
-      value: mapConfig.center[1]
-    });
-    spec.signals.push({
-      name: "rotate1",
-      value: -5
-    });
-    spec.data.push({
-      name: "bbox",
-      values: bbox,
-      format: {
-        type: "json"
+    const geoDataUrl = `${
+      toolRuntimeConfig.toolBaseUrl
+    }/datasets/Q11081619.geojson`;
+
+    const response = await fetch(geoDataUrl);
+    if (response.ok) {
+      const region = await response.json();
+
+      spec.signals.push({
+        name: "rotate0",
+        value: mapConfig.center[0] * -1
+      });
+      spec.signals.push({
+        name: "rotate1",
+        value: mapConfig.center[1] * -1
+      });
+      spec.data.push({
+        name: "world",
+        values: region,
+        format: {
+          type: "json"
+        }
+      });
+      let bbox;
+      if (mapConfig.bounds) {
+        bbox = turf.bboxPolygon(mapConfig.bounds);
+      } else {
+        bbox = turf.point(mapConfig.center);
       }
-    });
+      spec.data.push({
+        name: "bbox",
+        values: bbox,
+        format: {
+          type: "json"
+        }
+      });
+    }
   }
   spec.height = height;
   spec.width = width;

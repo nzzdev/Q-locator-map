@@ -8,7 +8,7 @@ const geojsonPick = require("geojson-pick");
 const querystring = require("querystring");
 
 const PRECISION = 4;
-const PROPERTY_WHITELIST = [
+const ALLOWED_PROPERTIES = [
   "type",
   "useForInitialView",
   "label",
@@ -23,7 +23,7 @@ const PROPERTY_WHITELIST = [
 function getCleanGeojson(geojson) {
   const reducedGeojson = geojsonPick.pickProperties(
     geojson,
-    PROPERTY_WHITELIST
+    ALLOWED_PROPERTIES
   );
   const trimmedGeojson = geojsonPrecition.parse(reducedGeojson, PRECISION);
   return trimmedGeojson;

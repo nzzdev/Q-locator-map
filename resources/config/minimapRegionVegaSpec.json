@@ -1,5 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "padding": 0,
   "autosize": "none",
   "signals": [],
   "data": [],
@@ -8,9 +9,9 @@
     {
       "name": "projection",
       "scale": { "signal": "scaleFactor" },
-      "center": { "signal": "center" },
-      "type": "mercator",
-      "translate": { "signal": "[width/2, height/2]" }
+      "type": "azimuthalEqualArea",
+      "translate": { "signal": "[width/2, height/2]" },
+      "rotate": [{ "signal": "rotate0" }, { "signal": "rotate1" }, 0]
     }
   ],
 
