@@ -215,10 +215,26 @@ async function getTile(tileset, z, x, y) {
   });
 }
 
+function getDefaultGeojsonStyles() {
+  return {
+    line: {
+      stroke: "#c31906",
+      "stroke-width": 2,
+      "stroke-opacity": 1
+    },
+    polygon: {
+      "stroke-width": 0,
+      fill: "#c31906",
+      "fill-opacity": 0.35
+    }
+  };
+}
+
 module.exports = {
   getMapConfig: getMapConfig,
   getExactPixelWidth: getExactPixelWidth,
   getHash: getHash,
   getTileset: getTileset,
-  getTile: getTile
+  getTile: getTile,
+  getDefaultGeojsonStyles: getDefaultGeojsonStyles
 };
