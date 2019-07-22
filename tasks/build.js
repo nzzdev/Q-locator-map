@@ -126,8 +126,6 @@ async function buildScripts() {
   }
 }
 
-// create fixture data
-// if new fixture data is added here, they have to be added in fixture data route as well
 function buildFixtures() {
   for (let [key, value] of Object.entries(createFixtureData)) {
     fs.writeFileSync(
