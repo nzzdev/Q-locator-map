@@ -80,7 +80,7 @@
   }
 </script>
 
-{#if legendItems.length > 0}
+{#if item.options.showLegend && legendItems.length > 0}
   <div class="s-legend-icon-label">
     {#each legendItems as legendItem}
       <div class="s-legend-item-label__item">
