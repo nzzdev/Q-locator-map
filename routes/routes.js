@@ -8,6 +8,7 @@ module.exports = [
   require("./option-availability.js"),
   require("./dynamic-schema.js"),
   require("./tiles.js"),
+  require("./tilesets.js"),
   require("./fonts.js"),
   require("./sprites.js")
-].concat(require("./schema.js"), require("./data.js"), require("./styles.js"));
+].concat(require("./schema.js"), require("./styles.js"));

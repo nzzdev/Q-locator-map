@@ -36,12 +36,14 @@ async function getStyleUrl(id, toolRuntimeConfig, qId) {
 }
 
 async function getMinimapMarkup(minimapOptions, mapConfig, toolRuntimeConfig) {
-  const height = 150;
-  const width = 150;
+  let height = 100;
+  let width = 100;
   let spec;
   if (minimapOptions.type === "region") {
+    height = 150;
+    width = 150;
     spec = JSON.parse(JSON.stringify(minimapRegionVegaSpec));
-    const geoDataUrl = `${toolRuntimeConfig.toolBaseUrl}/datasets/${
+    const geoDataUrl = `${toolRuntimeConfig.toolBaseUrl}/geodata/${
       minimapOptions.region
     }.geojson`;
 
@@ -82,7 +84,7 @@ async function getMinimapMarkup(minimapOptions, mapConfig, toolRuntimeConfig) {
     spec = JSON.parse(JSON.stringify(minimapGlobeVegaSpec));
     const geoDataUrl = `${
       toolRuntimeConfig.toolBaseUrl
-    }/datasets/Q11081619.geojson`;
+    }/geodata/Q11081619.geojson`;
 
     const response = await fetch(geoDataUrl);
     if (response.ok) {

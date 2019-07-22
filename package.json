@@ -24,8 +24,6 @@
     "@turf/turf": "^5.1.6",
     "ajv": "^6.10.1",
     "fontnik": "^0.5.3",
-    "geojson-pick": "^1.0.0",
-    "geojson-precision": "^1.0.0",
     "geojson-vt": "^3.2.1",
     "hasha": "^5.0.0",
     "nano": "^8.1.0",
