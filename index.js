@@ -1,5 +1,10 @@
 const Hapi = require("@hapi/hapi");
 const helpers = require("./helpers/helpers.js");
+const serverMethodCacheOptions = {
+  expiresIn: 365 * 24 * 60 * 60 * 1000,
+  cache: "memoryCache",
+  generateTimeout: 2 * 1000
+};
 
 const server = Hapi.server({
   port: process.env.PORT || 3000,
@@ -17,6 +22,16 @@ const routes = require("./routes/routes.js");
 
 async function init() {
   try {
+    server.cache.provision({
+      provider: {
+        constructor: require("@hapi/catbox-memory"),
+        options: {
+          partition: "memoryCache",
+          maxByteSize: 1000000000 // ~ 1GB
+        }
+      },
+      name: "memoryCache"
+    });
     const tilesets = JSON.parse(process.env.TILESETS);
     for (let [key, value] of Object.entries(tilesets)) {
       if (value.path) {
@@ -24,33 +39,26 @@ async function init() {
         server.app.tilesets[key] = await helpers.getTileset(value.path);
       }
     }
+
     server.method("getTile", helpers.getTile, {
       bind: {
         tilesets: server.app.tilesets
       },
-      cache: { expiresIn: 60000, generateTimeout: 100 }
+      cache: serverMethodCacheOptions
     });
+    server.method("getFont", helpers.getFont, {
+      cache: serverMethodCacheOptions
+    });
+
+    await server.register(require("@hapi/inert"));
+    await server.register(plugins);
+    server.route(routes);
+
+    await server.start();
+    console.log("server running ", server.info.uri);
   } catch (error) {
     console.log(error);
   }
-  server.method("getFont", helpers.getFont, {
-    cache: { expiresIn: 60000, generateTimeout: 100 }
-  });
-  await server.register(require("@hapi/inert"));
-  await server.register(plugins);
-  server.route(routes);
-  server.cache.provision({
-    provider: {
-      constructor: require("@hapi/catbox-memory"),
-      options: {
-        maxByteSize: 1000000000 // ~ 1GB
-      }
-    },
-    name: "memoryCache"
-  });
-
-  await server.start();
-  console.log("server running ", server.info.uri);
 }
 
 async function gracefullyStop() {
