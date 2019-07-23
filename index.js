@@ -1,4 +1,5 @@
 const Hapi = require("@hapi/hapi");
+const NodeGeocoder = require("node-geocoder");
 const helpers = require("./helpers/helpers.js");
 const geodataHelpers = require("./plugins/geodata/helpers.js");
 
@@ -24,6 +25,11 @@ const routes = require("./routes/routes.js");
 
 async function init() {
   try {
+    server.app.geocoder = NodeGeocoder({
+      provider: "opencage",
+      apiKey: process.env.OPENCAGE_APIKEY
+    });
+
     server.cache.provision({
       provider: {
         constructor: require("@hapi/catbox-memory"),
@@ -52,6 +58,20 @@ async function init() {
     server.method("getTilesetTile", helpers.getTilesetTile, {
       generateKey: (item, id, z, x, y) =>
         `${item._id}_${item.updatedDate}_${id}_${z}_${x}_${y}`,
+      cache: serverMethodCacheOptions
+    });
+
+    server.method("getRegionSuggestions", helpers.getRegionSuggestions, {
+      bind: {
+        server: server
+      },
+      generateKey: components => {
+        let key = "";
+        for (let component of components) {
+          key = `${key}_${component[0]}_${component[1]}`;
+        }
+        return key;
+      },
       cache: serverMethodCacheOptions
     });
 

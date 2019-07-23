@@ -305,6 +305,49 @@ function getDefaultGeojsonStyles() {
   };
 }
 
+async function getRegionSuggestions(components, countryCode) {
+  try {
+    const enums = [];
+    const enum_titles = [];
+    const wikidataIds = new Set();
+    for (let [key, value] of components) {
+      const geocoderResponse = await this.server.app.geocoder.geocode({
+        address: value,
+        countryCode: countryCode
+      });
+      if (
+        geocoderResponse.raw.status.code === 200 &&
+        geocoderResponse.raw.results.length > 0
+      ) {
+        for (let geocoderResult of geocoderResponse.raw.results) {
+          const wikidataId = geocoderResult.annotations.wikidata;
+          if (wikidataId) {
+            wikidataIds.add(wikidataId);
+          }
+        }
+      }
+    }
+
+    for (let wikidataId of wikidataIds.values()) {
+      const geodataResponse = await this.server.inject(
+        `/geodata/${wikidataId}`
+      );
+      if (geodataResponse.statusCode === 200) {
+        const version = geodataResponse.result.versions.pop();
+        enum_titles.push(version.label);
+        enums.push(wikidataId);
+      }
+    }
+
+    return {
+      enums: enums,
+      enum_titles: enum_titles
+    };
+  } catch (error) {
+    return Boom.notFound();
+  }
+}
+
 module.exports = {
   getMapConfig: getMapConfig,
   getExactPixelWidth: getExactPixelWidth,
@@ -313,5 +356,6 @@ module.exports = {
   getTile: getTile,
   getTilesetTile: getTilesetTile,
   getFont: getFont,
-  getDefaultGeojsonStyles: getDefaultGeojsonStyles
+  getDefaultGeojsonStyles: getDefaultGeojsonStyles,
+  getRegionSuggestions: getRegionSuggestions
 };
