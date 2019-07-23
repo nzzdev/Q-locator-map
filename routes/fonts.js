@@ -25,7 +25,10 @@ module.exports = {
         start,
         end
       );
-      return h.response(font).type("application/x-protobuf");
+      return h
+        .response(font)
+        .type("application/x-protobuf")
+        .header("Content-Encoding", "gzip");
     } catch (error) {
       return Boom.notFound();
     }

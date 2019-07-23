@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const zlib = require("zlib");
 const turf = require("@turf/turf");
 const hasha = require("hasha");
 const mbtiles = require("@mapbox/mbtiles");
@@ -253,7 +254,14 @@ async function getFont(fontName, start, end) {
         if (error) {
           reject(Boom.notFound());
         } else {
-          resolve(glyphCompose.combine([data]));
+          const glyph = glyphCompose.combine([data]);
+          zlib.gzip(glyph, (error, compressedGlyph) => {
+            if (error) {
+              reject(Boom.notFound());
+            } else {
+              resolve(compressedGlyph);
+            }
+          });
         }
       }
     );
