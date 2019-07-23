@@ -1,19 +1,6 @@
 const db = require("./db.js");
 const Joi = require("@hapi/joi");
 const Boom = require("@hapi/boom");
-const fetch = require("node-fetch");
-const vtpbf = require("vt-pbf");
-const geojsonvt = require("geojson-vt");
-const zlib = require("zlib");
-
-function getValidGeodataUrl(geodataEntry, version) {
-  if (Number.isInteger(version) && geodataEntry.versions[version]) {
-    return geodataEntry.versions[version].format.geojson;
-  } else {
-    const entry = geodataEntry.versions.pop();
-    return entry.format.geojson;
-  }
-}
 
 module.exports = {
   name: "geodata",
@@ -53,7 +40,9 @@ module.exports = {
             id: Joi.string().required()
           },
           query: {
-            version: Joi.number().optional()
+            version: Joi.number()
+              .optional()
+              .default(-1)
           }
         }
       },
@@ -72,7 +61,7 @@ module.exports = {
             return await db.insert(doc);
           } else {
             const doc = response.docs.pop();
-            if (Number.isInteger(version) && doc.versions[version]) {
+            if (version >= 0 && doc.versions[version]) {
               doc.versions[version] = versionMetadata;
             } else {
               doc.versions.push(versionMetadata);
@@ -114,7 +103,9 @@ module.exports = {
             id: Joi.string().required()
           },
           query: {
-            version: Joi.number().optional()
+            version: Joi.number()
+              .optional()
+              .default(-1)
           },
           options: {
             allowUnknown: true
@@ -123,19 +114,13 @@ module.exports = {
       },
       handler: async function(request, h) {
         try {
+          const id = request.params.id;
           const version = request.query.version - 1;
-          const response = await db.get(request.params.id);
-          const geodataEntry = response.docs.pop();
-          if (geodataEntry) {
-            const geodataUrl = getValidGeodataUrl(geodataEntry, version);
-            const response = await fetch(geodataUrl);
-            if (response.ok) {
-              const geodata = await response.json();
-              return h.response(geodata).type("application/geo+json");
-            }
-          } else {
-            throw new Error();
-          }
+          const geodata = await request.server.methods.getGeodataGeojson(
+            id,
+            version
+          );
+          return h.response(geodata).type("application/geo+json");
         } catch (error) {
           return Boom.notFound();
         }
@@ -154,7 +139,9 @@ module.exports = {
             y: Joi.number().required()
           },
           query: {
-            version: Joi.number().optional()
+            version: Joi.number()
+              .optional()
+              .default(-1)
           },
           options: {
             allowUnknown: true
@@ -167,25 +154,20 @@ module.exports = {
           const z = request.params.z;
           const x = request.params.x;
           const y = request.params.y;
+          const version = request.query.version;
 
-          const geodataResponse = await request.server.inject(
-            `/geodata/${id}.geojson`
+          const tile = await request.server.methods.getGeodataTile(
+            id,
+            z,
+            x,
+            y,
+            version
           );
-          if (geodataResponse.statusCode === 200) {
-            const tileIndex = geojsonvt(geodataResponse.result);
-            const tile = tileIndex.getTile(z, x, y);
-            if (tile) {
-              const tileObject = {};
-              tileObject[`source-${id}`] = tile;
-              const protobuf = zlib.gzipSync(
-                vtpbf.fromGeojsonVt(tileObject, { version: 2 })
-              );
-              return h
-                .response(protobuf)
-                .type("application/x-protobuf")
-                .header("Content-Encoding", "gzip");
-            }
-          }
+
+          return h
+            .response(tile)
+            .type("application/x-protobuf")
+            .header("Content-Encoding", "gzip");
         } catch (error) {
           return Boom.notFound();
         }

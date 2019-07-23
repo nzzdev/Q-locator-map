@@ -1,5 +1,7 @@
 const Hapi = require("@hapi/hapi");
 const helpers = require("./helpers/helpers.js");
+const geodataHelpers = require("./plugins/geodata/helpers.js");
+
 const serverMethodCacheOptions = {
   expiresIn: 365 * 24 * 60 * 60 * 1000,
   cache: "memoryCache",
@@ -46,7 +48,19 @@ async function init() {
       },
       cache: serverMethodCacheOptions
     });
+
     server.method("getFont", helpers.getFont, {
+      cache: serverMethodCacheOptions
+    });
+
+    server.method("getGeodataGeojson", geodataHelpers.getGeodataGeojson, {
+      cache: serverMethodCacheOptions
+    });
+
+    server.method("getGeodataTile", geodataHelpers.getGeodataTile, {
+      bind: {
+        server: server
+      },
       cache: serverMethodCacheOptions
     });
 
