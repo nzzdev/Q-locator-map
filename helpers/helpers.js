@@ -1,9 +1,13 @@
+const fs = require("fs");
+const path = require("path");
 const turf = require("@turf/turf");
 const hasha = require("hasha");
 const mbtiles = require("@mapbox/mbtiles");
 const vega = require("vega");
 const fetch = require("node-fetch");
 const Boom = require("@hapi/boom");
+const fontnik = require("fontnik");
+const glyphCompose = require("@mapbox/glyph-pbf-composite");
 const minimapRegionVegaSpec = require("../resources/config/minimapRegionVegaSpec.json");
 const minimapGlobeVegaSpec = require("../resources/config/minimapGlobeVegaSpec.json");
 
@@ -215,6 +219,47 @@ async function getTile(tileset, z, x, y) {
   });
 }
 
+const fontsDir = `${__dirname}/../resources/fonts/`;
+const notoSansRegular = fs.readFileSync(
+  path.join(fontsDir, "NotoSans-Regular.ttf")
+);
+const notoSansBold = fs.readFileSync(path.join(fontsDir, "NotoSans-Bold.ttf"));
+const notoSansItalic = fs.readFileSync(
+  path.join(fontsDir, "NotoSans-Italic.ttf")
+);
+
+function getFontFile(fontName) {
+  if (fontName === "Noto Sans Regular") {
+    return notoSansRegular;
+  } else if (fontName === "Noto Sans Bold") {
+    return notoSansBold;
+  } else if (fontName === "Noto Sans Italic") {
+    return notoSansItalic;
+  } else {
+    return notoSansRegular;
+  }
+}
+
+async function getFont(fontName, start, end) {
+  const fontFile = getFontFile(fontName);
+  return await new Promise((resolve, reject) => {
+    fontnik.range(
+      {
+        font: fontFile,
+        start: start,
+        end: end
+      },
+      (error, data) => {
+        if (error) {
+          reject(Boom.notFound());
+        } else {
+          resolve(glyphCompose.combine([data]));
+        }
+      }
+    );
+  });
+}
+
 function getDefaultGeojsonStyles() {
   return {
     line: {
@@ -236,5 +281,6 @@ module.exports = {
   getHash: getHash,
   getTileset: getTileset,
   getTile: getTile,
+  getFont: getFont,
   getDefaultGeojsonStyles: getDefaultGeojsonStyles
 };

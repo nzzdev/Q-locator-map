@@ -33,6 +33,9 @@ async function init() {
   } catch (error) {
     console.log(error);
   }
+  server.method("getFont", helpers.getFont, {
+    cache: { expiresIn: 60000, generateTimeout: 100 }
+  });
   await server.register(require("@hapi/inert"));
   await server.register(plugins);
   server.route(routes);
