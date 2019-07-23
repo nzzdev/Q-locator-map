@@ -49,6 +49,12 @@ async function init() {
       cache: serverMethodCacheOptions
     });
 
+    server.method("getTilesetTile", helpers.getTilesetTile, {
+      generateKey: (item, id, z, x, y) =>
+        `${item._id}_${item.updatedDate}_${id}_${z}_${x}_${y}`,
+      cache: serverMethodCacheOptions
+    });
+
     server.method("getFont", helpers.getFont, {
       cache: serverMethodCacheOptions
     });

@@ -8,6 +8,8 @@ const vega = require("vega");
 const fetch = require("node-fetch");
 const Boom = require("@hapi/boom");
 const fontnik = require("fontnik");
+const vtpbf = require("vt-pbf");
+const geojsonvt = require("geojson-vt");
 const glyphCompose = require("@mapbox/glyph-pbf-composite");
 const minimapRegionVegaSpec = require("../resources/config/minimapRegionVegaSpec.json");
 const minimapGlobeVegaSpec = require("../resources/config/minimapGlobeVegaSpec.json");
@@ -220,6 +222,26 @@ async function getTile(tileset, z, x, y) {
   });
 }
 
+async function getTilesetTile(item, id, z, x, y) {
+  try {
+    if (id >= 0 && id < item.geojsonList.length) {
+      const tileIndex = geojsonvt(item.geojsonList[id]);
+      const tile = tileIndex.getTile(z, x, y);
+      if (tile) {
+        const tileObject = {};
+        tileObject[`source-${id}`] = tile;
+        return zlib.gzipSync(vtpbf.fromGeojsonVt(tileObject, { version: 2 }));
+      } else {
+        return Boom.notFound();
+      }
+    } else {
+      return Boom.notFound();
+    }
+  } catch (error) {
+    return Boom.notFound();
+  }
+}
+
 const fontsDir = `${__dirname}/../resources/fonts/`;
 const notoSansRegular = fs.readFileSync(
   path.join(fontsDir, "NotoSans-Regular.ttf")
@@ -289,6 +311,7 @@ module.exports = {
   getHash: getHash,
   getTileset: getTileset,
   getTile: getTile,
+  getTilesetTile: getTilesetTile,
   getFont: getFont,
   getDefaultGeojsonStyles: getDefaultGeojsonStyles
 };

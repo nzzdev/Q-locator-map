@@ -1,8 +1,5 @@
 const Joi = require("@hapi/joi");
 const Boom = require("@hapi/boom");
-const vtpbf = require("vt-pbf");
-const geojsonvt = require("geojson-vt");
-const zlib = require("zlib");
 
 module.exports = {
   method: "POST",
@@ -21,30 +18,26 @@ module.exports = {
         allowUnknown: true
       }
     },
-    handler: (request, h) => {
-      const item = request.payload.item;
-      const id = request.params.id;
-      const z = request.params.z;
-      const x = request.params.x;
-      const y = request.params.y;
+    handler: async (request, h) => {
+      try {
+        const item = request.payload.item;
+        const id = request.params.id;
+        const z = request.params.z;
+        const x = request.params.x;
+        const y = request.params.y;
+        const tile = await request.server.methods.getTilesetTile(
+          item,
+          id,
+          z,
+          x,
+          y
+        );
 
-      if (id >= 0 && id < item.geojsonList.length) {
-        const tileIndex = geojsonvt(item.geojsonList[id]);
-        const tile = tileIndex.getTile(z, x, y);
-        if (tile) {
-          const tileObject = {};
-          tileObject[`source-${id}`] = tile;
-          const protobuf = zlib.gzipSync(
-            vtpbf.fromGeojsonVt(tileObject, { version: 2 })
-          );
-          return h
-            .response(protobuf)
-            .type("application/x-protobuf")
-            .header("Content-Encoding", "gzip");
-        } else {
-          return Boom.notFound();
-        }
-      } else {
+        return h
+          .response(tile)
+          .type("application/x-protobuf")
+          .header("Content-Encoding", "gzip");
+      } catch (error) {
         return Boom.notFound();
       }
     }
