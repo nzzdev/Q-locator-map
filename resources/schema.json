@@ -32,6 +32,17 @@
         }
       }
     },
+    "bbox": {
+      "title": "Sichtbarer Kartenausschnitt",
+      "Q:type": "bbox",
+      "type": "array",
+      "Q:options": {
+        "fields": ["geojsonList"]
+      },
+      "items": {
+        "type": "number"
+      }
+    },
     "sources": {
       "title": "Quelle(n)",
       "type": "array",
