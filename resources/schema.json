@@ -80,7 +80,7 @@
       "type": "string"
     },
     "options": {
-      "title": "Kartenoptionen",
+      "title": "Optionen",
       "type": "object",
       "properties": {
         "baseLayer": {
