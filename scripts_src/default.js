@@ -25,32 +25,20 @@ export default class LocatorMap {
       interactive: false,
       attributionControl: false
     };
-    const initialZoomLevel = this.data.options.initialZoomLevel;
+
     if (this.data.mapConfig.bounds) {
-      if (initialZoomLevel !== -1) {
-        mapConfig.zoom = initialZoomLevel;
-        mapConfig.center = this.data.mapConfig.center;
-      } else {
-        mapConfig.bounds = new mapboxgl.LngLatBounds(
-          this.data.mapConfig.bounds
-        );
-      }
+      mapConfig.bounds = new mapboxgl.LngLatBounds(this.data.mapConfig.bounds);
     } else {
       mapConfig.center = this.data.mapConfig.center;
-      if (initialZoomLevel !== -1) {
-        mapConfig.zoom = initialZoomLevel;
-      } else {
-        mapConfig.zoom = 9;
-      }
+      mapConfig.zoom = this.data.mapConfig.zoom;
     }
 
     const map = new mapboxgl.Map(mapConfig);
     const minimapOptions = this.data.options.minimapOptions || {};
     if (
-      (this.data.options.minimap && minimapOptions.type === "globe") ||
-      (this.data.options.minimap &&
-        minimapOptions.type === "region" &&
-        minimapOptions.region)
+      this.data.options.minimap &&
+      (minimapOptions.type === "globe" ||
+        (minimapOptions.type === "region" && minimapOptions.region))
     ) {
       map.addControl(
         new MinimapControl({
@@ -60,15 +48,13 @@ export default class LocatorMap {
       );
     }
 
-    let attributionPosition;
+    let attributionPosition = "bottom-right";
     if (minimapOptions.position === "bottom-right") {
       attributionPosition = "bottom-left";
-    } else {
-      attributionPosition = "bottom-right";
     }
     map.addControl(new mapboxgl.AttributionControl(), attributionPosition);
 
-    if (this.data.mapConfig.bounds && initialZoomLevel === -1) {
+    if (mapConfig.bounds) {
       map.fitBounds(mapConfig.bounds, { padding: 60, duration: 0 });
     }
 

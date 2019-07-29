@@ -141,21 +141,20 @@ async function getMinimapMarkup(minimapOptions, mapConfig, toolRuntimeConfig) {
 async function getMapConfig(item, toolRuntimeConfig, qId) {
   const mapConfig = {};
   const geojsonList = item.geojsonList;
-  if (
+  if (item.bbox && item.bbox.length === 4) {
+    mapConfig.bounds = item.bbox;
+  } else if (
     geojsonList.length === 1 &&
     geojsonList[0].type === "Feature" &&
     geojsonList[0].geometry.type === "Point"
   ) {
-    mapConfig.center = turf.center(geojsonList[0]).geometry.coordinates;
+    mapConfig.center = geojsonList[0].geometry.coordinates;
+    mapConfig.zoom = 9;
   } else {
     const bboxPolygons = geojsonList.map(geojson => {
       return turf.bboxPolygon(turf.bbox(geojson));
     });
-
     mapConfig.bounds = turf.bbox(turf.featureCollection(bboxPolygons));
-    mapConfig.center = turf.center(
-      turf.featureCollection(bboxPolygons)
-    ).geometry.coordinates;
   }
 
   mapConfig.styleUrl = await getStyleUrl(
@@ -166,10 +165,9 @@ async function getMapConfig(item, toolRuntimeConfig, qId) {
 
   const minimapOptions = item.options.minimapOptions || {};
   if (
-    (item.options.minimap && minimapOptions.type === "globe") ||
-    (item.options.minimap &&
-      minimapOptions.type === "region" &&
-      minimapOptions.region)
+    item.options.minimap &&
+    (minimapOptions.type === "globe" ||
+      (minimapOptions.type === "region" && minimapOptions.region))
   ) {
     mapConfig.minimapMarkup = await getMinimapMarkup(
       minimapOptions,
