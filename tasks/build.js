@@ -100,12 +100,22 @@ async function buildScripts() {
     const filename = "default";
     const inputOptions = {
       input: `${scriptsDir}${filename}.js`,
-      plugins: [resolve({ browser: true }), commonjs(), buble(), terser()]
+      plugins: [
+        buble({
+          transforms: {
+            dangerousForOf: true
+          }
+        }),
+        terser(),
+        resolve({ browser: true }),
+        commonjs()
+      ]
     };
     const outputOptions = {
       format: "iife",
       name: "window._q_locator_map.LocatorMap",
-      file: `scripts/${filename}.js`
+      file: `scripts/${filename}.js`,
+      sourcemap: false
     };
     // create the bundle and write it to disk
     const bundle = await rollup.rollup(inputOptions);

@@ -1,4 +1,3 @@
-import mapboxgl from "mapbox-gl";
 import MinimapControl from "./minimap.js";
 
 export default class LocatorMap {
@@ -71,5 +70,18 @@ export default class LocatorMap {
     if (this.data.mapConfig.bounds && initialZoomLevel === -1) {
       map.fitBounds(mapConfig.bounds, { padding: 60, duration: 0 });
     }
+
+    // Clean up and release all resources associated with the map as soon as the map gets removed from DOM
+    const observer = new MutationObserver((mutationList, observer) => {
+      for (let mutation of mutationList) {
+        if (mutation.removedNodes.length > 0) {
+          map.remove();
+          observer.disconnect();
+        }
+      }
+    });
+    observer.observe(this.element.parentNode.parentNode, {
+      childList: true
+    });
   }
 }
