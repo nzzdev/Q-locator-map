@@ -142,7 +142,13 @@ async function getMapConfig(item, toolRuntimeConfig, qId) {
   const mapConfig = {};
   const geojsonList = item.geojsonList;
   if (item.bbox && item.bbox.length === 4) {
-    mapConfig.bounds = item.bbox;
+    mapConfig.bbox = item.bbox;
+    const bottomLeft = [mapConfig.bbox[0], mapConfig.bbox[1]];
+    const bottomRight = [mapConfig.bbox[2], mapConfig.bbox[1]];
+    const topRight = [mapConfig.bbox[2], mapConfig.bbox[3]];
+    mapConfig.aspectRatio =
+      turf.distance(bottomRight, topRight) /
+      turf.distance(bottomRight, bottomLeft);
   } else if (
     geojsonList.length === 1 &&
     geojsonList[0].type === "Feature" &&

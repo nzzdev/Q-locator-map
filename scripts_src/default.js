@@ -14,8 +14,13 @@ export default class LocatorMap {
   }
 
   setHeight() {
-    const aspectRatio = this.width > 450 ? 9 / 16 : 1;
-    this.element.style.height = `${this.width * aspectRatio}px`;
+    if (this.data.mapConfig.aspectRatio) {
+      this.element.style.height = `${this.width *
+        this.data.mapConfig.aspectRatio}px`;
+    } else {
+      const aspectRatio = this.width > 450 ? 9 / 16 : 1;
+      this.element.style.height = `${this.width * aspectRatio}px`;
+    }
   }
 
   render() {
@@ -26,7 +31,9 @@ export default class LocatorMap {
       attributionControl: false
     };
 
-    if (this.data.mapConfig.bounds) {
+    if (this.data.mapConfig.bbox) {
+      mapConfig.bounds = new mapboxgl.LngLatBounds(this.data.mapConfig.bbox);
+    } else if (this.data.mapConfig.bounds) {
       mapConfig.bounds = new mapboxgl.LngLatBounds(this.data.mapConfig.bounds);
     } else {
       mapConfig.center = this.data.mapConfig.center;
@@ -54,7 +61,7 @@ export default class LocatorMap {
     }
     map.addControl(new mapboxgl.AttributionControl(), attributionPosition);
 
-    if (mapConfig.bounds) {
+    if (this.data.mapConfig.bounds) {
       map.fitBounds(mapConfig.bounds, { padding: 60, duration: 0 });
     }
 

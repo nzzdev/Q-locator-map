@@ -36,9 +36,7 @@
       "title": "Sichtbarer Kartenausschnitt",
       "Q:type": "bbox",
       "type": "array",
-      "Q:options": {
-        "fields": ["geojsonList"]
-      },
+      "maxItems": 4,
       "items": {
         "type": "number"
       }
