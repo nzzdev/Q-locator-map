@@ -164,14 +164,14 @@ async function getMapConfig(item, toolRuntimeConfig, qId) {
   }
 
   mapConfig.styleUrl = await getStyleUrl(
-    item.options.baseLayer,
+    item.options.baseLayer.style,
     toolRuntimeConfig,
     qId
   );
 
-  const minimapOptions = item.options.minimapOptions || {};
+  const minimapOptions = item.options.minimap.options || {};
   if (
-    item.options.minimap &&
+    item.options.minimap.showMinimap &&
     (minimapOptions.type === "globe" ||
       (minimapOptions.type === "region" && minimapOptions.region))
   ) {

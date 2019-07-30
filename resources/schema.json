@@ -83,97 +83,110 @@
       "properties": {
         "baseLayer": {
           "title": "Basiskarte",
-          "type": "string",
-          "default": "streets",
-          "enum": [
-            "streets",
-            "streetsFewLabels",
-            "streetsNoLabels",
-            "terrain",
-            "terrainNoLabels",
-            "aerial"
-          ],
-          "Q:options": {
-            "enum_titles": [
-              "Strassenkarte",
-              "Strassenkarte wenig Labels",
-              "Strassenkarte ohne Labels",
-              "Terrain",
-              "Terrain ohne Labels",
-              "Satellit"
-            ]
-          }
-        },
-        "minimap": {
-          "title": "Minimap anzeigen",
-          "type": "boolean",
-          "default": true
-        },
-        "minimapOptions": {
-          "title": "Minimap Optionen",
           "type": "object",
-          "Q:options": {
-            "availabilityChecks": [
-              {
-                "type": "ToolEndpoint",
-                "config": {
-                  "endpoint": "option-availability/minimapOptions",
-                  "fields": ["options.minimap"]
+          "properties": {
+            "style": {
+              "title": "Kartenstil",
+              "type": "string",
+              "default": "streets",
+              "enum": ["basic", "minimal", "nature", "satellite"],
+              "Q:options": {
+                "enum_titles": ["Standard", "Minimal", "Natur", "Satellit"]
+              }
+            },
+            "layers": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "title": "Beschriftungen",
+                  "type": "boolean",
+                  "default": true
                 }
               }
-            ],
-            "expandable": true
+            }
           },
+          "required": ["style"]
+        },
+        "minimap": {
+          "title": "Übersichtskarte",
+          "type": "object",
           "properties": {
-            "type": {
-              "title": "Typ",
-              "type": "string",
-              "enum": ["globe", "region"],
-              "Q:options": {
-                "selectType": "radio",
-                "enum_titles": ["Globus", "Region"]
-              },
-              "default": "region"
+            "showMinimap": {
+              "title": "Übersichtskarte anzeigen",
+              "type": "boolean",
+              "default": true
             },
-            "region": {
-              "title": "Region",
-              "type": "string",
+            "options": {
+              "type": "object",
               "Q:options": {
-                "selectType": "select",
-                "dynamicSchema": {
-                  "type": "ToolEndpoint",
-                  "config": {
-                    "endpoint": "dynamic-schema/region",
-                    "fields": ["geojsonList"]
-                  }
-                },
                 "availabilityChecks": [
                   {
                     "type": "ToolEndpoint",
                     "config": {
-                      "endpoint": "option-availability/region",
-                      "fields": ["options.minimapOptions.type"]
+                      "endpoint": "option-availability/minimap-options",
+                      "fields": ["options.minimap.showMinimap"]
                     }
                   }
                 ]
-              }
-            },
-            "position": {
-              "title": "Position",
-              "type": "string",
-              "enum": ["top-left", "top-right", "bottom-left", "bottom-right"],
-              "Q:options": {
-                "selectType": "select",
-                "enum_titles": [
-                  "links oben",
-                  "rechts oben",
-                  "links unten",
-                  "rechts unten"
-                ]
               },
-              "default": "bottom-right"
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["globe", "region"],
+                  "Q:options": {
+                    "selectType": "radio",
+                    "enum_titles": ["Globus", "Region"]
+                  },
+                  "default": "globe"
+                },
+                "region": {
+                  "title": "Region",
+                  "type": "string",
+                  "Q:options": {
+                    "selectType": "select",
+                    "dynamicSchema": {
+                      "type": "ToolEndpoint",
+                      "config": {
+                        "endpoint": "dynamic-schema/region",
+                        "fields": ["geojsonList"]
+                      }
+                    },
+                    "availabilityChecks": [
+                      {
+                        "type": "ToolEndpoint",
+                        "config": {
+                          "endpoint": "option-availability/region",
+                          "fields": ["options.minimap.options.type"]
+                        }
+                      }
+                    ]
+                  }
+                },
+                "position": {
+                  "title": "Position",
+                  "type": "string",
+                  "enum": [
+                    "top-left",
+                    "top-right",
+                    "bottom-left",
+                    "bottom-right"
+                  ],
+                  "Q:options": {
+                    "selectType": "select",
+                    "enum_titles": [
+                      "links oben",
+                      "rechts oben",
+                      "links unten",
+                      "rechts unten"
+                    ]
+                  },
+                  "default": "bottom-right"
+                }
+              },
+              "required": ["type"]
             }
-          }
+          },
+          "required": ["showMinimap"]
         },
         "highlightRegion": {
           "title": "Region hervorheben",
@@ -226,17 +239,8 @@
               }
             ]
           }
-        },
-        "hideTitle": {
-          "type": "boolean",
-          "default": false,
-          "Q:deprecated": true,
-          "Q:options": {
-            "hideInEditor": true
-          }
         }
-      },
-      "required": ["baseLayer", "initialZoomLevel", "minimap", "labelsBelowMap"]
+      }
     }
   },
   "required": ["title"],
@@ -271,6 +275,7 @@
         },
         "properties": {
           "type": "object",
+          "title": "Optionen",
           "required": ["type", "labelPosition"],
           "properties": {
             "label": {

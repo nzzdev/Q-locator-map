@@ -41,7 +41,7 @@ export default class LocatorMap {
     }
 
     const map = new mapboxgl.Map(mapConfig);
-    const minimapOptions = this.data.options.minimapOptions || {};
+    const minimapOptions = this.data.options.minimap.options || {};
     if (
       this.data.options.minimap &&
       (minimapOptions.type === "globe" ||

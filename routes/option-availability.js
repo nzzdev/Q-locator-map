@@ -12,15 +12,15 @@ module.exports = {
   },
   handler: function(request, h) {
     const item = request.payload.item;
-    if (request.params.optionName === "minimapOptions") {
+    if (request.params.optionName === "minimap-options") {
       return {
-        available: item.options.minimap
+        available: item.options.minimap.showMinimap
       };
     }
 
     if (request.params.optionName === "region") {
       return {
-        available: item.options.minimapOptions.type === "region"
+        available: item.options.minimap.options.type === "region"
       };
     }
 
