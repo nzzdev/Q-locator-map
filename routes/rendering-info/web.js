@@ -7,7 +7,7 @@ const scriptsDir = "../../scripts/";
 const scriptHashMap = require(`${scriptsDir}/hashMap.json`);
 const viewsDir = `${__dirname}/../../views/`;
 const helpers = require("../../helpers/helpers.js");
-const defaultGeojsonStyles = require("../../helpers/helpers.js").getDefaultGeojsonStyles();
+const defaultGeojsonStyles = require("../../helpers/styles.js").getDefaultGeojsonStyles();
 
 // setup svelte
 require("svelte/register");
@@ -88,13 +88,14 @@ module.exports = {
           name: scriptHashMap["default"]
         },
         {
-          content: `new window._q_locator_map.LocatorMap(document.querySelector('#${
+          content: `
+          new window._q_locator_map.LocatorMap(document.querySelector('#${
             context.id
-          }_container'), JSON.parse('${JSON.stringify({
+          }_container'), ${JSON.stringify({
             mapConfig: context.mapConfig,
             options: context.item.options,
             width: context.width
-          })}'))`
+          })})`
         }
       ],
       markup: staticTemplate.render(context).html

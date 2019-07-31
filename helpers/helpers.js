@@ -13,6 +13,7 @@ const geojsonvt = require("geojson-vt");
 const glyphCompose = require("@mapbox/glyph-pbf-composite");
 const minimapRegionVegaSpec = require("../resources/config/minimapRegionVegaSpec.json");
 const minimapGlobeVegaSpec = require("../resources/config/minimapGlobeVegaSpec.json");
+const styleHelpers = require("./styles.js");
 
 async function getHash(item, toolRuntimeConfig) {
   // This hash ensures that the response of the endpoint request can be cached forever
@@ -132,9 +133,6 @@ async function getMinimapMarkup(minimapOptions, mapConfig, toolRuntimeConfig) {
   const view = new vega.View(vega.parse(spec)).renderer("none").initialize();
   view.logLevel(vega.Warn);
   let svg = await view.toSVG();
-  // Escape quotation marks (" with \") and forward slashes (</svg> with <\/svg) for serialization of markup in JSON
-  svg = svg.replace(/"/g, '\\"');
-  svg = svg.replace(/\//g, "\\/");
   return svg;
 }
 
@@ -163,9 +161,10 @@ async function getMapConfig(item, toolRuntimeConfig, qId) {
     mapConfig.bounds = turf.bbox(turf.featureCollection(bboxPolygons));
   }
 
-  mapConfig.styleUrl = await getStyleUrl(
+  mapConfig.style = styleHelpers.getStyle(
     item.options.baseLayer.style,
-    toolRuntimeConfig,
+    item,
+    toolRuntimeConfig.toolBaseUrl,
     qId
   );
 
@@ -294,21 +293,6 @@ async function getFont(fontName, start, end) {
   });
 }
 
-function getDefaultGeojsonStyles() {
-  return {
-    line: {
-      stroke: "#c31906",
-      "stroke-width": 2,
-      "stroke-opacity": 1
-    },
-    polygon: {
-      "stroke-width": 0,
-      fill: "#c31906",
-      "fill-opacity": 0.35
-    }
-  };
-}
-
 async function getRegionSuggestions(components, countryCode) {
   try {
     const enums = [];
@@ -360,6 +344,5 @@ module.exports = {
   getTile: getTile,
   getTilesetTile: getTilesetTile,
   getFont: getFont,
-  getDefaultGeojsonStyles: getDefaultGeojsonStyles,
   getRegionSuggestions: getRegionSuggestions
 };

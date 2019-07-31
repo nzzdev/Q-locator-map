@@ -2,7 +2,21 @@ const resourcesDir = "../resources/";
 const basicStyle = require(`${resourcesDir}styles/basic/style.json`);
 const natureStyle = require(`${resourcesDir}styles/nature/style.json`);
 const satelliteStyle = require(`${resourcesDir}styles/satellite/style.json`);
-const defaultGeojsonStyles = require("./helpers.js").getDefaultGeojsonStyles();
+
+function getDefaultGeojsonStyles() {
+  return {
+    line: {
+      stroke: "#c31906",
+      "stroke-width": 2,
+      "stroke-opacity": 1
+    },
+    polygon: {
+      "stroke-width": 0,
+      fill: "#c31906",
+      "fill-opacity": 0.35
+    }
+  };
+}
 
 function getStyleJSON(id, toolBaseUrl) {
   let style;
@@ -40,6 +54,7 @@ function getStyleFilteredByLayer(style, item) {
 }
 
 function getStyleWithGeoJSONOverlays(style, item, toolBaseUrl, qId) {
+  const defaultGeojsonStyles = getDefaultGeojsonStyles();
   let firstSymbolLayerIndex = style.layers.findIndex(
     layer => layer.type === "symbol"
   );
@@ -200,7 +215,7 @@ function getStyleWithHighlightedRegion(style, item, toolBaseUrl) {
   return style;
 }
 
-async function getStyle(id, item, toolBaseUrl, qId) {
+function getStyle(id, item, toolBaseUrl, qId) {
   let style = getStyleJSON(id, toolBaseUrl);
 
   if (item) {
@@ -218,5 +233,6 @@ async function getStyle(id, item, toolBaseUrl, qId) {
 }
 
 module.exports = {
-  getStyle: getStyle
+  getStyle: getStyle,
+  getDefaultGeojsonStyles: getDefaultGeojsonStyles
 };

@@ -26,7 +26,7 @@ export default class LocatorMap {
   render() {
     const mapConfig = {
       container: this.element,
-      style: this.data.mapConfig.styleUrl,
+      style: this.data.mapConfig.style,
       interactive: false,
       attributionControl: false
     };
