@@ -41,26 +41,22 @@ export default class LocatorMap {
     }
 
     const map = new mapboxgl.Map(mapConfig);
-    const minimapOptions = this.data.options.minimap.options || {};
-    if (
-      this.data.options.minimap &&
-      (minimapOptions.type === "globe" ||
-        (minimapOptions.type === "region" && minimapOptions.region))
-    ) {
+    let attributionPosition = "bottom-right";
+    const minimap = this.data.options.minimap;
+    if (minimap.showMinimap) {
       map.addControl(
         new MinimapControl({
           minimapMarkup: this.data.mapConfig.minimapMarkup
         }),
-        minimapOptions.position
+        minimap.options.position
       );
+
+      if (minimap.options.position === "bottom-right") {
+        attributionPosition = "bottom-left";
+      }
     }
 
-    let attributionPosition = "bottom-right";
-    if (minimapOptions.position === "bottom-right") {
-      attributionPosition = "bottom-left";
-    }
     map.addControl(new mapboxgl.AttributionControl(), attributionPosition);
-
     if (this.data.mapConfig.bounds) {
       map.fitBounds(mapConfig.bounds, { padding: 60, duration: 0 });
     }

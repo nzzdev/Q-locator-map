@@ -168,14 +168,9 @@ async function getMapConfig(item, toolRuntimeConfig, qId) {
     qId
   );
 
-  const minimapOptions = item.options.minimap.options || {};
-  if (
-    item.options.minimap.showMinimap &&
-    (minimapOptions.type === "globe" ||
-      (minimapOptions.type === "region" && minimapOptions.region))
-  ) {
+  if (item.options.minimap.showMinimap) {
     mapConfig.minimapMarkup = await getMinimapMarkup(
-      minimapOptions,
+      item.options.minimap.options,
       mapConfig,
       toolRuntimeConfig
     );
