@@ -4,16 +4,13 @@ const zlib = require("zlib");
 const turf = require("@turf/turf");
 const hasha = require("hasha");
 const mbtiles = require("@mapbox/mbtiles");
-const vega = require("vega");
-const fetch = require("node-fetch");
 const Boom = require("@hapi/boom");
 const fontnik = require("fontnik");
 const vtpbf = require("vt-pbf");
 const geojsonvt = require("geojson-vt");
 const glyphCompose = require("@mapbox/glyph-pbf-composite");
-const minimapRegionVegaSpec = require("../resources/config/minimapRegionVegaSpec.json");
-const minimapGlobeVegaSpec = require("../resources/config/minimapGlobeVegaSpec.json");
 const styleHelpers = require("./styles.js");
+const minimapHelpers = require("./minimap.js");
 
 async function getHash(item, toolRuntimeConfig) {
   // This hash ensures that the response of the endpoint request can be cached forever
@@ -41,99 +38,6 @@ async function getStyleUrl(id, toolRuntimeConfig, qId) {
       toolRuntimeConfig.toolBaseUrl
     }`;
   }
-}
-
-async function getMinimapMarkup(minimapOptions, mapConfig, toolRuntimeConfig) {
-  let height = 100;
-  let width = 100;
-  let spec;
-  if (minimapOptions.type === "region") {
-    height = 150;
-    width = 150;
-    spec = JSON.parse(JSON.stringify(minimapRegionVegaSpec));
-    const geoDataUrl = `${toolRuntimeConfig.toolBaseUrl}/geodata/${
-      minimapOptions.region
-    }.geojson`;
-
-    const response = await fetch(geoDataUrl);
-    if (response.ok) {
-      const region = await response.json();
-      const center = turf.getCoord(turf.centroid(region));
-      const bbox = turf.bbox(region);
-      const distance = turf.distance([bbox[0], bbox[1]], [bbox[2], bbox[3]], {
-        units: "radians"
-      });
-      const scaleFactor = height / distance;
-
-      spec.signals.push({
-        name: "scaleFactor",
-        value: scaleFactor
-      });
-
-      spec.signals.push({
-        name: "rotate0",
-        value: center[0] * -1
-      });
-
-      spec.signals.push({
-        name: "rotate1",
-        value: center[1] * -1
-      });
-
-      spec.data.push({
-        name: "region",
-        values: region,
-        format: {
-          type: "json"
-        }
-      });
-    }
-  } else {
-    spec = JSON.parse(JSON.stringify(minimapGlobeVegaSpec));
-    const geoDataUrl = `${
-      toolRuntimeConfig.toolBaseUrl
-    }/geodata/Q11081619.geojson`;
-
-    const response = await fetch(geoDataUrl);
-    if (response.ok) {
-      const region = await response.json();
-
-      spec.signals.push({
-        name: "rotate0",
-        value: mapConfig.center[0] * -1
-      });
-      spec.signals.push({
-        name: "rotate1",
-        value: mapConfig.center[1] * -1
-      });
-      spec.data.push({
-        name: "world",
-        values: region,
-        format: {
-          type: "json"
-        }
-      });
-      let bbox;
-      if (mapConfig.bounds) {
-        bbox = turf.bboxPolygon(mapConfig.bounds);
-      } else {
-        bbox = turf.point(mapConfig.center);
-      }
-      spec.data.push({
-        name: "bbox",
-        values: bbox,
-        format: {
-          type: "json"
-        }
-      });
-    }
-  }
-  spec.height = height;
-  spec.width = width;
-  const view = new vega.View(vega.parse(spec)).renderer("none").initialize();
-  view.logLevel(vega.Warn);
-  let svg = await view.toSVG();
-  return svg;
 }
 
 async function getMapConfig(item, toolRuntimeConfig, qId) {
@@ -169,7 +73,7 @@ async function getMapConfig(item, toolRuntimeConfig, qId) {
   );
 
   if (item.options.minimap.showMinimap) {
-    mapConfig.minimapMarkup = await getMinimapMarkup(
+    mapConfig.minimapMarkup = await minimapHelpers.getMinimap(
       item.options.minimap.options,
       mapConfig,
       toolRuntimeConfig
