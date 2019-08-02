@@ -23,8 +23,81 @@ export default class LocatorMap {
     }
   }
 
+  addControls() {
+    let attributionPosition = "bottom-right";
+    const minimap = this.data.options.minimap;
+    if (minimap.showMinimap) {
+      this.map.addControl(
+        new MinimapControl({
+          minimapMarkup: this.data.mapConfig.minimapMarkup
+        }),
+        minimap.options.position
+      );
+
+      if (minimap.options.position === "bottom-right") {
+        attributionPosition = "bottom-left";
+      }
+    }
+
+    this.map.addControl(new mapboxgl.AttributionControl(), attributionPosition);
+    if (this.data.mapConfig.bounds) {
+      this.map.fitBounds(this.options.bounds, { padding: 60, duration: 0 });
+    }
+  }
+
+  preventLabelsAroundViewport() {
+    this.viewport = this.map.getBounds();
+    this.map.addSource("viewport-line", {
+      type: "geojson",
+      data: {
+        type: "Feature",
+        properties: {},
+        geometry: {
+          type: "LineString",
+          coordinates: [
+            [this.viewport._sw.lng, this.viewport._sw.lat],
+            [this.viewport._sw.lng, this.viewport._ne.lat],
+            [this.viewport._ne.lng, this.viewport._ne.lat],
+            [this.viewport._ne.lng, this.viewport._sw.lat],
+            [this.viewport._sw.lng, this.viewport._sw.lat]
+          ]
+        }
+      }
+    });
+
+    const width = 5;
+    const data = new Uint8Array(width * width * 4);
+    this.map.addImage("pixel", { width: width, height: width, data: data });
+
+    this.map.addLayer({
+      id: "viewport-line-symbols",
+      type: "symbol",
+      source: "viewport-line",
+      layout: {
+        "icon-image": "pixel",
+        "symbol-placement": "line",
+        "symbol-spacing": 5
+      }
+    });
+  }
+
+  onDetached() {
+    // Clean up and release all resources associated with the map as soon as the map gets removed from DOM
+    const observer = new MutationObserver((mutationList, observer) => {
+      for (let mutation of mutationList) {
+        if (mutation.removedNodes.length > 0) {
+          this.map.remove();
+          observer.disconnect();
+        }
+      }
+    });
+    observer.observe(this.element.parentNode.parentNode, {
+      childList: true
+    });
+  }
+
   render() {
-    const mapConfig = {
+    this.options = {
       container: this.element,
       style: this.data.mapConfig.style,
       interactive: false,
@@ -32,49 +105,22 @@ export default class LocatorMap {
     };
 
     if (this.data.mapConfig.bbox) {
-      mapConfig.bounds = new mapboxgl.LngLatBounds(this.data.mapConfig.bbox);
+      this.options.bounds = new mapboxgl.LngLatBounds(this.data.mapConfig.bbox);
     } else if (this.data.mapConfig.bounds) {
-      mapConfig.bounds = new mapboxgl.LngLatBounds(this.data.mapConfig.bounds);
+      this.options.bounds = new mapboxgl.LngLatBounds(
+        this.data.mapConfig.bounds
+      );
     } else {
-      mapConfig.center = this.data.mapConfig.center;
-      mapConfig.zoom = this.data.mapConfig.zoom;
+      this.options.center = this.data.mapConfig.center;
+      this.options.zoom = this.data.mapConfig.zoom;
     }
 
-    const map = new mapboxgl.Map(mapConfig);
-    map.on("load", () => {
-      let attributionPosition = "bottom-right";
-      const minimap = this.data.options.minimap;
-      if (minimap.showMinimap) {
-        map.addControl(
-          new MinimapControl({
-            minimapMarkup: this.data.mapConfig.minimapMarkup
-          }),
-          minimap.options.position
-        );
-
-        if (minimap.options.position === "bottom-right") {
-          attributionPosition = "bottom-left";
-        }
-      }
-
-      map.addControl(new mapboxgl.AttributionControl(), attributionPosition);
-      if (this.data.mapConfig.bounds) {
-        map.fitBounds(mapConfig.bounds, { padding: 60, duration: 0 });
-      }
-
-      // Clean up and release all resources associated with the map as soon as the map gets removed from DOM
-      const observer = new MutationObserver((mutationList, observer) => {
-        for (let mutation of mutationList) {
-          if (mutation.removedNodes.length > 0) {
-            map.remove();
-            observer.disconnect();
-          }
-        }
-      });
-      observer.observe(this.element.parentNode.parentNode, {
-        childList: true
-      });
+    this.map = new mapboxgl.Map(this.options);
+    this.map.on("load", () => {
+      this.preventLabelsAroundViewport();
+      this.addControls();
       this.element.parentNode.style.opacity = "1";
+      this.onDetached();
     });
   }
 }

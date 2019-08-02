@@ -186,10 +186,6 @@ function getStyleWithGeoJSONOverlays(style, item, toolBaseUrl, qId) {
 }
 
 function getStyleWithHighlightedRegion(style, item, toolBaseUrl) {
-  const firstSymbolLayerIndex = style.layers.findIndex(
-    layer => layer.type === "symbol"
-  );
-
   for (let highlightRegion of item.options.highlightRegion) {
     style.sources[`source-${highlightRegion.region}`] = {
       type: "vector",
