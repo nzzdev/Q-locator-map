@@ -11,10 +11,18 @@ function createMapPoint() {
     acronym: "abc",
     geojsonList: [points.bucharestHeavyTop],
     options: {
-      baseLayer: "streets",
-      initialZoomLevel: -1,
-      minimapInitialZoomOffset: 0,
-      minimap: true,
+      baseLayer: {
+        style: "streets",
+        layers: {
+          label: true
+        }
+      },
+      minimap: {
+        showMinimap: true,
+        options: {
+          type: "globe"
+        }
+      },
       labelsBelowMap: false,
       showLegend: true
     }
@@ -32,10 +40,18 @@ function createMapFeature() {
     acronym: "abc",
     geojsonList: [features.lineSofiaBucharest],
     options: {
-      baseLayer: "streets",
-      initialZoomLevel: -1,
-      minimapInitialZoomOffset: 0,
-      minimap: true,
+      baseLayer: {
+        style: "streets",
+        layers: {
+          label: true
+        }
+      },
+      minimap: {
+        showMinimap: true,
+        options: {
+          type: "globe"
+        }
+      },
       labelsBelowMap: false,
       showLegend: true
     }
@@ -58,10 +74,18 @@ function createMapFeatureCollection() {
       }
     ],
     options: {
-      baseLayer: "streets",
-      initialZoomLevel: -1,
-      minimapInitialZoomOffset: 0,
-      minimap: true,
+      baseLayer: {
+        style: "streets",
+        layers: {
+          label: true
+        }
+      },
+      minimap: {
+        showMinimap: true,
+        options: {
+          type: "globe"
+        }
+      },
       labelsBelowMap: false,
       showLegend: true
     }
@@ -79,10 +103,18 @@ function createMapPoints() {
     acronym: "abc",
     geojsonList: [],
     options: {
-      baseLayer: "streets",
-      initialZoomLevel: -1,
-      minimapInitialZoomOffset: 0,
-      minimap: true,
+      baseLayer: {
+        style: "streets",
+        layers: {
+          label: true
+        }
+      },
+      minimap: {
+        showMinimap: true,
+        options: {
+          type: "globe"
+        }
+      },
       labelsBelowMap: false,
       showLegend: true
     }
@@ -121,10 +153,18 @@ function createMapFeatures() {
     acronym: "abc",
     geojsonList: [],
     options: {
-      baseLayer: "streets",
-      initialZoomLevel: -1,
-      minimapInitialZoomOffset: 0,
-      minimap: true,
+      baseLayer: {
+        style: "streets",
+        layers: {
+          label: true
+        }
+      },
+      minimap: {
+        showMinimap: true,
+        options: {
+          type: "globe"
+        }
+      },
       labelsBelowMap: false,
       showLegend: true
     }
@@ -154,10 +194,18 @@ function createMapFeatureCollections() {
       }
     ],
     options: {
-      baseLayer: "streets",
-      initialZoomLevel: -1,
-      minimapInitialZoomOffset: 0,
-      minimap: true,
+      baseLayer: {
+        style: "streets",
+        layers: {
+          label: true
+        }
+      },
+      minimap: {
+        showMinimap: true,
+        options: {
+          type: "globe"
+        }
+      },
       labelsBelowMap: false,
       showLegend: true
     }
@@ -230,10 +278,18 @@ function showAcronym() {
       }
     ],
     options: {
-      baseLayer: "streets",
-      initialZoomLevel: -1,
-      minimapInitialZoomOffset: 0,
-      minimap: true,
+      baseLayer: {
+        style: "streets",
+        layers: {
+          label: true
+        }
+      },
+      minimap: {
+        showMinimap: true,
+        options: {
+          type: "globe"
+        }
+      },
       labelsBelowMap: false,
       showLegend: true
     }
@@ -251,10 +307,18 @@ function dontShowAcronym() {
     acronym: "abc",
     geojsonList: [points.bucharestHeavyTop],
     options: {
-      baseLayer: "streets",
-      initialZoomLevel: -1,
-      minimapInitialZoomOffset: 0,
-      minimap: true,
+      baseLayer: {
+        style: "streets",
+        layers: {
+          label: true
+        }
+      },
+      minimap: {
+        showMinimap: true,
+        options: {
+          type: "globe"
+        }
+      },
       labelsBelowMap: false,
       showLegend: true
     }
@@ -272,10 +336,18 @@ function antimeridian() {
     acronym: "abc",
     geojsonList: [points.honoluluHeavyTop, points.tokioHeavyTop],
     options: {
-      baseLayer: "streets",
-      initialZoomLevel: -1,
-      minimapInitialZoomOffset: 0,
-      minimap: true,
+      baseLayer: {
+        style: "streets",
+        layers: {
+          label: true
+        }
+      },
+      minimap: {
+        showMinimap: true,
+        options: {
+          type: "globe"
+        }
+      },
       labelsBelowMap: false,
       showLegend: true
     }
@@ -302,10 +374,18 @@ function labelPlacementTypePointHeavyLabel() {
       points.zurichHeavyBottomRight
     ],
     options: {
-      baseLayer: "streets",
-      initialZoomLevel: -1,
-      minimapInitialZoomOffset: 0,
-      minimap: false,
+      baseLayer: {
+        style: "streets",
+        layers: {
+          label: true
+        }
+      },
+      minimap: {
+        showMinimap: true,
+        options: {
+          type: "globe"
+        }
+      },
       labelsBelowMap: false,
       showLegend: true
     }
@@ -335,10 +415,18 @@ function labelPlacementTypePointLightLabel() {
       return geojson;
     }),
     options: {
-      baseLayer: "streets",
-      initialZoomLevel: -1,
-      minimapInitialZoomOffset: 0,
-      minimap: false,
+      baseLayer: {
+        style: "streets",
+        layers: {
+          label: true
+        }
+      },
+      minimap: {
+        showMinimap: true,
+        options: {
+          type: "globe"
+        }
+      },
       labelsBelowMap: false,
       showLegend: true
     }
@@ -367,10 +455,18 @@ function labelPlacementTypeEvent() {
       return geojson;
     }),
     options: {
-      baseLayer: "streets",
-      initialZoomLevel: -1,
-      minimapInitialZoomOffset: 0,
-      minimap: false,
+      baseLayer: {
+        style: "streets",
+        layers: {
+          label: true
+        }
+      },
+      minimap: {
+        showMinimap: true,
+        options: {
+          type: "globe"
+        }
+      },
       labelsBelowMap: false,
       showLegend: true
     }
