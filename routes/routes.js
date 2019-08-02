@@ -5,6 +5,7 @@ module.exports = [
   require("./health.js"),
   require("./fixtures/data.js"),
   require("./locales.js"),
+  require("./migration.js"),
   require("./option-availability.js"),
   require("./dynamic-schema.js"),
   require("./tiles.js"),

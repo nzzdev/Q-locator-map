@@ -57,7 +57,8 @@ module.exports = {
     }
   },
   handler: async function(request, h) {
-    const item = request.payload.item;
+    let item = request.payload.item;
+
     const toolRuntimeConfig = request.payload.toolRuntimeConfig;
     item.id = request.query._id;
 
