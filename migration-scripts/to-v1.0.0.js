@@ -6,8 +6,16 @@ module.exports.migrate = function(item) {
     if (item.options.baseLayer === "") {
       item.options.baseLayer = {};
     } else {
+      let style;
+      if (["terrain", "terrainNoLabels"].includes(item.options.baseLayer)) {
+        style = "nature";
+      } else if (["aerial"].includes(item.options.baseLayer)) {
+        style = "satellite";
+      } else {
+        style = "basic";
+      }
       item.options.baseLayer = {
-        style: item.options.baseLayer,
+        style: style,
         layers: {
           label: true
         }
