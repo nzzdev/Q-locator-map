@@ -200,14 +200,14 @@ function getStyleWithHighlightedRegion(style, item, toolBaseUrl) {
       maxzoom: 18
     };
 
-    style.layers.splice(firstSymbolLayerIndex, 0, {
+    style.layers.splice(1, 0, {
       id: `highlightedRegion-${highlightRegion.region}`,
       type: "fill",
       source: `source-${highlightRegion.region}`,
       "source-layer": `source-${highlightRegion.region}`,
       paint: {
-        "fill-color": "#ffffff",
-        "fill-opacity": 0.5
+        "fill-color": "#fad250",
+        "fill-opacity": 1
       }
     });
   }
