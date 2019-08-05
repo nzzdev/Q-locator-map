@@ -1,6 +1,7 @@
 const Hapi = require("@hapi/hapi");
 const NodeGeocoder = require("node-geocoder");
 const helpers = require("./helpers/helpers.js");
+const tileHelpers = require("./helpers/tiles.js");
 const geodataHelpers = require("./plugins/geodata/helpers.js");
 
 const serverMethodCacheOptions = {
@@ -44,18 +45,18 @@ async function init() {
     for (let [key, value] of Object.entries(tilesets)) {
       if (value.path) {
         server.app.tilesets = server.app.tilesets || {};
-        server.app.tilesets[key] = await helpers.getTileset(value.path);
+        server.app.tilesets[key] = await tileHelpers.getTileset(value.path);
       }
     }
 
-    server.method("getTile", helpers.getTile, {
+    server.method("getTile", tileHelpers.getTile, {
       bind: {
         tilesets: server.app.tilesets
       },
       cache: serverMethodCacheOptions
     });
 
-    server.method("getTilesetTile", helpers.getTilesetTile, {
+    server.method("getTilesetTile", tileHelpers.getTilesetTile, {
       generateKey: (item, id, z, x, y) =>
         `${item._id}_${item.updatedDate}_${id}_${z}_${x}_${y}`,
       cache: serverMethodCacheOptions

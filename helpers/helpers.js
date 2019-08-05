@@ -2,43 +2,11 @@ const fs = require("fs");
 const path = require("path");
 const zlib = require("zlib");
 const turf = require("@turf/turf");
-const hasha = require("hasha");
-const mbtiles = require("@mapbox/mbtiles");
 const Boom = require("@hapi/boom");
 const fontnik = require("fontnik");
-const vtpbf = require("vt-pbf");
-const geojsonvt = require("geojson-vt");
 const glyphCompose = require("@mapbox/glyph-pbf-composite");
 const styleHelpers = require("./styles.js");
 const minimapHelpers = require("./minimap.js");
-
-async function getHash(item, toolRuntimeConfig) {
-  // This hash ensures that the response of the endpoint request can be cached forever
-  // It changes as soon as the item or toolRuntimeConfig change
-  return await hasha(
-    JSON.stringify({
-      item: item,
-      toolRuntimeConfig: toolRuntimeConfig
-    }),
-    {
-      algorithm: "md5"
-    }
-  );
-}
-
-async function getStyleUrl(id, toolRuntimeConfig, qId) {
-  if (qId) {
-    return `${
-      toolRuntimeConfig.toolBaseUrl
-    }/styles/${id}?appendItemToPayload=${qId}&qId=${qId}&toolBaseUrl=${
-      toolRuntimeConfig.toolBaseUrl
-    }`;
-  } else {
-    return `${toolRuntimeConfig.toolBaseUrl}/styles/${id}?toolBaseUrl=${
-      toolRuntimeConfig.toolBaseUrl
-    }`;
-  }
-}
 
 async function getMapConfig(item, toolRuntimeConfig, qId) {
   const mapConfig = {};
@@ -97,51 +65,6 @@ function getExactPixelWidth(toolRuntimeConfig) {
     }
   }
   return undefined;
-}
-
-function getTileset(path) {
-  const tilesetPath = `${path}?mode=ro`;
-  return new Promise(function(resolve, reject) {
-    new mbtiles(tilesetPath, function(err, tileset) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(tileset);
-      }
-    });
-  });
-}
-
-async function getTile(tileset, z, x, y) {
-  return await new Promise((resolve, reject) => {
-    this.tilesets[tileset].getTile(z, x, y, (error, tile) => {
-      if (error) {
-        reject(Boom.notFound());
-      } else {
-        resolve(tile);
-      }
-    });
-  });
-}
-
-async function getTilesetTile(item, id, z, x, y) {
-  try {
-    if (id >= 0 && id < item.geojsonList.length) {
-      const tileIndex = geojsonvt(item.geojsonList[id]);
-      const tile = tileIndex.getTile(z, x, y);
-      if (tile) {
-        const tileObject = {};
-        tileObject[`source-${id}`] = tile;
-        return zlib.gzipSync(vtpbf.fromGeojsonVt(tileObject, { version: 2 }));
-      } else {
-        return Boom.notFound();
-      }
-    } else {
-      return Boom.notFound();
-    }
-  } catch (error) {
-    return Boom.notFound();
-  }
 }
 
 const fontsDir = `${__dirname}/../resources/fonts/`;
@@ -238,10 +161,6 @@ async function getRegionSuggestions(components, countryCode) {
 module.exports = {
   getMapConfig: getMapConfig,
   getExactPixelWidth: getExactPixelWidth,
-  getHash: getHash,
-  getTileset: getTileset,
-  getTile: getTile,
-  getTilesetTile: getTilesetTile,
   getFont: getFont,
   getRegionSuggestions: getRegionSuggestions
 };
