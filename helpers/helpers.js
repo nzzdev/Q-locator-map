@@ -7,10 +7,11 @@ const fontnik = require("fontnik");
 const glyphCompose = require("@mapbox/glyph-pbf-composite");
 const styleHelpers = require("./styles.js");
 const minimapHelpers = require("./minimap.js");
+const tilesHelpers = require("./tiles.js");
 
 async function getMapConfig(item, toolRuntimeConfig, qId) {
   const mapConfig = {};
-  const geojsonList = item.geojsonList;
+  let geojsonList = item.geojsonList;
   if (item.bbox && item.bbox.length === 4) {
     mapConfig.bbox = item.bbox;
     const bottomLeft = [mapConfig.bbox[0], mapConfig.bbox[1]];
@@ -27,6 +28,7 @@ async function getMapConfig(item, toolRuntimeConfig, qId) {
     mapConfig.center = geojsonList[0].geometry.coordinates;
     mapConfig.zoom = 9;
   } else {
+    geojsonList = tilesHelpers.transformCoordinates(geojsonList);
     const bboxPolygons = geojsonList.map(geojson => {
       return turf.bboxPolygon(turf.bbox(geojson));
     });
@@ -40,9 +42,16 @@ async function getMapConfig(item, toolRuntimeConfig, qId) {
     qId
   );
 
-  if (item.options.minimap.showMinimap) {
+  const minimapOptions = item.options.minimap.options;
+  if (
+    item.options.minimap.showMinimap &&
+    (minimapOptions.type === "globe" ||
+      (minimapOptions.type === "region" &&
+        minimapOptions.region &&
+        minimapOptions.region !== ""))
+  ) {
     mapConfig.minimapMarkup = await minimapHelpers.getMinimap(
-      item.options.minimap.options,
+      minimapOptions,
       mapConfig,
       toolRuntimeConfig
     );

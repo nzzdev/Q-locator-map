@@ -26,7 +26,7 @@ export default class LocatorMap {
   addControls() {
     let attributionPosition = "bottom-right";
     const minimap = this.data.options.minimap;
-    if (minimap.showMinimap) {
+    if (minimap.showMinimap && this.data.mapConfig.minimapMarkup) {
       this.map.addControl(
         new MinimapControl({
           minimapMarkup: this.data.mapConfig.minimapMarkup
