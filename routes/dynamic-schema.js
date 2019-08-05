@@ -52,6 +52,7 @@ module.exports = {
   handler: async function(request, h) {
     try {
       const item = request.payload.item;
+
       if (request.params.optionName === "region") {
         let enums = [];
         let enum_titles = [];

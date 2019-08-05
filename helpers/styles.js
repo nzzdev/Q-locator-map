@@ -186,21 +186,22 @@ function getStyleWithGeoJSONOverlays(style, item, toolBaseUrl, qId) {
 }
 
 function getStyleWithHighlightedRegion(style, item, toolBaseUrl) {
-  for (let highlightRegion of item.options.highlightRegion) {
-    style.sources[`source-${highlightRegion.region}`] = {
+  const highlightRegions = Array.from(
+    new Set(item.options.highlightRegion.map(region => region.region))
+  );
+  for (let highlightRegion of highlightRegions) {
+    style.sources[`source-${highlightRegion}`] = {
       type: "vector",
-      tiles: [
-        `${toolBaseUrl}/geodata/${highlightRegion.region}/{z}/{x}/{y}.pbf`
-      ],
+      tiles: [`${toolBaseUrl}/geodata/${highlightRegion}/{z}/{x}/{y}.pbf`],
       minzoom: 0,
       maxzoom: 18
     };
 
     style.layers.splice(1, 0, {
-      id: `highlightedRegion-${highlightRegion.region}`,
+      id: `highlightedRegion-${highlightRegion}`,
       type: "fill",
-      source: `source-${highlightRegion.region}`,
-      "source-layer": `source-${highlightRegion.region}`,
+      source: `source-${highlightRegion}`,
+      "source-layer": `source-${highlightRegion}`,
       paint: {
         "fill-color": "#fad250",
         "fill-opacity": 1
