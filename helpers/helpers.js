@@ -95,18 +95,31 @@ const gtAmericaStandardMedium = fs.readFileSync(
   path.join(fontsDir, "GT-America-Standard-Medium.otf")
 );
 
+const fonts = [
+  "GT America Standard Light",
+  "GT America Standard Regular",
+  "GT America Standard Medium",
+  "Noto Sans Regular",
+  "Noto Sans Bold",
+  "Noto Sans Italic"
+];
+
+function getFonts() {
+  return fonts;
+}
+
 function getFontFile(fontName) {
-  if (fontName === "GT America Standard Light") {
+  if (fontName === fonts[0]) {
     return gtAmericaStandardLight;
-  } else if (fontName === "GT America Standard Regular") {
+  } else if (fontName === fonts[1]) {
     return gtAmericaStandardRegular;
-  } else if (fontName === "GT America Standard Medium") {
+  } else if (fontName === fonts[2]) {
     return gtAmericaStandardMedium;
-  } else if (fontName === "Noto Sans Regular") {
+  } else if (fontName === fonts[3]) {
     return notoSansRegular;
-  } else if (fontName === "Noto Sans Bold") {
+  } else if (fontName === fonts[4]) {
     return notoSansBold;
-  } else if (fontName === "Noto Sans Italic") {
+  } else if (fontName === fonts[5]) {
     return notoSansItalic;
   } else {
     return gtAmericaStandardRegular;
@@ -187,5 +200,6 @@ module.exports = {
   getMapConfig: getMapConfig,
   getExactPixelWidth: getExactPixelWidth,
   getFont: getFont,
+  getFonts: getFonts,
   getRegionSuggestions: getRegionSuggestions
 };
