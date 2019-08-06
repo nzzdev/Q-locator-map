@@ -300,7 +300,7 @@
         "text-padding": 10,
         "text-rotation-alignment": "map",
         "text-field": "{height}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "visibility": "visible"
       },
       "paint": {
@@ -1712,7 +1712,7 @@
       "filter": ["all", ["==", "$type", "LineString"], ["!has", "name:de"]],
       "layout": {
         "text-field": "{name:latin}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "text-max-width": 5,
         "text-size": 12,
         "symbol-placement": "line",
@@ -1734,7 +1734,7 @@
       "filter": ["all", ["==", "$type", "LineString"], ["has", "name:de"]],
       "layout": {
         "text-field": "{name:de}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "text-max-width": 5,
         "text-size": 12,
         "symbol-placement": "line",
@@ -1761,7 +1761,7 @@
       ],
       "layout": {
         "text-field": "{name:latin}",
-        "text-font": ["Noto Sans Italic"],
+        "text-font": ["GT America Standard Light"],
         "text-max-width": 5,
         "text-size": 12,
         "visibility": "visible"
@@ -1787,7 +1787,7 @@
       ],
       "layout": {
         "text-field": "{name:de}",
-        "text-font": ["Noto Sans Italic"],
+        "text-font": ["GT America Standard Light"],
         "text-max-width": 5,
         "text-size": 12,
         "visibility": "visible"
@@ -1811,7 +1811,7 @@
         ["!has", "name:de"]
       ],
       "layout": {
-        "text-font": ["Noto Sans Italic"],
+        "text-font": ["GT America Standard Light"],
         "text-size": 11,
         "text-field": "{name:latin}",
         "text-max-width": 5,
@@ -1841,7 +1841,7 @@
         ["has", "name:de"]
       ],
       "layout": {
-        "text-font": ["Noto Sans Italic"],
+        "text-font": ["GT America Standard Light"],
         "text-size": 11,
         "text-field": "{name:de}",
         "text-max-width": 5,
@@ -1873,7 +1873,7 @@
       ],
       "layout": {
         "text-field": "{name:latin}",
-        "text-font": ["Noto Sans Italic"],
+        "text-font": ["GT America Standard Light"],
         "text-max-width": 5,
         "text-size": 13,
         "visibility": "visible"
@@ -1899,7 +1899,7 @@
       ],
       "layout": {
         "text-field": "{name:de}",
-        "text-font": ["Noto Sans Italic"],
+        "text-font": ["GT America Standard Light"],
         "text-max-width": 5,
         "text-size": 13,
         "visibility": "visible"
@@ -1921,7 +1921,7 @@
         "symbol-placement": "line",
         "text-anchor": "center",
         "text-field": "{name:latin}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "text-offset": [0, 0.15],
         "text-size": { "base": 1, "stops": [[13, 12], [14, 13]] },
         "visibility": "visible"
@@ -1944,7 +1944,7 @@
         "symbol-placement": "line",
         "text-anchor": "center",
         "text-field": "{name:de}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "text-offset": [0, 0.15],
         "text-size": { "base": 1, "stops": [[13, 12], [14, 13]] },
         "visibility": "visible"
@@ -1967,7 +1967,7 @@
         "symbol-placement": "line",
         "text-anchor": "center",
         "text-field": "{name:latin}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "text-offset": [0, 0.15],
         "text-size": { "base": 1, "stops": [[13, 10], [14, 12]] },
         "visibility": "visible"
@@ -1990,7 +1990,7 @@
         "symbol-placement": "line",
         "text-anchor": "center",
         "text-field": "{name:de}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "text-offset": [0, 0.15],
         "text-size": { "base": 1, "stops": [[13, 10], [14, 12]] },
         "visibility": "visible"
@@ -2019,7 +2019,7 @@
         "icon-image": "road_{ref_length}",
         "icon-rotation-alignment": "viewport",
         "symbol-spacing": 200,
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "symbol-placement": {
           "base": 1,
           "stops": [[10, "point"], [11, "line"]]
@@ -2048,7 +2048,7 @@
         "icon-image": "{network}_{ref_length}",
         "icon-rotation-alignment": "viewport",
         "symbol-spacing": 200,
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "symbol-placement": {
           "base": 1,
           "stops": [[7, "point"], [7, "line"], [8, "line"]]
@@ -2077,7 +2077,7 @@
         "icon-image": "{network}_{ref_length}",
         "icon-rotation-alignment": "viewport",
         "symbol-spacing": 200,
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "symbol-placement": {
           "base": 1,
           "stops": [[10, "point"], [11, "line"]]
@@ -2102,7 +2102,7 @@
       ],
       "layout": {
         "text-field": "{name:latin}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "text-letter-spacing": 0.1,
         "text-max-width": 9,
         "text-size": { "base": 1.2, "stops": [[12, 10], [15, 14]] },
@@ -2128,7 +2128,7 @@
       ],
       "layout": {
         "text-field": "{name:de}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "text-letter-spacing": 0.1,
         "text-max-width": 9,
         "text-size": { "base": 1.2, "stops": [[12, 10], [15, 14]] },
@@ -2157,7 +2157,7 @@
       ],
       "layout": {
         "text-size": 11,
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "visibility": "visible",
         "text-offset": [0, 0.5],
         "icon-size": 1,
@@ -2188,7 +2188,7 @@
       ],
       "layout": {
         "text-size": 11,
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "visibility": "visible",
         "text-offset": [0, 0.5],
         "icon-size": 1,
@@ -2219,7 +2219,7 @@
       ],
       "layout": {
         "text-size": 11,
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "visibility": "visible",
         "text-offset": [0, 0.5],
         "icon-size": 1,
@@ -2250,7 +2250,7 @@
       ],
       "layout": {
         "text-size": 11,
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "visibility": "visible",
         "text-offset": [0, 0.5],
         "icon-size": 1,
@@ -2276,7 +2276,7 @@
       "filter": ["all", ["==", "class", "village"], ["!has", "name:de"]],
       "layout": {
         "text-field": "{name:latin}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "text-max-width": 8,
         "text-size": { "base": 1.2, "stops": [[10, 12], [15, 22]] }
       },
@@ -2297,7 +2297,7 @@
       "filter": ["all", ["==", "class", "village"], ["has", "name:de"]],
       "layout": {
         "text-field": "{name:de}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "text-max-width": 8,
         "text-size": { "base": 1.2, "stops": [[10, 12], [15, 22]] }
       },
@@ -2320,7 +2320,7 @@
         "icon-image": { "base": 1, "stops": [[0, "dot_9"], [10, ""]] },
         "text-anchor": { "stops": [[6, "bottom"], [10, "center"]] },
         "text-field": "{name:latin}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "text-max-width": 8,
         "text-offset": [0, 0],
         "text-size": { "base": 1.2, "stops": [[7, 8], [11, 20]] },
@@ -2345,7 +2345,7 @@
         "icon-image": { "base": 1, "stops": [[0, "dot_9"], [10, ""]] },
         "text-anchor": { "stops": [[6, "bottom"], [10, "center"]] },
         "text-field": "{name:de}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "text-max-width": 8,
         "text-offset": [0, 0],
         "text-size": { "base": 1.2, "stops": [[7, 8], [11, 20]] },
@@ -2376,7 +2376,7 @@
         "icon-image": { "base": 1, "stops": [[0, "dot_9"], [10, ""]] },
         "text-anchor": { "stops": [[6, "bottom"], [10, "center"]] },
         "text-field": "{name:latin}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "text-max-width": 8,
         "text-offset": [0, 0],
         "text-size": { "base": 1.2, "stops": [[7, 14], [11, 24]] },
@@ -2409,7 +2409,7 @@
         "icon-image": { "base": 1, "stops": [[0, "dot_9"], [10, ""]] },
         "text-anchor": { "stops": [[6, "bottom"], [10, "center"]] },
         "text-field": "{name:de}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "text-max-width": 8,
         "text-offset": [0, 0],
         "text-size": { "base": 1.2, "stops": [[7, 14], [11, 24]] },
@@ -2436,7 +2436,7 @@
         "icon-image": { "base": 1, "stops": [[0, "dot_11"], [8, ""]] },
         "text-anchor": { "stops": [[6, "bottom"], [8, "center"]] },
         "text-field": "{name:latin}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "text-max-width": 8,
         "text-offset": [0, 0],
         "text-size": { "base": 1.2, "stops": [[7, 18], [11, 28]] },
@@ -2463,7 +2463,7 @@
         "icon-image": { "base": 1, "stops": [[0, "dot_11"], [8, ""]] },
         "text-anchor": { "stops": [[6, "bottom"], [8, "center"]] },
         "text-field": "{name:de}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "text-max-width": 8,
         "text-offset": [0, 0],
         "text-size": { "base": 1.2, "stops": [[7, 18], [11, 28]] },
@@ -2487,7 +2487,7 @@
       "filter": ["all", ["==", "class", "state"], ["!has", "name:de"]],
       "layout": {
         "text-field": "{name:latin}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "text-size": { "stops": [[4, 11], [6, 15]] },
         "text-transform": "uppercase",
         "visibility": "visible"
@@ -2508,7 +2508,7 @@
       "filter": ["all", ["==", "class", "state"], ["has", "name:de"]],
       "layout": {
         "text-field": "{name:de}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["GT America Standard Regular"],
         "text-size": { "stops": [[4, 11], [6, 15]] },
         "text-transform": "uppercase",
         "visibility": "visible"
@@ -2533,7 +2533,7 @@
       ],
       "layout": {
         "text-field": "{name:latin}",
-        "text-font": ["Noto Sans Italic"],
+        "text-font": ["GT America Standard Light"],
         "text-max-width": 6.25,
         "text-size": { "stops": [[3, 9], [7, 15]] },
         "text-transform": "none",
@@ -2560,7 +2560,7 @@
       ],
       "layout": {
         "text-field": "{name:de}",
-        "text-font": ["Noto Sans Italic"],
+        "text-font": ["GT America Standard Light"],
         "text-max-width": 6.25,
         "text-size": { "stops": [[3, 9], [7, 15]] },
         "text-transform": "none",
@@ -2589,7 +2589,7 @@
       ],
       "layout": {
         "text-field": "{name:latin}",
-        "text-font": ["Noto Sans Italic"],
+        "text-font": ["GT America Standard Light"],
         "text-max-width": 6.25,
         "text-size": { "stops": [[3, 11], [7, 17]] },
         "text-transform": "none",
@@ -2618,7 +2618,7 @@
       ],
       "layout": {
         "text-field": "{name:de}",
-        "text-font": ["Noto Sans Italic"],
+        "text-font": ["GT America Standard Light"],
         "text-max-width": 6.25,
         "text-size": { "stops": [[3, 11], [7, 17]] },
         "text-transform": "none",
@@ -2647,7 +2647,7 @@
       ],
       "layout": {
         "text-field": "{name:latin}",
-        "text-font": ["Noto Sans Italic"],
+        "text-font": ["GT America Standard Light"],
         "text-max-width": 6.25,
         "text-size": { "stops": [[2, 11], [5, 17]] },
         "text-transform": "none",
@@ -2676,7 +2676,7 @@
       ],
       "layout": {
         "text-field": "{name:de}",
-        "text-font": ["Noto Sans Italic"],
+        "text-font": ["GT America Standard Light"],
         "text-max-width": 6.25,
         "text-size": { "stops": [[2, 11], [5, 17]] },
         "text-transform": "none",
@@ -2705,7 +2705,7 @@
       ],
       "layout": {
         "text-field": "{name:latin}",
-        "text-font": ["Noto Sans Italic"],
+        "text-font": ["GT America Standard Light"],
         "text-max-width": 6.25,
         "text-size": { "stops": [[1, 11], [4, 17]] },
         "text-transform": "none",
@@ -2734,7 +2734,7 @@
       ],
       "layout": {
         "text-field": "{name:de}",
-        "text-font": ["Noto Sans Italic"],
+        "text-font": ["GT America Standard Light"],
         "text-max-width": 6.25,
         "text-size": { "stops": [[1, 11], [4, 17]] },
         "text-transform": "none",
@@ -2757,7 +2757,7 @@
       "filter": ["all", ["==", "class", "continent"], ["!has", "name:de"]],
       "layout": {
         "text-field": "{name:latin}",
-        "text-font": ["Noto Sans Bold"],
+        "text-font": ["GT America Standard Medium"],
         "text-size": 13,
         "text-transform": "uppercase",
         "text-justify": "center",
@@ -2779,7 +2779,7 @@
       "filter": ["all", ["==", "class", "continent"], ["has", "name:de"]],
       "layout": {
         "text-field": "{name:de}",
-        "text-font": ["Noto Sans Bold"],
+        "text-font": ["GT America Standard Medium"],
         "text-size": 13,
         "text-transform": "uppercase",
         "text-justify": "center",
