@@ -20,7 +20,8 @@ function createMapPoint() {
       minimap: {
         showMinimap: true,
         options: {
-          type: "globe"
+          type: "globe",
+          position: "bottom-right"
         }
       },
       labelsBelowMap: false,
@@ -49,7 +50,8 @@ function createMapFeature() {
       minimap: {
         showMinimap: true,
         options: {
-          type: "globe"
+          type: "globe",
+          position: "bottom-right"
         }
       },
       labelsBelowMap: false,
@@ -83,7 +85,8 @@ function createMapFeatureCollection() {
       minimap: {
         showMinimap: true,
         options: {
-          type: "globe"
+          type: "globe",
+          position: "bottom-right"
         }
       },
       labelsBelowMap: false,
@@ -112,7 +115,8 @@ function createMapPoints() {
       minimap: {
         showMinimap: true,
         options: {
-          type: "globe"
+          type: "globe",
+          position: "bottom-right"
         }
       },
       labelsBelowMap: false,
@@ -162,7 +166,8 @@ function createMapFeatures() {
       minimap: {
         showMinimap: true,
         options: {
-          type: "globe"
+          type: "globe",
+          position: "bottom-right"
         }
       },
       labelsBelowMap: false,
@@ -203,7 +208,8 @@ function createMapFeatureCollections() {
       minimap: {
         showMinimap: true,
         options: {
-          type: "globe"
+          type: "globe",
+          position: "bottom-right"
         }
       },
       labelsBelowMap: false,
@@ -307,7 +313,8 @@ function showAcronym() {
       minimap: {
         showMinimap: true,
         options: {
-          type: "globe"
+          type: "globe",
+          position: "bottom-right"
         }
       },
       labelsBelowMap: false,
@@ -336,7 +343,8 @@ function dontShowAcronym() {
       minimap: {
         showMinimap: true,
         options: {
-          type: "globe"
+          type: "globe",
+          position: "bottom-right"
         }
       },
       labelsBelowMap: false,
@@ -365,7 +373,8 @@ function antimeridian() {
       minimap: {
         showMinimap: true,
         options: {
-          type: "globe"
+          type: "globe",
+          position: "bottom-right"
         }
       },
       labelsBelowMap: false,
@@ -403,7 +412,8 @@ function labelPlacementTypePointHeavyLabel() {
       minimap: {
         showMinimap: false,
         options: {
-          type: "globe"
+          type: "globe",
+          position: "bottom-right"
         }
       },
       labelsBelowMap: false,
@@ -444,7 +454,8 @@ function labelPlacementTypePointLightLabel() {
       minimap: {
         showMinimap: false,
         options: {
-          type: "globe"
+          type: "globe",
+          position: "bottom-right"
         }
       },
       labelsBelowMap: false,
@@ -484,7 +495,8 @@ function labelPlacementTypeEvent() {
       minimap: {
         showMinimap: false,
         options: {
-          type: "globe"
+          type: "globe",
+          position: "bottom-right"
         }
       },
       labelsBelowMap: false,

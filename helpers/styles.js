@@ -53,51 +53,38 @@ function getStyleFilteredByLayer(style, item) {
   return style;
 }
 
-function getStyleWithGeoJSONOverlays(style, item, toolBaseUrl, qId) {
+function getStyleWithGeoJSONOverlays(style, features, toolBaseUrl, qId) {
   const defaultGeojsonStyles = getDefaultGeojsonStyles();
-  let firstSymbolLayerIndex = style.layers.findIndex(
+  const firstSymbolLayerIndex = style.layers.findIndex(
     layer => layer.type === "symbol"
   );
-  for (const [i, geojson] of item.geojsonList.entries()) {
-    style.sources[`source-${i}`] = {
-      type: "vector",
-      tiles: [
-        `${toolBaseUrl}/tilesets/${i}/{z}/{x}/{y}.pbf?appendItemToPayload=${qId}`
-      ],
-      minzoom: 0,
-      maxzoom: 18
-    };
+  const index = firstSymbolLayerIndex || style.layers.length - 1;
 
-    style.layers.push({
-      id: `label-${i}`,
-      type: "symbol",
-      source: `source-${i}`,
-      "source-layer": `source-${i}`,
-      layout: {
-        "text-field": "{label}",
-        "text-size": 13,
-        "text-font": ["Noto Sans Bold"],
-        "text-line-height": 1.1,
-        "text-offset": [0, -2],
-        "text-anchor": ["string", ["get", "labelPosition"], "center"]
-      },
-      paint: {
-        "text-halo-color": "#ffffff",
-        "text-halo-width": 4,
-        "text-halo-blur": 4
-      },
-      filter: ["==", "$type", "Point"]
-    });
+  const sourceName = "overlays";
+  style.sources[sourceName] = {
+    type: "vector",
+    tiles: [
+      `${toolBaseUrl}/tilesets/${qId}/{z}/{x}/{y}.pbf?appendItemToPayload=${qId}`
+    ],
+    minzoom: 0,
+    maxzoom: 18
+  };
 
-    firstSymbolLayerIndex = style.layers.findIndex(
-      layer => layer.type === "symbol"
-    );
+  // This layer is need so the source gets loaded. It doesn't do anything
+  style.layers.push({
+    id: `_point-0`,
+    type: "symbol",
+    source: sourceName,
+    "source-layer": `point-0`,
+    filter: ["==", "$type", "Polygon"]
+  });
 
-    style.layers.splice(firstSymbolLayerIndex, 0, {
+  for (const [i, geojson] of features.polygons.entries()) {
+    style.layers.splice(index, 0, {
       id: `polygon-${i}`,
       type: "fill",
-      source: `source-${i}`,
-      "source-layer": `source-${i}`,
+      source: sourceName,
+      "source-layer": `polygon-${i}`,
       paint: {
         "fill-color": [
           "string",
@@ -113,11 +100,11 @@ function getStyleWithGeoJSONOverlays(style, item, toolBaseUrl, qId) {
       filter: ["==", "$type", "Polygon"]
     });
 
-    style.layers.splice(firstSymbolLayerIndex, 0, {
+    style.layers.splice(index, 0, {
       id: `polygon-outline-${i}`,
       type: "line",
-      source: `source-${i}`,
-      "source-layer": `source-${i}`,
+      source: sourceName,
+      "source-layer": `polygon-${i}`,
       paint: {
         "line-color": [
           "string",
@@ -137,12 +124,14 @@ function getStyleWithGeoJSONOverlays(style, item, toolBaseUrl, qId) {
       },
       filter: ["==", "$type", "Polygon"]
     });
+  }
 
-    style.layers.splice(firstSymbolLayerIndex, 0, {
+  for (const [i, geojson] of features.linestrings.entries()) {
+    style.layers.splice(index, 0, {
       id: `linestring-${i}`,
       type: "line",
-      source: `source-${i}`,
-      "source-layer": `source-${i}`,
+      source: sourceName,
+      "source-layer": `linestring-${i}`,
       paint: {
         "line-color": [
           "string",
@@ -166,20 +155,6 @@ function getStyleWithGeoJSONOverlays(style, item, toolBaseUrl, qId) {
       },
       filter: ["==", "$type", "LineString"]
     });
-
-    style.layers.splice(firstSymbolLayerIndex, 0, {
-      id: `point-${i}`,
-      type: "circle",
-      source: `source-${i}`,
-      "source-layer": `source-${i}`,
-      paint: {
-        "circle-radius": 5,
-        "circle-color": "#000000",
-        "circle-stroke-width": 2,
-        "circle-stroke-color": "#ffffff"
-      },
-      filter: ["==", "$type", "Point"]
-    });
   }
 
   return style;
@@ -190,7 +165,7 @@ function getStyleWithHighlightedRegion(style, item, toolBaseUrl) {
     new Set(item.options.highlightRegion.map(region => region.region))
   );
   for (let highlightRegion of highlightRegions) {
-    style.sources[`source-${highlightRegion}`] = {
+    style.sources[`geodata-${highlightRegion}`] = {
       type: "vector",
       tiles: [`${toolBaseUrl}/geodata/${highlightRegion}/{z}/{x}/{y}.pbf`],
       minzoom: 0,
@@ -200,8 +175,8 @@ function getStyleWithHighlightedRegion(style, item, toolBaseUrl) {
     style.layers.splice(1, 0, {
       id: `highlightedRegion-${highlightRegion}`,
       type: "fill",
-      source: `source-${highlightRegion}`,
-      "source-layer": `source-${highlightRegion}`,
+      source: `geodata-${highlightRegion}`,
+      "source-layer": `geodata-${highlightRegion}`,
       paint: {
         "fill-color": "#fad250",
         "fill-opacity": 1
@@ -212,12 +187,12 @@ function getStyleWithHighlightedRegion(style, item, toolBaseUrl) {
   return style;
 }
 
-function getStyle(id, item, toolBaseUrl, qId) {
+function getStyle(id, item, toolBaseUrl, qId, features) {
   let style = getStyleJSON(id, toolBaseUrl);
 
   if (item) {
     style = getStyleFilteredByLayer(style, item);
-    style = getStyleWithGeoJSONOverlays(style, item, toolBaseUrl, qId);
+    style = getStyleWithGeoJSONOverlays(style, features, toolBaseUrl, qId);
     if (
       item.options.highlightRegion &&
       item.options.highlightRegion.length > 0

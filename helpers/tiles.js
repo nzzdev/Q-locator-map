@@ -92,27 +92,38 @@ function transformCoordinates(geojsonList) {
   return regularGeojsonList;
 }
 
-function getTransformedGeoJSON(id, geojsonList) {
+function getTransformedGeoJSON(geojsonList) {
   geojsonList = transformCoordinates(geojsonList);
-  return geojsonList[id];
+  return geojsonList;
 }
 
-async function getTilesetTile(item, id, z, x, y) {
+async function getTilesetTile(item, qId, z, x, y) {
   try {
-    if (id >= 0 && id < item.geojsonList.length) {
-      const geojson = getTransformedGeoJSON(id, item.geojsonList);
+    const geojsonList = getTransformedGeoJSON(item.geojsonList);
+    const features = this.helpers.getFeatures(geojsonList);
+    const tileObject = {};
+    for (const [i, geojson] of features.points.entries()) {
       const tileIndex = geojsonvt(geojson);
       const tile = tileIndex.getTile(z, x, y);
       if (tile) {
-        const tileObject = {};
-        tileObject[`source-${id}`] = tile;
-        return zlib.gzipSync(vtpbf.fromGeojsonVt(tileObject, { version: 2 }));
-      } else {
-        return Boom.notFound();
+        tileObject[`point-${i}`] = tile;
       }
-    } else {
-      return Boom.notFound();
     }
+    for (const [i, geojson] of features.linestrings.entries()) {
+      const tileIndex = geojsonvt(geojson);
+      const tile = tileIndex.getTile(z, x, y);
+      if (tile) {
+        tileObject[`linestring-${i}`] = tile;
+      }
+    }
+    for (const [i, geojson] of features.polygons.entries()) {
+      const tileIndex = geojsonvt(geojson);
+      const tile = tileIndex.getTile(z, x, y);
+      if (tile) {
+        tileObject[`polygon-${i}`] = tile;
+      }
+    }
+    return zlib.gzipSync(vtpbf.fromGeojsonVt(tileObject, { version: 2 }));
   } catch (error) {
     return Boom.notFound();
   }

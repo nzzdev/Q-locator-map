@@ -35,11 +35,15 @@ async function getMapConfig(item, toolRuntimeConfig, qId) {
     mapConfig.bounds = turf.bbox(turf.featureCollection(bboxPolygons));
   }
 
+  const features = getFeatures(geojsonList);
+  mapConfig.pointIndices = features.points.map((point, index) => index);
+
   mapConfig.style = styleHelpers.getStyle(
     item.options.baseLayer.style,
     item,
     toolRuntimeConfig.toolBaseUrl,
-    qId
+    qId,
+    features
   );
 
   const minimapOptions = item.options.minimap.options;
@@ -196,10 +200,68 @@ async function getRegionSuggestions(components, countryCode) {
   }
 }
 
+function getFeatures(geojsonList) {
+  let pointFeatures = [];
+  let linestringFeatures = [];
+  let polygonFeatures = [];
+  const featureCollections = geojsonList.filter(
+    geojson => geojson.type === "FeatureCollection"
+  );
+
+  for (const featureCollection of featureCollections) {
+    for (const feature of featureCollection.features) {
+      if (
+        feature.type === "Feature" &&
+        ["Point", "MultiPoint"].includes(feature.geometry.type)
+      ) {
+        pointFeatures.push(feature);
+      } else if (
+        feature.type === "Feature" &&
+        ["LineString", "MultiLineString"].includes(feature.geometry.type)
+      ) {
+        linestringFeatures.push(feature);
+      } else if (
+        feature.type === "Feature" &&
+        ["Polygon", "MultiPolygon"].includes(feature.geometry.type)
+      ) {
+        polygonFeatures.push(feature);
+      }
+    }
+  }
+
+  const points = geojsonList.filter(
+    geojson =>
+      geojson.type === "Feature" &&
+      ["Point", "MultiPoint"].includes(geojson.geometry.type)
+  );
+  pointFeatures = pointFeatures.concat(points);
+
+  const linestrings = geojsonList.filter(
+    geojson =>
+      geojson.type === "Feature" &&
+      ["LineString", "MultiLineString"].includes(geojson.geometry.type)
+  );
+  linestringFeatures = linestringFeatures.concat(linestrings);
+
+  const polygons = geojsonList.filter(
+    geojson =>
+      geojson.type === "Feature" &&
+      ["Polygon", "MultiPolygon"].includes(geojson.geometry.type)
+  );
+  polygonFeatures = polygonFeatures.concat(polygons);
+
+  return {
+    points: pointFeatures,
+    linestrings: linestringFeatures,
+    polygons: polygonFeatures
+  };
+}
+
 module.exports = {
   getMapConfig: getMapConfig,
   getExactPixelWidth: getExactPixelWidth,
   getFont: getFont,
   getFonts: getFonts,
-  getRegionSuggestions: getRegionSuggestions
+  getRegionSuggestions: getRegionSuggestions,
+  getFeatures: getFeatures
 };

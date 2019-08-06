@@ -57,8 +57,11 @@ async function init() {
     });
 
     server.method("getTilesetTile", tileHelpers.getTilesetTile, {
-      generateKey: (item, id, z, x, y) =>
-        `${item._id}_${item.updatedDate}_${id}_${z}_${x}_${y}`,
+      bind: {
+        helpers: helpers
+      },
+      generateKey: (item, qId, z, x, y) =>
+        `${qId}_${item.updatedDate}_${z}_${x}_${y}`,
       cache: serverMethodCacheOptions
     });
 

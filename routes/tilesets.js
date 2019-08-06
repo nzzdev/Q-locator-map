@@ -3,13 +3,13 @@ const Boom = require("@hapi/boom");
 
 module.exports = {
   method: "POST",
-  path: "/tilesets/{id}/{z}/{x}/{y}.pbf",
+  path: "/tilesets/{qId}/{z}/{x}/{y}.pbf",
   options: {
     description: "Returns the tileset in pbf format",
     tags: ["api"],
     validate: {
       params: {
-        id: Joi.number().required(),
+        qId: Joi.string().required(),
         z: Joi.number().required(),
         x: Joi.number().required(),
         y: Joi.number().required()
@@ -21,13 +21,13 @@ module.exports = {
     handler: async (request, h) => {
       try {
         const item = request.payload.item;
-        const id = request.params.id;
+        const qId = request.params.qId;
         const z = request.params.z;
         const x = request.params.x;
         const y = request.params.y;
         const tile = await request.server.methods.getTilesetTile(
           item,
-          id,
+          qId,
           z,
           x,
           y

@@ -41,7 +41,7 @@ async function getGeodataTile(id, z, x, y, version) {
     const tile = tileIndex.getTile(z, x, y);
     if (tile) {
       const tileObject = {};
-      tileObject[`source-${id}`] = tile;
+      tileObject[`geodata-${id}`] = tile;
       return zlib.gzipSync(vtpbf.fromGeojsonVt(tileObject, { version: 2 }));
     } else {
       return Boom.notFound();

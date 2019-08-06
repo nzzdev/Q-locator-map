@@ -15,6 +15,6 @@
   style="opacity: 0;">
   <Header {item} {displayOptions} />
   <Legend {item} {defaultGeojsonStyles} />
-  <div id="{id}_container" class="q-locator-map--container" />
+  <div id="{id}_container" class="q-locator-map-container" />
   <Footer {item} />
 </div>
