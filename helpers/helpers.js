@@ -85,15 +85,31 @@ const notoSansItalic = fs.readFileSync(
   path.join(fontsDir, "NotoSans-Italic.ttf")
 );
 
+const gtAmericaStandardLight = fs.readFileSync(
+  path.join(fontsDir, "GT-America-Standard-Light.otf")
+);
+const gtAmericaStandardRegular = fs.readFileSync(
+  path.join(fontsDir, "GT-America-Standard-Regular.otf")
+);
+const gtAmericaStandardMedium = fs.readFileSync(
+  path.join(fontsDir, "GT-America-Standard-Medium.otf")
+);
+
 function getFontFile(fontName) {
-  if (fontName === "Noto Sans Regular") {
+  if (fontName === "GT America Standard Light") {
+    return gtAmericaStandardLight;
+  } else if (fontName === "GT America Standard Regular") {
+    return gtAmericaStandardRegular;
+  } else if (fontName === "GT America Standard Medium") {
+    return gtAmericaStandardMedium;
+  } else if (fontName === "Noto Sans Regular") {
     return notoSansRegular;
   } else if (fontName === "Noto Sans Bold") {
     return notoSansBold;
   } else if (fontName === "Noto Sans Italic") {
     return notoSansItalic;
   } else {
-    return notoSansRegular;
+    return gtAmericaStandardRegular;
   }
 }
 
