@@ -180,13 +180,13 @@ async function getRegionVegaSpec(
 }
 
 async function getMinimap(minimapOptions, mapConfig, toolRuntimeConfig) {
-  let height = 100;
-  let width = 100;
+  let height = 90;
+  let width = 90;
 
   let spec;
   if (minimapOptions.type === "region") {
-    height = 150;
-    width = 150;
+    height = 120;
+    width = 120;
     spec = await getRegionVegaSpec(
       minimapOptions,
       mapConfig,
