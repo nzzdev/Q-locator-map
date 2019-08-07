@@ -55,11 +55,6 @@ function getStyleFilteredByLayer(style, item) {
 
 function getStyleWithGeoJSONOverlays(style, features, toolBaseUrl, qId) {
   const defaultGeojsonStyles = getDefaultGeojsonStyles();
-  const firstSymbolLayerIndex = style.layers.findIndex(
-    layer => layer.type === "symbol"
-  );
-  const index = firstSymbolLayerIndex || style.layers.length - 1;
-
   const sourceName = "overlays";
   style.sources[sourceName] = {
     type: "vector",
@@ -79,6 +74,10 @@ function getStyleWithGeoJSONOverlays(style, features, toolBaseUrl, qId) {
     filter: ["==", "$type", "Polygon"]
   });
 
+  const firstSymbolLayerIndex = style.layers.findIndex(
+    layer => layer.type === "symbol"
+  );
+  const index = firstSymbolLayerIndex || style.layers.length - 1;
   for (const [i, geojson] of features.polygons.entries()) {
     style.layers.splice(index, 0, {
       id: `polygon-${i}`,

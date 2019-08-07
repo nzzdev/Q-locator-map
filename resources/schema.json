@@ -142,6 +142,7 @@
                 "region": {
                   "title": "Region",
                   "type": "string",
+                  "default": "",
                   "Q:options": {
                     "selectType": "select",
                     "dynamicSchema": {

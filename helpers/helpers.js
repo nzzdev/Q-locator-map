@@ -88,7 +88,6 @@ const notoSansBold = fs.readFileSync(path.join(fontsDir, "NotoSans-Bold.ttf"));
 const notoSansItalic = fs.readFileSync(
   path.join(fontsDir, "NotoSans-Italic.ttf")
 );
-
 const gtAmericaStandardLight = fs.readFileSync(
   path.join(fontsDir, "GT-America-Standard-Light.otf")
 );
@@ -98,11 +97,27 @@ const gtAmericaStandardRegular = fs.readFileSync(
 const gtAmericaStandardMedium = fs.readFileSync(
   path.join(fontsDir, "GT-America-Standard-Medium.otf")
 );
+const pensumProRegular = fs.readFileSync(
+  path.join(fontsDir, "PensumPro-Regular.otf")
+);
+const pensumProRegularItalic = fs.readFileSync(
+  path.join(fontsDir, "PensumPro-RegularItalic.otf")
+);
+const pensumProMedium = fs.readFileSync(
+  path.join(fontsDir, "PensumPro-Medium.otf")
+);
+const pensumProBold = fs.readFileSync(
+  path.join(fontsDir, "PensumPro-Bold.otf")
+);
 
 const fonts = [
   "GT America Standard Light",
   "GT America Standard Regular",
   "GT America Standard Medium",
+  "PensumPro Regular",
+  "PensumPro Regular Italic",
+  "PensumPro Medium",
+  "PensumPro Bold",
   "Noto Sans Regular",
   "Noto Sans Bold",
   "Noto Sans Italic"
@@ -120,10 +135,18 @@ function getFontFile(fontName) {
   } else if (fontName === fonts[2]) {
     return gtAmericaStandardMedium;
   } else if (fontName === fonts[3]) {
-    return notoSansRegular;
+    return pensumProRegular;
   } else if (fontName === fonts[4]) {
-    return notoSansBold;
+    return pensumProRegularItalic;
   } else if (fontName === fonts[5]) {
+    return pensumProMedium;
+  } else if (fontName === fonts[6]) {
+    return pensumProBold;
+  } else if (fontName === fonts[7]) {
+    return notoSansRegular;
+  } else if (fontName === fonts[8]) {
+    return notoSansBold;
+  } else if (fontName === fonts[9]) {
     return notoSansItalic;
   } else {
     return gtAmericaStandardRegular;
