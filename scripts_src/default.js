@@ -80,11 +80,7 @@ export default class LocatorMap {
   }
 
   addPoints() {
-    for (let pointIndex of this.data.mapConfig.pointIndices) {
-      const features = this.map.querySourceFeatures("overlays", {
-        sourceLayer: `point-${pointIndex}`
-      });
-      const point = features[0];
+    for (let point of this.data.mapConfig.points) {
       if (point) {
         const marker = Marker[point.properties.type];
         const markerElement = document.createElement("div");

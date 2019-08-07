@@ -65,15 +65,6 @@ function getStyleWithGeoJSONOverlays(style, features, toolBaseUrl, qId) {
     maxzoom: 14
   };
 
-  // This layer is need so the source gets loaded. It doesn't do anything
-  style.layers.push({
-    id: `_default`,
-    type: "symbol",
-    source: sourceName,
-    "source-layer": `point-0`,
-    filter: ["==", "$type", "Point"]
-  });
-
   const allSymbolIndices = style.layers.reduce((ascending, layer, index) => {
     if (layer.type === "symbol") {
       ascending.push(index);

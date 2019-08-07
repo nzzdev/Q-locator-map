@@ -36,7 +36,7 @@ async function getMapConfig(item, toolRuntimeConfig, qId) {
   }
 
   const features = getFeatures(geojsonList);
-  mapConfig.pointIndices = features.points.map((point, index) => index);
+  mapConfig.points = features.points;
 
   mapConfig.style = styleHelpers.getStyle(
     item.options.baseLayer.style,
