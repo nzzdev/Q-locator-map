@@ -41,9 +41,6 @@ export default class LocatorMap {
     }
 
     this.map.addControl(new mapboxgl.AttributionControl(), attributionPosition);
-    if (this.data.mapConfig.bounds) {
-      this.map.fitBounds(this.options.bounds, { padding: 60, duration: 0 });
-    }
   }
 
   preventLabelsAroundViewport() {
@@ -122,7 +119,9 @@ export default class LocatorMap {
       container: this.element,
       style: this.data.mapConfig.style,
       interactive: false,
-      attributionControl: false
+      attributionControl: false,
+      fadeDuration: 0,
+      fitBoundsOptions: { padding: 60, duration: 0 }
     };
 
     if (this.data.mapConfig.bbox) {

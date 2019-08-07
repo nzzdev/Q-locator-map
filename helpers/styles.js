@@ -62,22 +62,25 @@ function getStyleWithGeoJSONOverlays(style, features, toolBaseUrl, qId) {
       `${toolBaseUrl}/tilesets/${qId}/{z}/{x}/{y}.pbf?appendItemToPayload=${qId}`
     ],
     minzoom: 0,
-    maxzoom: 18
+    maxzoom: 14
   };
 
   // This layer is need so the source gets loaded. It doesn't do anything
   style.layers.push({
-    id: `_point-0`,
+    id: `_default`,
     type: "symbol",
     source: sourceName,
     "source-layer": `point-0`,
-    filter: ["==", "$type", "Polygon"]
+    filter: ["==", "$type", "Point"]
   });
 
-  const firstSymbolLayerIndex = style.layers.findIndex(
-    layer => layer.type === "symbol"
-  );
-  const index = firstSymbolLayerIndex || style.layers.length - 1;
+  const allSymbolIndices = style.layers.reduce((ascending, layer, index) => {
+    if (layer.type === "symbol") {
+      ascending.push(index);
+    }
+    return ascending;
+  }, []);
+  const index = allSymbolIndices[1] || style.layers.length - 1;
   for (const [i, geojson] of features.polygons.entries()) {
     style.layers.splice(index, 0, {
       id: `polygon-${i}`,
