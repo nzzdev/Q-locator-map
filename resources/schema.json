@@ -217,16 +217,6 @@
             }
           }
         },
-        "labelsBelowMap": {
-          "title": "Beschriftungen unter der Karte anzeigen",
-          "type": "boolean",
-          "default": false
-        },
-        "labelsBelowMapOneRow": {
-          "title": "Beschriftungen unter der Karte ohne Zeilenumbruch",
-          "type": "boolean",
-          "default": false
-        },
         "showLegend": {
           "title": "Legende anzeigen",
           "type": "boolean",
