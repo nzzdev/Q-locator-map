@@ -1,3 +1,4 @@
+const hasha = require("hasha");
 const resourcesDir = "../resources/";
 const basicStyle = require(`${resourcesDir}styles/basic/style.json`);
 const natureStyle = require(`${resourcesDir}styles/nature/style.json`);
@@ -53,13 +54,20 @@ function getStyleFilteredByLayer(style, item) {
   return style;
 }
 
-function getStyleWithGeoJSONOverlays(style, features, toolBaseUrl, qId) {
+async function getHash(features) {
+  return await hasha(JSON.stringify(features), {
+    algorithm: "md5"
+  });
+}
+
+async function getStyleWithGeoJSONOverlays(style, features, toolBaseUrl, qId) {
   const defaultGeojsonStyles = getDefaultGeojsonStyles();
+  const hash = await getHash(features);
   const sourceName = "overlays";
   style.sources[sourceName] = {
     type: "vector",
     tiles: [
-      `${toolBaseUrl}/tilesets/${qId}/{z}/{x}/{y}.pbf?appendItemToPayload=${qId}`
+      `${toolBaseUrl}/tilesets/${qId}/${hash}/{z}/{x}/{y}.pbf?appendItemToPayload=${qId}`
     ],
     minzoom: 0,
     maxzoom: 14
@@ -180,12 +188,17 @@ function getStyleWithHighlightedRegion(style, item, toolBaseUrl) {
   return style;
 }
 
-function getStyle(id, item, toolBaseUrl, qId, features) {
+async function getStyle(id, item, toolBaseUrl, qId, features) {
   let style = getStyleJSON(id, toolBaseUrl);
 
   if (item) {
     style = getStyleFilteredByLayer(style, item);
-    style = getStyleWithGeoJSONOverlays(style, features, toolBaseUrl, qId);
+    style = await getStyleWithGeoJSONOverlays(
+      style,
+      features,
+      toolBaseUrl,
+      qId
+    );
     if (
       item.options.highlightRegion &&
       item.options.highlightRegion.length > 0

@@ -167,7 +167,11 @@ module.exports = {
           return h
             .response(tile)
             .type("application/x-protobuf")
-            .header("Content-Encoding", "gzip");
+            .header("Content-Encoding", "gzip")
+            .header(
+              "cache-control",
+              "max-age=31536000, s-maxage=31536000, stale-while-revalidate=31536000, stale-if-error=31536000, immutable"
+            );
         } catch (error) {
           return Boom.notFound();
         }

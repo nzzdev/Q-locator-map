@@ -17,13 +17,13 @@ module.exports = [
           toolBaseUrl: Joi.string().required()
         }
       },
-      handler: (request, h) => {
+      handler: async (request, h) => {
         const id = request.params.id;
         const toolBaseUrl = request.query.toolBaseUrl;
         let item;
         let qId;
 
-        const style = styleHelpers.getStyle(id, item, toolBaseUrl, qId);
+        const style = await styleHelpers.getStyle(id, item, toolBaseUrl, qId);
         if (style) {
           return style;
         } else {
@@ -50,13 +50,13 @@ module.exports = [
           allowUnknown: true
         }
       },
-      handler: (request, h) => {
+      handler: async (request, h) => {
         const id = request.params.id;
         const item = request.payload.item;
         const toolBaseUrl = request.query.toolBaseUrl;
         const qId = request.query.qId;
 
-        const style = styleHelpers.getStyle(id, item, toolBaseUrl, qId);
+        const style = await styleHelpers.getStyle(id, item, toolBaseUrl, qId);
         if (style) {
           return style;
         } else {
