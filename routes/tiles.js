@@ -37,9 +37,21 @@ module.exports = {
           const response = await fetch(tileUrl);
           if (response.ok) {
             if (extension === "png") {
-              return h.response(response.body).type("image/png");
+              return h
+                .response(response.body)
+                .type("image/png")
+                .header(
+                  "cache-control",
+                  "max-age=31536000, s-maxage=31536000, stale-while-revalidate=31536000, stale-if-error=31536000, immutable"
+                );
             } else {
-              return h.response(response.body).type("application/x-protobuf");
+              return h
+                .response(response.body)
+                .type("application/x-protobuf")
+                .header(
+                  "cache-control",
+                  "max-age=31536000, s-maxage=31536000, stale-while-revalidate=31536000, stale-if-error=31536000, immutable"
+                );
             }
           } else {
             return new Error();
@@ -52,7 +64,11 @@ module.exports = {
             return h
               .response(tile)
               .type("application/x-protobuf")
-              .header("Content-Encoding", "gzip");
+              .header("Content-Encoding", "gzip")
+              .header(
+                "cache-control",
+                "max-age=31536000, s-maxage=31536000, stale-while-revalidate=31536000, stale-if-error=31536000, immutable"
+              );
           }
         }
       } catch (error) {
