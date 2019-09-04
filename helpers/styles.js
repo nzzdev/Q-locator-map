@@ -175,7 +175,12 @@ function getStyleWithHighlightedRegion(style, item, toolBaseUrl) {
       maxzoom: 18
     };
 
-    style.layers.splice(1, 0, {
+    let index = 1;
+    if (item.options.baseLayer.style === "satellite") {
+      index = style.layers.length;
+    }
+
+    style.layers.splice(index, 0, {
       id: `highlightedRegion-${highlightRegion}`,
       type: "fill",
       source: `geodata-${highlightRegion}`,
