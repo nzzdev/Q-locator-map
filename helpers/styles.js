@@ -1,6 +1,7 @@
 const hasha = require("hasha");
 const resourcesDir = "../resources/";
 const basicStyle = require(`${resourcesDir}styles/basic/style.json`);
+const minimalStyle = require(`${resourcesDir}styles/minimal/style.json`);
 const natureStyle = require(`${resourcesDir}styles/nature/style.json`);
 const satelliteStyle = require(`${resourcesDir}styles/satellite/style.json`);
 
@@ -25,12 +26,13 @@ function getStyleJSON(id, toolBaseUrl) {
     style = JSON.stringify(natureStyle);
   } else if (["aerial", "satellite"].includes(id)) {
     style = JSON.stringify(satelliteStyle);
+  } else if (["minimal"].includes(id)) {
+    style = JSON.stringify(minimalStyle);
   } else {
     style = JSON.stringify(basicStyle);
   }
   style = JSON.parse(
     style
-      .replace(/\${maptiler_access_token}/g, process.env.MAPTILER_ACCESS_TOKEN)
       .replace(/\${mapbox_access_token}/g, process.env.MAPBOX_ACCESS_TOKEN)
       .replace(/\${toolBaseUrl}/g, toolBaseUrl)
   );

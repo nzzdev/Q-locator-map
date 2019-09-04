@@ -1,6 +1,6 @@
 {
   "version": 8,
-  "name": "Nature",
+  "name": "Minimal",
   "sources": {
     "openmaptiles": {
       "type": "vector",
@@ -8,23 +8,6 @@
       "minzoom": 0,
       "maxzoom": 14,
       "bounds": [-180, -85.0511, 180, 85.0511],
-      "attribution": "<a href=\"https://www.maptiler.com/copyright/\" target=\"_blank\">&copy; MapTiler</a> <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">&copy; OpenStreetMap contributors</a>"
-    },
-    "contours": {
-      "type": "vector",
-      "tiles": ["${toolBaseUrl}/tiles/contours/{z}/{x}/{y}.pbf"],
-      "minzoom": 9,
-      "maxzoom": 14,
-      "bounds": [-180, -85.0511, 180, 85.0511],
-      "attribution": "<a href=\"https://www.maptiler.com/copyright/\" target=\"_blank\">&copy; MapTiler</a> <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">&copy; OpenStreetMap contributors</a>"
-    },
-    "hillshade": {
-      "type": "raster",
-      "tiles": ["${toolBaseUrl}/tiles/hillshade/{z}/{x}/{y}.png"],
-      "minzoom": 0,
-      "maxzoom": 12,
-      "bounds": [-179.98067, -57.000384, 179.972533, 72.000695],
-      "tileSize": 256,
       "attribution": "<a href=\"https://www.maptiler.com/copyright/\" target=\"_blank\">&copy; MapTiler</a> <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">&copy; OpenStreetMap contributors</a>"
     }
   },
@@ -35,22 +18,7 @@
       "id": "background",
       "type": "background",
       "paint": {
-        "background-color": {
-          "stops": [
-            [
-              2,
-              "rgba(233, 239, 224, 1)"
-            ],
-            [
-              4,
-              "rgba(217, 224, 202, 1)"
-            ],
-            [
-              18,
-              "rgba(219, 226, 198, 1)"
-            ]
-          ]
-        }
+        "background-color": "rgba(236, 236, 236, 1)"
       }
     },
     {
@@ -83,20 +51,6 @@
       }
     },
     {
-      "id": "hillshade",
-      "type": "raster",
-      "source": "hillshade",
-      "layout": { "visibility": "visible" },
-      "paint": {
-        "raster-opacity": {
-          "base": 0.5,
-          "stops": [[3, 0], [5, 0.15], [12, 0.15]]
-        },
-        "raster-fade-duration": 300,
-        "raster-contrast": 0
-      }
-    },
-    {
       "id": "landcover_rock",
       "type": "fill",
       "source": "openmaptiles",
@@ -111,7 +65,7 @@
         ]
       ],
       "layout": {
-        "visibility": "visible"
+        "visibility": "none"
       },
       "paint": {
         "fill-color": "rgba(211, 211, 211, 1)",
@@ -166,7 +120,8 @@
               0.75
             ]
           ]
-        }
+        },
+        "fill-pattern": "0"
       }
     },
     {
@@ -184,10 +139,10 @@
         ]
       ],
       "layout": {
-        "visibility": "visible"
+        "visibility": "none"
       },
       "paint": {
-        "fill-color": "rgba(181, 202, 155, 1)",
+        "fill-color": "rgba(207, 207, 207, 1)",
         "fill-opacity": {
           "base": 1,
           "stops": [
@@ -200,12 +155,7 @@
               0.5
             ]
           ]
-        },
-        "fill-outline-color": "rgba(191, 202, 155, 1)",
-        "fill-translate": [
-          1,
-          1
-        ]
+        }
       }
     },
     {
@@ -228,7 +178,7 @@
         ]
       ],
       "layout": {
-        "visibility": "visible"
+        "visibility": "none"
       },
       "paint": {
         "fill-color": "rgba(255, 255, 255, 1)",
@@ -259,10 +209,10 @@
         "LineString"
       ],
       "layout": {
-        "visibility": "visible"
+        "visibility": "none"
       },
       "paint": {
-        "line-color": "rgba(198, 226, 240, 1)"
+        "line-color": "rgba(186, 186, 186, 1)"
       }
     },
     {
@@ -279,7 +229,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "fill-color": "rgba(149, 207, 230, 1)",
+        "fill-color": "rgba(186, 186, 186, 1)",
         "fill-antialias": true,
         "fill-outline-color": "rgba(168, 189, 204, 0)",
         "fill-translate": [
@@ -381,7 +331,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "fill-color": "rgba(207, 201, 191, 1)",
+        "fill-color": "rgba(203, 203, 203, 1)",
         "fill-opacity": {
           "base": 0.6,
           "stops": [
@@ -507,70 +457,6 @@
           ]
         },
         "line-dasharray": []
-      }
-    },
-    {
-      "id": "contour",
-      "type": "line",
-      "source": "contours",
-      "source-layer": "contour",
-      "filter": [
-        "all",
-        [
-          "!in",
-          "nth_line",
-          10,
-          5
-        ],
-        [
-          ">",
-          "height",
-          0
-        ]
-      ],
-      "paint": {
-        "line-color": "rgba(103, 97, 87, 1)",
-        "line-opacity": 0.2,
-        "line-width": 0.4
-      }
-    },
-    {
-      "id": "contour_index",
-      "type": "line",
-      "source": "contours",
-      "source-layer": "contour",
-      "filter": [
-        "all",
-        [
-          ">",
-          "height",
-          0
-        ],
-        [
-          "in",
-          "nth_line",
-          10,
-          5
-        ]
-      ],
-      "layout": {
-        "line-join": "miter"
-      },
-      "paint": {
-        "line-color": "rgba(103, 97, 87, 1)",
-        "line-width": 1.2,
-        "line-opacity": {
-          "stops": [
-            [
-              6,
-              1
-            ],
-            [
-              10,
-              0.3
-            ]
-          ]
-        }
       }
     },
     {
@@ -765,7 +651,7 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "rgba(141, 141, 141, 1)",
+        "line-color": "rgba(216, 216, 216, 1)",
         "line-width": {
           "base": 1.3,
           "stops": [
@@ -942,7 +828,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "line-color": "rgba(113, 113, 113, 1)",
+        "line-color": "rgba(240, 240, 240, 1)",
         "line-width": {
           "base": 1.2,
           "stops": [
@@ -957,10 +843,7 @@
           ]
         },
         "line-opacity": 0.9,
-        "line-dasharray": [
-          2,
-          3
-        ]
+        "line-dasharray": []
       }
     },
     {
@@ -1079,7 +962,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "line-color": "rgba(236, 236, 236, 1)",
+        "line-color": "rgba(245, 245, 245, 1)",
         "line-width": {
           "stops": [
             [
@@ -1232,7 +1115,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "line-color": "rgba(236, 236, 236, 1)",
+        "line-color": "rgba(245, 245, 245, 1)",
         "line-width": {
           "base": 1.4,
           "stops": [
@@ -1507,35 +1390,54 @@
       }
     },
     {
-      "id": "building-walls",
-      "type": "fill",
+      "id": "boundary_community",
+      "type": "line",
       "source": "openmaptiles",
-      "source-layer": "building",
-      "minzoom": 12,
+      "source-layer": "boundary",
+      "minzoom": 9,
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        [
+          "==",
+          "admin_level",
+          6
+        ],
+        [
+          "==",
+          "maritime",
+          0
+        ]
+      ],
       "layout": {
+        "line-cap": "square",
+        "line-join": "bevel",
         "visibility": "visible"
       },
       "paint": {
-        "fill-color": "rgba(160, 152, 137, 1)",
-        "fill-outline-color": "rgba(255, 255, 255, 0)",
-        "fill-antialias": true,
-        "fill-translate": [
-          2,
+        "line-color": "rgba(167, 167, 167, 1)",
+        "line-width": {
+          "stops": [
+            [
+              4,
+              0.5
+            ],
+            [
+              6,
+              0.75
+            ],
+            [
+              10,
+              1.25
+            ]
+          ]
+        },
+        "line-blur": 0,
+        "line-opacity": 1,
+        "line-dasharray": [
+          1,
           1
         ]
-      }
-    },
-    {
-      "id": "building",
-      "type": "fill",
-      "source": "openmaptiles",
-      "source-layer": "building",
-      "minzoom": 12,
-      "layout": {
-        "visibility": "visible"
-      },
-      "paint": {
-        "fill-color": "rgba(202, 197, 189, 1)"
       }
     },
     {
@@ -1564,7 +1466,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "line-color": "rgba(128, 128, 128, 1)",
+        "line-color": "rgba(167, 167, 167, 1)",
         "line-width": {
           "stops": [
             [
@@ -1609,7 +1511,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "line-color": "rgba(128, 128, 128, 1)",
+        "line-color": "rgba(167, 167, 167, 1)",
         "line-width": {
           "stops": [
             [
@@ -1669,23 +1571,8 @@
         "text-field": "{name:de}"
       },
       "paint": {
-        "text-color": "#4A4D4D",
-        "text-halo-color": {
-          "stops": [
-            [
-              2,
-              "rgba(233, 239, 224, 1)"
-            ],
-            [
-              4,
-              "rgba(217, 224, 202, 1)"
-            ],
-            [
-              18,
-              "rgba(219, 226, 198, 1)"
-            ]
-          ]
-        },
+        "text-color": "rgba(164, 164, 164, 1)",
+        "text-halo-color": "rgba(236, 236, 236, 1)",
         "text-halo-width": 1,
         "text-halo-blur": 1
       }
@@ -1730,23 +1617,8 @@
         "text-field": "{name:latin}"
       },
       "paint": {
-        "text-color": "#4A4D4D",
-        "text-halo-color": {
-          "stops": [
-            [
-              2,
-              "rgba(233, 239, 224, 1)"
-            ],
-            [
-              4,
-              "rgba(217, 224, 202, 1)"
-            ],
-            [
-              18,
-              "rgba(219, 226, 198, 1)"
-            ]
-          ]
-        },
+        "text-color": "rgba(164, 164, 164, 1)",
+        "text-halo-color": "rgba(236, 236, 236, 1)",
         "text-halo-width": 1,
         "text-halo-blur": 1,
         "icon-opacity": 0.7
@@ -1792,23 +1664,8 @@
         "text-field": "{name:de}"
       },
       "paint": {
-        "text-color": "#4A4D4D",
-        "text-halo-color": {
-          "stops": [
-            [
-              2,
-              "rgba(233, 239, 224, 1)"
-            ],
-            [
-              4,
-              "rgba(217, 224, 202, 1)"
-            ],
-            [
-              18,
-              "rgba(219, 226, 198, 1)"
-            ]
-          ]
-        },
+        "text-color": "rgba(164, 164, 164, 1)",
+        "text-halo-color": "rgba(236, 236, 236, 1)",
         "text-halo-width": 1,
         "text-halo-blur": 1,
         "icon-opacity": 0.7
@@ -1879,26 +1736,11 @@
         "text-field": "{name:de}"
       },
       "paint": {
-        "text-color": "#4A4D4D",
-        "text-halo-color": {
-          "stops": [
-            [
-              2,
-              "rgba(233, 239, 224, 1)"
-            ],
-            [
-              4,
-              "rgba(217, 224, 202, 1)"
-            ],
-            [
-              18,
-              "rgba(219, 226, 198, 1)"
-            ]
-          ]
-        },
+        "text-color": "rgba(164, 164, 164, 1)",
+        "text-halo-color": "rgba(236, 236, 236, 1)",
         "text-halo-width": 1,
         "text-halo-blur": 1,
-        "icon-opacity": 0.7
+        "icon-opacity": 0.25
       }
     },
     {
@@ -1979,26 +1821,11 @@
         "text-field": "{name:de}"
       },
       "paint": {
-        "text-color": "#4A4D4D",
-        "text-halo-color": {
-          "stops": [
-            [
-              2,
-              "rgba(233, 239, 224, 1)"
-            ],
-            [
-              4,
-              "rgba(217, 224, 202, 1)"
-            ],
-            [
-              18,
-              "rgba(219, 226, 198, 1)"
-            ]
-          ]
-        },
+        "text-color": "rgba(164, 164, 164, 1)",
+        "text-halo-color": "rgba(236, 236, 236, 1)",
         "text-halo-width": 1,
         "text-halo-blur": 1,
-        "icon-opacity": 0.7
+        "icon-opacity": 0.25
       }
     },
     {
@@ -2074,26 +1901,12 @@
         "text-field": "{name:de}"
       },
       "paint": {
-        "text-color": "#4A4D4D",
-        "text-halo-color": {
-          "stops": [
-            [
-              2,
-              "rgba(233, 239, 224, 1)"
-            ],
-            [
-              4,
-              "rgba(217, 224, 202, 1)"
-            ],
-            [
-              18,
-              "rgba(219, 226, 198, 1)"
-            ]
-          ]
-        },
+        "text-color": "rgba(164, 164, 164, 1)",
+        "text-halo-color": "rgba(236, 236, 236, 1)",
         "text-halo-width": 1,
         "text-halo-blur": 1,
-        "icon-opacity": 0.7
+        "icon-opacity": 0.25,
+        "icon-color": "rgba(194, 194, 194, 1)"
       }
     },
     {
@@ -2174,26 +1987,11 @@
         "text-field": "{name:de}"
       },
       "paint": {
-        "text-color": "#4A4D4D",
-        "text-halo-color": {
-          "stops": [
-            [
-              2,
-              "rgba(233, 239, 224, 1)"
-            ],
-            [
-              4,
-              "rgba(217, 224, 202, 1)"
-            ],
-            [
-              18,
-              "rgba(219, 226, 198, 1)"
-            ]
-          ]
-        },
+        "text-color": "rgba(164, 164, 164, 1)",
+        "text-halo-color": "rgba(236, 236, 236, 1)",
         "text-halo-width": 1,
         "text-halo-blur": 1,
-        "icon-opacity": 0.7
+        "icon-opacity": 0.25
       }
     },
     {
@@ -2223,29 +2021,14 @@
         "visibility": "visible",
         "text-field": "{name:de}",
         "text-font": [
-          "GT America Standard Medium"
+          "GT America Standard Regular"
         ],
         "text-transform": "none",
         "text-size": 10
       },
       "paint": {
-        "text-color": "#4A4D4D",
-        "text-halo-color": {
-          "stops": [
-            [
-              2,
-              "rgba(233, 239, 224, 1)"
-            ],
-            [
-              4,
-              "rgba(217, 224, 202, 1)"
-            ],
-            [
-              18,
-              "rgba(219, 226, 198, 1)"
-            ]
-          ]
-        },
+        "text-color": "rgba(148, 148, 148, 1)",
+        "text-halo-color": "rgba(236, 236, 236, 1)",
         "text-halo-width": 1,
         "text-halo-blur": 1
       }
@@ -2300,45 +2083,8 @@
       },
       "paint": {
         "text-halo-width": 1.4,
-        "text-halo-color": {
-          "stops": [
-            [
-              2,
-              "rgba(233, 239, 224, 1)"
-            ],
-            [
-              4,
-              "rgba(217, 224, 202, 1)"
-            ],
-            [
-              18,
-              "rgba(219, 226, 198, 1)"
-            ]
-          ]
-        },
-        "text-color": "#4A4D4D"
-      }
-    },
-    {
-      "id": "transportation_ferry",
-      "type": "line",
-      "source": "openmaptiles",
-      "source-layer": "transportation",
-      "filter": [
-        "all",
-        [
-          "in",
-          "class",
-          "ferry"
-        ]
-      ],
-      "paint": {
-        "line-color": "rgba(47, 136, 183, 1)",
-        "line-dasharray": [
-          2,
-          2
-        ],
-        "line-width": 1
+        "text-halo-color": "rgba(236, 236, 236, 1)",
+        "text-color": "rgba(148, 148, 148, 1)"
       }
     },
     {
@@ -2398,23 +2144,8 @@
       },
       "paint": {
         "text-halo-width": 1.4,
-        "text-halo-color": {
-          "stops": [
-            [
-              2,
-              "rgba(233, 239, 224, 1)"
-            ],
-            [
-              4,
-              "rgba(217, 224, 202, 1)"
-            ],
-            [
-              18,
-              "rgba(219, 226, 198, 1)"
-            ]
-          ]
-        },
-        "text-color": "rgba(107, 111, 111, 1)"
+        "text-halo-color": "rgba(236, 236, 236, 1)",
+        "text-color": "rgba(109, 109, 109, 1)"
       }
     },
     {
@@ -2478,23 +2209,8 @@
       },
       "paint": {
         "text-halo-width": 1.4,
-        "text-halo-color": {
-          "stops": [
-            [
-              2,
-              "rgba(233, 239, 224, 1)"
-            ],
-            [
-              4,
-              "rgba(217, 224, 202, 1)"
-            ],
-            [
-              18,
-              "rgba(219, 226, 198, 1)"
-            ]
-          ]
-        },
-        "text-color": "rgba(107, 111, 111, 1)"
+        "text-halo-color": "rgba(236, 236, 236, 1)",
+        "text-color": "rgba(109, 109, 109, 1)"
       }
     },
     {
@@ -2537,8 +2253,8 @@
         "text-letter-spacing": 0.1
       },
       "paint": {
-        "text-color": "rgba(61, 144, 191, 1)",
-        "text-halo-color": "#95CFE6",
+        "text-color": "rgba(149, 149, 149, 1)",
+        "text-halo-color": "rgba(186, 186, 186, 1)",
         "text-halo-width": 1,
         "text-halo-blur": 0
       }
@@ -2588,7 +2304,8 @@
         "visibility": "none"
       },
       "paint": {
-        "text-color": "rgba(61, 144, 191, 1)"
+        "text-color": "rgba(149, 149, 149, 1)",
+        "text-halo-color": "rgba(186, 186, 186, 1)"
       }
     },
     {
@@ -2637,7 +2354,8 @@
         "text-letter-spacing": 0.1
       },
       "paint": {
-        "text-color": "rgba(61, 144, 191, 1)"
+        "text-color": "rgba(149, 149, 149, 1)",
+        "text-halo-color": "rgba(186, 186, 186, 1)"
       }
     },
     {
@@ -2688,152 +2406,9 @@
         "text-letter-spacing": 0.1
       },
       "paint": {
-        "icon-color": "rgba(198, 226, 240, 1)",
-        "text-color": "rgba(61, 144, 191, 1)"
-      }
-    },
-    {
-      "id": "contour_label",
-      "type": "symbol",
-      "source": "contours",
-      "source-layer": "contour",
-      "filter": [
-        "all",
-        [
-          ">",
-          "height",
-          0
-        ],
-        [
-          "in",
-          "nth_line",
-          10,
-          5
-        ],
-        [
-          "==",
-          "$type",
-          "LineString"
-        ]
-      ],
-      "layout": {
-        "text-field": "{height}",
-        "text-font": [
-          "GT America Standard Regular",
-          "Arial Unicode MS Regular"
-        ],
-        "text-size": {
-          "stops": [
-            [
-              15,
-              9.5
-            ],
-            [
-              20,
-              12
-            ]
-          ]
-        },
-        "text-padding": 10,
-        "text-rotation-alignment": "map",
-        "text-keep-upright": true,
-        "symbol-placement": "line",
-        "symbol-avoid-edges": true
-      },
-      "paint": {
-        "text-color": "rgba(103, 97, 87, 1)",
-        "text-halo-color": {
-          "stops": [
-            [
-              2,
-              "rgba(233, 239, 224, 1)"
-            ],
-            [
-              4,
-              "rgba(217, 224, 202, 1)"
-            ],
-            [
-              18,
-              "rgba(219, 226, 198, 1)"
-            ]
-          ]
-        },
-        "text-halo-width": 1,
-        "icon-halo-color": "rgba(0, 0, 0, 0)"
-      }
-    },
-    {
-      "id": "mountain_peak",
-      "type": "symbol",
-      "source": "openmaptiles",
-      "source-layer": "mountain_peak",
-      "minzoom": 9,
-      "maxzoom": 24,
-      "filter": [
-        "all",
-        [
-          "==",
-          "$type",
-          "Point"
-        ],
-        [
-          "==",
-          "rank",
-          1
-        ],
-        [
-          "==",
-          "class",
-          "peak"
-        ]
-      ],
-      "layout": {
-        "text-size": 11,
-        "text-font": [
-          "GT America Standard Regular"
-        ],
-        "visibility": "visible",
-        "text-offset": [
-          0,
-          0.5
-        ],
-        "icon-size": 1,
-        "text-anchor": "bottom",
-        "text-field": "{name:latin} {name:nonlatin}\n{ele} m\n▲",
-        "text-max-width": {
-          "stops": [
-            [
-              6,
-              8
-            ],
-            [
-              10,
-              8
-            ]
-          ]
-        },
-        "text-justify": "center"
-      },
-      "paint": {
-        "text-color": "rgba(74, 77, 77, 1)",
-        "text-halo-width": 1,
-        "text-halo-color": {
-          "stops": [
-            [
-              2,
-              "rgba(233, 239, 224, 1)"
-            ],
-            [
-              4,
-              "rgba(217, 224, 202, 1)"
-            ],
-            [
-              18,
-              "rgba(219, 226, 198, 1)"
-            ]
-          ]
-        },
-        "text-halo-blur": 1
+        "icon-color": "rgba(109, 109, 109, 1)",
+        "text-color": "rgba(149, 149, 149, 1)",
+        "text-halo-color": "rgba(186, 186, 186, 1)"
       }
     }
   ]

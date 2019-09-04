@@ -18,13 +18,18 @@ module.exports = {
   },
   handler: function(request, h) {
     try {
-      const id = request.params.id;
+      let id = request.params.id;
       const extension = request.params.extension;
-      const spritePath = path.join(
-        stylesDir,
-        id,
-        `sprites/sprites.${extension}`
-      );
+      let spritePath = path.join(stylesDir, id, `sprites/sprites.${extension}`);
+      if (id.includes("2x")) {
+        id = id.replace("@2x", "");
+        spritePath = path.join(
+          stylesDir,
+          id,
+          `sprites/sprites@2x.${extension}`
+        );
+      }
+
       return h
         .file(spritePath)
         .header("cache-control", `max-age=${60 * 60 * 24 * 365}, immutable`);
