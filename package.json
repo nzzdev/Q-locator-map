@@ -38,6 +38,8 @@
   "devDependencies": {
     "@hapi/code": "^5.3.1",
     "@hapi/lab": "^18.1.2",
+    "@mapbox/maki": "^6.1.0",
+    "@mapbox/spritezero": "^6.1.1",
     "autoprefixer": "^9.6.1",
     "cssnano": "^4.1.10",
     "jsdom": "^15.1.1",

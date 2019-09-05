@@ -1,7 +1,7 @@
 const path = require("path");
 const Joi = require("@hapi/joi");
 const Boom = require("@hapi/boom");
-const stylesDir = `${__dirname}/../resources/styles/`;
+const spritesDir = `${__dirname}/../resources/sprites/`;
 
 module.exports = {
   method: "GET",
@@ -20,14 +20,13 @@ module.exports = {
     try {
       let id = request.params.id;
       const extension = request.params.extension;
-      let spritePath = path.join(stylesDir, id, `sprites/sprites.${extension}`);
+      let spritePath = path.join(spritesDir, `sprites.${extension}`);
       if (id.includes("2x")) {
         id = id.replace("@2x", "");
-        spritePath = path.join(
-          stylesDir,
-          id,
-          `sprites/sprites@2x.${extension}`
-        );
+        spritePath = path.join(spritesDir, `sprites@2x.${extension}`);
+      } else if (id.includes("4x")) {
+        id = id.replace("@4x", "");
+        spritePath = path.join(spritesDir, `sprites@4x.${extension}`);
       }
 
       return h

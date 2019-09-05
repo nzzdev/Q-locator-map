@@ -15,6 +15,12 @@
       "request": "launch",
       "name": "Debug import-geodata script",
       "program": "${workspaceFolder}/plugins/geodata/import-geodata/dev.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug generate-sprites script",
+      "program": "${workspaceFolder}/resources/sprites/generateSprites.js"
     }
   ]
 }

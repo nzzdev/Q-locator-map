@@ -75,8 +75,8 @@ function getPointStyleProperties(geojsonProperties) {
     textHaloColor: "#ffffff",
     textHaloWidth: 2,
     textFont: ["GT America Standard Medium"],
-    iconImage: "circle-11",
-    iconSize: 0.9
+    iconImage: "point-10",
+    iconSize: 1
   };
 
   if (geojsonProperties.labelPosition === "top") {
@@ -135,6 +135,7 @@ function getPointStyleProperties(geojsonProperties) {
 
   if (geojsonProperties.type === "pointLightLabel") {
     properties.textSize = 12;
+    properties.iconSize = 0.9;
   } else if (geojsonProperties.type === "pointOnly") {
     properties.textField = "";
   } else if (geojsonProperties.type === "label") {
@@ -144,9 +145,9 @@ function getPointStyleProperties(geojsonProperties) {
     properties.textJustify = "center";
     properties.textFont = ["GT America Standard Light"];
   } else if (geojsonProperties.type === "epicenter") {
-    properties.iconImage = "star-11";
+    properties.iconImage = "epicenter-42";
     properties.textField = "";
-    properties.iconSize = 2;
+    properties.iconSize = 1;
   }
 
   return properties;
