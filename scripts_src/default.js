@@ -133,7 +133,7 @@ export default class LocatorMap {
 
     this.map = new mapboxgl.Map(this.options);
     this.map.on("load", () => {
-      this.addPoints();
+      // this.addPoints();
       this.preventLabelsAroundViewport();
       this.addControls();
       this.element.parentNode.style.opacity = "1";

@@ -102,6 +102,13 @@ async function getTilesetTile(item, qId, z, x, y) {
     const geojsonList = getTransformedGeoJSON(item.geojsonList);
     const features = this.helpers.getFeatures(geojsonList);
     const tileObject = {};
+    for (const [i, geojson] of features.points.entries()) {
+      const tileIndex = geojsonvt(geojson);
+      const tile = tileIndex.getTile(z, x, y);
+      if (tile) {
+        tileObject[`point-${i}`] = tile;
+      }
+    }
     for (const [i, geojson] of features.linestrings.entries()) {
       const tileIndex = geojsonvt(geojson);
       const tile = tileIndex.getTile(z, x, y);

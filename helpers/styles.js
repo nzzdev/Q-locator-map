@@ -62,6 +62,96 @@ async function getHash(features) {
   });
 }
 
+function getPointStyleProperties(geojsonProperties) {
+  const verticalOffset = 0.6;
+  const horizontalOffset = 0.8;
+  const properties = {
+    textField: "{label}",
+    textAnchor: "bottom",
+    textJustify: "center",
+    textOffset: [0, -verticalOffset],
+    textSize: 14,
+    textColor: "#05032d",
+    textHaloColor: "#ffffff",
+    textHaloWidth: 2,
+    textFont: ["GT America Standard Medium"],
+    iconImage: "circle-11",
+    iconSize: 0.9
+  };
+
+  if (geojsonProperties.labelPosition === "top") {
+    if (geojsonProperties.type === "event") {
+      properties.textField = "{label} \n \u2193";
+    }
+  } else if (geojsonProperties.labelPosition === "bottom") {
+    properties.textAnchor = "top";
+    properties.textOffset = [0, verticalOffset];
+    if (geojsonProperties.type === "event") {
+      properties.textField = "\u2191 \n {label}";
+    }
+  } else if (geojsonProperties.labelPosition === "left") {
+    properties.textAnchor = "right";
+    properties.textOffset = [-horizontalOffset, 0];
+    properties.textJustify = "right";
+    if (geojsonProperties.type === "event") {
+      properties.textField = "{label} \u2192";
+    }
+  } else if (geojsonProperties.labelPosition === "right") {
+    properties.textAnchor = "left";
+    properties.textOffset = [horizontalOffset, 0];
+    properties.textJustify = "left";
+    if (geojsonProperties.type === "event") {
+      properties.textField = "\u2190 {label}";
+    }
+  } else if (geojsonProperties.labelPosition === "topleft") {
+    properties.textAnchor = "bottom-right";
+    properties.textOffset = [-horizontalOffset / 2, -verticalOffset / 2];
+    properties.textJustify = "right";
+    if (geojsonProperties.type === "event") {
+      properties.textField = "{label} \n \u2198";
+    }
+  } else if (geojsonProperties.labelPosition === "topright") {
+    properties.textAnchor = "bottom-left";
+    properties.textOffset = [horizontalOffset / 2, -verticalOffset / 2];
+    properties.textJustify = "left";
+    if (geojsonProperties.type === "event") {
+      properties.textField = "{label} \n \u2199";
+    }
+  } else if (geojsonProperties.labelPosition === "bottomleft") {
+    properties.textAnchor = "top-right";
+    properties.textOffset = [-horizontalOffset / 2, verticalOffset / 2];
+    properties.textJustify = "right";
+    if (geojsonProperties.type === "event") {
+      properties.textField = "{label} \u2197";
+    }
+  } else if (geojsonProperties.labelPosition === "bottomright") {
+    properties.textAnchor = "top-left";
+    properties.textOffset = [horizontalOffset / 2, verticalOffset / 2];
+    properties.textJustify = "left";
+    if (geojsonProperties.type === "event") {
+      properties.textField = "\u2196 {label}";
+    }
+  }
+
+  if (geojsonProperties.type === "pointLightLabel") {
+    properties.textSize = 12;
+  } else if (geojsonProperties.type === "pointOnly") {
+    properties.textField = "";
+  } else if (geojsonProperties.type === "label") {
+    properties.iconImage = "";
+    properties.textAnchor = "center";
+    properties.textOffset = [0, 0];
+    properties.textJustify = "center";
+    properties.textFont = ["GT America Standard Light"];
+  } else if (geojsonProperties.type === "epicenter") {
+    properties.iconImage = "star-11";
+    properties.textField = "";
+    properties.iconSize = 2;
+  }
+
+  return properties;
+}
+
 async function getStyleWithGeoJSONOverlays(style, features, toolBaseUrl, qId) {
   const defaultGeojsonStyles = getDefaultGeojsonStyles();
   const hash = await getHash(features);
@@ -99,8 +189,7 @@ async function getStyleWithGeoJSONOverlays(style, features, toolBaseUrl, qId) {
           ["get", "fill-opacity"],
           defaultGeojsonStyles.polygon["fill-opacity"]
         ]
-      },
-      filter: ["==", "$type", "Polygon"]
+      }
     });
 
     style.layers.splice(index, 0, {
@@ -124,8 +213,7 @@ async function getStyleWithGeoJSONOverlays(style, features, toolBaseUrl, qId) {
           ["get", "stroke-opacity"],
           defaultGeojsonStyles.line["stroke-opacity"]
         ]
-      },
-      filter: ["==", "$type", "Polygon"]
+      }
     });
   }
 
@@ -155,8 +243,32 @@ async function getStyleWithGeoJSONOverlays(style, features, toolBaseUrl, qId) {
       layout: {
         "line-cap": "round",
         "line-join": "round"
+      }
+    });
+  }
+
+  for (const [i, geojson] of features.points.entries()) {
+    const properties = getPointStyleProperties(geojson.properties);
+    style.layers.splice(allSymbolIndices.pop(), 0, {
+      id: `point-${i}`,
+      type: "symbol",
+      source: sourceName,
+      "source-layer": `point-${i}`,
+      layout: {
+        "text-field": properties.textField,
+        "text-size": properties.textSize,
+        "text-font": properties.textFont,
+        "text-anchor": properties.textAnchor,
+        "text-justify": properties.textJustify,
+        "text-offset": properties.textOffset,
+        "icon-image": properties.iconImage,
+        "icon-size": properties.iconSize
       },
-      filter: ["==", "$type", "LineString"]
+      paint: {
+        "text-color": properties.textColor,
+        "text-halo-color": properties.textHaloColor,
+        "text-halo-width": properties.textHaloWidth
+      }
     });
   }
 
