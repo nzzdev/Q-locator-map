@@ -1,7 +1,5 @@
 import mapboxgl from "mapbox-gl";
 import MinimapControl from "./minimap.js";
-import Marker from "./marker.js";
-
 export default class LocatorMap {
   constructor(element, data = {}) {
     if (element) {
@@ -79,22 +77,6 @@ export default class LocatorMap {
     });
   }
 
-  addPoints() {
-    for (let point of this.data.mapConfig.points) {
-      if (point) {
-        const marker = Marker[point.properties.type];
-        const markerElement = document.createElement("div");
-        markerElement.innerHTML = marker.getMarkup(point.properties);
-        markerElement.className = marker.className;
-        markerElement.style.height = `${marker.size}px`;
-        markerElement.style.width = `${marker.size}px`;
-        new mapboxgl.Marker(markerElement)
-          .setLngLat(point.geometry.coordinates)
-          .addTo(this.map);
-      }
-    }
-  }
-
   onDetached() {
     // Clean up and release all resources associated with the map as soon as the map gets removed from DOM
     const observer = new MutationObserver((mutationList, observer) => {
@@ -133,7 +115,6 @@ export default class LocatorMap {
 
     this.map = new mapboxgl.Map(this.options);
     this.map.on("load", () => {
-      // this.addPoints();
       this.preventLabelsAroundViewport();
       this.addControls();
       this.element.parentNode.style.opacity = "1";
