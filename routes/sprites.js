@@ -20,7 +20,7 @@ module.exports = {
     try {
       let id = request.params.id;
       const extension = request.params.extension;
-      let spritePath = path.join(spritesDir, `sprites.${extension}`);
+      let spritePath = path.join(spritesDir, `sprites@1x.${extension}`);
       if (id.includes("2x")) {
         id = id.replace("@2x", "");
         spritePath = path.join(spritesDir, `sprites@2x.${extension}`);
