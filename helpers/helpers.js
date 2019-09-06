@@ -35,13 +35,13 @@ async function getMapConfig(item, toolRuntimeConfig, qId) {
     mapConfig.bounds = turf.bbox(turf.featureCollection(bboxPolygons));
   }
 
-  const features = getFeatures(geojsonList);
+  mapConfig.features = getFeatures(geojsonList);
   mapConfig.style = await styleHelpers.getStyle(
     item.options.baseLayer.style,
     item,
     toolRuntimeConfig.toolBaseUrl,
     qId,
-    features
+    mapConfig.features
   );
 
   const minimapOptions = item.options.minimap.options;

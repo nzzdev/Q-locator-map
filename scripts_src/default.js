@@ -22,6 +22,246 @@ export default class LocatorMap {
     }
   }
 
+  getDefaultGeojsonStyles() {
+    return {
+      line: {
+        stroke: "#c31906",
+        "stroke-width": 2,
+        "stroke-opacity": 1
+      },
+      polygon: {
+        "stroke-width": 0,
+        fill: "#c31906",
+        "fill-opacity": 0.35
+      }
+    };
+  }
+
+  getPointStyleProperties(geojsonProperties) {
+    const verticalOffset = 0.6;
+    const horizontalOffset = 0.8;
+    const properties = {
+      textField: "{label}",
+      textAnchor: "bottom",
+      textJustify: "center",
+      textOffset: [0, -verticalOffset],
+      textSize: 14,
+      textColor: "#05032d",
+      textHaloColor: "#ffffff",
+      textHaloWidth: 2,
+      textFont: ["GT America Standard Medium"],
+      iconImage: "point-10",
+      iconSize: 1
+    };
+
+    if (geojsonProperties.labelPosition === "top") {
+      if (geojsonProperties.type === "event") {
+        properties.textField = "{label} \n \u2193";
+      }
+    } else if (geojsonProperties.labelPosition === "bottom") {
+      properties.textAnchor = "top";
+      properties.textOffset = [0, verticalOffset];
+      if (geojsonProperties.type === "event") {
+        properties.textField = "\u2191 \n {label}";
+      }
+    } else if (geojsonProperties.labelPosition === "left") {
+      properties.textAnchor = "right";
+      properties.textOffset = [-horizontalOffset, 0];
+      properties.textJustify = "right";
+      if (geojsonProperties.type === "event") {
+        properties.textField = "{label} \u2192";
+      }
+    } else if (geojsonProperties.labelPosition === "right") {
+      properties.textAnchor = "left";
+      properties.textOffset = [horizontalOffset, 0];
+      properties.textJustify = "left";
+      if (geojsonProperties.type === "event") {
+        properties.textField = "\u2190 {label}";
+      }
+    } else if (geojsonProperties.labelPosition === "topleft") {
+      properties.textAnchor = "bottom-right";
+      properties.textOffset = [-horizontalOffset / 2, -verticalOffset / 2];
+      properties.textJustify = "right";
+      if (geojsonProperties.type === "event") {
+        properties.textField = "{label} \n \u2198";
+      }
+    } else if (geojsonProperties.labelPosition === "topright") {
+      properties.textAnchor = "bottom-left";
+      properties.textOffset = [horizontalOffset / 2, -verticalOffset / 2];
+      properties.textJustify = "left";
+      if (geojsonProperties.type === "event") {
+        properties.textField = "{label} \n \u2199";
+      }
+    } else if (geojsonProperties.labelPosition === "bottomleft") {
+      properties.textAnchor = "top-right";
+      properties.textOffset = [-horizontalOffset / 2, verticalOffset / 2];
+      properties.textJustify = "right";
+      if (geojsonProperties.type === "event") {
+        properties.textField = "{label} \u2197";
+      }
+    } else if (geojsonProperties.labelPosition === "bottomright") {
+      properties.textAnchor = "top-left";
+      properties.textOffset = [horizontalOffset / 2, verticalOffset / 2];
+      properties.textJustify = "left";
+      if (geojsonProperties.type === "event") {
+        properties.textField = "\u2196 {label}";
+      }
+    }
+
+    if (geojsonProperties.type === "pointLightLabel") {
+      properties.textSize = 12;
+      properties.iconSize = 0.9;
+    } else if (geojsonProperties.type === "pointOnly") {
+      properties.textField = "";
+    } else if (geojsonProperties.type === "label") {
+      properties.iconImage = "";
+      properties.textAnchor = "center";
+      properties.textOffset = [0, 0];
+      properties.textJustify = "center";
+      properties.textFont = ["GT America Standard Light"];
+    } else if (geojsonProperties.type === "epicenter") {
+      properties.iconImage = "epicenter-42";
+      properties.textField = "";
+      properties.iconSize = 1;
+    }
+
+    return properties;
+  }
+
+  addFeatures() {
+    const defaultGeojsonStyles = this.getDefaultGeojsonStyles();
+    const style = this.map.getStyle();
+    const allSymbolIndices = style.layers.reduce((ascending, layer, index) => {
+      if (layer.type === "symbol") {
+        ascending.push(layer.id);
+      }
+      return ascending;
+    }, []);
+    const layerId = allSymbolIndices[1] || style.layers.length - 1;
+    for (const [
+      i,
+      geojson
+    ] of this.data.mapConfig.features.polygons.entries()) {
+      this.map.addLayer(
+        {
+          id: `polygon-${i}`,
+          type: "fill",
+          source: {
+            type: "geojson",
+            data: geojson
+          },
+          paint: {
+            "fill-color": [
+              "string",
+              ["get", "fill"],
+              defaultGeojsonStyles.polygon.fill
+            ],
+            "fill-opacity": [
+              "number",
+              ["get", "fill-opacity"],
+              defaultGeojsonStyles.polygon["fill-opacity"]
+            ]
+          }
+        },
+        layerId
+      );
+
+      this.map.addLayer(
+        {
+          id: `polygon-outline-${i}`,
+          type: "line",
+          source: {
+            type: "geojson",
+            data: geojson
+          },
+          paint: {
+            "line-color": [
+              "string",
+              ["get", "stroke"],
+              defaultGeojsonStyles.line["stroke"]
+            ],
+            "line-width": [
+              "number",
+              ["get", "stroke-width"],
+              defaultGeojsonStyles.polygon["stroke-width"]
+            ],
+            "line-opacity": [
+              "number",
+              ["get", "stroke-opacity"],
+              defaultGeojsonStyles.line["stroke-opacity"]
+            ]
+          }
+        },
+        layerId
+      );
+    }
+
+    for (const [
+      i,
+      geojson
+    ] of this.data.mapConfig.features.linestrings.entries()) {
+      this.map.addLayer(
+        {
+          id: `linestring-${i}`,
+          type: "line",
+          source: {
+            type: "geojson",
+            data: geojson
+          },
+          paint: {
+            "line-color": [
+              "string",
+              ["get", "stroke"],
+              defaultGeojsonStyles.line["stroke"]
+            ],
+            "line-width": [
+              "number",
+              ["get", "stroke-width"],
+              defaultGeojsonStyles.line["stroke-width"]
+            ],
+            "line-opacity": [
+              "number",
+              ["get", "stroke-opacity"],
+              defaultGeojsonStyles.line["stroke-opacity"]
+            ]
+          },
+          layout: {
+            "line-cap": "round",
+            "line-join": "round"
+          }
+        },
+        layerId
+      );
+    }
+
+    for (const [i, geojson] of this.data.mapConfig.features.points.entries()) {
+      const properties = this.getPointStyleProperties(geojson.properties);
+      this.map.addLayer({
+        id: `point-${i}`,
+        type: "symbol",
+        source: {
+          type: "geojson",
+          data: geojson
+        },
+        layout: {
+          "text-field": properties.textField,
+          "text-size": properties.textSize,
+          "text-font": properties.textFont,
+          "text-anchor": properties.textAnchor,
+          "text-justify": properties.textJustify,
+          "text-offset": properties.textOffset,
+          "icon-image": properties.iconImage,
+          "icon-size": properties.iconSize
+        },
+        paint: {
+          "text-color": properties.textColor,
+          "text-halo-color": properties.textHaloColor,
+          "text-halo-width": properties.textHaloWidth
+        }
+      });
+    }
+  }
+
   addControls() {
     let attributionPosition = "bottom-right";
     const minimap = this.data.options.minimap;
@@ -115,6 +355,7 @@ export default class LocatorMap {
 
     this.map = new mapboxgl.Map(this.options);
     this.map.on("load", () => {
+      this.addFeatures();
       this.preventLabelsAroundViewport();
       this.addControls();
       this.element.parentNode.style.opacity = "1";
