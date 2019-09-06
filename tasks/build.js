@@ -101,12 +101,12 @@ async function buildScripts() {
     const inputOptions = {
       input: `${scriptsDir}${filename}.js`,
       plugins: [
-        buble({
-          transforms: {
-            dangerousForOf: true
-          }
-        }),
-        terser(),
+        // buble({
+        //   transforms: {
+        //     dangerousForOf: true
+        //   }
+        // }),
+        // terser(),
         resolve({ browser: true }),
         commonjs()
       ]
