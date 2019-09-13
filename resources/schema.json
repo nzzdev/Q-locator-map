@@ -32,20 +32,6 @@
         }
       }
     },
-    "bbox": {
-      "title": "Kartenbereich definieren",
-      "Q:type": "bbox",
-      "Q:options": {
-        "openInDialog": {
-          "buttonText": "Kartenbereich definieren"
-        }
-      },
-      "type": "array",
-      "maxItems": 4,
-      "items": {
-        "type": "number"
-      }
-    },
     "sources": {
       "title": "Quelle(n)",
       "type": "array",
@@ -235,6 +221,20 @@
                 }
               }
             ]
+          }
+        },
+        "bbox": {
+          "title": "Kartenbereich definieren",
+          "Q:type": "bbox",
+          "Q:options": {
+            "openInDialog": {
+              "buttonText": "Kartenbereich definieren"
+            }
+          },
+          "type": "array",
+          "maxItems": 4,
+          "items": {
+            "type": "number"
           }
         }
       }

@@ -12,8 +12,8 @@ const tilesHelpers = require("./tiles.js");
 async function getMapConfig(item, toolRuntimeConfig, qId) {
   const mapConfig = {};
   let geojsonList = item.geojsonList;
-  if (item.bbox && item.bbox.length === 4) {
-    mapConfig.bbox = item.bbox;
+  if (item.options.bbox && item.options.bbox.length === 4) {
+    mapConfig.bbox = item.options.bbox;
     const bottomLeft = [mapConfig.bbox[0], mapConfig.bbox[1]];
     const bottomRight = [mapConfig.bbox[2], mapConfig.bbox[1]];
     const topRight = [mapConfig.bbox[2], mapConfig.bbox[3]];
