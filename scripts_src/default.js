@@ -265,17 +265,38 @@ export default class LocatorMap {
   addControls() {
     let attributionPosition = "bottom-right";
     const minimap = this.data.options.minimap;
-    if (minimap.showMinimap && this.data.mapConfig.minimapMarkup) {
-      this.map.addControl(
-        new MinimapControl({
-          minimapMarkup: this.data.mapConfig.minimapMarkup
-        }),
-        minimap.options.position
-      );
-
+    if (
+      minimap.showMinimap &&
+      (minimap.options.type === "globe" ||
+        (minimap.options.type === "region" &&
+          minimap.options.region &&
+          minimap.options.region !== ""))
+    ) {
       if (minimap.options.position === "bottom-right") {
         attributionPosition = "bottom-left";
       }
+      let bounds = this.map.getBounds().toArray();
+      bounds = JSON.stringify([
+        bounds[0][0],
+        bounds[0][1],
+        bounds[1][0],
+        bounds[1][1]
+      ]);
+      const url = `${this.data.toolBaseUrl}/minimap/${minimap.options.type}?region=${minimap.options.region}&bounds=${bounds}&toolBaseUrl=${this.data.toolBaseUrl}`;
+      fetch(url)
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          }
+        })
+        .then(result => {
+          this.map.addControl(
+            new MinimapControl({
+              minimapMarkup: result.markup
+            }),
+            minimap.options.position
+          );
+        });
     }
 
     this.map.addControl(new mapboxgl.AttributionControl(), attributionPosition);

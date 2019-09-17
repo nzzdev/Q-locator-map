@@ -10,5 +10,6 @@ module.exports = [
   require("./dynamic-schema.js"),
   require("./tiles.js"),
   require("./tilesets.js"),
-  require("./sprites.js")
+  require("./sprites.js"),
+  require("./minimap.js")
 ].concat(require("./schema.js"), require("./styles.js"), require("./fonts.js"));

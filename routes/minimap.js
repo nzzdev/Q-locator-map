@@ -1,35 +1,44 @@
 const Joi = require("@hapi/joi");
 const Boom = require("@hapi/boom");
+const minimapHelpers = require("../helpers/minimap.js");
 
 module.exports = {
   method: "GET",
-  path: "/minimap/{id}.{extension}",
+  path: "/minimap/{type}",
   options: {
-    description: "Returns the sprites",
+    description: "Returns the minimap",
     tags: ["api"],
     validate: {
       params: {
-        id: Joi.string().required(),
-        extension: Joi.string().required()
+        type: Joi.string().required()
+      },
+      query: {
+        bounds: Joi.array()
+          .length(4)
+          .items(Joi.number()),
+        toolBaseUrl: Joi.string().required(),
+        region: Joi.string().required()
       }
     }
   },
-  handler: function(request, h) {
+  handler: async function(request, h) {
     try {
-      let id = request.params.id;
-      const extension = request.params.extension;
-      let spritePath = path.join(spritesDir, `sprites@1x.${extension}`);
-      if (id.includes("2x")) {
-        id = id.replace("@2x", "");
-        spritePath = path.join(spritesDir, `sprites@2x.${extension}`);
-      } else if (id.includes("4x")) {
-        id = id.replace("@4x", "");
-        spritePath = path.join(spritesDir, `sprites@4x.${extension}`);
-      }
+      const markup = await minimapHelpers.getMinimap({
+        type: request.params.type,
+        bounds: request.query.bounds,
+        toolBaseUrl: request.query.toolBaseUrl,
+        region: request.query.region
+      });
 
       return h
-        .file(spritePath)
-        .header("cache-control", `max-age=${60 * 60 * 24 * 365}, immutable`);
+        .response({
+          markup: markup
+        })
+        .type("application/json")
+        .header(
+          "cache-control",
+          "max-age=31536000, s-maxage=31536000, stale-while-revalidate=31536000, stale-if-error=31536000, immutable"
+        );
     } catch (error) {
       return Boom.notFound();
     }

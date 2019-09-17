@@ -6,7 +6,6 @@ const Boom = require("@hapi/boom");
 const fontnik = require("fontnik");
 const glyphCompose = require("@mapbox/glyph-pbf-composite");
 const styleHelpers = require("./styles.js");
-const minimapHelpers = require("./minimap.js");
 const tilesHelpers = require("./tiles.js");
 
 async function getMapConfig(item, toolRuntimeConfig, qId) {
@@ -43,21 +42,6 @@ async function getMapConfig(item, toolRuntimeConfig, qId) {
     qId,
     mapConfig.features
   );
-
-  const minimapOptions = item.options.minimap.options;
-  if (
-    item.options.minimap.showMinimap &&
-    (minimapOptions.type === "globe" ||
-      (minimapOptions.type === "region" &&
-        minimapOptions.region &&
-        minimapOptions.region !== ""))
-  ) {
-    mapConfig.minimapMarkup = await minimapHelpers.getMinimap(
-      minimapOptions,
-      mapConfig,
-      toolRuntimeConfig
-    );
-  }
   return mapConfig;
 }
 

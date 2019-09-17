@@ -94,7 +94,8 @@ module.exports = {
           }_container'), ${JSON.stringify({
             mapConfig: context.mapConfig,
             options: context.item.options,
-            width: context.width
+            width: context.width,
+            toolBaseUrl: toolRuntimeConfig.toolBaseUrl
           })})`
         }
       ],
