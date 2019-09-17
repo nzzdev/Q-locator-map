@@ -79,7 +79,7 @@ function getStyleWithHighlightedRegion(style, item, toolBaseUrl) {
       "source-layer": `geodata-${highlightRegion}`,
       paint: {
         "fill-color": "#fad250",
-        "fill-opacity": 1
+        "fill-opacity": 0.4
       }
     });
   }
