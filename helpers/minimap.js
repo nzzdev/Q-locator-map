@@ -8,7 +8,7 @@ const pointMark = {
   from: { data: "bbox" },
   encode: {
     update: {
-      fill: { value: "red" }
+      fill: { value: "#d64113" }
     }
   },
   transform: [
@@ -24,7 +24,7 @@ const bboxMark = {
   from: { data: "bbox" },
   encode: {
     update: {
-      stroke: { value: "red" },
+      stroke: { value: "#d64113" },
       strokeWidth: 1
     }
   },
@@ -39,14 +39,14 @@ const bboxMark = {
 async function getGlobeVegaSpec(mapConfig, toolRuntimeConfig) {
   const threshold = 100000000000;
   spec = JSON.parse(JSON.stringify(minimapGlobeVegaSpec));
-  const geoDataUrl = `${
-    toolRuntimeConfig.toolBaseUrl
-  }/geodata/Q11081619.geojson`;
+  const geoDataUrl = `${toolRuntimeConfig.toolBaseUrl}/geodata/Q11081619.geojson`;
 
   let center;
   let bboxFeature;
   if (mapConfig.bbox) {
-    bboxFeature = turf.bboxPolygon(mapConfig.bbox);
+    bboxFeature = turf.rewind(turf.bboxPolygon(mapConfig.bbox), {
+      reverse: true
+    });
     center = turf.getCoord(turf.centroid(turf.bboxPolygon(mapConfig.bbox)));
     if (turf.area(bboxFeature) < threshold) {
       bboxFeature = turf.point(center);
@@ -108,9 +108,7 @@ async function getRegionVegaSpec(
 ) {
   const threshold = 50000000;
   spec = JSON.parse(JSON.stringify(minimapRegionVegaSpec));
-  const geoDataUrl = `${toolRuntimeConfig.toolBaseUrl}/geodata/${
-    minimapOptions.region
-  }.geojson`;
+  const geoDataUrl = `${toolRuntimeConfig.toolBaseUrl}/geodata/${minimapOptions.region}.geojson`;
 
   let center;
   let bboxFeature;
@@ -159,6 +157,12 @@ async function getRegionVegaSpec(
     spec.signals.push({
       name: "rotate1",
       value: center[1] * -1
+    });
+
+    const label = region.properties.name_de ? region.properties.name_de : "";
+    spec.signals.push({
+      name: "label",
+      value: label
     });
     spec.data.push({
       name: "region",

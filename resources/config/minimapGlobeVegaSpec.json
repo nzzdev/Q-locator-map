@@ -24,9 +24,7 @@
       "from": { "data": "sphere" },
       "encode": {
         "update": {
-          "fill": { "value": "lightblue" },
-          "stroke": { "value": "black" },
-          "strokeWidth": { "value": 1.5 }
+          "fill": { "value": "#cee9f2" }
         }
       },
       "transform": [
@@ -42,7 +40,7 @@
       "encode": {
         "update": {
           "fill": { "value": "white" },
-          "stroke": { "value": "black" },
+          "stroke": { "value": "#b6b6be" },
           "strokeWidth": { "value": 0.5 }
         }
       },

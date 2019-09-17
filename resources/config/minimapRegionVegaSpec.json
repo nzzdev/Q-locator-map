@@ -22,7 +22,7 @@
       "encode": {
         "update": {
           "fill": { "value": "white" },
-          "stroke": { "value": "black" },
+          "stroke": { "value": "#b6b6be" },
           "strokeWidth": { "value": 0.5 }
         }
       },
@@ -32,6 +32,27 @@
           "projection": "projection"
         }
       ]
+    },
+    {
+      "type": "text",
+      "encode": {
+        "enter": {
+          "fill": { "value": "#b6b6be" },
+          "text": { "signal": "label" }
+        },
+        "update": {
+          "opacity": { "value": 1 },
+          "x": { "signal": "width/2" },
+          "y": { "signal": "height/2" },
+          "align": { "value": "center" },
+          "baseline": { "value": "middle" },
+          "fontSize": { "value": 12 },
+          "limit": { "value": 0 }
+        },
+        "hover": {
+          "opacity": { "value": 0.5 }
+        }
+      }
     }
   ]
 }
