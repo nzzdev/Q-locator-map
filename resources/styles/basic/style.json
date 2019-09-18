@@ -1156,7 +1156,7 @@
       "type": "fill",
       "source": "openmaptiles",
       "source-layer": "building",
-      "minzoom": 12,
+      "minzoom": 14,
       "layout": {
         "visibility": "visible"
       },
@@ -1175,7 +1175,7 @@
       "type": "fill",
       "source": "openmaptiles",
       "source-layer": "building",
-      "minzoom": 12,
+      "minzoom": 14,
       "layout": {
         "visibility": "visible"
       },
