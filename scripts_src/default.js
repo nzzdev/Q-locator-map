@@ -137,7 +137,7 @@ export default class LocatorMap {
       }
       return ascending;
     }, []);
-    const layerId = allSymbolIndices[1] || style.layers.length - 1;
+    const layerId = allSymbolIndices[1] || style.layers.pop().id;
     for (const [
       i,
       geojson
