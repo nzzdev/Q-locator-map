@@ -1906,7 +1906,7 @@
           "stops": [
             [
               0,
-              "circle-11"
+              "punkt"
             ],
             [
               8,
@@ -1995,7 +1995,7 @@
           "stops": [
             [
               0,
-              "circle-11"
+              "punkt"
             ],
             [
               8,
@@ -2079,7 +2079,7 @@
           "stops": [
             [
               0,
-              "circle-11"
+              "punkt"
             ],
             [
               8,
@@ -2168,7 +2168,7 @@
           "stops": [
             [
               0,
-              "circle-11"
+              "punkt"
             ],
             [
               8,
@@ -2758,7 +2758,7 @@
           -0.5
         ],
         "icon-size": 1,
-        "icon-image": "mountain-11",
+        "icon-image": "berg-klein",
         "text-anchor": "bottom",
         "text-field": "{name:latin} {name:nonlatin}\n{ele} m",
         "text-max-width": {

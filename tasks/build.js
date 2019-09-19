@@ -12,6 +12,7 @@ const buble = require("rollup-plugin-buble");
 const { terser } = require("rollup-plugin-terser");
 const resolve = require("rollup-plugin-node-resolve");
 const commonjs = require("rollup-plugin-commonjs");
+const json = require("rollup-plugin-json");
 
 const stylesDir = `${__dirname}/../styles_src/`;
 const scriptsDir = `${__dirname}/../scripts_src/`;
@@ -108,7 +109,8 @@ async function buildScripts() {
         // }),
         // terser(),
         resolve({ browser: true }),
-        commonjs()
+        commonjs(),
+        json({ namedExports: false })
       ]
     };
     const outputOptions = {

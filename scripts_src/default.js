@@ -1,5 +1,6 @@
 import mapboxgl from "mapbox-gl";
 import MinimapControl from "./minimap.js";
+import Sprites from "../resources/sprites/sprites@1x.json";
 export default class LocatorMap {
   constructor(element, data = {}) {
     if (element) {
@@ -37,92 +38,94 @@ export default class LocatorMap {
     };
   }
 
+  getPositionProperties(labelPosition, type) {
+    if (Sprites[type] || type === "event") {
+      if (type === "event") {
+        type = `arrow-${labelPosition}`;
+      }
+      const padding = 2;
+      const translateVertical = Sprites[type].height / 2 + padding;
+      const translateHorizontal = Sprites[type].width / 2 + 2 * padding;
+      const properties = {
+        textAnchor: "bottom",
+        textJustify: "center",
+        textTranslate: [0, -translateVertical]
+      };
+      if (labelPosition === "bottom") {
+        properties.textAnchor = "top";
+        properties.textTranslate = [0, translateVertical];
+      } else if (labelPosition === "left") {
+        properties.textAnchor = "right";
+        properties.textTranslate = [-translateHorizontal, 0];
+        properties.textJustify = "right";
+      } else if (labelPosition === "right") {
+        properties.textAnchor = "left";
+        properties.textTranslate = [translateHorizontal, 0];
+        properties.textJustify = "left";
+      } else if (labelPosition === "topleft") {
+        properties.textAnchor = "bottom-right";
+        properties.textTranslate = [
+          -translateHorizontal / 1.4,
+          -translateVertical / 1.4
+        ];
+        properties.textJustify = "right";
+      } else if (labelPosition === "topright") {
+        properties.textAnchor = "bottom-left";
+        properties.textTranslate = [
+          translateHorizontal / 1.4,
+          -translateVertical / 1.4
+        ];
+        properties.textJustify = "left";
+      } else if (labelPosition === "bottomleft") {
+        properties.textAnchor = "top-right";
+        properties.textTranslate = [
+          -translateHorizontal / 1.4,
+          translateVertical / 1.4
+        ];
+        properties.textJustify = "right";
+      } else if (labelPosition === "bottomright") {
+        properties.textAnchor = "top-left";
+        properties.textTranslate = [
+          translateHorizontal / 1.4,
+          translateVertical / 1.4
+        ];
+        properties.textJustify = "left";
+      }
+      return properties;
+    } else {
+      return {
+        textAnchor: "center",
+        textJustify: "center",
+        textTranslate: [0, 0]
+      };
+    }
+  }
+
   getPointStyleProperties(geojsonProperties) {
-    const verticalOffset = 0.6;
-    const horizontalOffset = 0.8;
+    const positionProperties = this.getPositionProperties(
+      geojsonProperties.labelPosition,
+      geojsonProperties.type
+    );
     const properties = {
+      textAnchor: positionProperties.textAnchor,
+      textTranslate: positionProperties.textTranslate,
+      textJustify: positionProperties.textJustify,
       textField: "{label}",
-      textAnchor: "bottom",
-      textJustify: "center",
-      textOffset: [0, -verticalOffset],
       textSize: 14,
+      textLineHeight: 1.2,
       textColor: "#05032d",
       textHaloColor: "#ffffff",
       textHaloWidth: 2,
       textFont: ["GT America Standard Medium"],
-      iconImage: "point-10",
+      iconImage: geojsonProperties.type,
       iconSize: 1
     };
 
-    if (geojsonProperties.labelPosition === "top") {
-      if (geojsonProperties.type === "event") {
-        properties.textField = "{label} \n \u2193";
-      }
-    } else if (geojsonProperties.labelPosition === "bottom") {
-      properties.textAnchor = "top";
-      properties.textOffset = [0, verticalOffset];
-      if (geojsonProperties.type === "event") {
-        properties.textField = "\u2191 \n {label}";
-      }
-    } else if (geojsonProperties.labelPosition === "left") {
-      properties.textAnchor = "right";
-      properties.textOffset = [-horizontalOffset, 0];
-      properties.textJustify = "right";
-      if (geojsonProperties.type === "event") {
-        properties.textField = "{label} \u2192";
-      }
-    } else if (geojsonProperties.labelPosition === "right") {
-      properties.textAnchor = "left";
-      properties.textOffset = [horizontalOffset, 0];
-      properties.textJustify = "left";
-      if (geojsonProperties.type === "event") {
-        properties.textField = "\u2190 {label}";
-      }
-    } else if (geojsonProperties.labelPosition === "topleft") {
-      properties.textAnchor = "bottom-right";
-      properties.textOffset = [-horizontalOffset / 2, -verticalOffset / 2];
-      properties.textJustify = "right";
-      if (geojsonProperties.type === "event") {
-        properties.textField = "{label} \n \u2198";
-      }
-    } else if (geojsonProperties.labelPosition === "topright") {
-      properties.textAnchor = "bottom-left";
-      properties.textOffset = [horizontalOffset / 2, -verticalOffset / 2];
-      properties.textJustify = "left";
-      if (geojsonProperties.type === "event") {
-        properties.textField = "{label} \n \u2199";
-      }
-    } else if (geojsonProperties.labelPosition === "bottomleft") {
-      properties.textAnchor = "top-right";
-      properties.textOffset = [-horizontalOffset / 2, verticalOffset / 2];
-      properties.textJustify = "right";
-      if (geojsonProperties.type === "event") {
-        properties.textField = "{label} \u2197";
-      }
-    } else if (geojsonProperties.labelPosition === "bottomright") {
-      properties.textAnchor = "top-left";
-      properties.textOffset = [horizontalOffset / 2, verticalOffset / 2];
-      properties.textJustify = "left";
-      if (geojsonProperties.type === "event") {
-        properties.textField = "\u2196 {label}";
-      }
-    }
-
-    if (geojsonProperties.type === "pointLightLabel") {
-      properties.textSize = 12;
-      properties.iconSize = 0.9;
-    } else if (geojsonProperties.type === "pointOnly") {
-      properties.textField = "";
-    } else if (geojsonProperties.type === "label") {
+    if (geojsonProperties.type === "label") {
       properties.iconImage = "";
-      properties.textAnchor = "center";
-      properties.textOffset = [0, 0];
-      properties.textJustify = "center";
       properties.textFont = ["GT America Standard Light"];
-    } else if (geojsonProperties.type === "epicenter") {
-      properties.iconImage = "epicenter-42";
-      properties.textField = "";
-      properties.iconSize = 1;
+    } else if (geojsonProperties.type === "event") {
+      properties.iconImage = `arrow-${geojsonProperties.labelPosition}`;
     }
 
     return properties;
@@ -246,14 +249,15 @@ export default class LocatorMap {
         layout: {
           "text-field": properties.textField,
           "text-size": properties.textSize,
+          "text-line-height": properties.textLineHeight,
           "text-font": properties.textFont,
           "text-anchor": properties.textAnchor,
           "text-justify": properties.textJustify,
-          "text-offset": properties.textOffset,
           "icon-image": properties.iconImage,
           "icon-size": properties.iconSize
         },
         paint: {
+          "text-translate": properties.textTranslate,
           "text-color": properties.textColor,
           "text-halo-color": properties.textHaloColor,
           "text-halo-width": properties.textHaloWidth
