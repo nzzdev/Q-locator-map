@@ -222,6 +222,27 @@
             }
           }
         },
+        "labelsBelowMap": {
+          "title": "Beschriftungen unter der Karte anzeigen",
+          "type": "boolean",
+          "default": false
+        },
+        "labelsBelowMapOneRow": {
+          "title": "Beschriftungen unter der Karte ohne Zeilenumbruch",
+          "type": "boolean",
+          "default": false,
+          "Q:options": {
+            "availabilityChecks": [
+              {
+                "type": "ToolEndpoint",
+                "config": {
+                  "endpoint": "option-availability/labelsBelowMapOneRow",
+                  "fields": ["options.labelsBelowMap", "geojsonList"]
+                }
+              }
+            ]
+          }
+        },
         "showLegend": {
           "title": "Legende anzeigen",
           "type": "boolean",
@@ -284,7 +305,6 @@
                 "point-prominent",
                 "point-outline",
                 "point-outline-prominent",
-                "number",
                 "label",
                 "event",
                 "airplane",

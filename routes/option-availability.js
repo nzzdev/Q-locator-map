@@ -1,6 +1,14 @@
 const Boom = require("@hapi/boom");
 const Joi = require("@hapi/joi");
 
+function hasLabelsBelowMap(item) {
+  return item.options.labelsBelowMap === true;
+}
+
+function hasMoreThanOneLabel(item) {
+  return Array.isArray(item.geojsonList) && item.geojsonList.length > 1;
+}
+
 module.exports = {
   method: "POST",
   path: "/option-availability/{optionName}",
@@ -12,6 +20,12 @@ module.exports = {
   },
   handler: function(request, h) {
     const item = request.payload.item;
+
+    if (request.params.optionName === "labelsBelowMapOneRow") {
+      return {
+        available: hasLabelsBelowMap(item) && hasMoreThanOneLabel(item)
+      };
+    }
     if (request.params.optionName === "minimap-options") {
       return {
         available: item.options.minimap.showMinimap

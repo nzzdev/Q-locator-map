@@ -38,52 +38,59 @@ export default class LocatorMap {
     };
   }
 
-  getPositionProperties(labelPosition, type) {
-    if (Sprites[type] || type === "event") {
-      if (type === "event") {
-        type = `arrow-${labelPosition}`;
+  getPositionProperties(geojsonProperties) {
+    if (
+      Sprites[geojsonProperties.type] ||
+      ["event", "number"].includes(geojsonProperties.type)
+    ) {
+      if (geojsonProperties.type === "event") {
+        geojsonProperties.type = `arrow-${geojsonProperties.labelPosition}`;
+      } else if (geojsonProperties.type === "number") {
+        geojsonProperties.type = `number-${geojsonProperties.index}`;
       }
       const padding = 2;
-      const translateVertical = Sprites[type].height / 2 + padding;
-      const translateHorizontal = Sprites[type].width / 2 + 2 * padding;
+      const translateVertical =
+        Sprites[geojsonProperties.type].height / 2 + padding;
+      const translateHorizontal =
+        Sprites[geojsonProperties.type].width / 2 + 2 * padding;
       const properties = {
         textAnchor: "bottom",
         textJustify: "center",
         textTranslate: [0, -translateVertical]
       };
-      if (labelPosition === "bottom") {
+      if (geojsonProperties.labelPosition === "bottom") {
         properties.textAnchor = "top";
         properties.textTranslate = [0, translateVertical];
-      } else if (labelPosition === "left") {
+      } else if (geojsonProperties.labelPosition === "left") {
         properties.textAnchor = "right";
         properties.textTranslate = [-translateHorizontal, 0];
         properties.textJustify = "right";
-      } else if (labelPosition === "right") {
+      } else if (geojsonProperties.labelPosition === "right") {
         properties.textAnchor = "left";
         properties.textTranslate = [translateHorizontal, 0];
         properties.textJustify = "left";
-      } else if (labelPosition === "topleft") {
+      } else if (geojsonProperties.labelPosition === "topleft") {
         properties.textAnchor = "bottom-right";
         properties.textTranslate = [
           -translateHorizontal / 1.4,
           -translateVertical / 1.4
         ];
         properties.textJustify = "right";
-      } else if (labelPosition === "topright") {
+      } else if (geojsonProperties.labelPosition === "topright") {
         properties.textAnchor = "bottom-left";
         properties.textTranslate = [
           translateHorizontal / 1.4,
           -translateVertical / 1.4
         ];
         properties.textJustify = "left";
-      } else if (labelPosition === "bottomleft") {
+      } else if (geojsonProperties.labelPosition === "bottomleft") {
         properties.textAnchor = "top-right";
         properties.textTranslate = [
           -translateHorizontal / 1.4,
           translateVertical / 1.4
         ];
         properties.textJustify = "right";
-      } else if (labelPosition === "bottomright") {
+      } else if (geojsonProperties.labelPosition === "bottomright") {
         properties.textAnchor = "top-left";
         properties.textTranslate = [
           translateHorizontal / 1.4,
@@ -102,10 +109,7 @@ export default class LocatorMap {
   }
 
   getPointStyleProperties(geojsonProperties) {
-    const positionProperties = this.getPositionProperties(
-      geojsonProperties.labelPosition,
-      geojsonProperties.type
-    );
+    const positionProperties = this.getPositionProperties(geojsonProperties);
     const properties = {
       textAnchor: positionProperties.textAnchor,
       textTranslate: positionProperties.textTranslate,
@@ -121,7 +125,9 @@ export default class LocatorMap {
       iconSize: 1
     };
 
-    if (geojsonProperties.type === "label") {
+    if (geojsonProperties.type.includes("number")) {
+      properties.textField = "";
+    } else if (geojsonProperties.type === "label") {
       properties.iconImage = "";
       properties.textFont = ["GT America Standard Light"];
     } else if (geojsonProperties.type === "event") {
@@ -238,6 +244,10 @@ export default class LocatorMap {
     }
 
     for (const [i, geojson] of this.data.mapConfig.features.points.entries()) {
+      if (this.data.options.labelsBelowMap) {
+        geojson.properties.type = "number";
+        geojson.properties.index = i + 1;
+      }
       const properties = this.getPointStyleProperties(geojson.properties);
       this.map.addLayer({
         id: `point-${i}`,
