@@ -8,6 +8,7 @@
       "tileSize": 256
     }
   },
+  "sprite": "${toolBaseUrl}/sprites/sprites",
   "glyphs": "${toolBaseUrl}/fonts/{fontstack}/{range}.pbf",
   "layers": [
     {
