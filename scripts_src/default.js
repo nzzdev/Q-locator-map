@@ -313,7 +313,12 @@ export default class LocatorMap {
         });
     }
 
-    this.map.addControl(new mapboxgl.AttributionControl(), attributionPosition);
+    if (this.data.options.baseLayer.style !== "satellite") {
+      this.map.addControl(
+        new mapboxgl.AttributionControl(),
+        attributionPosition
+      );
+    }
   }
 
   preventLabelsAroundViewport() {
