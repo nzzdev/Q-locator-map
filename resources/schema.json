@@ -145,18 +145,8 @@
                   "default": "globe"
                 },
                 "region": {
-                  "title": "Region",
-                  "type": "string",
-                  "default": "",
+                  "type": "object",
                   "Q:options": {
-                    "selectType": "select",
-                    "dynamicSchema": {
-                      "type": "ToolEndpoint",
-                      "config": {
-                        "endpoint": "dynamic-schema/region",
-                        "fields": ["geojsonList"]
-                      }
-                    },
                     "availabilityChecks": [
                       {
                         "type": "ToolEndpoint",
@@ -166,6 +156,26 @@
                         }
                       }
                     ]
+                  },
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "default": "",
+                      "Q:options": {
+                        "selectType": "select",
+                        "dynamicSchema": {
+                          "type": "ToolEndpoint",
+                          "config": {
+                            "endpoint": "dynamic-schema/region",
+                            "fields": ["geojsonList"]
+                          }
+                        }
+                      }
+                    },
+                    "label": {
+                      "title": "Beschriftung",
+                      "type": "string"
+                    }
                   }
                 },
                 "position": {

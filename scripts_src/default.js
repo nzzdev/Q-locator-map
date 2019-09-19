@@ -283,8 +283,8 @@ export default class LocatorMap {
       minimap.showMinimap &&
       (minimap.options.type === "globe" ||
         (minimap.options.type === "region" &&
-          minimap.options.region &&
-          minimap.options.region !== ""))
+          minimap.options.region.id &&
+          minimap.options.region.id !== ""))
     ) {
       if (minimap.options.position === "bottom-right") {
         attributionPosition = "bottom-left";
@@ -297,8 +297,11 @@ export default class LocatorMap {
         bounds[1][1]
       ]);
       let url = `${this.data.toolBaseUrl}/minimap/${minimap.options.type}?bounds=${bounds}&toolBaseUrl=${this.data.toolBaseUrl}`;
-      if (minimap.options.region && minimap.options.region !== "") {
-        url = `${url}&region=${minimap.options.region}`;
+      if (minimap.options.region.id && minimap.options.region.id !== "") {
+        url = `${url}&regionId=${minimap.options.region.id}`;
+      }
+      if (minimap.options.region.label && minimap.options.region.label !== "") {
+        url = `${url}&regionLabel=${minimap.options.region.label}`;
       }
       fetch(url)
         .then(response => {

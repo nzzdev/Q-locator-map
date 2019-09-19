@@ -39,7 +39,7 @@ const bboxMark = {
 
 async function getGlobeVegaSpec(options) {
   const spec = JSON.parse(JSON.stringify(minimapGlobeVegaSpec));
-  const geoDataUrl = `${options.toolBaseUrl}/geodata/${options.region}.geojson`;
+  const geoDataUrl = `${options.toolBaseUrl}/geodata/${options.region.id}.geojson`;
   let bboxFeature = turf.rewind(turf.bboxPolygon(options.bounds), {
     reverse: true
   });
@@ -112,7 +112,7 @@ function getDimensions(bbox) {
 
 async function getRegionVegaSpec(options) {
   const spec = JSON.parse(JSON.stringify(minimapRegionVegaSpec));
-  const geoDataUrl = `${options.toolBaseUrl}/geodata/${options.region}.geojson`;
+  const geoDataUrl = `${options.toolBaseUrl}/geodata/${options.region.id}.geojson`;
   let bboxFeature = turf.bboxPolygon(options.bounds);
 
   const response = await fetch(geoDataUrl);
@@ -151,7 +151,10 @@ async function getRegionVegaSpec(options) {
       value: center[1] * -1
     });
 
-    const label = region.properties.name_de ? region.properties.name_de : "";
+    let label = region.properties.name_de ? region.properties.name_de : "";
+    if (options.region.label && options.region.label !== "") {
+      label = options.region.label;
+    }
     spec.signals.push({
       name: "label",
       value: label
@@ -180,7 +183,7 @@ async function getMinimap(options) {
   if (options.type === "region") {
     spec = await getRegionVegaSpec(options);
   } else {
-    options.region = "Q11081619";
+    options.region.id = "Q11081619";
     spec = await getGlobeVegaSpec(options);
   }
 

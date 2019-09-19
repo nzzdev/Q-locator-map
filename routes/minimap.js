@@ -17,7 +17,8 @@ module.exports = {
           .length(4)
           .items(Joi.number()),
         toolBaseUrl: Joi.string().required(),
-        region: Joi.string().optional()
+        regionId: Joi.string().optional(),
+        regionLabel: Joi.string().optional()
       }
     }
   },
@@ -26,11 +27,13 @@ module.exports = {
       const options = {
         type: request.params.type,
         bounds: request.query.bounds,
-        toolBaseUrl: request.query.toolBaseUrl
+        toolBaseUrl: request.query.toolBaseUrl,
+        region: {}
       };
 
       if (options.type === "region") {
-        options.region = request.query.region;
+        options.region.id = request.query.regionId;
+        options.region.label = request.query.regionLabel;
       }
 
       const markup = await minimapHelpers.getMinimap(options);
