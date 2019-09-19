@@ -83,7 +83,34 @@ async function getGlobeVegaSpec(options) {
   return spec;
 }
 
-async function getRegionVegaSpec(options, height) {
+function getDimensions(bbox) {
+  const minX = bbox[0];
+  const minY = bbox[1];
+  const maxX = bbox[2];
+  const maxY = bbox[3];
+  const distanceX = turf.distance([minX, minY], [maxX, minY]);
+  const distanceY = turf.distance([maxX, minY], [maxX, maxY]);
+  let aspectRatio = 1;
+  const defaultDimension = 120;
+  let width;
+  let height;
+  if (distanceX > distanceY) {
+    aspectRatio = distanceY / distanceX;
+    width = defaultDimension;
+    height = defaultDimension * aspectRatio;
+  } else if (distanceX < distanceY) {
+    aspectRatio = distanceX / distanceY;
+    width = defaultDimension * aspectRatio;
+    height = defaultDimension;
+  }
+
+  return {
+    width: width,
+    height: height
+  };
+}
+
+async function getRegionVegaSpec(options) {
   const spec = JSON.parse(JSON.stringify(minimapRegionVegaSpec));
   const geoDataUrl = `${options.toolBaseUrl}/geodata/${options.region}.geojson`;
   let bboxFeature = turf.bboxPolygon(options.bounds);
@@ -100,10 +127,16 @@ async function getRegionVegaSpec(options, height) {
       spec.marks.push(bboxMark);
     }
     const bbox = turf.bbox(region);
+    const dimensions = getDimensions(bbox);
+    spec.width = dimensions.width;
+    spec.height = dimensions.height;
     const distance = turf.distance([bbox[0], bbox[1]], [bbox[2], bbox[3]], {
       units: "radians"
     });
-    const scaleFactor = height / distance;
+    let scaleFactor = spec.height / distance;
+    if (spec.width > spec.height) {
+      scaleFactor = spec.width / distance;
+    }
 
     spec.signals.push({
       name: "scaleFactor",
@@ -143,20 +176,21 @@ async function getRegionVegaSpec(options, height) {
 }
 
 async function getMinimap(options) {
-  let height = 90;
-  let width = 90;
-
   let spec;
   if (options.type === "region") {
-    height = 120;
-    width = 120;
-    spec = await getRegionVegaSpec(options, height);
+    spec = await getRegionVegaSpec(options);
   } else {
     options.region = "Q11081619";
     spec = await getGlobeVegaSpec(options);
   }
-  spec.height = height;
-  spec.width = width;
+
+  if (!spec.height) {
+    spec.height = 90;
+  }
+  if (!spec.width) {
+    spec.width = 90;
+  }
+
   const view = new vega.View(vega.parse(spec)).renderer("none").initialize();
   view.logLevel(vega.Warn);
   let svg = await view.toSVG();

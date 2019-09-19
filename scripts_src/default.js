@@ -296,7 +296,10 @@ export default class LocatorMap {
         bounds[1][0],
         bounds[1][1]
       ]);
-      const url = `${this.data.toolBaseUrl}/minimap/${minimap.options.type}?region=${minimap.options.region}&bounds=${bounds}&toolBaseUrl=${this.data.toolBaseUrl}`;
+      let url = `${this.data.toolBaseUrl}/minimap/${minimap.options.type}?bounds=${bounds}&toolBaseUrl=${this.data.toolBaseUrl}`;
+      if (minimap.options.region && minimap.options.region !== "") {
+        url = `${url}&region=${minimap.options.region}`;
+      }
       fetch(url)
         .then(response => {
           if (response.ok) {

@@ -17,18 +17,23 @@ module.exports = {
           .length(4)
           .items(Joi.number()),
         toolBaseUrl: Joi.string().required(),
-        region: Joi.string().required()
+        region: Joi.string().optional()
       }
     }
   },
   handler: async function(request, h) {
     try {
-      const markup = await minimapHelpers.getMinimap({
+      const options = {
         type: request.params.type,
         bounds: request.query.bounds,
-        toolBaseUrl: request.query.toolBaseUrl,
-        region: request.query.region
-      });
+        toolBaseUrl: request.query.toolBaseUrl
+      };
+
+      if (options.type === "region") {
+        options.region = request.query.region;
+      }
+
+      const markup = await minimapHelpers.getMinimap(options);
 
       return h
         .response({
