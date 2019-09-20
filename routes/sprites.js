@@ -31,7 +31,7 @@ module.exports = {
 
       return h
         .file(spritePath)
-        .header("cache-control", `max-age=${60 * 60 * 24 * 365}, immutable`);
+        .header("cache-control", `max-age=${60 * 60 * 24 * 2}, immutable`);
     } catch (error) {
       return Boom.notFound();
     }

@@ -10,9 +10,11 @@
   margin: 0;
 }
 
-.q-locator-map-footer__marker-labels__label {
-  margin-bottom: 3px;
+.q-locator-map-footer__marker-labels {
+  margin-top: 8px;
+}
 
+.q-locator-map-footer__marker-labels__label {
   .q-locator-map-code-point {
     font-family: sans-serif;
     padding-right: 4px;
@@ -22,11 +24,11 @@
 .q-locator-map-footer__marker-labels--one-row {
   display: flex;
   flex-wrap: wrap;
-  margin-left: -10px;
+  margin-left: -8px;
   align-content: center;
 
   .q-locator-map-footer__marker-labels__label {
     white-space: nowrap;
-    padding-left: 10px;
+    padding-left: 8px;
   }
 }
