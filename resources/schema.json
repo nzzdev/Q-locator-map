@@ -214,7 +214,7 @@
           "items": {
             "type": "object",
             "properties": {
-              "region": {
+              "id": {
                 "title": "Region",
                 "type": "string",
                 "default": "",

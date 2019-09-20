@@ -57,7 +57,7 @@ function getStyleFilteredByLayer(style, item) {
 
 function getStyleWithHighlightedRegion(style, item, toolBaseUrl) {
   const highlightRegions = Array.from(
-    new Set(item.options.highlightRegion.map(region => region.region.id))
+    new Set(item.options.highlightRegion.map(region => region.id))
   );
   for (let highlightRegion of highlightRegions) {
     style.sources[`geodata-${highlightRegion}`] = {
