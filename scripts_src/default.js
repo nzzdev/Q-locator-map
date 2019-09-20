@@ -140,17 +140,14 @@ export default class LocatorMap {
   addFeatures() {
     const defaultGeojsonStyles = this.getDefaultGeojsonStyles();
     const style = this.map.getStyle();
-    const allSymbolIndices = style.layers.reduce((ascending, layer, index) => {
+    const allSymbolIndices = style.layers.reduce((ascending, layer) => {
       if (layer.type === "symbol") {
         ascending.push(layer.id);
       }
       return ascending;
     }, []);
     const layerId = allSymbolIndices[1] || style.layers.pop().id;
-    for (const [
-      i,
-      geojson
-    ] of this.data.mapConfig.features.polygons.entries()) {
+    this.data.mapConfig.features.polygons.forEach((geojson, i) => {
       this.map.addLayer(
         {
           id: `polygon-${i}`,
@@ -203,12 +200,9 @@ export default class LocatorMap {
         },
         layerId
       );
-    }
+    });
 
-    for (const [
-      i,
-      geojson
-    ] of this.data.mapConfig.features.linestrings.entries()) {
+    this.data.mapConfig.features.linestrings.forEach((geojson, i) => {
       this.map.addLayer(
         {
           id: `linestring-${i}`,
@@ -241,9 +235,9 @@ export default class LocatorMap {
         },
         layerId
       );
-    }
+    });
 
-    for (const [i, geojson] of this.data.mapConfig.features.points.entries()) {
+    this.data.mapConfig.features.points.forEach((geojson, i) => {
       if (this.data.options.labelsBelowMap) {
         geojson.properties.type = "number";
         geojson.properties.index = i + 1;
@@ -273,7 +267,7 @@ export default class LocatorMap {
           "text-halo-width": properties.textHaloWidth
         }
       });
-    }
+    });
   }
 
   addControls() {
