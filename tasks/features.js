@@ -258,6 +258,19 @@ const points = {
       labelPosition: "bottom",
       useForInitialView: true
     }
+  },
+  bernEpicenter: {
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: [7.4514512, 46.9482713]
+    },
+    properties: {
+      label: "Budapest",
+      type: "epicenter",
+      labelPosition: "top",
+      useForInitialView: true
+    }
   }
 };
 

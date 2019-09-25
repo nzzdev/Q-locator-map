@@ -11,14 +11,15 @@ const tilesHelpers = require("./tiles.js");
 async function getMapConfig(item, toolRuntimeConfig, qId) {
   const mapConfig = {};
   let geojsonList = item.geojsonList;
+
   if (item.options.baseLayer.bbox && item.options.baseLayer.bbox.length === 4) {
     mapConfig.bbox = item.options.baseLayer.bbox;
     const bottomLeft = [mapConfig.bbox[0], mapConfig.bbox[1]];
     const bottomRight = [mapConfig.bbox[2], mapConfig.bbox[1]];
-    const topRight = [mapConfig.bbox[2], mapConfig.bbox[3]];
-    mapConfig.aspectRatio =
-      turf.distance(bottomRight, topRight) /
-      turf.distance(bottomRight, bottomLeft);
+    const topLeft = [mapConfig.bbox[0], mapConfig.bbox[3]];
+    const width = turf.distance(bottomLeft, topLeft);
+    const height = turf.distance(bottomLeft, bottomRight);
+    mapConfig.aspectRatio = width / height;
   } else if (
     geojsonList.length === 1 &&
     geojsonList[0].type === "Feature" &&
@@ -32,6 +33,10 @@ async function getMapConfig(item, toolRuntimeConfig, qId) {
       return turf.bboxPolygon(turf.bbox(geojson));
     });
     mapConfig.bounds = turf.bbox(turf.featureCollection(bboxPolygons));
+  }
+
+  if (item.options.initialZoomLevel >= 1) {
+    mapConfig.zoom = item.options.initialZoomLevel;
   }
 
   mapConfig.features = getFeatures(geojsonList);

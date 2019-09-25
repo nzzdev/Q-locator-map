@@ -146,7 +146,7 @@ export default class LocatorMap {
       }
       return ascending;
     }, []);
-    const layerId = allSymbolIndices[1] || style.layers.pop().id;
+    const layerId = allSymbolIndices[1];
     this.data.mapConfig.features.polygons.forEach((geojson, i) => {
       this.map.addLayer(
         {
@@ -257,6 +257,8 @@ export default class LocatorMap {
           "text-font": properties.textFont,
           "text-anchor": properties.textAnchor,
           "text-justify": properties.textJustify,
+          "text-allow-overlap": true,
+          "icon-allow-overlap": true,
           "icon-image": properties.iconImage,
           "icon-size": properties.iconSize
         },
@@ -277,6 +279,7 @@ export default class LocatorMap {
       minimap.showMinimap &&
       (minimap.options.type === "globe" ||
         (minimap.options.type === "region" &&
+          minimap.options.region &&
           minimap.options.region.id &&
           minimap.options.region.id !== ""))
     ) {
@@ -291,10 +294,18 @@ export default class LocatorMap {
         bounds[1][1]
       ]);
       let url = `${this.data.toolBaseUrl}/minimap/${minimap.options.type}?bounds=${bounds}&toolBaseUrl=${this.data.toolBaseUrl}`;
-      if (minimap.options.region.id && minimap.options.region.id !== "") {
+      if (
+        minimap.options.region &&
+        minimap.options.region.id &&
+        minimap.options.region.id !== ""
+      ) {
         url = `${url}&regionId=${minimap.options.region.id}`;
       }
-      if (minimap.options.region.label && minimap.options.region.label !== "") {
+      if (
+        minimap.options.region &&
+        minimap.options.region.label &&
+        minimap.options.region.label !== ""
+      ) {
         url = `${url}&regionLabel=${minimap.options.region.label}`;
       }
       fetch(url)
@@ -385,6 +396,9 @@ export default class LocatorMap {
     if (this.width < 560) {
       this.options.fitBoundsOptions.padding = 30;
     }
+    if (this.data.mapConfig.zoom) {
+      this.options.fitBoundsOptions.maxZoom = this.data.mapConfig.zoom;
+    }
     if (this.data.mapConfig.bbox) {
       this.options.bounds = new mapboxgl.LngLatBounds(this.data.mapConfig.bbox);
     } else if (this.data.mapConfig.bounds) {
@@ -398,8 +412,8 @@ export default class LocatorMap {
 
     this.map = new mapboxgl.Map(this.options);
     this.map.on("load", () => {
-      this.addFeatures();
       this.preventLabelsAroundViewport();
+      this.addFeatures();
       this.addControls();
       this.element.parentNode.style.opacity = "1";
       this.onDetached();
