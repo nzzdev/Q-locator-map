@@ -1,4 +1,14 @@
-const Hapi = require("hapi");
+const Hapi = require("@hapi/hapi");
+const NodeGeocoder = require("node-geocoder");
+const helpers = require("./helpers/helpers.js");
+const tileHelpers = require("./helpers/tiles.js");
+const geodataHelpers = require("./plugins/geodata/helpers.js");
+
+const serverMethodCacheOptions = {
+  expiresIn: 365 * 24 * 60 * 60 * 1000,
+  cache: "memoryCache",
+  generateTimeout: 2 * 1000
+};
 
 const server = Hapi.server({
   port: process.env.PORT || 3000,
@@ -7,13 +17,92 @@ const server = Hapi.server({
   }
 });
 
+const plugins = [
+  {
+    plugin: require("./plugins/geodata/index.js")
+  }
+];
 const routes = require("./routes/routes.js");
 
 async function init() {
-  await server.register(require("inert"));
-  server.route(routes);
-  await server.start();
-  console.log("server running ", server.info.uri);
+  try {
+    server.app.geocoder = NodeGeocoder({
+      provider: "opencage",
+      apiKey: process.env.OPENCAGE_APIKEY
+    });
+
+    server.cache.provision({
+      provider: {
+        constructor: require("@hapi/catbox-memory"),
+        options: {
+          partition: "memoryCache",
+          maxByteSize: 1000000000 // ~ 1GB
+        }
+      },
+      name: "memoryCache"
+    });
+    const tilesets = JSON.parse(process.env.TILESETS);
+    for (let [key, value] of Object.entries(tilesets)) {
+      if (value.path) {
+        server.app.tilesets = server.app.tilesets || {};
+        server.app.tilesets[key] = await tileHelpers.getTileset(value.path);
+      }
+    }
+
+    server.method("getTile", tileHelpers.getTile, {
+      bind: {
+        tilesets: server.app.tilesets
+      },
+      cache: serverMethodCacheOptions
+    });
+
+    server.method("getTilesetTile", tileHelpers.getTilesetTile, {
+      bind: {
+        helpers: helpers
+      },
+      generateKey: (item, qId, z, x, y) =>
+        `${qId}_${item.updatedDate}_${z}_${x}_${y}`,
+      cache: serverMethodCacheOptions
+    });
+
+    server.method("getRegionSuggestions", helpers.getRegionSuggestions, {
+      bind: {
+        server: server
+      },
+      generateKey: components => {
+        let key = "";
+        for (let component of components) {
+          key = `${key}_${component[0]}_${component[1]}`;
+        }
+        return key;
+      },
+      cache: serverMethodCacheOptions
+    });
+
+    server.method("getFont", helpers.getFont, {
+      cache: serverMethodCacheOptions
+    });
+
+    server.method("getGeodataGeojson", geodataHelpers.getGeodataGeojson, {
+      cache: serverMethodCacheOptions
+    });
+
+    server.method("getGeodataTile", geodataHelpers.getGeodataTile, {
+      bind: {
+        server: server
+      },
+      cache: serverMethodCacheOptions
+    });
+
+    await server.register(require("@hapi/inert"));
+    await server.register(plugins);
+    server.route(routes);
+
+    await server.start();
+    console.log("server running ", server.info.uri);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 async function gracefullyStop() {

@@ -1,8 +1,8 @@
 const fs = require("fs");
-const path = require("path");
 const crypto = require("crypto");
+const path = require("path");
 
-const sass = require("node-sass");
+const sass = require("sass");
 const postcss = require("postcss");
 const postcssImport = require("postcss-import");
 const autoprefixer = require("autoprefixer");
@@ -10,9 +10,13 @@ const cssnano = require("cssnano");
 const rollup = require("rollup");
 const buble = require("rollup-plugin-buble");
 const { terser } = require("rollup-plugin-terser");
+const resolve = require("rollup-plugin-node-resolve");
+const commonjs = require("rollup-plugin-commonjs");
+const json = require("rollup-plugin-json");
 
-const stylesDir = path.join(__dirname, "/../styles_src/");
-const scriptsDir = path.join(__dirname, "/../scripts_src/");
+const stylesDir = `${__dirname}/../styles_src/`;
+const scriptsDir = `${__dirname}/../scripts_src/`;
+const createFixtureData = require("./createFixtureData.js");
 
 function writeHashmap(hashmapPath, files, fileext) {
   const hashMap = {};
@@ -35,7 +39,7 @@ function writeHashmap(hashmapPath, files, fileext) {
 
 async function compileStylesheet(name) {
   return new Promise((resolve, reject) => {
-    const filePath = path.join(stylesDir, `${name}.scss`);
+    const filePath = `${stylesDir}${name}.scss`;
     fs.access(filePath, fs.constants.R_OK, err => {
       if (err) {
         reject(new Error(`stylesheet ${filePath} cannot be read`));
@@ -55,7 +59,7 @@ async function compileStylesheet(name) {
               .use(autoprefixer)
               .use(cssnano)
               .process(sassResult.css, {
-                from: path.join(stylesDir, `${name}.css`)
+                from: `${stylesDir}${name}.css`
               })
               .then(prefixedResult => {
                 if (prefixedResult.warnings().length > 0) {
@@ -97,12 +101,23 @@ async function buildScripts() {
     const filename = "default";
     const inputOptions = {
       input: `${scriptsDir}${filename}.js`,
-      plugins: [buble(), terser()]
+      plugins: [
+        json({ namedExports: false }),
+        buble({
+          transforms: {
+            dangerousForOf: true
+          }
+        }),
+        terser(),
+        resolve({ browser: true }),
+        commonjs()
+      ]
     };
     const outputOptions = {
       format: "iife",
       name: "window._q_locator_map.LocatorMap",
-      file: `scripts/${filename}.js`
+      file: `scripts/${filename}.js`,
+      sourcemap: false
     };
     // create the bundle and write it to disk
     const bundle = await rollup.rollup(inputOptions);
@@ -123,7 +138,16 @@ async function buildScripts() {
   }
 }
 
-Promise.all([buildScripts(), buildStyles()])
+function buildFixtures() {
+  for (let [key, value] of Object.entries(createFixtureData)) {
+    fs.writeFileSync(
+      path.join("resources/fixtures/data/", `${key}.json`),
+      JSON.stringify(value())
+    );
+  }
+}
+
+Promise.all([buildScripts(), buildStyles(), buildFixtures()])
   .then(res => {
     console.log("build complete");
   })

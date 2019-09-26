@@ -1,20 +1,22 @@
-const Boom = require("boom");
+const Boom = require("@hapi/boom");
 const fs = require("fs");
-const path = require("path");
 
-const stylesDir = path.join(__dirname, "/../../styles/");
-const styleHashMap = require(path.join(stylesDir, "hashMap.json"));
-const scriptsDir = `${__dirname}/../../scripts/`;
+const stylesDir = "../../styles/";
+const styleHashMap = require(`${stylesDir}hashMap.json`);
+const scriptsDir = "../../scripts/";
 const scriptHashMap = require(`${scriptsDir}/hashMap.json`);
 const viewsDir = `${__dirname}/../../views/`;
+const helpers = require("../../helpers/helpers.js");
+const defaultGeojsonStyles = require("../../helpers/styles.js").getDefaultGeojsonStyles();
 
-require("svelte/ssr/register");
-const template = require(`${viewsDir}/locator-map.html`);
+// setup svelte
+require("svelte/register");
+const staticTemplate = require(viewsDir + "LocatorMap.svelte").default;
 
 // POSTed item will be validated against given schema
 // hence we fetch the JSON schema...
 const schemaString = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "../../resources/", "schema.json"), {
+  fs.readFileSync(`${__dirname}/../../resources/schema.json`, {
     encoding: "utf-8"
   })
 );
@@ -40,7 +42,7 @@ async function validatePayload(payload, options, next) {
   if (typeof payload.toolRuntimeConfig !== "object") {
     return next(Boom.badRequest(), payload);
   }
-  await validateAgainstSchema(payload.item, options);
+  // await validateAgainstSchema(payload.item, options);
 }
 
 module.exports = {
@@ -55,41 +57,62 @@ module.exports = {
     }
   },
   handler: async function(request, h) {
-    const item = request.payload.item;
+    let item = request.payload.item;
+    // Send the item to the migration endpoint and overwrite it with
+    // the migrated version if it has changed
+    const response = await request.server.inject({
+      method: "POST",
+      url: "/migration",
+      payload: {
+        item: request.payload.item
+      }
+    });
+    if (response.statusCode === 200) {
+      item = response.result.item;
+    }
+
+    const toolRuntimeConfig = request.payload.toolRuntimeConfig;
     item.id = request.query._id;
 
     const context = {
       item: item,
-      displayOptions: request.payload.toolRuntimeConfig.displayOptions || {},
+      displayOptions: toolRuntimeConfig.displayOptions || {},
       id: `q_locator_map_${request.query._id}_${Math.floor(
         Math.random() * 100000
-      )}`.replace(/-/g, "")
+      )}`.replace(/-/g, ""),
+      mapConfig: await helpers.getMapConfig(
+        item,
+        toolRuntimeConfig,
+        request.query._id
+      ),
+      width: helpers.getExactPixelWidth(toolRuntimeConfig),
+      defaultGeojsonStyles: defaultGeojsonStyles
     };
 
     const renderingInfo = {
-      polyfills: ["Promise"],
+      polyfills: ["Promise", "Element.prototype.classList"],
       stylesheets: [
         {
           name: styleHashMap["default"]
-        },
-        {
-          url: "https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css"
         }
       ],
       scripts: [
         {
-          url: "https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js"
-        },
-        {
           name: scriptHashMap["default"]
         },
         {
-          content: `new window._q_locator_map.LocatorMap(${`${
+          content: `
+          new window._q_locator_map.LocatorMap(document.querySelector('#${
             context.id
-          }_container`})`
+          }_container'), ${JSON.stringify({
+            mapConfig: context.mapConfig,
+            options: context.item.options,
+            width: context.width,
+            toolBaseUrl: toolRuntimeConfig.toolBaseUrl
+          })})`
         }
       ],
-      markup: template.render(context).html
+      markup: staticTemplate.render(context).html
     };
 
     return renderingInfo;

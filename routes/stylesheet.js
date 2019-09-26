@@ -1,12 +1,10 @@
-const path = require("path");
-
 module.exports = {
   method: "GET",
   path: "/stylesheet/{filename}.{hash}.{extension}",
   options: {
     cors: true,
     files: {
-      relativeTo: path.join(__dirname, "/../styles/")
+      relativeTo: `${__dirname}/../styles/`
     }
   },
   handler: function(request, h) {

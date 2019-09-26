@@ -1,8 +1,34 @@
-.q-locator-map {
-  opacity: 1 !important;
-}
+@import "../node_modules/mapbox-gl/dist/mapbox-gl.css";
 
 .q-locator-map-container {
-  height: 500px;
   width: 100%;
+}
+
+.q-locator-map-minimap.mapboxgl-ctrl {
+  display: flex;
+  filter: drop-shadow(8px 8px 10px rgba(0, 0, 0, 0.2));
+  margin: 0;
+}
+
+.q-locator-map-footer__marker-labels {
+  margin-top: 8px;
+}
+
+.q-locator-map-footer__marker-labels__label {
+  .q-locator-map-code-point {
+    font-family: sans-serif;
+    padding-right: 4px;
+  }
+}
+
+.q-locator-map-footer__marker-labels--one-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -8px;
+  align-content: center;
+
+  .q-locator-map-footer__marker-labels__label {
+    white-space: nowrap;
+    padding-left: 8px;
+  }
 }

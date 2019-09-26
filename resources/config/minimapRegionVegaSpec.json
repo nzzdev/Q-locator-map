@@ -1,0 +1,60 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "autosize": "none",
+  "padding": 4,
+  "signals": [],
+  "data": [],
+
+  "projections": [
+    {
+      "name": "projection",
+      "scale": { "signal": "scaleFactor" },
+      "type": "azimuthalEqualArea",
+      "translate": { "signal": "[width/2, height/2]" },
+      "rotate": [{ "signal": "rotate0" }, { "signal": "rotate1" }, 0]
+    }
+  ],
+
+  "marks": [
+    {
+      "type": "shape",
+      "from": { "data": "region" },
+      "encode": {
+        "update": {
+          "fill": { "value": "white" },
+          "stroke": { "value": "#b6b6be" },
+          "strokeWidth": { "value": 0.5 }
+        }
+      },
+      "transform": [
+        {
+          "type": "geoshape",
+          "projection": "projection"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "encode": {
+        "enter": {
+          "fill": { "value": "#b6b6be" },
+          "text": { "signal": "label" }
+        },
+        "update": {
+          "opacity": { "value": 1 },
+          "x": { "signal": "width/2" },
+          "y": { "signal": "height/2" },
+          "align": { "value": "center" },
+          "baseline": { "value": "middle" },
+          "font": { "value": "nzz-sans-serif" },
+          "fontSize": { "value": 11 },
+          "fontWeight": { "value": 100 },
+          "limit": { "value": 0 }
+        },
+        "hover": {
+          "opacity": { "value": 0.5 }
+        }
+      }
+    }
+  ]
+}
