@@ -118,9 +118,10 @@ module.exports.migrate = function(item) {
         .map(geojson => {
           return turf.bboxPolygon(turf.bbox(geojson));
         });
-      item.options.baseLayer.bbox = turf.bbox(
-        turf.featureCollection(bboxPolygons)
-      );
+      item.options.dimension = {
+        bbox: turf.bbox(turf.featureCollection(bboxPolygons)),
+        useDefaultAspectRatio: true
+      };
     }
 
     result.isChanged = true;
@@ -160,8 +161,7 @@ module.exports.migrate = function(item) {
         style: style,
         layers: {
           label: label
-        },
-        bbox: []
+        }
       };
     }
     result.isChanged = true;

@@ -12,14 +12,16 @@ async function getMapConfig(item, toolRuntimeConfig, qId) {
   const mapConfig = {};
   let geojsonList = item.geojsonList;
 
-  if (item.options.baseLayer.bbox && item.options.baseLayer.bbox.length === 4) {
-    mapConfig.bbox = item.options.baseLayer.bbox;
-    const bottomLeft = [mapConfig.bbox[0], mapConfig.bbox[1]];
-    const bottomRight = [mapConfig.bbox[2], mapConfig.bbox[1]];
-    const topLeft = [mapConfig.bbox[0], mapConfig.bbox[3]];
-    const width = turf.distance(bottomLeft, topLeft);
-    const height = turf.distance(bottomLeft, bottomRight);
-    mapConfig.aspectRatio = width / height;
+  if (item.options.dimension.bbox && item.options.dimension.bbox.length === 4) {
+    mapConfig.bbox = item.options.dimension.bbox;
+    if (!item.options.dimension.useDefaultAspectRatio) {
+      const bottomLeft = [mapConfig.bbox[0], mapConfig.bbox[1]];
+      const bottomRight = [mapConfig.bbox[2], mapConfig.bbox[1]];
+      const topLeft = [mapConfig.bbox[0], mapConfig.bbox[3]];
+      const width = turf.distance(bottomLeft, topLeft);
+      const height = turf.distance(bottomLeft, bottomRight);
+      mapConfig.aspectRatio = width / height;
+    }
   } else if (
     geojsonList.length === 1 &&
     geojsonList[0].type === "Feature" &&

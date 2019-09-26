@@ -72,6 +72,42 @@
       "title": "Optionen",
       "type": "object",
       "properties": {
+        "dimension": {
+          "title": "Kartenbereich",
+          "type": "object",
+          "properties": {
+            "bbox": {
+              "title": "Kartenbereich definieren",
+              "Q:type": "bbox",
+              "Q:options": {
+                "openInDialog": {
+                  "buttonText": "Kartenbereich definieren"
+                }
+              },
+              "type": "array",
+              "maxItems": 4,
+              "items": {
+                "type": "number"
+              }
+            },
+            "useDefaultAspectRatio": {
+              "title": "Standard Kartenformat verwenden",
+              "type": "boolean",
+              "default": true,
+              "Q:options": {
+                "availabilityChecks": [
+                  {
+                    "type": "ToolEndpoint",
+                    "config": {
+                      "endpoint": "option-availability/useDefaultAspectRatio",
+                      "fields": ["options.dimension"]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
         "baseLayer": {
           "title": "Basiskarte",
           "type": "object",
@@ -93,20 +129,6 @@
                   "type": "boolean",
                   "default": true
                 }
-              }
-            },
-            "bbox": {
-              "title": "Kartenbereich definieren",
-              "Q:type": "bbox",
-              "Q:options": {
-                "openInDialog": {
-                  "buttonText": "Kartenbereich definieren"
-                }
-              },
-              "type": "array",
-              "maxItems": 4,
-              "items": {
-                "type": "number"
               }
             }
           },

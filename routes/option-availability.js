@@ -38,6 +38,15 @@ module.exports = {
       };
     }
 
+    if (request.params.optionName === "useDefaultAspectRatio") {
+      return {
+        available:
+          item.options.dimension &&
+          item.options.dimension.bbox &&
+          item.options.dimension.bbox.length === 4
+      };
+    }
+
     return Boom.badRequest();
   }
 };
