@@ -46,7 +46,9 @@
           "y": { "signal": "height/2" },
           "align": { "value": "center" },
           "baseline": { "value": "middle" },
-          "fontSize": { "value": 12 },
+          "font": { "value": "nzz-sans-serif" },
+          "fontSize": { "value": 11 },
+          "fontWeight": { "value": 100 },
           "limit": { "value": 0 }
         },
         "hover": {
