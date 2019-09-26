@@ -11,9 +11,19 @@ function createMapPoint() {
     acronym: "abc",
     geojsonList: [points.bucharestHeavyTop],
     options: {
-      baseLayer: "streets",
-      minimap: true,
-      minimapInitialZoomOffset: 0,
+      baseLayer: {
+        style: "basic",
+        layers: {
+          label: true
+        }
+      },
+      minimap: {
+        showMinimap: true,
+        options: {
+          type: "globe",
+          position: "bottom-right"
+        }
+      },
       labelsBelowMap: false,
       showLegend: true
     }
@@ -31,9 +41,19 @@ function createMapFeature() {
     acronym: "abc",
     geojsonList: [features.lineSofiaBucharest],
     options: {
-      baseLayer: "streetsNoLabels",
-      minimap: true,
-      minimapInitialZoomOffset: 0,
+      baseLayer: {
+        style: "basic",
+        layers: {
+          label: true
+        }
+      },
+      minimap: {
+        showMinimap: true,
+        options: {
+          type: "globe",
+          position: "bottom-right"
+        }
+      },
       labelsBelowMap: false,
       showLegend: true
     }
@@ -56,9 +76,19 @@ function createMapFeatureCollection() {
       }
     ],
     options: {
-      baseLayer: "streetsFewLabels",
-      minimap: true,
-      minimapInitialZoomOffset: 0,
+      baseLayer: {
+        style: "basic",
+        layers: {
+          label: true
+        }
+      },
+      minimap: {
+        showMinimap: true,
+        options: {
+          type: "globe",
+          position: "bottom-right"
+        }
+      },
       labelsBelowMap: false,
       showLegend: true
     }
@@ -76,9 +106,19 @@ function createMapPoints() {
     acronym: "abc",
     geojsonList: [],
     options: {
-      baseLayer: "terrain",
-      minimap: true,
-      minimapInitialZoomOffset: 0,
+      baseLayer: {
+        style: "nature",
+        layers: {
+          label: true
+        }
+      },
+      minimap: {
+        showMinimap: true,
+        options: {
+          type: "globe",
+          position: "bottom-right"
+        }
+      },
       labelsBelowMap: false,
       showLegend: true
     }
@@ -117,9 +157,19 @@ function createMapFeatures() {
     acronym: "abc",
     geojsonList: [],
     options: {
-      baseLayer: "terrainNoLabels",
-      minimap: true,
-      minimapInitialZoomOffset: 0,
+      baseLayer: {
+        style: "nature",
+        layers: {
+          label: false
+        }
+      },
+      minimap: {
+        showMinimap: true,
+        options: {
+          type: "globe",
+          position: "bottom-right"
+        }
+      },
       labelsBelowMap: false,
       showLegend: true
     }
@@ -149,9 +199,19 @@ function createMapFeatureCollections() {
       }
     ],
     options: {
-      baseLayer: "aerial",
-      minimap: true,
-      minimapInitialZoomOffset: 0,
+      baseLayer: {
+        style: "satellite",
+        layers: {
+          label: true
+        }
+      },
+      minimap: {
+        showMinimap: true,
+        options: {
+          type: "globe",
+          position: "bottom-right"
+        }
+      },
       labelsBelowMap: false,
       showLegend: true
     }
@@ -163,7 +223,13 @@ function createMapPointsNoMinimap() {
   const item = createMapPoints();
   item.title = "FIXTURE: map with 10 points and no minimap";
   item.subtitle = "subtitle";
-  item.options.minimap = false;
+  item.options.minimap = {
+    showMinimap: false,
+    options: {
+      type: "globe",
+      position: "bottom-right"
+    }
+  };
   return item;
 }
 
@@ -179,7 +245,12 @@ function createMapLayerStreetsFew() {
   const item = createMapPoint(); // change as it fits your needs to other feature(s)
   item.title = "FIXTURE: map with base layer streets with few labels";
   item.subtitle = "subtitle";
-  item.options.baseLayer = "streetsFewLabels";
+  item.options.baseLayer = {
+    style: "basic",
+    layers: {
+      label: true
+    }
+  };
   return item;
 }
 
@@ -187,7 +258,12 @@ function createMapLayerStreetsNo() {
   const item = createMapPoint(); // change as it fits your needs to other feature(s)
   item.title = "FIXTURE: map with base layer streets without labels";
   item.subtitle = "subtitle";
-  item.options.baseLayer = "streetsNoLabels";
+  item.options.baseLayer = {
+    style: "basic",
+    layers: {
+      label: true
+    }
+  };
   return item;
 }
 
@@ -195,15 +271,25 @@ function createMapLayerTerrain() {
   const item = createMapPoint(); // change as it fits your needs to other feature(s)
   item.title = "FIXTURE: map with base layer terrain";
   item.subtitle = "subtitle";
-  item.options.baseLayer = "terrain";
+  item.options.baseLayer = {
+    style: "basic",
+    layers: {
+      label: true
+    }
+  };
   return item;
 }
 
-function createMapLayerAerial() {
+function createMapLayerSatellite() {
   const item = createMapPoint(); // change as it fits your needs to other feature(s)
-  item.title = "FIXTURE: map with base layer aerial";
+  item.title = "FIXTURE: map with base layer satellite";
   item.subtitle = "subtitle";
-  item.options.baseLayer = "aerial";
+  item.options.baseLayer = {
+    style: "basic",
+    layers: {
+      label: true
+    }
+  };
   return item;
 }
 
@@ -222,9 +308,19 @@ function showAcronym() {
       }
     ],
     options: {
-      baseLayer: "streets",
-      minimap: true,
-      minimapInitialZoomOffset: 0,
+      baseLayer: {
+        style: "basic",
+        layers: {
+          label: true
+        }
+      },
+      minimap: {
+        showMinimap: true,
+        options: {
+          type: "globe",
+          position: "bottom-right"
+        }
+      },
       labelsBelowMap: false,
       showLegend: true
     }
@@ -242,9 +338,19 @@ function dontShowAcronym() {
     acronym: "abc",
     geojsonList: [points.bucharestHeavyTop],
     options: {
-      baseLayer: "streets",
-      minimap: true,
-      minimapInitialZoomOffset: 0,
+      baseLayer: {
+        style: "basic",
+        layers: {
+          label: true
+        }
+      },
+      minimap: {
+        showMinimap: true,
+        options: {
+          type: "globe",
+          position: "bottom-right"
+        }
+      },
       labelsBelowMap: false,
       showLegend: true
     }
@@ -262,9 +368,19 @@ function antimeridian() {
     acronym: "abc",
     geojsonList: [points.honoluluHeavyTop, points.tokioHeavyTop],
     options: {
-      baseLayer: "streets",
-      minimap: true,
-      minimapInitialZoomOffset: 0,
+      baseLayer: {
+        style: "basic",
+        layers: {
+          label: true
+        }
+      },
+      minimap: {
+        showMinimap: true,
+        options: {
+          type: "globe",
+          position: "bottom-right"
+        }
+      },
       labelsBelowMap: false,
       showLegend: true
     }
@@ -291,9 +407,19 @@ function labelPlacementTypePointHeavyLabel() {
       points.zurichHeavyBottomRight
     ],
     options: {
-      baseLayer: "streets",
-      minimap: false,
-      minimapInitialZoomOffset: 0,
+      baseLayer: {
+        style: "basic",
+        layers: {
+          label: true
+        }
+      },
+      minimap: {
+        showMinimap: false,
+        options: {
+          type: "globe",
+          position: "bottom-right"
+        }
+      },
       labelsBelowMap: false,
       showLegend: true
     }
@@ -323,9 +449,19 @@ function labelPlacementTypePointLightLabel() {
       return geojson;
     }),
     options: {
-      baseLayer: "streets",
-      minimap: false,
-      minimapInitialZoomOffset: 0,
+      baseLayer: {
+        style: "basic",
+        layers: {
+          label: true
+        }
+      },
+      minimap: {
+        showMinimap: false,
+        options: {
+          type: "globe",
+          position: "bottom-right"
+        }
+      },
       labelsBelowMap: false,
       showLegend: true
     }
@@ -354,9 +490,19 @@ function labelPlacementTypeEvent() {
       return geojson;
     }),
     options: {
-      baseLayer: "streets",
-      minimap: false,
-      minimapInitialZoomOffset: 0,
+      baseLayer: {
+        style: "basic",
+        layers: {
+          label: true
+        }
+      },
+      minimap: {
+        showMinimap: false,
+        options: {
+          type: "globe",
+          position: "bottom-right"
+        }
+      },
       labelsBelowMap: false,
       showLegend: true
     }
@@ -378,7 +524,7 @@ module.exports = {
   baseLayerStreetFewLabels: createMapLayerStreetsFew,
   baseLayerStreetNoLabels: createMapLayerStreetsNo,
   baseLayerTerrain: createMapLayerTerrain,
-  baseLayerAerial: createMapLayerAerial,
+  baseLayerSatellite: createMapLayerSatellite,
   showAcronym: showAcronym,
   dontShowAcronym: dontShowAcronym,
   antimeridian: antimeridian,
