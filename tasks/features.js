@@ -7,7 +7,7 @@ const points = {
     },
     properties: {
       label: "Bukarest",
-      type: "pointHeavyLabel",
+      type: "point",
       labelPosition: "top",
       useForInitialView: true
     }
@@ -20,7 +20,7 @@ const points = {
     },
     properties: {
       label: "Sofia",
-      type: "pointHeavyLabel",
+      type: "point",
       labelPosition: "bottom",
       useForInitialView: true
     }
@@ -33,7 +33,7 @@ const points = {
     },
     properties: {
       label: "Honolulu",
-      type: "pointHeavyLabel",
+      type: "point",
       labelPosition: "top",
       useForInitialView: true
     }
@@ -46,7 +46,7 @@ const points = {
     },
     properties: {
       label: "Tokio",
-      type: "pointHeavyLabel",
+      type: "point",
       labelPosition: "top",
       useForInitialView: true
     }
@@ -59,7 +59,7 @@ const points = {
     },
     properties: {
       label: "oben",
-      type: "pointHeavyLabel",
+      type: "point",
       labelPosition: "top",
       useForInitialView: true
     }
@@ -72,7 +72,7 @@ const points = {
     },
     properties: {
       label: "unten",
-      type: "pointHeavyLabel",
+      type: "point",
       labelPosition: "bottom",
       useForInitialView: true
     }
@@ -85,7 +85,7 @@ const points = {
     },
     properties: {
       label: "links",
-      type: "pointHeavyLabel",
+      type: "point",
       labelPosition: "left",
       useForInitialView: true
     }
@@ -98,7 +98,7 @@ const points = {
     },
     properties: {
       label: "rechts",
-      type: "pointHeavyLabel",
+      type: "point",
       labelPosition: "right",
       useForInitialView: true
     }
@@ -111,7 +111,7 @@ const points = {
     },
     properties: {
       label: "obenrechts",
-      type: "pointHeavyLabel",
+      type: "point",
       labelPosition: "topright",
       useForInitialView: true
     }
@@ -124,7 +124,7 @@ const points = {
     },
     properties: {
       label: "obenlinks",
-      type: "pointHeavyLabel",
+      type: "point",
       labelPosition: "topleft",
       useForInitialView: true
     }
@@ -137,7 +137,7 @@ const points = {
     },
     properties: {
       label: "untenlinks",
-      type: "pointHeavyLabel",
+      type: "point",
       labelPosition: "bottomleft",
       useForInitialView: true
     }
@@ -150,7 +150,7 @@ const points = {
     },
     properties: {
       label: "untenrechts",
-      type: "pointHeavyLabel",
+      type: "point",
       labelPosition: "bottomright",
       useForInitialView: true
     }
@@ -163,7 +163,7 @@ const points = {
     },
     properties: {
       label: "Tirana",
-      type: "pointLightLabel",
+      type: "point",
       labelPosition: "top",
       useForInitialView: true
     }
@@ -176,7 +176,7 @@ const points = {
     },
     properties: {
       label: "Jerewan",
-      type: "pointLightLabel",
+      type: "point",
       labelPosition: "bottom",
       useForInitialView: true
     }
@@ -189,7 +189,7 @@ const points = {
     },
     properties: {
       label: "Sarajevo",
-      type: "pointOnly",
+      type: "point",
       labelPosition: "top",
       useForInitialView: true
     }
@@ -202,7 +202,7 @@ const points = {
     },
     properties: {
       label: "Zagreb",
-      type: "pointOnly",
+      type: "point",
       labelPosition: "bottom",
       useForInitialView: true
     }

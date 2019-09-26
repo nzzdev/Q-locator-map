@@ -42,7 +42,7 @@ async function validatePayload(payload, options, next) {
   if (typeof payload.toolRuntimeConfig !== "object") {
     return next(Boom.badRequest(), payload);
   }
-  // await validateAgainstSchema(payload.item, options);
+  await validateAgainstSchema(payload.item, options);
 }
 
 module.exports = {
@@ -57,19 +57,7 @@ module.exports = {
     }
   },
   handler: async function(request, h) {
-    let item = request.payload.item;
-    // Send the item to the migration endpoint and overwrite it with
-    // the migrated version if it has changed
-    const response = await request.server.inject({
-      method: "POST",
-      url: "/migration",
-      payload: {
-        item: request.payload.item
-      }
-    });
-    if (response.statusCode === 200) {
-      item = response.result.item;
-    }
+    const item = request.payload.item;
 
     const toolRuntimeConfig = request.payload.toolRuntimeConfig;
     item.id = request.query._id;
