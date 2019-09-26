@@ -12,7 +12,11 @@ async function getMapConfig(item, toolRuntimeConfig, qId) {
   const mapConfig = {};
   let geojsonList = item.geojsonList;
 
-  if (item.options.dimension.bbox && item.options.dimension.bbox.length === 4) {
+  if (
+    item.options.dimension &&
+    item.options.dimension.bbox &&
+    item.options.dimension.bbox.length === 4
+  ) {
     mapConfig.bbox = item.options.dimension.bbox;
     if (!item.options.dimension.useDefaultAspectRatio) {
       const bottomLeft = [mapConfig.bbox[0], mapConfig.bbox[1]];
