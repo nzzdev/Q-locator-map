@@ -186,19 +186,6 @@ module.exports.migrate = function(item) {
     result.isChanged = true;
   }
 
-  if (item.options && Number.isInteger(item.options.initialZoomLevel)) {
-    if (item.options.initialZoomLevel === -1) {
-      delete item.options.initialZoomLevel;
-    } else if (item.options.initialZoomLevel === 0) {
-      item.options.initialZoomLevel = 1;
-    } else if (item.options.initialZoomLevel === 2) {
-      item.options.initialZoomLevel = item.options.initialZoomLevel - 1;
-    } else if (item.options.initialZoomLevel > 2) {
-      item.options.initialZoomLevel = item.options.initialZoomLevel - 2;
-    }
-    result.isChanged = true;
-  }
-
   result.item = item;
   return result;
 };

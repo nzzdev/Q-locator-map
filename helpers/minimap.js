@@ -121,7 +121,7 @@ async function getRegionVegaSpec(options) {
     const center = turf.getCoord(turf.centroid(region));
     const areaRatio = turf.area(region) / turf.area(bboxFeature);
     if (areaRatio > threshold) {
-      bboxFeature = turf.point(center);
+      bboxFeature = turf.centroid(bboxFeature);
       spec.marks.push(pointMark);
     } else {
       spec.marks.push(bboxMark);
