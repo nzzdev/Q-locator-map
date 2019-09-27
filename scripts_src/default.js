@@ -398,6 +398,7 @@ export default class LocatorMap {
     }
     if (this.data.mapConfig.bbox) {
       this.options.bounds = new mapboxgl.LngLatBounds(this.data.mapConfig.bbox);
+      this.options.fitBoundsOptions.padding = 0;
     } else if (this.data.mapConfig.bounds) {
       this.options.bounds = new mapboxgl.LngLatBounds(
         this.data.mapConfig.bounds
