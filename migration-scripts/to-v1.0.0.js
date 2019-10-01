@@ -118,6 +118,7 @@ module.exports.migrate = function(item) {
         .map(geojson => {
           return turf.bboxPolygon(turf.bbox(geojson));
         });
+
       item.options.dimension = {
         bbox: turf.bbox(turf.featureCollection(bboxPolygons)),
         useDefaultAspectRatio: true
@@ -183,6 +184,15 @@ module.exports.migrate = function(item) {
   // minimapInitialZoomOffset option
   if (item.options && Number.isInteger(item.options.minimapInitialZoomOffset)) {
     delete item.options.minimapInitialZoomOffset;
+    result.isChanged = true;
+  }
+
+  if (item.options && Number.isInteger(item.options.initialZoomLevel)) {
+    if (item.options.initialZoomLevel === -1) {
+      delete item.options.initialZoomLevel;
+    } else if (item.options.initialZoomLevel === 0) {
+      item.options.initialZoomLevel = 1;
+    }
     result.isChanged = true;
   }
 
