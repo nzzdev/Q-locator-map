@@ -8,6 +8,7 @@ const scriptHashMap = require(`${scriptsDir}/hashMap.json`);
 const viewsDir = `${__dirname}/../../views/`;
 const helpers = require("../../helpers/helpers.js");
 const defaultGeojsonStyles = require("../../helpers/styles.js").getDefaultGeojsonStyles();
+const numberMarkers = helpers.getNumberMarkers();
 
 // setup svelte
 require("svelte/register");
@@ -74,7 +75,8 @@ module.exports = {
         request.query._id
       ),
       width: helpers.getExactPixelWidth(toolRuntimeConfig),
-      defaultGeojsonStyles: defaultGeojsonStyles
+      defaultGeojsonStyles: defaultGeojsonStyles,
+      numberMarkers: numberMarkers
     };
 
     const renderingInfo = {

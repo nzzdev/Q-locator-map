@@ -1,5 +1,6 @@
 <script>
   export let item;
+  export let numberMarkers;
   let numberedLabels = item.geojsonList
     .map(item => {
       if (!item.hasOwnProperty("type")) {
@@ -28,21 +29,21 @@
       );
     })
     .map((feature, index) => {
-      let codePoint = null;
-      if (index < 20) {
-        codePoint = 9312 + index;
-      } else if (index >= 20 && index < 36) {
-        codePoint = 12881 + index;
-      } else if (index >= 36 && index < 50) {
-        codePoint = 12977 + index;
-      }
-      if (codePoint) {
+      const number = index + 1;
+      const numberMarker = numberMarkers.find(numberMarker => {
+        return `number-${number}` === numberMarker.id;
+      });
+      if (numberMarker) {
         return {
-          codePoint: String.fromCodePoint(codePoint),
-          text: feature.properties.label.replace(/<br>/g, " ")
+          text: feature.properties.label,
+          icon: numberMarker.svg
+        };
+      } else {
+        return {
+          text: feature.properties.label,
+          icon: ""
         };
       }
-      return null;
     })
     .filter(label => {
       return label !== null;
@@ -51,11 +52,13 @@
 
 {#if item.options.labelsBelowMap === true}
   <div
-    class="q-locator-map-footer__marker-labels {item.options.labelsBelowMapOneRow === true ? 'q-locator-map-footer__marker-labels--one-row' : ''}">
+    class="q-locator-map-labels {item.options.labelsBelowMapOneRow === true ? 'q-locator-map-labels--one-row' : ''}">
     {#each numberedLabels as label}
-      <div class="q-locator-map-footer__marker-labels__label s-font-note">
-        <span class="q-locator-map-code-point">{label.codePoint}</span>
-        {label.text}
+      <div class="q-locator-map-labels__label s-font-note">
+        <div class="q-locator-map-labels__icon">
+          {@html label.icon}
+        </div>
+        <div>{label.text}</div>
       </div>
     {/each}
   </div>

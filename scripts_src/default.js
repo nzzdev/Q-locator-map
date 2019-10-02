@@ -49,10 +49,15 @@ export default class LocatorMap {
         geojsonProperties.type = `number-${geojsonProperties.index}`;
       }
       const padding = 2;
-      const translateVertical =
-        Sprites[geojsonProperties.type].height / 2 + padding;
-      const translateHorizontal =
-        Sprites[geojsonProperties.type].width / 2 + 2 * padding;
+      let translateVertical = 0;
+      let translateHorizontal = 0;
+      if (Sprites[geojsonProperties.type]) {
+        translateVertical =
+          Sprites[geojsonProperties.type].height / 2 + padding;
+        translateHorizontal =
+          Sprites[geojsonProperties.type].width / 2 + 2 * padding;
+      }
+
       const properties = {
         textAnchor: "bottom",
         textJustify: "center",
@@ -125,8 +130,17 @@ export default class LocatorMap {
       iconSize: 1
     };
 
-    if (geojsonProperties.type.includes("number")) {
+    const maxNumberMarker = 20;
+    if (
+      geojsonProperties.type.includes("number") &&
+      geojsonProperties.index <= maxNumberMarker
+    ) {
       properties.textField = "";
+    } else if (
+      geojsonProperties.type.includes("number") &&
+      geojsonProperties.index > maxNumberMarker
+    ) {
+      properties.iconImage = "";
     } else if (geojsonProperties.type === "label") {
       properties.iconImage = "";
       properties.textFont = ["GT America Standard Light"];

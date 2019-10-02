@@ -7,6 +7,7 @@
   export let item;
   export let displayOptions;
   export let defaultGeojsonStyles;
+  export let numberMarkers;
 </script>
 
 <div
@@ -17,6 +18,6 @@
   <Header {item} {displayOptions} />
   <Legend {item} {defaultGeojsonStyles} />
   <div id="{id}_container" class="q-locator-map-container" />
-  <LabelsBelowMap {item} />
+  <LabelsBelowMap {item} {numberMarkers} />
   <Footer {item} />
 </div>
