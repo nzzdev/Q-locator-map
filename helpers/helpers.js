@@ -5,6 +5,7 @@ const turf = require("@turf/turf");
 const Boom = require("@hapi/boom");
 const fontnik = require("fontnik");
 const glyphCompose = require("@mapbox/glyph-pbf-composite");
+const glob = require("glob");
 const styleHelpers = require("./styles.js");
 const tilesHelpers = require("./tiles.js");
 
@@ -273,11 +274,27 @@ function getFeatures(geojsonList) {
   };
 }
 
+function getNumberMarkers() {
+  return glob
+    .sync(
+      path.resolve(
+        path.join(__dirname, "../resources/sprites/marker/number-*.svg")
+      )
+    )
+    .map(f => {
+      return {
+        id: path.basename(f).replace(".svg", ""),
+        svg: fs.readFileSync(f).toString("utf8")
+      };
+    });
+}
+
 module.exports = {
   getMapConfig: getMapConfig,
   getExactPixelWidth: getExactPixelWidth,
   getFont: getFont,
   getFonts: getFonts,
   getRegionSuggestions: getRegionSuggestions,
-  getFeatures: getFeatures
+  getFeatures: getFeatures,
+  getNumberMarkers: getNumberMarkers
 };
