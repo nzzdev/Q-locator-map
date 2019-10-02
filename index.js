@@ -5,7 +5,7 @@ const tileHelpers = require("./helpers/tiles.js");
 const geodataHelpers = require("./plugins/geodata/helpers.js");
 
 const serverMethodCacheOptions = {
-  expiresIn: 365 * 24 * 60 * 60 * 1000,
+  expiresIn: 7 * 24 * 60 * 60 * 1000,
   cache: "memoryCache",
   generateTimeout: 2 * 1000
 };
@@ -36,7 +36,7 @@ async function init() {
         constructor: require("@hapi/catbox-memory"),
         options: {
           partition: "memoryCache",
-          maxByteSize: 1000000000 // ~ 1GB
+          maxByteSize: process.env.MEMORY_CACHE_SIZE || 1000000000 // ~ 1GB
         }
       },
       name: "memoryCache"
