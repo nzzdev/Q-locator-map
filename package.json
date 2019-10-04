@@ -1,6 +1,6 @@
 {
   "name": "Q-locator-map",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,7 @@
     "url": "https://github.com/nzzdev/Q-locator-map.git"
   },
   "dependencies": {
-    "@hapi/boom": "^7.4.10",
+    "@hapi/boom": "^7.4.11",
     "@hapi/catbox-memory": "^4.1.1",
     "@hapi/hapi": "^18.4.0",
     "@hapi/inert": "^5.2.2",
@@ -32,7 +32,7 @@
     "node-fetch": "^2.6.0",
     "node-geocoder": "^3.24.0",
     "svelte": "^3.12.1",
-    "vega": "^5.6.0",
+    "vega": "^5.7.0",
     "vt-pbf": "^3.1.1",
     "zlib": "^1.0.5"
   },
@@ -43,15 +43,15 @@
     "autoprefixer": "^9.6.1",
     "cssnano": "^4.1.10",
     "jsdom": "^15.1.1",
-    "mapbox-gl": "^1.3.2",
+    "mapbox-gl": "^1.4.0",
     "postcss": "^7.0.18",
     "postcss-import": "^12.0.1",
-    "rollup": "^1.21.4",
+    "rollup": "^1.23.0",
     "rollup-plugin-buble": "^0.19.8",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-terser": "^5.1.2",
-    "sass": "^1.22.12"
+    "sass": "^1.23.0"
   }
 }

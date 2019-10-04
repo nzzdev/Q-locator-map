@@ -43,63 +43,89 @@ export default class LocatorMap {
       Sprites[geojsonProperties.type] ||
       ["event", "number"].includes(geojsonProperties.type)
     ) {
-      if (geojsonProperties.type === "event") {
-        geojsonProperties.type = `arrow-${geojsonProperties.labelPosition}`;
-      } else if (geojsonProperties.type === "number") {
-        geojsonProperties.type = `number-${geojsonProperties.index}`;
-      }
       const padding = 2;
       let translateVertical = 0;
       let translateHorizontal = 0;
+      let translateFactor = 2;
+      let iconOffset = 6;
+      let cornerTranslateFactor = 1.4;
+      if (geojsonProperties.type === "event") {
+        geojsonProperties.type = `arrow-${geojsonProperties.labelPosition}`;
+        translateFactor = 1.2;
+        cornerTranslateFactor = 1.2;
+      } else if (geojsonProperties.type === "number") {
+        geojsonProperties.type = `number-${geojsonProperties.index}`;
+      }
+
       if (Sprites[geojsonProperties.type]) {
         translateVertical =
-          Sprites[geojsonProperties.type].height / 2 + padding;
+          Sprites[geojsonProperties.type].height / translateFactor + padding;
         translateHorizontal =
-          Sprites[geojsonProperties.type].width / 2 + 2 * padding;
+          Sprites[geojsonProperties.type].width / translateFactor + 2 * padding;
       }
 
       const properties = {
         textAnchor: "bottom",
         textJustify: "center",
-        textTranslate: [0, -translateVertical]
+        textTranslate: [0, -translateVertical],
+        iconOffset: [0, iconOffset]
       };
       if (geojsonProperties.labelPosition === "bottom") {
         properties.textAnchor = "top";
         properties.textTranslate = [0, translateVertical];
+        properties.iconOffset = [0, -iconOffset];
       } else if (geojsonProperties.labelPosition === "left") {
         properties.textAnchor = "right";
         properties.textTranslate = [-translateHorizontal, 0];
+        properties.iconOffset = [iconOffset, 0];
         properties.textJustify = "right";
       } else if (geojsonProperties.labelPosition === "right") {
         properties.textAnchor = "left";
         properties.textTranslate = [translateHorizontal, 0];
+        properties.iconOffset = [-iconOffset, 0];
         properties.textJustify = "left";
       } else if (geojsonProperties.labelPosition === "topleft") {
         properties.textAnchor = "bottom-right";
         properties.textTranslate = [
-          -translateHorizontal / 1.4,
-          -translateVertical / 1.4
+          -translateHorizontal / cornerTranslateFactor,
+          -translateVertical / cornerTranslateFactor
+        ];
+        properties.iconOffset = [
+          iconOffset / cornerTranslateFactor,
+          iconOffset / cornerTranslateFactor
         ];
         properties.textJustify = "right";
       } else if (geojsonProperties.labelPosition === "topright") {
         properties.textAnchor = "bottom-left";
         properties.textTranslate = [
-          translateHorizontal / 1.4,
-          -translateVertical / 1.4
+          translateHorizontal / cornerTranslateFactor,
+          -translateVertical / cornerTranslateFactor
+        ];
+        properties.iconOffset = [
+          -iconOffset / cornerTranslateFactor,
+          iconOffset / cornerTranslateFactor
         ];
         properties.textJustify = "left";
       } else if (geojsonProperties.labelPosition === "bottomleft") {
         properties.textAnchor = "top-right";
         properties.textTranslate = [
-          -translateHorizontal / 1.4,
-          translateVertical / 1.4
+          -translateHorizontal / cornerTranslateFactor,
+          translateVertical / cornerTranslateFactor
+        ];
+        properties.iconOffset = [
+          iconOffset / cornerTranslateFactor,
+          -iconOffset / cornerTranslateFactor
         ];
         properties.textJustify = "right";
       } else if (geojsonProperties.labelPosition === "bottomright") {
         properties.textAnchor = "top-left";
         properties.textTranslate = [
-          translateHorizontal / 1.4,
-          translateVertical / 1.4
+          translateHorizontal / cornerTranslateFactor,
+          translateVertical / cornerTranslateFactor
+        ];
+        properties.iconOffset = [
+          -iconOffset / cornerTranslateFactor,
+          -iconOffset / cornerTranslateFactor
         ];
         properties.textJustify = "left";
       }
@@ -127,7 +153,9 @@ export default class LocatorMap {
       textHaloWidth: 2,
       textFont: ["GT America Standard Medium"],
       iconImage: geojsonProperties.type,
-      iconSize: 1
+      iconSize: 1,
+      iconAnchor: "center",
+      iconOffset: [0, 0]
     };
 
     const maxNumberMarker = 20;
@@ -144,8 +172,9 @@ export default class LocatorMap {
     } else if (geojsonProperties.type === "label") {
       properties.iconImage = "";
       properties.textFont = ["GT America Standard Light"];
-    } else if (geojsonProperties.type === "event") {
-      properties.iconImage = `arrow-${geojsonProperties.labelPosition}`;
+    } else if (geojsonProperties.type.includes("arrow")) {
+      properties.iconAnchor = positionProperties.textAnchor;
+      properties.iconOffset = positionProperties.iconOffset;
     }
 
     return properties;
@@ -274,7 +303,9 @@ export default class LocatorMap {
           "text-allow-overlap": true,
           "icon-allow-overlap": true,
           "icon-image": properties.iconImage,
-          "icon-size": properties.iconSize
+          "icon-size": properties.iconSize,
+          "icon-anchor": properties.iconAnchor,
+          "icon-offset": properties.iconOffset
         },
         paint: {
           "text-translate": properties.textTranslate,

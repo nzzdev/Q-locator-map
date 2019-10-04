@@ -91,7 +91,7 @@
               }
             },
             "useDefaultAspectRatio": {
-              "title": "Standard Kartenformat verwenden",
+              "title": "Standard Seitenverhältnis verwenden",
               "type": "boolean",
               "default": true,
               "Q:options": {
@@ -227,13 +227,14 @@
           "required": ["showMinimap"]
         },
         "highlightRegion": {
-          "title": "Region hervorheben",
+          "title": "Hervorhebung von Regionen",
           "type": "array",
           "Q:options": {
             "layout": "compact",
             "sortable": false
           },
           "items": {
+            "title": "Hervorhebung",
             "type": "object",
             "properties": {
               "id": {
