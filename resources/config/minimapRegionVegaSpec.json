@@ -37,7 +37,7 @@
       "type": "text",
       "encode": {
         "enter": {
-          "fill": { "value": "#b6b6be" },
+          "fill": { "value": "#6e6e7e" },
           "text": { "signal": "label" }
         },
         "update": {
