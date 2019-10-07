@@ -6,11 +6,10 @@ const Boom = require("@hapi/boom");
 const fontnik = require("fontnik");
 const glyphCompose = require("@mapbox/glyph-pbf-composite");
 const glob = require("glob");
-const styleHelpers = require("./styles.js");
 const tilesHelpers = require("./tiles.js");
 
-async function getMapConfig(item, toolRuntimeConfig, qId) {
-  const mapConfig = {};
+async function getConfig(item, itemStateInDb) {
+  const config = {};
   let geojsonList = item.geojsonList;
 
   if (
@@ -18,43 +17,38 @@ async function getMapConfig(item, toolRuntimeConfig, qId) {
     item.options.dimension.bbox &&
     item.options.dimension.bbox.length === 4
   ) {
-    mapConfig.bbox = item.options.dimension.bbox;
+    config.bbox = item.options.dimension.bbox;
     if (!item.options.dimension.useDefaultAspectRatio) {
-      const bottomLeft = [mapConfig.bbox[0], mapConfig.bbox[1]];
-      const bottomRight = [mapConfig.bbox[2], mapConfig.bbox[1]];
-      const topLeft = [mapConfig.bbox[0], mapConfig.bbox[3]];
+      const bottomLeft = [config.bbox[0], config.bbox[1]];
+      const bottomRight = [config.bbox[2], config.bbox[1]];
+      const topLeft = [config.bbox[0], config.bbox[3]];
       const width = turf.distance(bottomLeft, topLeft);
       const height = turf.distance(bottomLeft, bottomRight);
-      mapConfig.aspectRatio = width / height;
+      config.aspectRatio = width / height;
     }
   } else if (
     geojsonList.length === 1 &&
     geojsonList[0].type === "Feature" &&
     geojsonList[0].geometry.type === "Point"
   ) {
-    mapConfig.center = geojsonList[0].geometry.coordinates;
-    mapConfig.zoom = 9;
+    config.center = geojsonList[0].geometry.coordinates;
+    config.zoom = 9;
   } else {
     geojsonList = tilesHelpers.transformCoordinates(geojsonList);
     const bboxPolygons = geojsonList.map(geojson => {
       return turf.bboxPolygon(turf.bbox(geojson));
     });
-    mapConfig.bounds = turf.bbox(turf.featureCollection(bboxPolygons));
+    config.bounds = turf.bbox(turf.featureCollection(bboxPolygons));
   }
 
   if (item.options.initialZoomLevel >= 1) {
-    mapConfig.zoom = item.options.initialZoomLevel;
+    config.zoom = item.options.initialZoomLevel;
   }
 
-  mapConfig.features = getFeatures(geojsonList);
-  mapConfig.style = await styleHelpers.getStyle(
-    item.options.baseLayer.style,
-    item,
-    toolRuntimeConfig.toolBaseUrl,
-    qId,
-    mapConfig.features
-  );
-  return mapConfig;
+  if (!itemStateInDb) {
+    config.features = getFeatures(geojsonList);
+  }
+  return config;
 }
 
 function getExactPixelWidth(toolRuntimeConfig) {
@@ -290,7 +284,7 @@ function getNumberMarkers() {
 }
 
 module.exports = {
-  getMapConfig: getMapConfig,
+  getConfig: getConfig,
   getExactPixelWidth: getExactPixelWidth,
   getFont: getFont,
   getFonts: getFonts,

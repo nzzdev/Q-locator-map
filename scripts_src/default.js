@@ -1,4 +1,5 @@
 import mapboxgl from "mapbox-gl";
+import * as helpers from "./helpers.js";
 import MinimapControl from "./minimap.js";
 import Sprites from "../resources/sprites/sprites@1x.json";
 export default class LocatorMap {
@@ -14,9 +15,9 @@ export default class LocatorMap {
   }
 
   setHeight() {
-    if (this.data.mapConfig.aspectRatio) {
+    if (this.data.config.aspectRatio) {
       this.element.style.height = `${this.width *
-        this.data.mapConfig.aspectRatio}px`;
+        this.data.config.aspectRatio}px`;
     } else {
       const aspectRatio = this.width > 450 ? 9 / 16 : 1;
       this.element.style.height = `${this.width * aspectRatio}px`;
@@ -190,7 +191,7 @@ export default class LocatorMap {
       return ascending;
     }, []);
     const layerId = allSymbolIndices[1];
-    this.data.mapConfig.features.polygons.forEach((geojson, i) => {
+    this.data.config.features.polygons.forEach((geojson, i) => {
       this.map.addLayer(
         {
           id: `polygon-${i}`,
@@ -245,7 +246,7 @@ export default class LocatorMap {
       );
     });
 
-    this.data.mapConfig.features.linestrings.forEach((geojson, i) => {
+    this.data.config.features.linestrings.forEach((geojson, i) => {
       this.map.addLayer(
         {
           id: `linestring-${i}`,
@@ -280,7 +281,7 @@ export default class LocatorMap {
       );
     });
 
-    this.data.mapConfig.features.points.forEach((geojson, i) => {
+    this.data.config.features.points.forEach((geojson, i) => {
       if (this.data.options.labelsBelowMap) {
         geojson.properties.type = "number";
         geojson.properties.index = i + 1;
@@ -428,35 +429,37 @@ export default class LocatorMap {
     });
   }
 
+  getStyle() {}
+
   render() {
     this.options = {
       container: this.element,
-      style: this.data.mapConfig.style,
+      style: this.getStyle(),
       interactive: false,
       attributionControl: false,
       fadeDuration: 0,
       fitBoundsOptions: { padding: 60, duration: 0 }
     };
 
-    if (this.data.mapConfig.zoom) {
-      this.options.fitBoundsOptions.maxZoom = this.data.mapConfig.zoom;
+    if (this.data.config.zoom) {
+      this.options.fitBoundsOptions.maxZoom = this.data.config.zoom;
     }
-    if (this.data.mapConfig.bbox) {
-      this.options.bounds = new mapboxgl.LngLatBounds(this.data.mapConfig.bbox);
+    if (this.data.config.bbox) {
+      this.options.bounds = new mapboxgl.LngLatBounds(this.data.config.bbox);
       this.options.fitBoundsOptions.padding = 0;
-    } else if (this.data.mapConfig.bounds) {
-      this.options.bounds = new mapboxgl.LngLatBounds(
-        this.data.mapConfig.bounds
-      );
+    } else if (this.data.config.bounds) {
+      this.options.bounds = new mapboxgl.LngLatBounds(this.data.config.bounds);
     } else {
-      this.options.center = this.data.mapConfig.center;
-      this.options.zoom = this.data.mapConfig.zoom;
+      this.options.center = this.data.config.center;
+      this.options.zoom = this.data.config.zoom;
     }
 
     this.map = new mapboxgl.Map(this.options);
     this.map.on("load", () => {
       this.preventLabelsAroundViewport();
-      this.addFeatures();
+      if (!this.data.itemStateInDB) {
+        this.addFeatures();
+      }
       this.addControls();
       this.element.parentNode.style.opacity = "1";
       this.onDetached();
