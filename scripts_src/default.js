@@ -1,7 +1,6 @@
 import mapboxgl from "mapbox-gl";
 import * as helpers from "./helpers.js";
 import MinimapControl from "./minimap.js";
-import Sprites from "../resources/sprites/sprites@1x.json";
 export default class LocatorMap {
   constructor(element, data = {}) {
     if (element) {
@@ -10,7 +9,10 @@ export default class LocatorMap {
       this.width =
         this.data.width || this.element.getBoundingClientRect().width;
       this.setHeight();
-      this.render();
+      helpers.getStyle(this.data).then(style => {
+        this.data.config.style = style;
+        this.render();
+      });
     }
   }
 
@@ -22,300 +24,6 @@ export default class LocatorMap {
       const aspectRatio = this.width > 450 ? 9 / 16 : 1;
       this.element.style.height = `${this.width * aspectRatio}px`;
     }
-  }
-
-  getDefaultGeojsonStyles() {
-    return {
-      line: {
-        stroke: "#c31906",
-        "stroke-width": 2,
-        "stroke-opacity": 1
-      },
-      polygon: {
-        "stroke-width": 0,
-        fill: "#c31906",
-        "fill-opacity": 0.35
-      }
-    };
-  }
-
-  getPositionProperties(geojsonProperties) {
-    if (
-      Sprites[geojsonProperties.type] ||
-      ["event", "number"].includes(geojsonProperties.type)
-    ) {
-      const padding = 2;
-      let translateVertical = 0;
-      let translateHorizontal = 0;
-      let translateFactor = 2;
-      let iconOffset = 6;
-      let cornerTranslateFactor = 1.4;
-      if (geojsonProperties.type === "event") {
-        geojsonProperties.type = `arrow-${geojsonProperties.labelPosition}`;
-        translateFactor = 1.2;
-        cornerTranslateFactor = 1.2;
-      } else if (geojsonProperties.type === "number") {
-        geojsonProperties.type = `number-${geojsonProperties.index}`;
-      }
-
-      if (Sprites[geojsonProperties.type]) {
-        translateVertical =
-          Sprites[geojsonProperties.type].height / translateFactor + padding;
-        translateHorizontal =
-          Sprites[geojsonProperties.type].width / translateFactor + 2 * padding;
-      }
-
-      const properties = {
-        textAnchor: "bottom",
-        textJustify: "center",
-        textTranslate: [0, -translateVertical],
-        iconOffset: [0, iconOffset]
-      };
-      if (geojsonProperties.labelPosition === "bottom") {
-        properties.textAnchor = "top";
-        properties.textTranslate = [0, translateVertical];
-        properties.iconOffset = [0, -iconOffset];
-      } else if (geojsonProperties.labelPosition === "left") {
-        properties.textAnchor = "right";
-        properties.textTranslate = [-translateHorizontal, 0];
-        properties.iconOffset = [iconOffset, 0];
-        properties.textJustify = "right";
-      } else if (geojsonProperties.labelPosition === "right") {
-        properties.textAnchor = "left";
-        properties.textTranslate = [translateHorizontal, 0];
-        properties.iconOffset = [-iconOffset, 0];
-        properties.textJustify = "left";
-      } else if (geojsonProperties.labelPosition === "topleft") {
-        properties.textAnchor = "bottom-right";
-        properties.textTranslate = [
-          -translateHorizontal / cornerTranslateFactor,
-          -translateVertical / cornerTranslateFactor
-        ];
-        properties.iconOffset = [
-          iconOffset / cornerTranslateFactor,
-          iconOffset / cornerTranslateFactor
-        ];
-        properties.textJustify = "right";
-      } else if (geojsonProperties.labelPosition === "topright") {
-        properties.textAnchor = "bottom-left";
-        properties.textTranslate = [
-          translateHorizontal / cornerTranslateFactor,
-          -translateVertical / cornerTranslateFactor
-        ];
-        properties.iconOffset = [
-          -iconOffset / cornerTranslateFactor,
-          iconOffset / cornerTranslateFactor
-        ];
-        properties.textJustify = "left";
-      } else if (geojsonProperties.labelPosition === "bottomleft") {
-        properties.textAnchor = "top-right";
-        properties.textTranslate = [
-          -translateHorizontal / cornerTranslateFactor,
-          translateVertical / cornerTranslateFactor
-        ];
-        properties.iconOffset = [
-          iconOffset / cornerTranslateFactor,
-          -iconOffset / cornerTranslateFactor
-        ];
-        properties.textJustify = "right";
-      } else if (geojsonProperties.labelPosition === "bottomright") {
-        properties.textAnchor = "top-left";
-        properties.textTranslate = [
-          translateHorizontal / cornerTranslateFactor,
-          translateVertical / cornerTranslateFactor
-        ];
-        properties.iconOffset = [
-          -iconOffset / cornerTranslateFactor,
-          -iconOffset / cornerTranslateFactor
-        ];
-        properties.textJustify = "left";
-      }
-      return properties;
-    } else {
-      return {
-        textAnchor: "center",
-        textJustify: "center",
-        textTranslate: [0, 0]
-      };
-    }
-  }
-
-  getPointStyleProperties(geojsonProperties) {
-    const positionProperties = this.getPositionProperties(geojsonProperties);
-    const properties = {
-      textAnchor: positionProperties.textAnchor,
-      textTranslate: positionProperties.textTranslate,
-      textJustify: positionProperties.textJustify,
-      textField: "{label}",
-      textSize: 14,
-      textLineHeight: 1.2,
-      textColor: "#05032d",
-      textHaloColor: "#ffffff",
-      textHaloWidth: 2,
-      textFont: ["GT America Standard Medium"],
-      iconImage: geojsonProperties.type,
-      iconSize: 1,
-      iconAnchor: "center",
-      iconOffset: [0, 0]
-    };
-
-    const maxNumberMarker = 20;
-    if (
-      geojsonProperties.type.includes("number") &&
-      geojsonProperties.index <= maxNumberMarker
-    ) {
-      properties.textField = "";
-    } else if (
-      geojsonProperties.type.includes("number") &&
-      geojsonProperties.index > maxNumberMarker
-    ) {
-      properties.iconImage = "";
-    } else if (geojsonProperties.type === "label") {
-      properties.iconImage = "";
-      properties.textFont = ["GT America Standard Light"];
-    } else if (geojsonProperties.type.includes("arrow")) {
-      properties.iconAnchor = positionProperties.textAnchor;
-      properties.iconOffset = positionProperties.iconOffset;
-    }
-
-    return properties;
-  }
-
-  addFeatures() {
-    const defaultGeojsonStyles = this.getDefaultGeojsonStyles();
-    const style = this.map.getStyle();
-    const allSymbolIndices = style.layers.reduce((ascending, layer) => {
-      if (layer.type === "symbol") {
-        ascending.push(layer.id);
-      }
-      return ascending;
-    }, []);
-    const layerId = allSymbolIndices[1];
-    this.data.config.features.polygons.forEach((geojson, i) => {
-      this.map.addLayer(
-        {
-          id: `polygon-${i}`,
-          type: "fill",
-          source: {
-            type: "geojson",
-            data: geojson
-          },
-          paint: {
-            "fill-color": [
-              "string",
-              ["get", "fill"],
-              defaultGeojsonStyles.polygon.fill
-            ],
-            "fill-opacity": [
-              "number",
-              ["get", "fill-opacity"],
-              defaultGeojsonStyles.polygon["fill-opacity"]
-            ]
-          }
-        },
-        layerId
-      );
-
-      this.map.addLayer(
-        {
-          id: `polygon-outline-${i}`,
-          type: "line",
-          source: {
-            type: "geojson",
-            data: geojson
-          },
-          paint: {
-            "line-color": [
-              "string",
-              ["get", "stroke"],
-              defaultGeojsonStyles.line["stroke"]
-            ],
-            "line-width": [
-              "number",
-              ["get", "stroke-width"],
-              defaultGeojsonStyles.polygon["stroke-width"]
-            ],
-            "line-opacity": [
-              "number",
-              ["get", "stroke-opacity"],
-              defaultGeojsonStyles.line["stroke-opacity"]
-            ]
-          }
-        },
-        layerId
-      );
-    });
-
-    this.data.config.features.linestrings.forEach((geojson, i) => {
-      this.map.addLayer(
-        {
-          id: `linestring-${i}`,
-          type: "line",
-          source: {
-            type: "geojson",
-            data: geojson
-          },
-          paint: {
-            "line-color": [
-              "string",
-              ["get", "stroke"],
-              defaultGeojsonStyles.line["stroke"]
-            ],
-            "line-width": [
-              "number",
-              ["get", "stroke-width"],
-              defaultGeojsonStyles.line["stroke-width"]
-            ],
-            "line-opacity": [
-              "number",
-              ["get", "stroke-opacity"],
-              defaultGeojsonStyles.line["stroke-opacity"]
-            ]
-          },
-          layout: {
-            "line-cap": "round",
-            "line-join": "round"
-          }
-        },
-        layerId
-      );
-    });
-
-    this.data.config.features.points.forEach((geojson, i) => {
-      if (this.data.options.labelsBelowMap) {
-        geojson.properties.type = "number";
-        geojson.properties.index = i + 1;
-      }
-      const properties = this.getPointStyleProperties(geojson.properties);
-      this.map.addLayer({
-        id: `point-${i}`,
-        type: "symbol",
-        source: {
-          type: "geojson",
-          data: geojson
-        },
-        layout: {
-          "text-field": properties.textField,
-          "text-size": properties.textSize,
-          "text-line-height": properties.textLineHeight,
-          "text-font": properties.textFont,
-          "text-anchor": properties.textAnchor,
-          "text-justify": properties.textJustify,
-          "text-allow-overlap": true,
-          "icon-allow-overlap": true,
-          "icon-image": properties.iconImage,
-          "icon-size": properties.iconSize,
-          "icon-anchor": properties.iconAnchor,
-          "icon-offset": properties.iconOffset
-        },
-        paint: {
-          "text-translate": properties.textTranslate,
-          "text-color": properties.textColor,
-          "text-halo-color": properties.textHaloColor,
-          "text-halo-width": properties.textHaloWidth
-        }
-      });
-    });
   }
 
   addControls() {
@@ -429,12 +137,10 @@ export default class LocatorMap {
     });
   }
 
-  getStyle() {}
-
   render() {
     this.options = {
       container: this.element,
-      style: this.getStyle(),
+      style: this.data.config.style,
       interactive: false,
       attributionControl: false,
       fadeDuration: 0,
@@ -457,9 +163,6 @@ export default class LocatorMap {
     this.map = new mapboxgl.Map(this.options);
     this.map.on("load", () => {
       this.preventLabelsAroundViewport();
-      if (!this.data.itemStateInDB) {
-        this.addFeatures();
-      }
       this.addControls();
       this.element.parentNode.style.opacity = "1";
       this.onDetached();

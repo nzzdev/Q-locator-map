@@ -8,8 +8,9 @@ module.exports = [
   require("./migration.js"),
   require("./option-availability.js"),
   require("./dynamic-schema.js"),
+  require("./styles.js"),
   require("./tiles.js"),
   require("./tilesets.js"),
   require("./sprites.js"),
   require("./minimap.js")
-].concat(require("./schema.js"), require("./styles.js"), require("./fonts.js"));
+].concat(require("./schema.js"), require("./fonts.js"));

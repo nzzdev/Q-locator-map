@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const zlib = require("zlib");
+const hasha = require("hasha");
 const turf = require("@turf/turf");
 const Boom = require("@hapi/boom");
 const fontnik = require("fontnik");
@@ -45,9 +46,8 @@ async function getConfig(item, itemStateInDb) {
     config.zoom = item.options.initialZoomLevel;
   }
 
-  if (!itemStateInDb) {
-    config.features = getFeatures(geojsonList);
-  }
+  config.features = await getFeatures(geojsonList, itemStateInDb);
+  config.defaultGeojsonStyles = getDefaultGeojsonStyles();
   return config;
 }
 
@@ -211,7 +211,28 @@ async function getRegionSuggestions(components, countryCode) {
   }
 }
 
-function getFeatures(geojsonList) {
+async function getHash(features) {
+  return await hasha(JSON.stringify(features), {
+    algorithm: "md5"
+  });
+}
+
+function getDefaultGeojsonStyles() {
+  return {
+    line: {
+      stroke: "#c31906",
+      "stroke-width": 2,
+      "stroke-opacity": 1
+    },
+    polygon: {
+      "stroke-width": 0,
+      fill: "#c31906",
+      "fill-opacity": 0.35
+    }
+  };
+}
+
+async function getFeatures(geojsonList, itemStateInDb) {
   let pointFeatures = [];
   let linestringFeatures = [];
   let polygonFeatures = [];
@@ -245,27 +266,49 @@ function getFeatures(geojsonList) {
       geojson.type === "Feature" &&
       ["Point", "MultiPoint"].includes(geojson.geometry.type)
   );
-  pointFeatures = pointFeatures.concat(points);
+  pointFeatures = pointFeatures.concat(points).map((feature, index) => {
+    return {
+      id: `point-${index}`,
+      geojson: feature
+    };
+  });
 
   const linestrings = geojsonList.filter(
     geojson =>
       geojson.type === "Feature" &&
       ["LineString", "MultiLineString"].includes(geojson.geometry.type)
   );
-  linestringFeatures = linestringFeatures.concat(linestrings);
+  linestringFeatures = linestringFeatures
+    .concat(linestrings)
+    .map((feature, index) => {
+      return {
+        id: `linestring-${index}`,
+        geojson: !itemStateInDb ? feature : undefined
+      };
+    });
 
   const polygons = geojsonList.filter(
     geojson =>
       geojson.type === "Feature" &&
       ["Polygon", "MultiPolygon"].includes(geojson.geometry.type)
   );
-  polygonFeatures = polygonFeatures.concat(polygons);
+  polygonFeatures = polygonFeatures.concat(polygons).map((feature, index) => {
+    return {
+      id: `polygon-${index}`,
+      geojson: !itemStateInDb ? feature : undefined
+    };
+  });
 
-  return {
+  const features = {
     points: pointFeatures,
     linestrings: linestringFeatures,
     polygons: polygonFeatures
   };
+
+  features.hash = await getHash(features);
+  features.type = itemStateInDb ? "vector" : "geojson";
+  features.sourceName = itemStateInDb ? "overlays" : "";
+  return features;
 }
 
 function getNumberMarkers() {
@@ -290,5 +333,6 @@ module.exports = {
   getFonts: getFonts,
   getRegionSuggestions: getRegionSuggestions,
   getFeatures: getFeatures,
+  getDefaultGeojsonStyles: getDefaultGeojsonStyles,
   getNumberMarkers: getNumberMarkers
 };
