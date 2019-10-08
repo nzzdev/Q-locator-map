@@ -47,7 +47,10 @@ module.exports = {
 
       const style = await getStyleJSON(id, toolBaseUrl);
       if (style) {
-        return style;
+        return h
+          .response(style)
+          .type("application/json; charset=utf-8")
+          .header("cache-control", `max-age=${60 * 60 * 24 * 2}, immutable`);
       } else {
         return Boom.notFound();
       }
