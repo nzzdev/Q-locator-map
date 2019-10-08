@@ -100,29 +100,29 @@ function getTransformedGeoJSON(geojsonList) {
 async function getTilesetTile(item, qId, z, x, y) {
   try {
     const geojsonList = getTransformedGeoJSON(item.geojsonList);
-    const features = this.helpers.getFeatures(geojsonList);
+    const features = await this.helpers.getFeatures(geojsonList);
     const tileObject = {};
-    for (const [i, geojson] of features.points.entries()) {
-      const tileIndex = geojsonvt(geojson);
+    features.points.forEach(feature => {
+      const tileIndex = geojsonvt(feature.geojson);
       const tile = tileIndex.getTile(z, x, y);
       if (tile) {
-        tileObject[`point-${i}`] = tile;
+        tileObject[feature.id] = tile;
       }
-    }
-    for (const [i, geojson] of features.linestrings.entries()) {
-      const tileIndex = geojsonvt(geojson);
+    });
+    features.linestrings.forEach(feature => {
+      const tileIndex = geojsonvt(feature.geojson);
       const tile = tileIndex.getTile(z, x, y);
       if (tile) {
-        tileObject[`linestring-${i}`] = tile;
+        tileObject[feature.id] = tile;
       }
-    }
-    for (const [i, geojson] of features.polygons.entries()) {
-      const tileIndex = geojsonvt(geojson);
+    });
+    features.polygons.forEach(feature => {
+      const tileIndex = geojsonvt(feature.geojson);
       const tile = tileIndex.getTile(z, x, y);
       if (tile) {
-        tileObject[`polygon-${i}`] = tile;
+        tileObject[feature.id] = tile;
       }
-    }
+    });
     return zlib.gzipSync(vtpbf.fromGeojsonVt(tileObject, { version: 2 }));
   } catch (error) {
     return Boom.notFound();

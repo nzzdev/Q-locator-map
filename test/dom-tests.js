@@ -12,7 +12,7 @@ const fixtureData = require("../tasks/createFixtureData.js");
 const fixtures = Object.keys(fixtureData).map(fixture =>
   require(`${fixturesDir}/${fixture}.json`)
 );
-const defaultGeojsonStyles = require("../helpers/styles.js").getDefaultGeojsonStyles();
+const defaultGeojsonStyles = require("../helpers/helpers.js").getDefaultGeojsonStyles();
 
 // setup svelte
 require("svelte/register");

@@ -1,16 +1,16 @@
 const fs = require("fs");
 const path = require("path");
 const zlib = require("zlib");
+const hasha = require("hasha");
 const turf = require("@turf/turf");
 const Boom = require("@hapi/boom");
 const fontnik = require("fontnik");
 const glyphCompose = require("@mapbox/glyph-pbf-composite");
 const glob = require("glob");
-const styleHelpers = require("./styles.js");
 const tilesHelpers = require("./tiles.js");
 
-async function getMapConfig(item, toolRuntimeConfig, qId) {
-  const mapConfig = {};
+async function getConfig(item, itemStateInDb) {
+  const config = {};
   let geojsonList = item.geojsonList;
 
   if (
@@ -18,43 +18,41 @@ async function getMapConfig(item, toolRuntimeConfig, qId) {
     item.options.dimension.bbox &&
     item.options.dimension.bbox.length === 4
   ) {
-    mapConfig.bbox = item.options.dimension.bbox;
+    config.bbox = item.options.dimension.bbox;
     if (!item.options.dimension.useDefaultAspectRatio) {
-      const bottomLeft = [mapConfig.bbox[0], mapConfig.bbox[1]];
-      const bottomRight = [mapConfig.bbox[2], mapConfig.bbox[1]];
-      const topLeft = [mapConfig.bbox[0], mapConfig.bbox[3]];
+      const bottomLeft = [config.bbox[0], config.bbox[1]];
+      const bottomRight = [config.bbox[2], config.bbox[1]];
+      const topLeft = [config.bbox[0], config.bbox[3]];
       const width = turf.distance(bottomLeft, topLeft);
       const height = turf.distance(bottomLeft, bottomRight);
-      mapConfig.aspectRatio = width / height;
+      config.aspectRatio = width / height;
     }
   } else if (
     geojsonList.length === 1 &&
     geojsonList[0].type === "Feature" &&
     geojsonList[0].geometry.type === "Point"
   ) {
-    mapConfig.center = geojsonList[0].geometry.coordinates;
-    mapConfig.zoom = 9;
+    config.center = geojsonList[0].geometry.coordinates;
+    config.zoom = 9;
   } else {
     geojsonList = tilesHelpers.transformCoordinates(geojsonList);
     const bboxPolygons = geojsonList.map(geojson => {
       return turf.bboxPolygon(turf.bbox(geojson));
     });
-    mapConfig.bounds = turf.bbox(turf.featureCollection(bboxPolygons));
+    config.bounds = turf.bbox(turf.featureCollection(bboxPolygons));
   }
 
   if (item.options.initialZoomLevel >= 1) {
-    mapConfig.zoom = item.options.initialZoomLevel;
+    config.zoom = item.options.initialZoomLevel;
   }
 
-  mapConfig.features = getFeatures(geojsonList);
-  mapConfig.style = await styleHelpers.getStyle(
-    item.options.baseLayer.style,
-    item,
-    toolRuntimeConfig.toolBaseUrl,
-    qId,
-    mapConfig.features
+  config.features = await getFeatures(
+    geojsonList,
+    itemStateInDb,
+    item.options.labelsBelowMap
   );
-  return mapConfig;
+  config.defaultGeojsonStyles = getDefaultGeojsonStyles();
+  return config;
 }
 
 function getExactPixelWidth(toolRuntimeConfig) {
@@ -217,7 +215,28 @@ async function getRegionSuggestions(components, countryCode) {
   }
 }
 
-function getFeatures(geojsonList) {
+async function getHash(features) {
+  return await hasha(JSON.stringify(features), {
+    algorithm: "md5"
+  });
+}
+
+function getDefaultGeojsonStyles() {
+  return {
+    line: {
+      stroke: "#c31906",
+      "stroke-width": 2,
+      "stroke-opacity": 1
+    },
+    polygon: {
+      "stroke-width": 0,
+      fill: "#c31906",
+      "fill-opacity": 0.35
+    }
+  };
+}
+
+async function getFeatures(geojsonList, itemStateInDb, labelsBelowMap) {
   let pointFeatures = [];
   let linestringFeatures = [];
   let polygonFeatures = [];
@@ -251,27 +270,53 @@ function getFeatures(geojsonList) {
       geojson.type === "Feature" &&
       ["Point", "MultiPoint"].includes(geojson.geometry.type)
   );
-  pointFeatures = pointFeatures.concat(points);
+  pointFeatures = pointFeatures.concat(points).map((feature, index) => {
+    if (labelsBelowMap && feature.properties) {
+      feature.properties.type = "number";
+      feature.properties.index = index + 1;
+    }
+    return {
+      id: `point-${index}`,
+      geojson: feature
+    };
+  });
 
   const linestrings = geojsonList.filter(
     geojson =>
       geojson.type === "Feature" &&
       ["LineString", "MultiLineString"].includes(geojson.geometry.type)
   );
-  linestringFeatures = linestringFeatures.concat(linestrings);
+  linestringFeatures = linestringFeatures
+    .concat(linestrings)
+    .map((feature, index) => {
+      return {
+        id: `linestring-${index}`,
+        geojson: !itemStateInDb ? feature : undefined
+      };
+    });
 
   const polygons = geojsonList.filter(
     geojson =>
       geojson.type === "Feature" &&
       ["Polygon", "MultiPolygon"].includes(geojson.geometry.type)
   );
-  polygonFeatures = polygonFeatures.concat(polygons);
+  polygonFeatures = polygonFeatures.concat(polygons).map((feature, index) => {
+    return {
+      id: `polygon-${index}`,
+      geojson: !itemStateInDb ? feature : undefined
+    };
+  });
 
-  return {
+  const features = {
     points: pointFeatures,
     linestrings: linestringFeatures,
     polygons: polygonFeatures
   };
+
+  features.hash = await getHash(features);
+  features.type = itemStateInDb ? "vector" : "geojson";
+  features.sourceName = itemStateInDb ? "overlays" : "";
+  return features;
 }
 
 function getNumberMarkers() {
@@ -290,11 +335,12 @@ function getNumberMarkers() {
 }
 
 module.exports = {
-  getMapConfig: getMapConfig,
+  getConfig: getConfig,
   getExactPixelWidth: getExactPixelWidth,
   getFont: getFont,
   getFonts: getFonts,
   getRegionSuggestions: getRegionSuggestions,
   getFeatures: getFeatures,
+  getDefaultGeojsonStyles: getDefaultGeojsonStyles,
   getNumberMarkers: getNumberMarkers
 };
