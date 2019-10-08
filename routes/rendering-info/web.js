@@ -7,7 +7,7 @@ const scriptsDir = "../../scripts/";
 const scriptHashMap = require(`${scriptsDir}/hashMap.json`);
 const viewsDir = `${__dirname}/../../views/`;
 const helpers = require("../../helpers/helpers.js");
-const defaultGeojsonStyles = require("../../helpers/styles.js").getDefaultGeojsonStyles();
+const defaultGeojsonStyles = require("../../helpers/helpers.js").getDefaultGeojsonStyles();
 const numberMarkers = helpers.getNumberMarkers();
 
 // setup svelte
@@ -69,11 +69,7 @@ module.exports = {
       id: `q_locator_map_${request.query._id}_${Math.floor(
         Math.random() * 100000
       )}`.replace(/-/g, ""),
-      mapConfig: await helpers.getMapConfig(
-        item,
-        toolRuntimeConfig,
-        request.query._id
-      ),
+      config: await helpers.getConfig(item, request.payload.itemStateInDb),
       width: helpers.getExactPixelWidth(toolRuntimeConfig),
       defaultGeojsonStyles: defaultGeojsonStyles,
       numberMarkers: numberMarkers
@@ -95,10 +91,12 @@ module.exports = {
           new window._q_locator_map.LocatorMap(document.querySelector('#${
             context.id
           }_container'), ${JSON.stringify({
-            mapConfig: context.mapConfig,
+            config: context.config,
             options: context.item.options,
             width: context.width,
-            toolBaseUrl: toolRuntimeConfig.toolBaseUrl
+            qId: context.item.id,
+            toolBaseUrl: toolRuntimeConfig.toolBaseUrl,
+            itemStateInDb: request.payload.itemStateInDb
           })})`
         }
       ],
