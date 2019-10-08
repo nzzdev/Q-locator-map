@@ -280,11 +280,7 @@ export function getStyle(data) {
       style.layers.splice(index, 0, outlineLayer);
     });
 
-    data.config.features.points.forEach((feature, i) => {
-      if (data.options.labelsBelowMap) {
-        feature.geojson.properties.type = "number";
-        feature.geojson.properties.index = i + 1;
-      }
+    data.config.features.points.forEach(feature => {
       const properties = getPointStyleProperties(feature.geojson.properties);
       const layer = {
         id: feature.id,

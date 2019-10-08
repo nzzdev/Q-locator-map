@@ -46,7 +46,11 @@ async function getConfig(item, itemStateInDb) {
     config.zoom = item.options.initialZoomLevel;
   }
 
-  config.features = await getFeatures(geojsonList, itemStateInDb);
+  config.features = await getFeatures(
+    geojsonList,
+    itemStateInDb,
+    item.options.labelsBelowMap
+  );
   config.defaultGeojsonStyles = getDefaultGeojsonStyles();
   return config;
 }
@@ -232,7 +236,7 @@ function getDefaultGeojsonStyles() {
   };
 }
 
-async function getFeatures(geojsonList, itemStateInDb) {
+async function getFeatures(geojsonList, itemStateInDb, labelsBelowMap) {
   let pointFeatures = [];
   let linestringFeatures = [];
   let polygonFeatures = [];
@@ -267,6 +271,10 @@ async function getFeatures(geojsonList, itemStateInDb) {
       ["Point", "MultiPoint"].includes(geojson.geometry.type)
   );
   pointFeatures = pointFeatures.concat(points).map((feature, index) => {
+    if (labelsBelowMap && feature.properties) {
+      feature.properties.type = "number";
+      feature.properties.index = index + 1;
+    }
     return {
       id: `point-${index}`,
       geojson: feature
