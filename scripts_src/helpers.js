@@ -317,7 +317,7 @@ export function getStyle(data) {
         };
         layer.source = feature.id;
       }
-      style.layers.splice(style.layers.length - 1, 0, layer);
+      style.layers.splice(style.layers.length, 0, layer);
     });
 
     return style;
