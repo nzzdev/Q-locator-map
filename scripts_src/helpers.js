@@ -170,7 +170,7 @@ export function getStyle(data) {
       }
       return ascending;
     }, []);
-    const index = allSymbolIndices[1] || style.layers.length - 1;
+    const index = allSymbolIndices[1] || style.layers.length;
     if (data.config.features.type === "vector") {
       style.sources[data.config.features.sourceName] = {
         type: "vector",
