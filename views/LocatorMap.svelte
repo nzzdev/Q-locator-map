@@ -18,6 +18,11 @@
   <Header {item} {displayOptions} />
   <Legend {item} {defaultGeojsonStyles} />
   <div id="{id}_container" class="q-locator-map-container" />
+  {#if item.options.baseLayer.style !== 'satellite'}
+    <div class="s-font-note-s s-font-note-s--light">
+      Kartengrundlage: © MapTiler, © OpenStreetMap contributors
+    </div>
+  {/if}
   <LabelsBelowMap {item} {numberMarkers} />
   <Footer {item} />
 </div>
