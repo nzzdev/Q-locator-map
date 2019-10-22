@@ -9,7 +9,7 @@ const glyphCompose = require("@mapbox/glyph-pbf-composite");
 const glob = require("glob");
 const tilesHelpers = require("./tiles.js");
 
-async function getConfig(item, itemStateInDb) {
+async function getConfig(item, itemStateInDb, toolRuntimeConfig) {
   const config = {};
   let geojsonList = item.geojsonList;
 
@@ -52,6 +52,10 @@ async function getConfig(item, itemStateInDb) {
     item.options.labelsBelowMap
   );
   config.defaultGeojsonStyles = getDefaultGeojsonStyles();
+
+  if (toolRuntimeConfig.style) {
+    config.style = toolRuntimeConfig.style;
+  }
   return config;
 }
 

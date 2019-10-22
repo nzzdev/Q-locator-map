@@ -69,7 +69,11 @@ module.exports = {
       id: `q_locator_map_${request.query._id}_${Math.floor(
         Math.random() * 100000
       )}`.replace(/-/g, ""),
-      config: await helpers.getConfig(item, request.payload.itemStateInDb),
+      config: await helpers.getConfig(
+        item,
+        request.payload.itemStateInDb,
+        toolRuntimeConfig
+      ),
       width: helpers.getExactPixelWidth(toolRuntimeConfig),
       defaultGeojsonStyles: defaultGeojsonStyles,
       numberMarkers: numberMarkers

@@ -10,15 +10,35 @@ export function getStyle(data) {
       }
     })
     .then(style => {
-      style = applyStyleConfig(style, data);
       style = filterByLayer(style, data);
       style = addHighlightedRegions(style, data);
       style = addFeatures(style, data);
+      style = applyStyleConfig(style, data);
+
       return style;
     });
 
   function applyStyleConfig(style, data) {
-    return style;
+    style = JSON.stringify(style);
+    return JSON.parse(
+      style
+        .replace(
+          /\${font-sans-light}/g,
+          data.config.style.fonts["font-sans-light"].name
+        )
+        .replace(
+          /\${font-sans-regular}/g,
+          data.config.style.fonts["font-sans-regular"].name
+        )
+        .replace(
+          /\${font-sans-medium}/g,
+          data.config.style.fonts["font-sans-medium"].name
+        )
+        .replace(
+          /\${font-serif-regular}/g,
+          data.config.style.fonts["font-serif-regular"].name
+        )
+    );
   }
 
   function getPositionProperties(geojsonProperties) {
@@ -134,7 +154,7 @@ export function getStyle(data) {
       textColor: "#05032d",
       textHaloColor: "#ffffff",
       textHaloWidth: 2,
-      textFont: ["GT America Standard Medium"],
+      textFont: ["${font-sans-medium}"],
       iconImage: geojsonProperties.type,
       iconSize: 1,
       iconAnchor: "center",
@@ -154,7 +174,7 @@ export function getStyle(data) {
       properties.iconImage = "";
     } else if (geojsonProperties.type === "label") {
       properties.iconImage = "";
-      properties.textFont = ["GT America Standard Light"];
+      properties.textFont = ["${font-sans-light}"];
     } else if (geojsonProperties.type.includes("arrow")) {
       properties.iconAnchor = positionProperties.textAnchor;
       properties.iconOffset = positionProperties.iconOffset;

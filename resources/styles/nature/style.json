@@ -1510,7 +1510,7 @@
         "text-transform": "none",
         "symbol-spacing": 350,
         "text-font": [
-          "GT America Standard Regular"
+          "${font-sans-regular}"
         ],
         "symbol-placement": "line",
         "visibility": "visible",
@@ -1554,7 +1554,7 @@
         "text-size": 10,
         "symbol-spacing": 350,
         "text-font": [
-          "GT America Standard Regular"
+          "${font-sans-regular}"
         ],
         "symbol-placement": "line",
         "visibility": "none",
@@ -1604,7 +1604,7 @@
         "text-transform": "uppercase",
         "symbol-spacing": 350,
         "text-font": [
-          "GT America Standard Regular"
+          "${font-sans-regular}"
         ],
         "symbol-placement": "line",
         "visibility": "visible",
@@ -1790,7 +1790,7 @@
         "text-size": 10,
         "text-transform": "none",
         "text-font": [
-          "GT America Standard Regular"
+          "${font-sans-regular}"
         ],
         "text-justify": "center",
         "visibility": "visible",
@@ -1839,7 +1839,7 @@
         "text-size": 10,
         "text-transform": "none",
         "text-font": [
-          "GT America Standard Regular"
+          "${font-sans-regular}"
         ],
         "text-justify": "left",
         "visibility": "visible",
@@ -1890,7 +1890,7 @@
         "text-size": 10,
         "text-transform": "none",
         "text-font": [
-          "GT America Standard Regular"
+          "${font-sans-regular}"
         ],
         "text-justify": "left",
         "visibility": "visible",
@@ -1954,7 +1954,7 @@
         },
         "text-transform": "none",
         "text-font": [
-          "GT America Standard Regular"
+          "${font-sans-regular}"
         ],
         "text-justify": "left",
         "visibility": "visible",
@@ -2043,7 +2043,7 @@
         },
         "text-transform": "none",
         "text-font": [
-          "GT America Standard Regular"
+          "${font-sans-regular}"
         ],
         "text-justify": "left",
         "visibility": "visible",
@@ -2127,7 +2127,7 @@
         },
         "text-transform": "none",
         "text-font": [
-          "GT America Standard Regular"
+          "${font-sans-regular}"
         ],
         "text-justify": "left",
         "visibility": "visible",
@@ -2216,7 +2216,7 @@
         },
         "text-transform": "none",
         "text-font": [
-          "GT America Standard Regular"
+          "${font-sans-regular}"
         ],
         "text-justify": "left",
         "visibility": "visible",
@@ -2279,7 +2279,7 @@
         "visibility": "visible",
         "text-field": "{name:de}",
         "text-font": [
-          "GT America Standard Medium"
+          "${font-sans-medium}"
         ],
         "text-transform": "uppercase",
         "text-size": 12
@@ -2326,7 +2326,7 @@
         "visibility": "visible",
         "text-field": "{name:de}",
         "text-font": [
-          "GT America Standard Medium"
+          "${font-sans-medium}"
         ],
         "text-transform": "none",
         "text-size": {
@@ -2388,7 +2388,7 @@
         "visibility": "visible",
         "text-field": "{name:de}",
         "text-font": [
-          "GT America Standard Medium"
+          "${font-sans-medium}"
         ],
         "text-transform": "uppercase",
         "text-size": {
@@ -2454,7 +2454,7 @@
         "visibility": "visible",
         "text-field": "{name:de}",
         "text-font": [
-          "GT America Standard Medium"
+          "${font-sans-medium}"
         ],
         "text-transform": "uppercase",
         "text-size": {
@@ -2507,7 +2507,7 @@
         "text-rotation-alignment": "map",
         "symbol-spacing": 500,
         "text-font": [
-          "PensumPro Regular"
+          "${font-serif-regular}"
         ],
         "text-size": {
           "stops": [
@@ -2557,8 +2557,7 @@
       "layout": {
         "text-field": "{name:de}",
         "text-font": [
-          "PensumPro Regular",
-          "Arial Unicode MS Regular"
+          "${font-serif-regular}"
         ],
         "text-size": {
           "stops": [
@@ -2620,8 +2619,7 @@
           ]
         },
         "text-font": [
-          "PensumPro Regular",
-          "Arial Unicode MS Regular"
+          "${font-serif-regular}"
         ],
         "text-transform": "none",
         "text-letter-spacing": 0.1
@@ -2660,8 +2658,7 @@
       "layout": {
         "text-field": "{name:de}",
         "text-font": [
-          "PensumPro Regular",
-          "Arial Unicode MS Regular"
+          "${font-serif-regular}"
         ],
         "text-size": {
           "stops": [
@@ -2717,8 +2714,7 @@
       "layout": {
         "text-field": "{height}",
         "text-font": [
-          "GT America Standard Regular",
-          "Arial Unicode MS Regular"
+          "${font-sans-regular}"
         ],
         "text-size": {
           "stops": [
@@ -2788,7 +2784,7 @@
       "layout": {
         "text-size": 11,
         "text-font": [
-          "GT America Standard Regular"
+          "${font-sans-regular}"
         ],
         "visibility": "visible",
         "text-offset": [
