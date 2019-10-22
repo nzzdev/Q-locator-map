@@ -27,7 +27,6 @@ export default class LocatorMap {
   }
 
   addControls() {
-    let attributionPosition = "bottom-right";
     const minimap = this.data.options.minimap;
     if (
       minimap.showMinimap &&
@@ -37,9 +36,6 @@ export default class LocatorMap {
           minimap.options.region.id &&
           minimap.options.region.id !== ""))
     ) {
-      if (minimap.options.position === "bottom-right") {
-        attributionPosition = "bottom-left";
-      }
       let bounds = this.map.getBounds().toArray();
       bounds = JSON.stringify([
         bounds[0][0],
@@ -76,13 +72,6 @@ export default class LocatorMap {
             minimap.options.position
           );
         });
-    }
-
-    if (this.data.options.baseLayer.style !== "satellite") {
-      this.map.addControl(
-        new mapboxgl.AttributionControl(),
-        attributionPosition
-      );
     }
   }
 

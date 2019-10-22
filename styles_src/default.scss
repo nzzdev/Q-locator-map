@@ -39,3 +39,13 @@
     padding-left: 8px;
   }
 }
+
+.q-locator-map-attribution {
+  margin-top: 4px;
+}
+
+.q-locator-map-attribution a,
+.q-locator-map-attribution a:visited {
+  color: currentColor;
+  text-decoration: none;
+}
