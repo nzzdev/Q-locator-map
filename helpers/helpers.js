@@ -54,8 +54,8 @@ async function getConfig(item, itemStateInDb, toolRuntimeConfig) {
   );
   config.defaultGeojsonStyles = getDefaultGeojsonStyles();
 
-  if (toolRuntimeConfig.style) {
-    config.style = toolRuntimeConfig.style;
+  if (toolRuntimeConfig.styleConfig) {
+    config.styleConfig = toolRuntimeConfig.styleConfig;
   }
   return config;
 }

@@ -14,7 +14,6 @@ export function getStyle(data) {
       style = addHighlightedRegions(style, data);
       style = addFeatures(style, data);
       style = applyStyleConfig(style, data);
-
       return style;
     });
 
@@ -24,21 +23,21 @@ export function getStyle(data) {
       style
         .replace(
           /\${font-sans-light}/g,
-          data.config.style.fonts["font-sans-light"].name
+          data.config.styleConfig.fonts["font-sans-light"].name
         )
         .replace(
           /\${font-sans-regular}/g,
-          data.config.style.fonts["font-sans-regular"].name
+          data.config.styleConfig.fonts["font-sans-regular"].name
         )
         .replace(
           /\${font-sans-medium}/g,
-          data.config.style.fonts["font-sans-medium"].name
+          data.config.styleConfig.fonts["font-sans-medium"].name
         )
         .replace(
           /\${font-serif-regular}/g,
-          data.config.style.fonts["font-serif-regular"].name
+          data.config.styleConfig.fonts["font-serif-regular"].name
         )
-        .replace(/\${fontBaseUrl}/g, data.config.style.fontBaseUrl)
+        .replace(/\${fontBaseUrl}/g, data.config.styleConfig.fonts.fontBaseUrl)
     );
   }
 
