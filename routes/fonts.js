@@ -26,15 +26,20 @@ module.exports = [
           fontstack: Joi.string().required(),
           start: Joi.number().required(),
           end: Joi.number().required()
+        },
+        query: {
+          fontBaseUrl: Joi.string().required()
         }
       }
     },
     handler: async function(request, h) {
       try {
+        const fontBaseUrl = request.query.fontBaseUrl;
         const fontstack = request.params.fontstack.split(",");
         const start = request.params.start;
         const end = request.params.end;
         const font = await request.server.methods.getFont(
+          fontBaseUrl,
           fontstack[0],
           start,
           end

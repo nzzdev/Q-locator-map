@@ -9,7 +9,7 @@
     }
   },
   "sprite": "${toolBaseUrl}/sprites/sprites",
-  "glyphs": "${toolBaseUrl}/fonts/{fontstack}/{range}.pbf",
+  "glyphs": "${toolBaseUrl}/fonts/{fontstack}/{range}.pbf?fontBaseUrl=${fontBaseUrl}",
   "layers": [
     {
       "id": "background",

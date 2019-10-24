@@ -38,6 +38,7 @@ export function getStyle(data) {
           /\${font-serif-regular}/g,
           data.config.style.fonts["font-serif-regular"].name
         )
+        .replace(/\${fontBaseUrl}/g, data.config.style.fontBaseUrl)
     );
   }
 

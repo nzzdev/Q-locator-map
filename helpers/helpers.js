@@ -3,6 +3,7 @@ const path = require("path");
 const zlib = require("zlib");
 const hasha = require("hasha");
 const turf = require("@turf/turf");
+const fetch = require("node-fetch");
 const Boom = require("@hapi/boom");
 const fontnik = require("fontnik");
 const glyphCompose = require("@mapbox/glyph-pbf-composite");
@@ -149,31 +150,34 @@ function getFontFile(fontName) {
   }
 }
 
-async function getFont(fontName, start, end) {
-  const fontFile = getFontFile(fontName);
-  return await new Promise((resolve, reject) => {
-    fontnik.range(
-      {
-        font: fontFile,
-        start: start,
-        end: end
-      },
-      (error, data) => {
-        if (error) {
-          reject(Boom.notFound());
-        } else {
-          const glyph = glyphCompose.combine([data]);
-          zlib.gzip(glyph, (error, compressedGlyph) => {
-            if (error) {
-              reject(Boom.notFound());
-            } else {
-              resolve(compressedGlyph);
-            }
-          });
+async function getFont(fontBaseUrl, fontName, start, end) {
+  const response = await fetch(`${fontBaseUrl}${fontName}.otf`);
+  if (response.ok) {
+    const fontFile = await response.buffer();
+    return await new Promise((resolve, reject) => {
+      fontnik.range(
+        {
+          font: fontFile,
+          start: start,
+          end: end
+        },
+        (error, data) => {
+          if (error) {
+            reject(Boom.notFound());
+          } else {
+            const glyph = glyphCompose.combine([data]);
+            zlib.gzip(glyph, (error, compressedGlyph) => {
+              if (error) {
+                reject(Boom.notFound());
+              } else {
+                resolve(compressedGlyph);
+              }
+            });
+          }
         }
-      }
-    );
-  });
+      );
+    });
+  }
 }
 
 async function getRegionSuggestions(components, countryCode) {
