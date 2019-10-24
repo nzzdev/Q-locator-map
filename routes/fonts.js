@@ -25,12 +25,13 @@ module.exports = [
   },
   {
     method: "GET",
-    path: "/fonts/{fontstack}/{start}-{end}.pbf",
+    path: "/fonts/{hash}/{fontstack}/{start}-{end}.pbf",
     options: {
       description: "Returns fonts in pbf format",
       tags: ["api"],
       validate: {
         params: {
+          hash: Joi.string().required(),
           fontstack: Joi.string().required(),
           start: Joi.number().required(),
           end: Joi.number().required()

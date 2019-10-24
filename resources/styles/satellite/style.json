@@ -4,12 +4,12 @@
   "sources": {
     "satellite": {
       "type": "raster",
-      "url": "https://api.mapbox.com/v4/mapbox.satellite.json?secure&access_token=${mapbox_access_token}",
+      "url": "https://api.mapbox.com/v4/mapbox.satellite.json?secure&access_token={mapboxAccessToken}",
       "tileSize": 256
     }
   },
-  "sprite": "${toolBaseUrl}/sprites/sprites",
-  "glyphs": "${toolBaseUrl}/fonts/{fontstack}/{range}.pbf?fontBaseUrl=${fontBaseUrl}",
+  "sprite": "{toolBaseUrl}/sprites/sprites",
+  "glyphs": "{toolBaseUrl}/fonts/{fontHash}/{fontstack}/{range}.pbf?fontBaseUrl={fontBaseUrl}",
   "layers": [
     {
       "id": "background",

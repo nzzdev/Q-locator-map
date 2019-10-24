@@ -43,7 +43,7 @@ export default class LocatorMap {
         bounds[1][0],
         bounds[1][1]
       ]);
-      let url = `${this.data.toolBaseUrl}/minimap/${minimap.options.type}?bounds=${bounds}&toolBaseUrl=${this.data.toolBaseUrl}`;
+      let url = `${this.data.config.toolBaseUrl}/minimap/${minimap.options.type}?bounds=${bounds}&toolBaseUrl=${this.data.config.toolBaseUrl}`;
       if (
         minimap.options.region &&
         minimap.options.region.id &&

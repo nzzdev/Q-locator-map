@@ -2,7 +2,7 @@ import Sprites from "../resources/sprites/sprites@1x.json";
 
 export function getStyle(data) {
   return fetch(
-    `${data.toolBaseUrl}/styles/${data.options.baseLayer.style}?toolBaseUrl=${data.toolBaseUrl}`
+    `${data.config.toolBaseUrl}/styles/${data.config.styles[data.options.baseLayer.style].hash}/${data.options.baseLayer.style}`
   )
     .then(response => {
       if (response.ok) {
@@ -13,31 +13,34 @@ export function getStyle(data) {
       style = filterByLayer(style, data);
       style = addHighlightedRegions(style, data);
       style = addFeatures(style, data);
-      style = applyStyleConfig(style, data);
+      style = applyConfig(style, data);
       return style;
     });
 
-  function applyStyleConfig(style, data) {
+  function applyConfig(style, data) {
     style = JSON.stringify(style);
     return JSON.parse(
       style
         .replace(
-          /\${font-sans-light}/g,
+          /{font-sans-light}/g,
           data.config.styleConfig.fonts["font-sans-light"].name
         )
         .replace(
-          /\${font-sans-regular}/g,
+          /{font-sans-regular}/g,
           data.config.styleConfig.fonts["font-sans-regular"].name
         )
         .replace(
-          /\${font-sans-medium}/g,
+          /{font-sans-medium}/g,
           data.config.styleConfig.fonts["font-sans-medium"].name
         )
         .replace(
-          /\${font-serif-regular}/g,
+          /{font-serif-regular}/g,
           data.config.styleConfig.fonts["font-serif-regular"].name
         )
-        .replace(/\${fontBaseUrl}/g, data.config.styleConfig.fonts.fontBaseUrl)
+        .replace(/{fontBaseUrl}/g, data.config.styleConfig.fonts.fontBaseUrl)
+        .replace(/{fontHash}/g, data.config.fontHash)
+        .replace(/{mapboxAccessToken}/g, data.config.mapboxAccessToken)
+        .replace(/{toolBaseUrl}/g, data.config.toolBaseUrl)
     );
   }
 
@@ -195,7 +198,7 @@ export function getStyle(data) {
       style.sources[data.config.features.sourceName] = {
         type: "vector",
         tiles: [
-          `${data.toolBaseUrl}/tilesets/${data.qId}/${data.config.features.hash}/{z}/{x}/{y}.pbf?appendItemToPayload=${data.qId}`
+          `${data.config.toolBaseUrl}/tilesets/${data.qId}/${data.config.features.hash}/{z}/{x}/{y}.pbf?appendItemToPayload=${data.qId}`
         ],
         minzoom: 0,
         maxzoom: 14
@@ -371,7 +374,7 @@ export function getStyle(data) {
         style.sources[`geodata-${highlightRegion}`] = {
           type: "vector",
           tiles: [
-            `${data.toolBaseUrl}/geodata/${highlightRegion}/{z}/{x}/{y}.pbf`
+            `${data.config.toolBaseUrl}/geodata/${highlightRegion}/{z}/{x}/{y}.pbf`
           ],
           minzoom: 0,
           maxzoom: 18

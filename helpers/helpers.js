@@ -10,7 +10,7 @@ const glyphCompose = require("@mapbox/glyph-pbf-composite");
 const glob = require("glob");
 const tilesHelpers = require("./tiles.js");
 
-async function getConfig(item, itemStateInDb, toolRuntimeConfig) {
+async function getConfig(item, itemStateInDb, toolRuntimeConfig, data) {
   const config = {};
   let geojsonList = item.geojsonList;
 
@@ -56,8 +56,24 @@ async function getConfig(item, itemStateInDb, toolRuntimeConfig) {
 
   if (toolRuntimeConfig.styleConfig) {
     config.styleConfig = toolRuntimeConfig.styleConfig;
+    config.fontHash = await getHash(toolRuntimeConfig.styleConfig.fonts);
   }
+
+  config.mapboxAccessToken = process.env.MAPBOX_ACCESS_TOKEN;
+  config.toolBaseUrl = toolRuntimeConfig.toolBaseUrl;
+  config.styles = getStyles(data.styles);
   return config;
+}
+
+function getStyles(styles) {
+  const styleHashes = {};
+  for (let [key, value] of Object.entries(styles)) {
+    styleHashes[key] = {
+      hash: value.hash
+    };
+  }
+
+  return styleHashes;
 }
 
 function getExactPixelWidth(toolRuntimeConfig) {
@@ -150,8 +166,8 @@ async function getRegionSuggestions(components, countryCode) {
   }
 }
 
-async function getHash(features) {
-  return await hasha(JSON.stringify(features), {
+async function getHash(data) {
+  return await hasha(JSON.stringify(data), {
     algorithm: "md5"
   });
 }
@@ -276,5 +292,6 @@ module.exports = {
   getRegionSuggestions: getRegionSuggestions,
   getFeatures: getFeatures,
   getDefaultGeojsonStyles: getDefaultGeojsonStyles,
-  getNumberMarkers: getNumberMarkers
+  getNumberMarkers: getNumberMarkers,
+  getHash: getHash
 };

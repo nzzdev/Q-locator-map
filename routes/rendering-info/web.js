@@ -66,13 +66,12 @@ module.exports = {
     const context = {
       item: item,
       displayOptions: toolRuntimeConfig.displayOptions || {},
-      id: `q_locator_map_${request.query._id}_${Math.floor(
-        Math.random() * 100000
-      )}`.replace(/-/g, ""),
+      id: `q_locator_map_${toolRuntimeConfig.requestId}`,
       config: await helpers.getConfig(
         item,
         request.payload.itemStateInDb,
-        toolRuntimeConfig
+        toolRuntimeConfig,
+        request.server.app
       ),
       width: helpers.getExactPixelWidth(toolRuntimeConfig),
       defaultGeojsonStyles: defaultGeojsonStyles,
@@ -95,12 +94,10 @@ module.exports = {
           new window._q_locator_map.LocatorMap(document.querySelector('#${
             context.id
           }_container'), ${JSON.stringify({
+            qId: context.item.id,
             config: context.config,
             options: context.item.options,
-            width: context.width,
-            qId: context.item.id,
-            toolBaseUrl: toolRuntimeConfig.toolBaseUrl,
-            itemStateInDb: request.payload.itemStateInDb
+            width: context.width
           })})`
         }
       ],

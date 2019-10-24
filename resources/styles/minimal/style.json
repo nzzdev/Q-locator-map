@@ -4,15 +4,15 @@
   "sources": {
     "openmaptiles": {
       "type": "vector",
-      "tiles": ["${toolBaseUrl}/tiles/openmaptiles/{z}/{x}/{y}.pbf"],
+      "tiles": ["{toolBaseUrl}/tiles/openmaptiles/{z}/{x}/{y}.pbf"],
       "minzoom": 0,
       "maxzoom": 14,
       "bounds": [-180, -85.0511, 180, 85.0511],
       "attribution": "<a href=\"https://www.maptiler.com/copyright/\" target=\"_blank\">&copy; MapTiler</a> <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">&copy; OpenStreetMap contributors</a>"
     }
   },
-  "sprite": "${toolBaseUrl}/sprites/sprites",
-  "glyphs": "${toolBaseUrl}/fonts/{fontstack}/{range}.pbf?fontBaseUrl=${fontBaseUrl}",
+  "sprite": "{toolBaseUrl}/sprites/sprites",
+  "glyphs": "{toolBaseUrl}/fonts/{fontHash}/{fontstack}/{range}.pbf?fontBaseUrl={fontBaseUrl}",
   "layers": [
     {
       "id": "background",
@@ -819,7 +819,7 @@
         "text-transform": "none",
         "symbol-spacing": 350,
         "text-font": [
-          "${font-sans-regular}"
+          "{font-sans-regular}"
         ],
         "symbol-placement": "line",
         "visibility": "visible",
@@ -870,7 +870,7 @@
         "text-transform": "uppercase",
         "symbol-spacing": 350,
         "text-font": [
-          "${font-sans-regular}"
+          "{font-sans-regular}"
         ],
         "symbol-placement": "line",
         "visibility": "visible",
@@ -1106,7 +1106,7 @@
         "text-size": 10,
         "text-transform": "none",
         "text-font": [
-          "${font-sans-regular}"
+          "{font-sans-regular}"
         ],
         "text-justify": "center",
         "visibility": "visible",
@@ -1155,7 +1155,7 @@
         "text-size": 10,
         "text-transform": "none",
         "text-font": [
-          "${font-sans-regular}"
+          "{font-sans-regular}"
         ],
         "text-justify": "left",
         "visibility": "visible",
@@ -1206,7 +1206,7 @@
         "text-size": 10,
         "text-transform": "none",
         "text-font": [
-          "${font-sans-regular}"
+          "{font-sans-regular}"
         ],
         "text-justify": "left",
         "visibility": "visible",
@@ -1270,7 +1270,7 @@
         },
         "text-transform": "none",
         "text-font": [
-          "${font-sans-regular}"
+          "{font-sans-regular}"
         ],
         "text-justify": "left",
         "visibility": "visible",
@@ -1359,7 +1359,7 @@
         },
         "text-transform": "none",
         "text-font": [
-          "${font-sans-regular}"
+          "{font-sans-regular}"
         ],
         "text-justify": "left",
         "visibility": "visible",
@@ -1443,7 +1443,7 @@
         },
         "text-transform": "none",
         "text-font": [
-          "${font-sans-regular}"
+          "{font-sans-regular}"
         ],
         "text-justify": "left",
         "visibility": "visible",
@@ -1533,7 +1533,7 @@
         },
         "text-transform": "none",
         "text-font": [
-          "${font-sans-regular}"
+          "{font-sans-regular}"
         ],
         "text-justify": "left",
         "visibility": "visible",
@@ -1596,7 +1596,7 @@
         "visibility": "visible",
         "text-field": "{name:de}",
         "text-font": [
-          "${font-sans-medium}"
+          "{font-sans-medium}"
         ],
         "text-transform": "uppercase",
         "text-size": {
@@ -1654,7 +1654,7 @@
         "visibility": "visible",
         "text-field": "{name:de}",
         "text-font": [
-          "${font-sans-medium}"
+          "{font-sans-medium}"
         ],
         "text-transform": "none",
         "text-size": {
@@ -1718,7 +1718,7 @@
         "visibility": "visible",
         "text-field": "{name:de}",
         "text-font": [
-          "${font-sans-medium}"
+          "{font-sans-medium}"
         ],
         "text-transform": "uppercase",
         "text-size": {
@@ -1784,7 +1784,7 @@
         "visibility": "visible",
         "text-field": "{name:de}",
         "text-font": [
-          "${font-sans-medium}"
+          "{font-sans-medium}"
         ],
         "text-transform": "uppercase",
         "text-size": {
@@ -1837,7 +1837,7 @@
         "text-rotation-alignment": "map",
         "symbol-spacing": 500,
         "text-font": [
-          "${font-serif-regular}"
+          "{font-serif-regular}"
         ],
         "text-size": {
           "stops": [
@@ -1899,7 +1899,7 @@
           ]
         },
         "text-font": [
-          "${font-serif-regular}"
+          "{font-serif-regular}"
         ],
         "text-transform": "none",
         "text-letter-spacing": 0.1
@@ -1936,7 +1936,7 @@
       "layout": {
         "text-field": "{name:de}",
         "text-font": [
-          "${font-serif-regular}"
+          "{font-serif-regular}"
         ],
         "text-size": {
           "stops": [
