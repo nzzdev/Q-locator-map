@@ -1,6 +1,5 @@
 const Joi = require("@hapi/joi");
 const Boom = require("@hapi/boom");
-const helpers = require("../helpers/helpers.js");
 
 module.exports = [
   {
@@ -12,7 +11,16 @@ module.exports = [
       cors: true
     },
     handler: async function(request, h) {
-      return helpers.getFonts();
+      return [
+        "GT-America-Standard-Light",
+        "GT-America-Standard-Regular",
+        "GT-America-Standard-Medium",
+        "PensumPro-Regular",
+        "UniversLTStd-Light",
+        "UniversLTStd",
+        "UniversLTStd-Black",
+        "BodoniStd"
+      ];
     }
   },
   {
