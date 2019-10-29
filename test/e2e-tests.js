@@ -9,6 +9,13 @@ const before = lab.before;
 const after = lab.after;
 const it = lab.it;
 
+const helpers = require("../helpers/helpers.js");
+const resourcesDir = "../resources/";
+const basicStyle = require(`${resourcesDir}styles/basic/style.json`);
+const minimalStyle = require(`${resourcesDir}styles/minimal/style.json`);
+const natureStyle = require(`${resourcesDir}styles/nature/style.json`);
+const satelliteStyle = require(`${resourcesDir}styles/satellite/style.json`);
+
 const routes = require("../routes/routes.js");
 
 const fixturesDir = "../resources/fixtures/data";
@@ -18,6 +25,9 @@ const fixtures = Object.keys(fixtureData).map(fixture =>
 );
 
 let server;
+const toolRuntimeConfig = {
+  toolBaseUrl: "http://localhost:3001/tools/locator_map"
+};
 
 before(async () => {
   try {
@@ -29,6 +39,24 @@ before(async () => {
     });
     await server.register(require("@hapi/inert"));
     server.route(routes);
+    server.app.styles = {
+      basic: {
+        style: basicStyle,
+        hash: await helpers.getHash(basicStyle)
+      },
+      minimal: {
+        style: minimalStyle,
+        hash: await helpers.getHash(minimalStyle)
+      },
+      nature: {
+        style: natureStyle,
+        hash: await helpers.getHash(natureStyle)
+      },
+      satellite: {
+        style: satelliteStyle,
+        hash: await helpers.getHash(satelliteStyle)
+      }
+    };
   } catch (err) {
     expect(err).to.not.exist();
   }
@@ -113,9 +141,7 @@ lab.experiment("all fixtures render", async () => {
         url: "/rendering-info/web",
         payload: {
           item: fixture,
-          toolRuntimeConfig: {
-            toolBaseUrl: "http://localhost:3001/tools/locator_map"
-          }
+          toolRuntimeConfig: toolRuntimeConfig
         }
       };
       const response = await server.inject(request);
@@ -134,9 +160,7 @@ lab.experiment("rendering-info", () => {
           some: "object",
           that: "doesn't validate against the schema"
         },
-        toolRuntimeConfig: {
-          toolBaseUrl: "http://localhost:3001/tools/locator_map"
-        }
+        toolRuntimeConfig: toolRuntimeConfig
       }
     };
     const response = await server.inject(request);
@@ -151,9 +175,7 @@ lab.experiment("assets", () => {
       method: "POST",
       payload: {
         item: fixtures[0],
-        toolRuntimeConfig: {
-          toolBaseUrl: "http://localhost:3001/tools/locator_map"
-        }
+        toolRuntimeConfig: toolRuntimeConfig
       }
     });
     const stylesheetRes = await server.inject(
