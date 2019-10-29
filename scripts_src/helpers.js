@@ -157,7 +157,7 @@ export function getStyle(data) {
       textColor: "#05032d",
       textHaloColor: "#ffffff",
       textHaloWidth: 2,
-      textFont: ["${font-sans-medium}"],
+      textFont: ["{font-sans-medium}"],
       iconImage: geojsonProperties.type,
       iconSize: 1,
       iconAnchor: "center",
@@ -177,7 +177,7 @@ export function getStyle(data) {
       properties.iconImage = "";
     } else if (geojsonProperties.type === "label") {
       properties.iconImage = "";
-      properties.textFont = ["${font-sans-light}"];
+      properties.textFont = ["{font-sans-light}"];
     } else if (geojsonProperties.type.includes("arrow")) {
       properties.iconAnchor = positionProperties.textAnchor;
       properties.iconOffset = positionProperties.iconOffset;

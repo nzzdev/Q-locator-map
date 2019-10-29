@@ -96,21 +96,25 @@ async function init() {
       cache: serverMethodCacheOptions
     });
 
+    const basicStyle = require(`${resourcesDir}styles/basic/style.json`);
+    const minimalStyle = require(`${resourcesDir}styles/minimal/style.json`);
+    const natureStyle = require(`${resourcesDir}styles/nature/style.json`);
+    const satelliteStyle = require(`${resourcesDir}styles/satellite/style.json`);
     server.app.styles = {
       basic: {
-        style: require(`${resourcesDir}styles/basic/style.json`),
+        style: basicStyle,
         hash: await helpers.getHash(basicStyle)
       },
       minimal: {
-        style: require(`${resourcesDir}styles/minimal/style.json`),
+        style: minimalStyle,
         hash: await helpers.getHash(minimalStyle)
       },
       nature: {
-        style: require(`${resourcesDir}styles/nature/style.json`),
+        style: natureStyle,
         hash: await helpers.getHash(natureStyle)
       },
       satellite: {
-        style: require(`${resourcesDir}styles/satellite/style.json`),
+        style: satelliteStyle,
         hash: await helpers.getHash(satelliteStyle)
       }
     };
