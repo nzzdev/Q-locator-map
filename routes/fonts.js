@@ -18,8 +18,7 @@ module.exports = [
         "PensumPro-Regular",
         "UniversLTStd-Light",
         "UniversLTStd",
-        "UniversLTStd-Black",
-        "BodoniStd"
+        "UniversLTStd-Black"
       ];
     }
   },
