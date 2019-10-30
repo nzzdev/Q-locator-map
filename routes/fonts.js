@@ -4,7 +4,7 @@ const Boom = require("@hapi/boom");
 module.exports = [
   {
     method: "GET",
-    path: "/fonts.json",
+    path: "/fonts/{hash}.json",
     options: {
       description: "Returns list of fonts",
       tags: ["api"],
