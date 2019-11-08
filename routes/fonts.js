@@ -16,6 +16,7 @@ module.exports = [
         "GT-America-Standard-Regular",
         "GT-America-Standard-Medium",
         "PensumPro-Regular",
+        "PensumPro-Regular-Italic",
         "UniversLTStd-Light",
         "UniversLTStd",
         "UniversLTStd-Black"
