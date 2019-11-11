@@ -16,7 +16,8 @@ The script needs the following environment variables to work:
 
 ```js
 process.env.Q_SERVER_BASE_URL = "https://q-server.st-staging.nzz.ch";
-process.env.Q_TOOL_BASE_URL = "https://q-server.st-staging.nzz.ch/tools/locator_map";
+process.env.Q_TOOL_BASE_URL =
+  "https://q-server.st-staging.nzz.ch/tools/locator_map";
 process.env.LD_USERNAME = "manuel.roth@nzz.ch";
 process.env.DATASETS = `[
   {
@@ -122,5 +123,5 @@ process.env.DATASETS = `[
   }
 ]`;
 
-require(./index.js);
+require("./index.js");
 ```

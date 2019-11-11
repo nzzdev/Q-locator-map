@@ -344,36 +344,39 @@ export function getStyle(data) {
       data.options.highlightRegion &&
       data.options.highlightRegion.length > 0
     ) {
+      style.sources.regions = {
+        type: "vector",
+        tiles: [`${data.toolBaseUrl}/tiles/regions/{z}/{x}/{y}.pbf`],
+        minzoom: 0,
+        maxzoom: 10
+      };
+
       const highlightRegions = Array.from(
         new Set(data.options.highlightRegion.map(region => region.id))
       );
       for (let highlightRegion of highlightRegions) {
-        style.sources[`geodata-${highlightRegion}`] = {
-          type: "vector",
-          tiles: [
-            `${data.toolBaseUrl}/geodata/${highlightRegion}/{z}/{x}/{y}.pbf`
-          ],
-          minzoom: 0,
-          maxzoom: 18
-        };
-
         let index = 1;
         if (data.options.baseLayer.style === "satellite") {
           index = style.layers.length;
         }
 
-        style.layers.splice(index, 0, {
-          id: `highlightedRegion-${highlightRegion}`,
-          type: "fill",
-          source: `geodata-${highlightRegion}`,
-          "source-layer": `geodata-${highlightRegion}`,
-          paint: {
-            "fill-color": "#fad250",
-            "fill-opacity": 0.4
-          }
-        });
+        for (let sourceLayer of ["countries", "subdivisions"]) {
+          style.layers.splice(index, 0, {
+            id: `highlightedRegion-${highlightRegion}`,
+            type: "fill",
+            source: "regions",
+            "source-layer": sourceLayer,
+            filter: ["==", "wikidata", highlightRegion],
+            paint: {
+              "fill-color": "#fad250",
+              "fill-opacity": 0.4
+            }
+          });
+        }
       }
     }
+
+    console.log(style);
 
     return style;
   }

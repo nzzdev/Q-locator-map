@@ -6,9 +6,16 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@turf/clone": "^6.0.2",
+    "@turf/rewind": "^5.1.5",
+    "d3-dsv": "^1.1.1",
+    "d3-geo": "^1.11.9",
     "form-data": "^2.5.0",
+    "mapshaper": "^0.4.140",
     "node-fetch": "^2.6.0",
+    "prettier": "^1.19.1",
     "promptly": "^3.0.3",
+    "query-overpass": "^1.5.5",
     "shapefile": "^0.6.6"
   }
 }
