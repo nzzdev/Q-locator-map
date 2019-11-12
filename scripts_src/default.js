@@ -1,6 +1,7 @@
 import mapboxgl from "mapbox-gl";
 import * as helpers from "./helpers.js";
 import MinimapControl from "./minimap.js";
+import ScaleControl from "./scale.js";
 export default class LocatorMap {
   constructor(element, data = {}) {
     if (element) {
@@ -27,6 +28,8 @@ export default class LocatorMap {
   }
 
   addControls() {
+    // todo: get minimap location and place accordingly
+    this.map.addControl(new ScaleControl({ maxWidth: 120 }), "bottom-left");
     const minimap = this.data.options.minimap;
     if (
       minimap.showMinimap &&
