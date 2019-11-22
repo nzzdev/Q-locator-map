@@ -28,9 +28,12 @@ export default class LocatorMap {
   }
 
   addControls() {
-    // todo: get minimap location and place accordingly
-    this.map.addControl(new ScaleControl({ maxWidth: 120 }), "bottom-left");
     const minimap = this.data.options.minimap;
+    let scalePosition =
+      minimap.options && minimap.options.position === "bottom-left"
+        ? "top-left"
+        : "bottom-left";
+    this.map.addControl(new ScaleControl({ maxWidth: 120 }), scalePosition);
     if (
       minimap.showMinimap &&
       (minimap.options.type === "globe" ||
