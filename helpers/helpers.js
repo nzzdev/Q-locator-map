@@ -9,6 +9,7 @@ const fontnik = require("fontnik");
 const glyphCompose = require("@mapbox/glyph-pbf-composite");
 const glob = require("glob");
 const tilesHelpers = require("./tiles.js");
+const deepmerge = require("deepmerge");
 
 async function getConfig(item, itemStateInDb, toolRuntimeConfig, data) {
   const config = {};
@@ -56,6 +57,7 @@ async function getConfig(item, itemStateInDb, toolRuntimeConfig, data) {
 
   if (toolRuntimeConfig.styleConfig) {
     config.styleConfig = toolRuntimeConfig.styleConfig;
+    config.styleConfig.colors = getColors(toolRuntimeConfig.styleConfig);
     config.fontHash = await getHash(toolRuntimeConfig.styleConfig.fonts);
   }
 
@@ -283,6 +285,68 @@ function getNumberMarkers() {
         svg: fs.readFileSync(f).toString("utf8")
       };
     });
+}
+
+function getColors(styleConfig) {
+  let colors = {
+    basic: {
+      background: "#f0f0f2",
+      water: "#cee9f2",
+      waterway: "#add8e6",
+      forest: "#99c7a3",
+      road: "#dfe0e5",
+      railway: "#d8d9db",
+      building: "#e3e3e8",
+      text: "#92929e",
+      boundary_country: "#a88ea8",
+      boundary_state: "#c9c4e0",
+      boundary_community: "#d4c1ee",
+      highlighted_country: "#ffffff",
+      highlighted_region: "#f4eede"
+    },
+    minimal: {
+      background: "#f0f0f2",
+      water: "#cee1e6",
+      waterway: "#add8e6",
+      forest: "#99c7a3",
+      road: "#ffffff",
+      railway: "#dcdce2",
+      building: "#cdcdcd",
+      text: "#92929e",
+      boundary: "#b6b6be",
+      highlighted_country: "#ffffff",
+      highlighted_region: "#f4eede"
+    },
+    nature: {
+      background: "#edece1",
+      water: "#cee9f2",
+      waterway: "#add8e6",
+      forest: "#99c7a3",
+      road: "#dbdad1",
+      railway: "#d9d9d9",
+      building: "#dbdad1",
+      text: "#92929e",
+      boundary: "#b6b6be",
+      highlighted_country: "#ffffff",
+      highlighted_region: "#f4eede"
+    },
+    satellite: {
+      background: "#f0f0f2"
+    },
+    minimap: {
+      background: "#ffffff",
+      water: "#cee1e6",
+      boundary: "#b6b6be",
+      text: "#92929e",
+      bbox: "#000000"
+    }
+  };
+
+  if (styleConfig.colors) {
+    colors = deepmerge(colors, styleConfig.colors);
+  }
+
+  return colors;
 }
 
 module.exports = {

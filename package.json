@@ -24,6 +24,7 @@
     "@turf/turf": "^5.1.6",
     "ajv": "^6.10.2",
     "clone": "^2.1.2",
+    "deepmerge": "^4.2.2",
     "fontnik": "^0.5.3",
     "geojson-vt": "^3.2.1",
     "glob": "^7.1.4",

@@ -2,7 +2,9 @@ import Sprites from "../resources/sprites/sprites@1x.json";
 
 export function getStyle(data) {
   return fetch(
-    `${data.config.toolBaseUrl}/styles/${data.config.styles[data.options.baseLayer.style].hash}/${data.options.baseLayer.style}`
+    `${data.config.toolBaseUrl}/styles/${
+      data.config.styles[data.options.baseLayer.style].hash
+    }/${data.options.baseLayer.style}`
   )
     .then(response => {
       if (response.ok) {
@@ -18,30 +20,34 @@ export function getStyle(data) {
     });
 
   function applyConfig(style, data) {
+    const colors = data.config.styleConfig.colors[style.name];
     style = JSON.stringify(style);
-    return JSON.parse(
+    style = JSON.parse(
       style
         .replace(
-          /{font-sans-light}/g,
-          data.config.styleConfig.fonts["font-sans-light"].name
+          /{fontSansLight}/g,
+          data.config.styleConfig.fonts.fontSansLight.name
         )
         .replace(
-          /{font-sans-regular}/g,
-          data.config.styleConfig.fonts["font-sans-regular"].name
+          /{fontSansRegular}/g,
+          data.config.styleConfig.fonts.fontSansRegular.name
         )
         .replace(
-          /{font-sans-medium}/g,
-          data.config.styleConfig.fonts["font-sans-medium"].name
+          /{fontSansMedium}/g,
+          data.config.styleConfig.fonts.fontSansMedium.name
         )
         .replace(
-          /{font-serif-regular}/g,
-          data.config.styleConfig.fonts["font-serif-regular"].name
+          /{fontSerifRegular}/g,
+          data.config.styleConfig.fonts.fontSerifRegular.name
         )
+        .replace(/{colorBackground}/g, colors.background)
         .replace(/{fontBaseUrl}/g, data.config.styleConfig.fonts.fontBaseUrl)
         .replace(/{fontHash}/g, data.config.fontHash)
         .replace(/{mapboxAccessToken}/g, data.config.mapboxAccessToken)
         .replace(/{toolBaseUrl}/g, data.config.toolBaseUrl)
     );
+
+    return style;
   }
 
   function getPositionProperties(geojsonProperties) {
@@ -157,7 +163,7 @@ export function getStyle(data) {
       textColor: "#05032d",
       textHaloColor: "#ffffff",
       textHaloWidth: 2,
-      textFont: ["{font-sans-medium}"],
+      textFont: ["{fontSansMedium}"],
       iconImage: geojsonProperties.type,
       iconSize: 1,
       iconAnchor: "center",
@@ -177,7 +183,7 @@ export function getStyle(data) {
       properties.iconImage = "";
     } else if (geojsonProperties.type === "label") {
       properties.iconImage = "";
-      properties.textFont = ["{font-sans-light}"];
+      properties.textFont = ["{fontSansLight}"];
     } else if (geojsonProperties.type.includes("arrow")) {
       properties.iconAnchor = positionProperties.textAnchor;
       properties.iconOffset = positionProperties.iconOffset;

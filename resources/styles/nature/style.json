@@ -1,6 +1,6 @@
 {
   "version": 8,
-  "name": "Nature",
+  "name": "nature",
   "sources": {
     "openmaptiles": {
       "type": "vector",
@@ -35,22 +35,7 @@
       "id": "background",
       "type": "background",
       "paint": {
-        "background-color": {
-          "stops": [
-            [
-              2,
-              "rgba(233, 239, 224, 1)"
-            ],
-            [
-              4,
-              "rgba(217, 224, 202, 1)"
-            ],
-            [
-              18,
-              "rgba(219, 226, 198, 1)"
-            ]
-          ]
-        }
+        "background-color": "{colorBackground}"
       }
     },
     {
@@ -1510,7 +1495,7 @@
         "text-transform": "none",
         "symbol-spacing": 350,
         "text-font": [
-          "{font-sans-regular}"
+          "{fontSansRegular}"
         ],
         "symbol-placement": "line",
         "visibility": "visible",
@@ -1554,7 +1539,7 @@
         "text-size": 10,
         "symbol-spacing": 350,
         "text-font": [
-          "{font-sans-regular}"
+          "{fontSansRegular}"
         ],
         "symbol-placement": "line",
         "visibility": "none",
@@ -1604,7 +1589,7 @@
         "text-transform": "uppercase",
         "symbol-spacing": 350,
         "text-font": [
-          "{font-sans-regular}"
+          "{fontSansRegular}"
         ],
         "symbol-placement": "line",
         "visibility": "visible",
@@ -1790,7 +1775,7 @@
         "text-size": 10,
         "text-transform": "none",
         "text-font": [
-          "{font-sans-regular}"
+          "{fontSansRegular}"
         ],
         "text-justify": "center",
         "visibility": "visible",
@@ -1839,7 +1824,7 @@
         "text-size": 10,
         "text-transform": "none",
         "text-font": [
-          "{font-sans-regular}"
+          "{fontSansRegular}"
         ],
         "text-justify": "left",
         "visibility": "visible",
@@ -1890,7 +1875,7 @@
         "text-size": 10,
         "text-transform": "none",
         "text-font": [
-          "{font-sans-regular}"
+          "{fontSansRegular}"
         ],
         "text-justify": "left",
         "visibility": "visible",
@@ -1954,7 +1939,7 @@
         },
         "text-transform": "none",
         "text-font": [
-          "{font-sans-regular}"
+          "{fontSansRegular}"
         ],
         "text-justify": "left",
         "visibility": "visible",
@@ -2043,7 +2028,7 @@
         },
         "text-transform": "none",
         "text-font": [
-          "{font-sans-regular}"
+          "{fontSansRegular}"
         ],
         "text-justify": "left",
         "visibility": "visible",
@@ -2127,7 +2112,7 @@
         },
         "text-transform": "none",
         "text-font": [
-          "{font-sans-regular}"
+          "{fontSansRegular}"
         ],
         "text-justify": "left",
         "visibility": "visible",
@@ -2216,7 +2201,7 @@
         },
         "text-transform": "none",
         "text-font": [
-          "{font-sans-regular}"
+          "{fontSansRegular}"
         ],
         "text-justify": "left",
         "visibility": "visible",
@@ -2279,7 +2264,7 @@
         "visibility": "visible",
         "text-field": "{name:de}",
         "text-font": [
-          "{font-sans-medium}"
+          "{fontSansMedium}"
         ],
         "text-transform": "uppercase",
         "text-size": 12
@@ -2326,7 +2311,7 @@
         "visibility": "visible",
         "text-field": "{name:de}",
         "text-font": [
-          "{font-sans-medium}"
+          "{fontSansMedium}"
         ],
         "text-transform": "none",
         "text-size": {
@@ -2388,7 +2373,7 @@
         "visibility": "visible",
         "text-field": "{name:de}",
         "text-font": [
-          "{font-sans-medium}"
+          "{fontSansMedium}"
         ],
         "text-transform": "uppercase",
         "text-size": {
@@ -2454,7 +2439,7 @@
         "visibility": "visible",
         "text-field": "{name:de}",
         "text-font": [
-          "{font-sans-medium}"
+          "{fontSansMedium}"
         ],
         "text-transform": "uppercase",
         "text-size": {
@@ -2507,7 +2492,7 @@
         "text-rotation-alignment": "map",
         "symbol-spacing": 500,
         "text-font": [
-          "{font-serif-regular}"
+          "{fontSerifRegular}"
         ],
         "text-size": {
           "stops": [
@@ -2557,7 +2542,7 @@
       "layout": {
         "text-field": "{name:de}",
         "text-font": [
-          "{font-serif-regular}"
+          "{fontSerifRegular}"
         ],
         "text-size": {
           "stops": [
@@ -2619,7 +2604,7 @@
           ]
         },
         "text-font": [
-          "{font-serif-regular}"
+          "{fontSerifRegular}"
         ],
         "text-transform": "none",
         "text-letter-spacing": 0.1
@@ -2658,7 +2643,7 @@
       "layout": {
         "text-field": "{name:de}",
         "text-font": [
-          "{font-serif-regular}"
+          "{fontSerifRegular}"
         ],
         "text-size": {
           "stops": [
@@ -2714,7 +2699,7 @@
       "layout": {
         "text-field": "{height}",
         "text-font": [
-          "{font-sans-regular}"
+          "{fontSansRegular}"
         ],
         "text-size": {
           "stops": [
@@ -2784,7 +2769,7 @@
       "layout": {
         "text-size": 11,
         "text-font": [
-          "{font-sans-regular}"
+          "{fontSansRegular}"
         ],
         "visibility": "visible",
         "text-offset": [
