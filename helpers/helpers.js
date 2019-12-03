@@ -55,11 +55,8 @@ async function getConfig(item, itemStateInDb, toolRuntimeConfig, data) {
   );
   config.defaultGeojsonStyles = getDefaultGeojsonStyles();
 
-  if (toolRuntimeConfig.styleConfig) {
-    config.styleConfig = toolRuntimeConfig.styleConfig;
-    config.styleConfig.colors = getColors(toolRuntimeConfig.styleConfig);
-    config.fontHash = await getHash(toolRuntimeConfig.styleConfig.fonts);
-  }
+  config.styleConfig = getStyleConfig(toolRuntimeConfig.styleConfig);
+  config.fontHash = await getHash(toolRuntimeConfig.styleConfig.fonts);
 
   config.mapboxAccessToken = process.env.MAPBOX_ACCESS_TOKEN;
   config.toolBaseUrl = toolRuntimeConfig.toolBaseUrl;
@@ -287,7 +284,7 @@ function getNumberMarkers() {
     });
 }
 
-function getColors(styleConfig) {
+function getStyleConfig(styleConfig) {
   let colors = {
     basic: {
       background: "#f0f0f2",
@@ -298,11 +295,11 @@ function getColors(styleConfig) {
       railway: "#d8d9db",
       building: "#e3e3e8",
       text: "#92929e",
-      boundary_country: "#a88ea8",
-      boundary_state: "#c9c4e0",
-      boundary_community: "#d4c1ee",
-      highlighted_country: "#ffffff",
-      highlighted_region: "#f4eede"
+      boundaryCountry: "#a88ea8",
+      boundaryState: "#c9c4e0",
+      boundaryCommunity: "#d4c1ee",
+      highlightedCountry: "#ffffff",
+      highlightedRegion: "#f4eede"
     },
     minimal: {
       background: "#f0f0f2",
@@ -314,8 +311,8 @@ function getColors(styleConfig) {
       building: "#cdcdcd",
       text: "#92929e",
       boundary: "#b6b6be",
-      highlighted_country: "#ffffff",
-      highlighted_region: "#f4eede"
+      highlightedCountry: "#ffffff",
+      highlightedRegion: "#f4eede"
     },
     nature: {
       background: "#edece1",
@@ -327,11 +324,21 @@ function getColors(styleConfig) {
       building: "#dbdad1",
       text: "#92929e",
       boundary: "#b6b6be",
-      highlighted_country: "#ffffff",
-      highlighted_region: "#f4eede"
+      highlightedCountry: "#ffffff",
+      highlightedRegion: "#f4eede"
     },
     satellite: {
-      background: "#f0f0f2"
+      background: "#f0f0f2",
+      water: "#cee9f2",
+      waterway: "#add8e6",
+      forest: "#99c7a3",
+      road: "#dfe0e5",
+      railway: "#d8d9db",
+      building: "#e3e3e8",
+      text: "#92929e",
+      boundary: "#ffffff",
+      highlightedCountry: "#ffffff",
+      highlightedRegion: "#f4eede"
     },
     minimap: {
       background: "#ffffff",
@@ -346,7 +353,8 @@ function getColors(styleConfig) {
     colors = deepmerge(colors, styleConfig.colors);
   }
 
-  return colors;
+  styleConfig.colors = colors;
+  return styleConfig;
 }
 
 module.exports = {

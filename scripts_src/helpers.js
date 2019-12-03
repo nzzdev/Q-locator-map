@@ -21,9 +21,18 @@ export function getStyle(data) {
 
   function applyConfig(style, data) {
     const colors = data.config.styleConfig.colors[style.name];
-    style = JSON.stringify(style);
     style = JSON.parse(
-      style
+      JSON.stringify(style)
+        .replace(/{colorBackground}/g, colors.background)
+        .replace(/{colorWater}/g, colors.water)
+        .replace(/{colorWaterway}/g, colors.waterway)
+        .replace(/{colorForest}/g, colors.forest)
+        .replace(/{colorRoad}/g, colors.road)
+        .replace(/{colorRailway}/g, colors.railway)
+        .replace(/{colorBuilding}/g, colors.building)
+        .replace(/{colorText}/g, colors.text)
+        .replace(/{colorHighlightedCountry}/g, colors.highlightedCountry)
+        .replace(/{colorHighlightedRegion}/g, colors.highlightedRegion)
         .replace(
           /{fontSansLight}/g,
           data.config.styleConfig.fonts.fontSansLight.name
@@ -40,13 +49,24 @@ export function getStyle(data) {
           /{fontSerifRegular}/g,
           data.config.styleConfig.fonts.fontSerifRegular.name
         )
-        .replace(/{colorBackground}/g, colors.background)
         .replace(/{fontBaseUrl}/g, data.config.styleConfig.fonts.fontBaseUrl)
         .replace(/{fontHash}/g, data.config.fontHash)
         .replace(/{mapboxAccessToken}/g, data.config.mapboxAccessToken)
         .replace(/{toolBaseUrl}/g, data.config.toolBaseUrl)
     );
 
+    if (style.name === "basic") {
+      style = JSON.parse(
+        JSON.stringify(style)
+          .replace(/{colorBoundaryCountry}/g, colors.boundaryCountry)
+          .replace(/{colorBoundaryState}/g, colors.boundaryState)
+          .replace(/{colorBoundaryCommunity}/g, colors.boundaryCommunity)
+      );
+    } else if (["minimal", "nature", "satellite"].includes(style.name)) {
+      style = JSON.parse(
+        JSON.stringify(style).replace(/{colorBoundary}/g, colors.boundary)
+      );
+    }
     return style;
   }
 
