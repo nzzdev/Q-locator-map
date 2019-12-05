@@ -2219,40 +2219,13 @@
           "{fontSansMedium}"
         ],
         "text-transform": "none",
-        "text-size": {
-          "base": 1,
-          "stops": [
-            [
-              0,
-              9
-            ],
-            [
-              6,
-              11
-            ]
-          ]
-        }
+        "text-size": "{fontSizeCountry}"
       },
       "paint": {
-        "text-halo-width": 1.4,
-        "text-halo-color": {
-          "stops": [
-            [
-              2,
-              "rgba(251, 254, 252, 1)"
-            ],
-            [
-              4,
-              "rgba(244, 247, 245, 1)"
-            ],
-            [
-              18,
-              "rgba(237, 240, 238, 1)"
-            ]
-          ]
-        },
-        "text-color": "rgba(185, 194, 202, 1)",
-        "text-halo-blur": 1.4
+        "text-halo-width": "{fontLineHeight}",
+        "text-halo-color": "{colorBackground}",
+        "text-color": "{fontColorCountry}",
+        "text-halo-blur": "{fontLineHeight}"
       }
     },
     {

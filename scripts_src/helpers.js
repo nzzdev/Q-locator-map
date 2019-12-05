@@ -21,6 +21,7 @@ export function getStyle(data) {
 
   function applyConfig(style, data) {
     const colors = data.config.styleConfig.colors[style.name];
+    const labels = data.config.styleConfig.labels;
     style = JSON.parse(
       JSON.stringify(style)
         .replace(/{colorBackground}/g, colors.background)
@@ -33,6 +34,9 @@ export function getStyle(data) {
         .replace(/{colorText}/g, colors.text)
         .replace(/{colorHighlightedCountry}/g, colors.highlightedCountry)
         .replace(/{colorHighlightedRegion}/g, colors.highlightedRegion)
+        .replace(/{fontSizeCountry}/g, labels.country.fontSizeCountry)
+        .replace(/{fontColorCountry}/g, labels.country.fontColorCountry)
+        .replace(/{fontLineHeight}/g, labels.fontLineHeight)
         .replace(
           /{fontSansLight}/g,
           data.config.styleConfig.fonts.fontSansLight.name
