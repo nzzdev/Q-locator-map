@@ -1,0 +1,14 @@
+# Split by wikidata attribute in order to have one file per region
+npx mapshaper \
+  -i data/osm/regions/simplified/*.json no-topology name= \
+  -split wikidata \
+  -o format=geojson data/osm/features/
+
+# Run simplification for every feature. This ensures that
+# the simplification resolution is applied for each feature separately
+for feature in data/osm/features/*.json; do
+  npx mapshaper \
+    -i "$feature" \
+    -simplify resolution=1024x1024 \
+    -o force format=geojson "$feature"
+done

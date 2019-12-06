@@ -3,6 +3,7 @@ set -o errexit
 set -o nounset
 
 mkdir -p data/osm/regions/raw
+mkdir -p data/osm/regions/clipped
 
 curl https://overpass-api.de/api/interpreter \
   --compressed \
@@ -41,3 +42,21 @@ tippecanoe \
   --simplification=4 \
   --simplify-only-low-zooms \
   -o data/osm/regions.mbtiles
+
+exit
+
+## New implementation with split files separate by country
+
+npx mapshaper \
+  -i data/osm/regions/*.geojson combine-files no-topology -merge-layers \
+  -split admin_level \
+  -clip data/osmdata/land-polygons-complete-4326/land_polygons.shp \
+  -merge-layers \
+  -split ISO3166-1 \
+  -o format=geojson data/osm/regions/clipped/
+
+npx mapshaper \
+  -i data/osm/regions/clipped/*.json combine-files no-topology -merge-layers \
+  -split type \
+  -o format=geojson target=country data/osm/countries-clipped.geojson \
+  -o format=geojson target=subdivision data/osm/subdivisions-clipped.geojson

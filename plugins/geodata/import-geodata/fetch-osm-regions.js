@@ -1,10 +1,7 @@
 const fs = require("fs");
 const { geoBounds } = require("d3-geo");
 const queryOverpassWithCallback = require("query-overpass");
-const turf = {
-  clone: require("@turf/clone").default,
-  rewind: require("@turf/rewind")
-};
+const turf = require("@turf/turf");
 
 async function fetchOsmRegions(countryCode, overpassResult) {
   const query = `
@@ -165,7 +162,7 @@ function getBbox(geojson) {
 
 if (require.main === module) {
   fetchOsmRegions("CH").then(({ geojson }) => {
-    fs.writeFileSync(`data/CH-regions.json`, JSON.stringify(geojson));
+    fs.writeFileSync("data/CH-regions.json", JSON.stringify(geojson));
   });
 }
 
