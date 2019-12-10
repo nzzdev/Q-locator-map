@@ -15,11 +15,9 @@ module.exports = [
         "GT-America-Standard-Light",
         "GT-America-Standard-Regular",
         "GT-America-Standard-Medium",
-        "PensumPro-Regular",
         "PensumPro-Regular-Italic",
-        "UniversLTStd-Light",
-        "UniversLTStd",
-        "UniversLTStd-Black"
+        "UniversLTStd-LightCn",
+        "UniversNextPro-MediumCond"
       ];
     }
   },
