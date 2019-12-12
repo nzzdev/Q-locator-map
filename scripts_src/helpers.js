@@ -34,9 +34,28 @@ export function getStyle(data) {
         .replace(/{colorText}/g, colors.text)
         .replace(/{colorHighlightedCountry}/g, colors.highlightedCountry)
         .replace(/{colorHighlightedRegion}/g, colors.highlightedRegion)
-        .replace(/{fontSizeCountry}/g, labels.country.fontSizeCountry)
-        .replace(/{fontColorCountry}/g, labels.country.fontColorCountry)
-        .replace(/{fontLineHeight}/g, labels.fontLineHeight)
+        .replace(
+          /"{textSizeCountry}"/g,
+          JSON.stringify(labels.country.textSizeCountry)
+        )
+        .replace(/{textColorCountry}/g, labels.country.textColorCountry)
+        .replace(
+          /"{textHaloWidthCountry}"/g,
+          labels.country.textHaloWidthCountry
+        )
+        .replace(/{textTransformCountry}/g, labels.country.textTransformCountry)
+        .replace(
+          /"{textSizeWater}"/g,
+          JSON.stringify(labels.water.textSizeWater)
+        )
+        .replace(
+          /"{textColorWater}"/g,
+          JSON.stringify(labels.water.textColorWater)
+        )
+        .replace(
+          /"{textHaloWidthWater}"/g,
+          JSON.stringify(labels.water.textHaloWidthWater)
+        )
         .replace(
           /{fontSansLight}/g,
           data.config.styleConfig.fonts.fontSansLight.name
