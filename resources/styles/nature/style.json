@@ -47,7 +47,7 @@
         "==",
         "$type",
         "Polygon"
-      ]
+      ],
       "paint": {
         "fill-color": "rgb(230, 233, 229)",
         "fill-opacity": {
@@ -90,7 +90,7 @@
           "class",
           "rock"
         ]
-      ]
+      ],
       "paint": {
         "fill-color": "rgba(211, 211, 211, 1)",
         "fill-opacity": {
@@ -160,7 +160,7 @@
           "class",
           "wood"
         ]
-      ]
+      ],
       "paint": {
         "fill-color": "rgba(181, 202, 155, 1)",
         "fill-opacity": {
@@ -201,7 +201,7 @@
           "class",
           "ice"
         ]
-      ]
+      ],
       "paint": {
         "fill-color": "rgba(255, 255, 255, 1)",
         "fill-opacity": {
@@ -230,7 +230,7 @@
         "==",
         "$type",
         "LineString"
-      ]
+      ],
       "paint": {
         "line-color": {
           "stops": [
@@ -258,7 +258,7 @@
           "$type",
           "Polygon"
         ]
-      ]
+      ],
       "paint": {
         "fill-color": "rgba(173, 216, 230, 1)",
         "fill-antialias": true,
@@ -373,7 +373,7 @@
           "class",
           "residential"
         ]
-      ]
+      ],
       "paint": {
         "fill-color": "rgba(207, 201, 191, 1)",
         "fill-opacity": {
@@ -580,7 +580,7 @@
           "runway",
           "taxiway"
         ]
-      ]
+      ],
       "paint": {
         "fill-opacity": {
           "base": 1,
@@ -660,7 +660,7 @@
           "class",
           "pier"
         ]
-      ]
+      ],
       "paint": {
         "fill-color": "rgb(242,243,240)",
         "fill-antialias": true
@@ -1248,7 +1248,7 @@
       "type": "fill",
       "source": "openmaptiles",
       "source-layer": "building",
-      "minzoom": 14
+      "minzoom": 14,
       "paint": {
         "fill-color": "rgba(202, 197, 189, 1)",
         "fill-outline-color": "rgba(178, 178, 178, 1)"

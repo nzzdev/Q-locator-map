@@ -26,7 +26,7 @@
       "type": "fill",
       "source": "openmaptiles",
       "source-layer": "park",
-      "filter": ["==", "$type", "Polygon"]
+      "filter": ["==", "$type", "Polygon"],
       "paint": {
         "fill-color": "{colorForest}",
         "fill-opacity": {
@@ -59,7 +59,7 @@
       "source": "openmaptiles",
       "source-layer": "landcover",
       "minzoom": 5,
-      "filter": ["all", ["==", "$type", "Polygon"], ["==", "class", "wood"]]
+      "filter": ["all", ["==", "$type", "Polygon"], ["==", "class", "wood"]],
       "paint": {
         "fill-color": "{colorForest}",
         "fill-opacity": {
@@ -78,7 +78,7 @@
       "source-layer": "waterway",
       "minzoom": 4,
       "maxzoom": 24,
-      "filter": ["==", "$type", "LineString"]
+      "filter": ["==", "$type", "LineString"],
       "paint": {
         "line-color": "{colorWater}"
       }
@@ -88,7 +88,7 @@
       "type": "fill",
       "source": "openmaptiles",
       "source-layer": "water",
-      "filter": ["==", "$type", "Polygon"]
+      "filter": ["==", "$type", "Polygon"],
       "paint": {
         "fill-color": "{colorWater}",
         "fill-antialias": true,
@@ -116,7 +116,7 @@
         "all",
         ["==", "$type", "Polygon"],
         ["==", "subclass", "ice_shelf"]
-      ]
+      ],
       "paint": {
         "fill-color": "#ffffff",
         "fill-opacity": 0.5
@@ -193,7 +193,7 @@
         "all",
         ["==", "$type", "Polygon"],
         ["in", "class", "runway", "taxiway"]
-      ]
+      ],
       "paint": {
         "fill-opacity": {
           "base": 1,
@@ -242,7 +242,7 @@
       "source": "openmaptiles",
       "source-layer": "transportation",
       "minzoom": 0,
-      "filter": ["all", ["==", "$type", "Polygon"], ["==", "class", "pier"]]
+      "filter": ["all", ["==", "$type", "Polygon"], ["==", "class", "pier"]],
       "paint": {
         "fill-color": "#ececf0",
         "fill-antialias": true
@@ -498,7 +498,7 @@
       "type": "fill",
       "source": "openmaptiles",
       "source-layer": "building",
-      "minzoom": 14
+      "minzoom": 14,
       "paint": {
         "fill-color": "{colorBackground}",
         "fill-outline-color": "#ffffff",
@@ -511,7 +511,7 @@
       "type": "fill",
       "source": "openmaptiles",
       "source-layer": "building",
-      "minzoom": 14
+      "minzoom": 14,
       "paint": {
         "fill-color": "{colorBuilding}",
         "fill-outline-color": "{colorBackground}"

@@ -26,7 +26,7 @@
       "type": "fill",
       "source": "openmaptiles",
       "source-layer": "park",
-      "filter": ["==", "$type", "Polygon"]
+      "filter": ["==", "$type", "Polygon"],
       "paint": {
         "fill-color": "rgb(230, 233, 229)",
         "fill-opacity": {
@@ -54,7 +54,7 @@
       "type": "fill",
       "source": "openmaptiles",
       "source-layer": "water",
-      "filter": ["==", "$type", "Polygon"]
+      "filter": ["==", "$type", "Polygon"],
       "paint": {
         "fill-color": "rgba(214, 214, 214, 1)",
         "fill-antialias": true,
@@ -72,7 +72,7 @@
         "all",
         ["==", "$type", "Polygon"],
         ["==", "subclass", "ice_shelf"]
-      ]
+      ],
       "paint": {
         "fill-color": "hsl(0, 0%, 98%)",
         "fill-opacity": 0.7
@@ -149,7 +149,7 @@
         "all",
         ["==", "$type", "Polygon"],
         ["in", "class", "runway", "taxiway"]
-      ]
+      ],
       "paint": {
         "fill-opacity": {
           "base": 1,
@@ -225,7 +225,7 @@
       "type": "fill",
       "source": "openmaptiles",
       "source-layer": "building",
-      "minzoom": 15
+      "minzoom": 15,
       "paint": {
         "fill-outline-color": "rgba(236, 236, 236, 1)",
         "fill-color": "rgba(203, 203, 203, 1)",
