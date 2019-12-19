@@ -124,6 +124,7 @@ export function getStyle(data) {
 
   function getPointStyleProperties(geojsonProperties) {
     const positionProperties = getPositionProperties(geojsonProperties);
+    // default properties
     const properties = {
       textAnchor: positionProperties.textAnchor,
       textTranslate: positionProperties.textTranslate,
@@ -141,21 +142,35 @@ export function getStyle(data) {
       iconOffset: [0, 0]
     };
 
-    const maxNumberMarker = 20;
-    if (
-      geojsonProperties.type.includes("number") &&
-      geojsonProperties.index <= maxNumberMarker
-    ) {
-      properties.textField = "";
-    } else if (
-      geojsonProperties.type.includes("number") &&
-      geojsonProperties.index > maxNumberMarker
-    ) {
+    // special properties handling
+
+    // handling of labels below map
+    if (geojsonProperties.type.includes("number")) {
+      const maxNumberMarker = 20;
+      if (geojsonProperties.index <= maxNumberMarker) {
+        properties.textField = "";
+      } else if (geojsonProperties.index > maxNumberMarker) {
+        properties.iconImage = "";
+      }
+    }
+
+    // handling of marker types without icon
+    if (["label", "country"].includes(geojsonProperties.type)) {
       properties.iconImage = "";
-    } else if (geojsonProperties.type === "label") {
-      properties.iconImage = "";
+    }
+
+    // handling of text font
+    if (["label", "country"].includes(geojsonProperties.type)) {
       properties.textFont = ["GT America Standard Light"];
-    } else if (geojsonProperties.type.includes("arrow")) {
+    }
+
+    // handling of text color
+    if (geojsonProperties.type === "country") {
+      properties.textColor = "#6e6e7e";
+    }
+
+    // handling of icon properties for arrow marker type
+    if (geojsonProperties.type.includes("arrow")) {
       properties.iconAnchor = positionProperties.textAnchor;
       properties.iconOffset = positionProperties.iconOffset;
     }
