@@ -29,11 +29,13 @@ export function getStyle(data) {
         .replace(/{colorWaterway}/g, colors.waterway)
         .replace(/{colorForest}/g, colors.forest)
         .replace(/{colorRoad}/g, colors.road)
+        .replace(/{colorRoadText}/g, colors.roadText)
         .replace(/{colorRailway}/g, colors.railway)
         .replace(/{colorBuilding}/g, colors.building)
         .replace(/{colorText}/g, colors.text)
         .replace(/{colorHighlightedCountry}/g, colors.highlightedCountry)
         .replace(/{colorHighlightedRegion}/g, colors.highlightedRegion)
+        .replace(/"{textHaloWidth}"/g, labels.textHaloWidth)
         .replace(
           /"{textSizeCountry}"/g,
           JSON.stringify(labels.country.textSizeCountry)
@@ -45,6 +47,11 @@ export function getStyle(data) {
         )
         .replace(/{textTransformCountry}/g, labels.country.textTransformCountry)
         .replace(
+          /"{textSizeCapital}"/g,
+          JSON.stringify(labels.capital.textSizeCapital)
+        )
+        .replace(/"{textSizeCity}"/g, JSON.stringify(labels.city.textSizeCity))
+        .replace(
           /"{textSizeWater}"/g,
           JSON.stringify(labels.water.textSizeWater)
         )
@@ -55,6 +62,10 @@ export function getStyle(data) {
         .replace(
           /"{textHaloWidthWater}"/g,
           JSON.stringify(labels.water.textHaloWidthWater)
+        )
+        .replace(
+          /"{textColorOcean}"/g,
+          JSON.stringify(labels.ocean.textColorOcean)
         )
         .replace(
           /{fontSansLight}/g,

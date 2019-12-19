@@ -285,13 +285,14 @@ function getNumberMarkers() {
 }
 
 function getStyleConfig(styleConfig) {
-  let colors = {
+  let defaultStyleConfig = {
     basic: {
       background: "#f0f0f2",
       water: "#cee9f2",
       waterway: "#add8e6",
       forest: "#99c7a3",
       road: "#dfe0e5",
+      roadText: "#b6b6be",
       railway: "#d8d9db",
       building: "#e3e3e8",
       text: "#92929e",
@@ -346,15 +347,40 @@ function getStyleConfig(styleConfig) {
       boundary: "#b6b6be",
       text: "#92929e",
       bbox: "#000000"
+    },
+    labels: {
+      textHaloWidth: 2,
+      country: {
+        textSizeCountry: {
+          base: 1,
+          stops: [
+            [0, 10],
+            [3, 12],
+            [4, 16]
+          ]
+        },
+        textColorCountry: "#6e6e7e",
+        textHaloWidthCountry: 1.4,
+        textTransformCountry: "none"
+      },
+      capital: {
+        textSizeCapital: 15
+      },
+      city: {
+        textSizeCity: 13
+      },
+      water: {
+        textSizeWater: 13,
+        textColorWater: "#0093bf",
+        textHaloWidthWater: 2
+      },
+      ocean: {
+        textColorOcean: "#ffffff"
+      }
     }
   };
 
-  if (styleConfig.colors) {
-    colors = deepmerge(colors, styleConfig.colors);
-  }
-
-  styleConfig.colors = colors;
-  return styleConfig;
+  return deepmerge(defaultStyleConfig, styleConfig);
 }
 
 module.exports = {
