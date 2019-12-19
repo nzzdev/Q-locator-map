@@ -155,7 +155,11 @@ export function getStyle(data) {
     }
 
     // handling of marker types without icon
-    if (["label", "country"].includes(geojsonProperties.type)) {
+    if (
+      ["label", "country", "capital", "city", "water"].includes(
+        geojsonProperties.type
+      )
+    ) {
       properties.iconImage = "";
     }
 
@@ -164,9 +168,25 @@ export function getStyle(data) {
       properties.textFont = ["GT America Standard Light"];
     }
 
+    // handling of text size
+    if (["city", "water"].includes(geojsonProperties.type)) {
+      properties.textSize = 13;
+    } else if (geojsonProperties.type === "capital") {
+      properties.textSize = 15;
+    }
+
     // handling of text color
     if (geojsonProperties.type === "country") {
       properties.textColor = "#6e6e7e";
+    } else if (["capital", "city"].includes(geojsonProperties.type)) {
+      properties.textColor = "#92929e";
+    } else if (geojsonProperties.type === "water") {
+      properties.textColor = "#0093bf";
+    }
+
+    // handling of text halo
+    if (geojsonProperties.type === "water") {
+      properties.textHaloColor = "#CEE9F2";
     }
 
     // handling of icon properties for arrow marker type
