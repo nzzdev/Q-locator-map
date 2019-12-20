@@ -1,68 +1,95 @@
-## OpenStreetMap scripts
+# Import regions from OpenStreetMap
 
-### Prerequisites
+The total process takes about 1 hour.
 
-Download land polygons.
+## Prerequisites
 
-### Steps
+Download land polygons from osmdata, unpack and store the shapefile in `import-osm/0-land-polygons`.
+Direct link: https://osmdata.openstreetmap.de/download/land-polygons-complete-4326.zip
 
-1. Query list of countries (Overpass)
+Landing page: https://osmdata.openstreetmap.de/data/land-polygons.html
+=> Select "WGS 84, Large polygons not split".
+
+## Steps
+
+Run this script to execute all steps listed below:
+
+```bash
+import-osm/import-osm.sh
+```
+
+#### 1. Query list of countries (Overpass)
 
 Input: Nothing.
 Output: List of countries with ISO3166-1 codes.
 
-2. Query regions by country (Overpass)
+#### 2. Query regions by country (Overpass)
 
 Input: List of countries with ISO3166-1 codes.
 Output: For every country, one GeoJSON file with country and subdivision polygons.
 
 Also store raw data only download if raw data is not available.
 
-3. Clip with land polygons
+#### 3. Clip with land polygons
 
 Input: For every country, one GeoJSON file with country and subdivision polygons.
 Output: For every country, one GeoJSON file with country and subdivision polygons.
 
-4. Merge regions
+#### 4. Merge regions
 
 Input: For every country, one GeoJSON file with country and subdivision polygons.
 Output: One GeoJSON file with all countries, one GeoJSON file with all subdivisions.
 
-5. Generate vector tiles
+#### 5. Generate vector tiles
 
 Input: One GeoJSON file with all countries, one GeoJSON file with all subdivisions.
 Output: mbtiles file with 2 layers (countries, subdivisions).
 
-6. Reduce regions (remove small disconnected parts, e.g. remove French Guiana from France)
+#### 6. Reduce regions (remove small disconnected parts, e.g. remove French Guiana from France)
 
 Input: For every country, one GeoJSON file with country and subdivision polygons.
 Output: For every country, one GeoJSON file with country and subdivision polygons.
 
-7. Split by region
+#### 7. Split by region
 
 Input: For every country, one GeoJSON file with country and subdivision polygons.
 Output: For every region, one GeoJSON file.
 
-8. Simplify regions
+#### 8. Simplify regions
 
 Input: For every region, one GeoJSON file.
 Output: For every region, one GeoJSON file.
 
 ### Clean up
 
-## Geodata import script
+Run this to remove all `output` folders:
 
-The geodata import script is responsible for converting shapefiles to geojson, uploading the geojson's to S3 and storing the metadata in geodata database.
+```bash
+import-osm/remove-outputs.sh
+```
 
-### Description
+# Upload regions for highlighting
+
+Vector tiles are generated in step 5 above, and are stored at
+`import-osm/5-vector-tiles/output/regions.mbtiles`.
+
+Give the file an appropriate name, e.g. `regions-2019-12-20.mbtiles`, and upload it to S3, e.g. to `nzz-q-assets-stage/q-locator-map`.
+
+Then use the `q-locator-map-tilesets` service to deploy the tileset.
+
+# Upload regions for minimap
+
+The geodata upload script is responsible for reading geojsons, uploading the geojsons to S3 and storing the metadata in geodata database.
+
+## Description
 
 The script does the following things:
 
-- Reads the shapefiles in the folder `/data` and converts all the features to geojson
-- Uploads the geojson to S3 using the Q-Server `/files` route
+- Reads the geojsons from step 8 above
+- Uploads the geojsons to S3 using the Q-Server `/files` route
 - Stores the metadata in the geodata database using the `/geodata/{id}` route of the Q-Locator-Map tool
 
-### Configuration
+## Configuration
 
 The script needs the following environment variables to work:
 
@@ -71,109 +98,49 @@ process.env.Q_SERVER_BASE_URL = "https://q-server.st-staging.nzz.ch";
 process.env.Q_TOOL_BASE_URL =
   "https://q-server.st-staging.nzz.ch/tools/locator_map";
 process.env.LD_USERNAME = "manuel.roth@nzz.ch";
-process.env.DATASETS = `[
+process.env.DATASETS = JSON.stringify([
   {
     disable: true,
     version: 1,
     item: "Q252",
-    path: "/data/ne_10m_admin_0_countries/ne_10m_admin_0_countries",
-    "description": "Gültig ab 24.05.2018",
-    "validFrom": "Thu May 24 2018 00:00:00 GMT+0000 (CET)",
-    "source": {
-      "url": "https://www.naturalearthdata.com",
-      "label": "Natural Earth"
+    path: "import-osm/8-simplify-regions/output/",
+    description: "Gültig ab 20.12.2019",
+    validFrom: "Fri Dec 20 2019 00:00:00 GMT+0000 (CET)",
+    source: {
+      url: "https://www.openstreetmap.org/copyright",
+      label: "OpenStreetMap"
     },
     properties: {
-      wikidataid: "WIKIDATAID",
-      name: "NAME",
-      name_de: "NAME_DE",
-      name_fr: "NAME_FR",
-      name_it: "NAME_IT",
-      name_en: "NAME_EN",
-      postal: "POSTAL",
-      abbrevation: "ABBREV",
-      continent: "CONTINENT"
-    },
-    id: "WIKIDATAID",
-    label: "NAME_DE",
-    labelFallback: "NAME"
-  },
-  {
-    disable: true,
-    version: 1,
-    path: "/data/ne_10m_admin_0_countries/ne_10m_admin_0_countries",
-    "description": "Gültig ab 24.05.2018",
-    "validFrom": "Thu May 24 2018 00:00:00 GMT+0000 (CET)",
-    "source": {
-      "url": "https://www.naturalearthdata.com",
-      "label": "Natural Earth"
-    },
-    properties: {
-      wikidataid: "WIKIDATAID",
-      name: "NAME",
-      name_de: "NAME_DE",
-      name_fr: "NAME_FR",
-      name_it: "NAME_IT",
-      name_en: "NAME_EN",
-      postal: "POSTAL",
-      abbrevation: "ABBREV",
-      continent: "CONTINENT"
-    },
-    id: "WIKIDATAID",
-    label: "NAME_DE",
-    labelFallback: "NAME"
-  },
-  {
-    disable: true,
-    version: 1,
-    item: "Q752346",
-    path:
-      "/data/ne_10m_admin_1_states_provinces/ne_10m_admin_1_states_provinces",
-    "description": "Gültig ab 24.05.2018",
-    "validFrom": "Thu May 24 2018 00:00:00 GMT+0000 (CET)",
-    "source": {
-      "url": "https://www.naturalearthdata.com",
-      "label": "Natural Earth"
-    },
-    properties: {
-      wikidataid: "wikidataid",
+      wikidataid: "wikidata",
       name: "name",
-      name_de: "name_de",
-      name_fr: "name_fr",
-      name_it: "name_it",
-      name_en: "name_en",
-      postal: "postal",
-      country: "admin"
+      name_de: "name:de",
+      type: "type"
     },
-    id: "wikidataid",
-    label: "name_de",
+    id: "wikidata",
+    label: "name:de",
     labelFallback: "name"
   },
   {
+    disable: true,
     version: 1,
-    path:
-      "/data/ne_10m_admin_1_states_provinces/ne_10m_admin_1_states_provinces",
-    "description": "Gültig ab 24.05.2018",
-    "validFrom": "Thu May 24 2018 00:00:00 GMT+0000 (CET)",
-    "source": {
-      "url": "https://www.naturalearthdata.com",
-      "label": "Natural Earth"
+    path: "import-osm/8-simplify-regions/output/",
+    description: "Gültig ab 20.12.2019",
+    validFrom: "Fri Dec 20 2019 00:00:00 GMT+0000 (CET)",
+    source: {
+      url: "https://www.openstreetmap.org/copyright",
+      label: "OpenStreetMap"
     },
     properties: {
-      wikidataid: "wikidataid",
+      wikidataid: "wikidata",
       name: "name",
-      name_de: "name_de",
-      name_fr: "name_fr",
-      name_it: "name_it",
-      name_en: "name_en",
-      postal: "postal",
-      country: "admin"
+      name_de: "name:de",
+      type: "type"
     },
-    id: "wikidataid",
-    label: "name_de",
+    id: "wikidata",
+    label: "name:de",
     labelFallback: "name"
   }
-]`;
+]);
 
 require("./index.js");
 ```
