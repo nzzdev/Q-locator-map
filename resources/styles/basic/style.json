@@ -91,7 +91,6 @@
       "filter": ["==", "$type", "Polygon"],
       "paint": {
         "fill-color": "{colorWater}",
-        "fill-antialias": true,
         "fill-outline-color": "#e9f5f6"
       }
     },
@@ -133,10 +132,6 @@
         ["==", "$type", "LineString"],
         ["all", ["==", "brunnel", "tunnel"], ["==", "class", "motorway"]]
       ],
-      "layout": {
-        "line-cap": "butt",
-        "line-join": "miter"
-      },
       "paint": {
         "line-color": "{colorRoad}",
         "line-width": {
@@ -170,8 +165,7 @@
             [16, 6],
             [20, 20]
           ]
-        },
-        "line-opacity": 1
+        }
       }
     },
     {
@@ -219,8 +213,7 @@
             [11, 4],
             [17, 50]
           ]
-        },
-        "line-opacity": 1
+        }
       }
     },
     {
@@ -231,8 +224,7 @@
       "minzoom": 0,
       "filter": ["all", ["==", "$type", "Polygon"], ["==", "class", "pier"]],
       "paint": {
-        "fill-color": "#ececf0",
-        "fill-antialias": true
+        "fill-color": "#ececf0"
       }
     },
     {
@@ -276,8 +268,7 @@
             [13, 0.25],
             [20, 5]
           ]
-        },
-        "line-opacity": 1
+        }
       }
     },
     {
@@ -406,8 +397,7 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "{colorRailway}",
-        "line-width": 1
+        "line-color": "{colorRailway}"
       }
     },
     {
@@ -425,8 +415,7 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "{colorRailway}",
-        "line-width": 1
+        "line-color": "{colorRailway}"
       }
     },
     {
@@ -464,7 +453,6 @@
       "paint": {
         "fill-color": "{colorBackground}",
         "fill-outline-color": "#ffffff",
-        "fill-antialias": true,
         "fill-translate": [2, 1]
       }
     },
@@ -490,10 +478,6 @@
         ["==", "$type", "LineString"],
         ["all", ["==", "brunnel", "bridge"], ["==", "class", "motorway"]]
       ],
-      "layout": {
-        "line-cap": "butt",
-        "line-join": "miter"
-      },
       "paint": {
         "line-color": "{colorRoad}",
         "line-width": {
@@ -504,8 +488,7 @@
             [20, 35]
           ]
         },
-        "line-dasharray": [2, 0],
-        "line-opacity": 1
+        "line-dasharray": [2, 0]
       }
     },
     {
@@ -549,7 +532,6 @@
       "layout": {
         "text-size": 10,
         "text-max-angle": 30,
-        "text-transform": "none",
         "symbol-spacing": 350,
         "text-font": ["{fontSansRegular}"],
         "symbol-placement": "line",
@@ -578,7 +560,6 @@
       "layout": {
         "text-size": 10,
         "text-max-angle": 30,
-        "text-transform": "uppercase",
         "symbol-spacing": 350,
         "text-font": ["{fontSansRegular}"],
         "symbol-placement": "line",
@@ -613,9 +594,7 @@
             [6, 0.3],
             [10, 0.9]
           ]
-        },
-        "line-blur": 0,
-        "line-opacity": 1
+        }
       }
     },
     {
@@ -637,9 +616,7 @@
             [4, 0.4],
             [10, 1.5]
           ]
-        },
-        "line-blur": 0,
-        "line-opacity": 1
+        }
       }
     },
     {
@@ -664,9 +641,7 @@
             [0, 0.5],
             [10, 1.5]
           ]
-        },
-        "line-blur": 0,
-        "line-opacity": 1
+        }
       }
     },
     {
@@ -687,8 +662,6 @@
             [10, 1.5]
           ]
         },
-        "line-blur": 0,
-        "line-opacity": 1,
         "line-dasharray": [0.5, 2, 2]
       }
     },
@@ -708,7 +681,6 @@
       "layout": {
         "text-size": "{textSizeCity}",
         "text-font": ["{fontSansRegular}"],
-
         "text-field": "{name:de}"
       },
       "paint": {
