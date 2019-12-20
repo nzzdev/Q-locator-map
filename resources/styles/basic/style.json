@@ -530,7 +530,7 @@
         ["!has", "name:de"]
       ],
       "layout": {
-        "text-size": 10,
+        "text-size": 12,
         "text-max-angle": 30,
         "symbol-spacing": 350,
         "text-font": ["{fontSansRegular}"],
@@ -558,7 +558,7 @@
         ["has", "name:de"]
       ],
       "layout": {
-        "text-size": 10,
+        "text-size": 12,
         "text-max-angle": 30,
         "symbol-spacing": 350,
         "text-font": ["{fontSansRegular}"],
