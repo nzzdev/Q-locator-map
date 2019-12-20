@@ -1,8 +1,7 @@
-const fs = require("fs");
 const { geoArea, geoCentroid, geoDistance } = require("d3-geo");
 const turf = require("@turf/turf");
 
-function simplifyRegions(features) {
+function reduceRegions(features) {
   features.forEach(feature => {
     const { type, coordinates } = feature.geometry;
     if (type === "MultiPolygon") {
@@ -41,16 +40,4 @@ function simplifyRegions(features) {
   });
 }
 
-if (require.main === module) {
-  const geojson = JSON.parse(
-    fs.readFileSync("data/osm/regions/clipped/US.json")
-  );
-  // geojson.features = geojson.features.slice(1);
-  simplifyRegions(geojson.features);
-  fs.writeFileSync(
-    "data/osm/test-US-simplified.geojson",
-    JSON.stringify(geojson)
-  );
-}
-
-module.exports = simplifyRegions;
+module.exports = reduceRegions;

@@ -1,3 +1,55 @@
+## OpenStreetMap scripts
+
+### Prerequisites
+
+Download land polygons.
+
+### Steps
+
+1. Query list of countries (Overpass)
+
+Input: Nothing.
+Output: List of countries with ISO3166-1 codes.
+
+2. Query regions by country (Overpass)
+
+Input: List of countries with ISO3166-1 codes.
+Output: For every country, one GeoJSON file with country and subdivision polygons.
+
+Also store raw data only download if raw data is not available.
+
+3. Clip with land polygons
+
+Input: For every country, one GeoJSON file with country and subdivision polygons.
+Output: For every country, one GeoJSON file with country and subdivision polygons.
+
+4. Merge regions
+
+Input: For every country, one GeoJSON file with country and subdivision polygons.
+Output: One GeoJSON file with all countries, one GeoJSON file with all subdivisions.
+
+5. Generate vector tiles
+
+Input: One GeoJSON file with all countries, one GeoJSON file with all subdivisions.
+Output: mbtiles file with 2 layers (countries, subdivisions).
+
+6. Reduce regions (remove small disconnected parts, e.g. remove French Guiana from France)
+
+Input: For every country, one GeoJSON file with country and subdivision polygons.
+Output: For every country, one GeoJSON file with country and subdivision polygons.
+
+7. Split by region
+
+Input: For every country, one GeoJSON file with country and subdivision polygons.
+Output: For every region, one GeoJSON file.
+
+8. Simplify regions
+
+Input: For every region, one GeoJSON file.
+Output: For every region, one GeoJSON file.
+
+### Clean up
+
 ## Geodata import script
 
 The geodata import script is responsible for converting shapefiles to geojson, uploading the geojson's to S3 and storing the metadata in geodata database.

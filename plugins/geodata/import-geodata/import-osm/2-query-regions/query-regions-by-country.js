@@ -3,7 +3,7 @@ const { geoBounds } = require("d3-geo");
 const queryOverpassWithCallback = require("query-overpass");
 const turf = require("@turf/turf");
 
-async function fetchOsmRegions(countryCode, overpassResult) {
+async function queryRegionsByCountry(countryCode, overpassResult) {
   const query = `
     [out:json];
 
@@ -100,13 +100,14 @@ async function parseOverpassResult(overpassResult, keepTags, countryCode) {
     properties.osmRelationId = parseInt(feature.id.split("/")[1]);
     delete feature.id;
 
-    if (properties["ISO3166-1"] && properties["ISO3166-2"]) {
-      console.log(
-        `Feature is both country and subdivision, country: ${properties["ISO3166-1"]}, subdivision: ${properties["ISO3166-2"]}`
-      );
-    }
-
     // Set type to country / subdivision
+    // ---
+    // Some regions (usually "dependent territories") are both countries and subdivisions and also
+    // have a separate ISO3166-1 country code, in addition to the ISO3166-2 subdivision code.
+    // For example American Samoa has these codes:
+    //    ISO3166-1: AS, ISO3166-2: US-AS
+    // These regions will be labeled as "subdivision" here.
+    // See https://en.wikipedia.org/wiki/ISO_3166-2#Subdivisions_included_in_ISO_3166-1
     if (properties["ISO3166-1"] === countryCode) {
       properties.type = "country";
     } else if (properties["ISO3166-2"]) {
@@ -161,9 +162,9 @@ function getBbox(geojson) {
 }
 
 if (require.main === module) {
-  fetchOsmRegions("CH").then(({ geojson }) => {
-    fs.writeFileSync("data/CH-regions.json", JSON.stringify(geojson));
+  queryRegionsByCountry("CH").then(({ geojson }) => {
+    fs.writeFileSync("CH-regions.json", JSON.stringify(geojson));
   });
 }
 
-module.exports = fetchOsmRegions;
+module.exports = queryRegionsByCountry;

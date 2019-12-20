@@ -368,15 +368,13 @@ export function getStyle(data) {
             "source-layer": sourceLayer,
             filter: ["==", "wikidata", highlightRegion],
             paint: {
-              "fill-color": "#fad250",
+              "fill-color": "#fad250", // TODO different colors for countries/subdivisions?
               "fill-opacity": 0.4
             }
           });
         }
       }
     }
-
-    console.log(style);
 
     return style;
   }
