@@ -14,7 +14,6 @@
     "node-fetch": "^2.6.0",
     "prettier": "^1.19.1",
     "promptly": "^3.0.3",
-    "query-overpass": "^1.5.5",
-    "shapefile": "^0.6.6"
+    "query-overpass": "^1.5.5"
   }
 }
