@@ -398,9 +398,6 @@
     {
       "id": "tunnel_motorway_casing",
       "type": "line",
-      "metadata": {
-        "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
-      },
       "source": "openmaptiles",
       "source-layer": "transportation",
       "minzoom": 6,
@@ -518,9 +515,6 @@
     {
       "id": "aeroway-taxiway",
       "type": "line",
-      "metadata": {
-        "mapbox:group": "1444849345966.4436"
-      },
       "source": "openmaptiles",
       "source-layer": "aeroway",
       "minzoom": 12,
@@ -561,9 +555,6 @@
     {
       "id": "aeroway-area",
       "type": "fill",
-      "metadata": {
-        "mapbox:group": "1444849345966.4436"
-      },
       "source": "openmaptiles",
       "source-layer": "aeroway",
       "minzoom": 4,
@@ -601,9 +592,6 @@
     {
       "id": "aeroway-runway",
       "type": "line",
-      "metadata": {
-        "mapbox:group": "1444849345966.4436"
-      },
       "source": "openmaptiles",
       "source-layer": "aeroway",
       "minzoom": 11,
@@ -645,7 +633,6 @@
     {
       "id": "road_area_pier",
       "type": "fill",
-      "metadata": {},
       "source": "openmaptiles",
       "source-layer": "transportation",
       "filter": [
@@ -669,7 +656,6 @@
     {
       "id": "road_pier",
       "type": "line",
-      "metadata": {},
       "source": "openmaptiles",
       "source-layer": "transportation",
       "filter": [
@@ -709,9 +695,6 @@
     {
       "id": "highway_path",
       "type": "line",
-      "metadata": {
-        "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
-      },
       "source": "openmaptiles",
       "source-layer": "transportation",
       "minzoom": 5,
@@ -757,9 +740,6 @@
     {
       "id": "highway_minor",
       "type": "line",
-      "metadata": {
-        "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
-      },
       "source": "openmaptiles",
       "source-layer": "transportation",
       "minzoom": 5,
@@ -803,9 +783,6 @@
     {
       "id": "highway_major",
       "type": "line",
-      "metadata": {
-        "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
-      },
       "source": "openmaptiles",
       "source-layer": "transportation",
       "minzoom": 5,
@@ -849,9 +826,6 @@
     {
       "id": "highway_major_subtle",
       "type": "line",
-      "metadata": {
-        "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
-      },
       "source": "openmaptiles",
       "source-layer": "transportation",
       "maxzoom": 11,
@@ -894,9 +868,6 @@
     {
       "id": "highway_motorway_inner",
       "type": "line",
-      "metadata": {
-        "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
-      },
       "source": "openmaptiles",
       "source-layer": "transportation",
       "minzoom": 5,
@@ -950,9 +921,6 @@
     {
       "id": "highway_motorway_subtle",
       "type": "line",
-      "metadata": {
-        "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
-      },
       "source": "openmaptiles",
       "source-layer": "transportation",
       "minzoom": 5,
@@ -994,9 +962,6 @@
     {
       "id": "highway_motorway_bridge_casing",
       "type": "line",
-      "metadata": {
-        "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
-      },
       "source": "openmaptiles",
       "source-layer": "transportation",
       "minzoom": 5,
@@ -1054,9 +1019,6 @@
     {
       "id": "highway_motorway_bridge_inner",
       "type": "line",
-      "metadata": {
-        "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
-      },
       "source": "openmaptiles",
       "source-layer": "transportation",
       "minzoom": 5,
@@ -1121,9 +1083,6 @@
     {
       "id": "railway",
       "type": "line",
-      "metadata": {
-        "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
-      },
       "source": "openmaptiles",
       "source-layer": "transportation",
       "minzoom": 10,
@@ -1171,9 +1130,6 @@
     {
       "id": "railway_service",
       "type": "line",
-      "metadata": {
-        "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
-      },
       "source": "openmaptiles",
       "source-layer": "transportation",
       "minzoom": 10,
@@ -1208,9 +1164,6 @@
     {
       "id": "railway_transit",
       "type": "line",
-      "metadata": {
-        "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
-      },
       "source": "openmaptiles",
       "source-layer": "transportation",
       "minzoom": 10,
@@ -1257,9 +1210,6 @@
     {
       "id": "highway_name_other",
       "type": "symbol",
-      "metadata": {
-        "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
-      },
       "source": "openmaptiles",
       "source-layer": "transportation_name",
       "filter": [
@@ -1306,9 +1256,6 @@
     {
       "id": "highway_name_other-de",
       "type": "symbol",
-      "metadata": {
-        "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
-      },
       "source": "openmaptiles",
       "source-layer": "transportation_name",
       "filter": [
@@ -1355,9 +1302,6 @@
     {
       "id": "boundary_state",
       "type": "line",
-      "metadata": {
-        "mapbox:group": "a14c9607bc7954ba1df7205bf660433f"
-      },
       "source": "openmaptiles",
       "source-layer": "boundary",
       "minzoom": 3,
@@ -1404,9 +1348,6 @@
     {
       "id": "boundary_country",
       "type": "line",
-      "metadata": {
-        "mapbox:group": "a14c9607bc7954ba1df7205bf660433f"
-      },
       "source": "openmaptiles",
       "source-layer": "boundary",
       "filter": [
@@ -1448,9 +1389,6 @@
     {
       "id": "boundary_country_disputed",
       "type": "line",
-      "metadata": {
-        "mapbox:group": "a14c9607bc7954ba1df7205bf660433f"
-      },
       "source": "openmaptiles",
       "source-layer": "boundary",
       "filter": [
@@ -1488,9 +1426,6 @@
     {
       "id": "place_suburb-de",
       "type": "symbol",
-      "metadata": {
-        "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
-      },
       "source": "openmaptiles",
       "source-layer": "place",
       "minzoom": 5,
@@ -1536,9 +1471,6 @@
     {
       "id": "place_village",
       "type": "symbol",
-      "metadata": {
-        "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
-      },
       "source": "openmaptiles",
       "source-layer": "place",
       "minzoom": 5,
@@ -1586,9 +1518,6 @@
     {
       "id": "place_village-de",
       "type": "symbol",
-      "metadata": {
-        "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
-      },
       "source": "openmaptiles",
       "source-layer": "place",
       "minzoom": 5,
@@ -1636,9 +1565,6 @@
     {
       "id": "place_town-de",
       "type": "symbol",
-      "metadata": {
-        "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
-      },
       "source": "openmaptiles",
       "source-layer": "place",
       "minzoom": 5,
@@ -1711,9 +1637,6 @@
     {
       "id": "place_city-de",
       "type": "symbol",
-      "metadata": {
-        "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
-      },
       "source": "openmaptiles",
       "source-layer": "place",
       "minzoom": 5,
@@ -1799,9 +1722,6 @@
     {
       "id": "place_capital-de",
       "type": "symbol",
-      "metadata": {
-        "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
-      },
       "source": "openmaptiles",
       "source-layer": "place",
       "minzoom": 5,
@@ -1882,9 +1802,6 @@
     {
       "id": "place_city_large-de",
       "type": "symbol",
-      "metadata": {
-        "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
-      },
       "source": "openmaptiles",
       "source-layer": "place",
       "minzoom": 5,
@@ -1970,9 +1887,6 @@
     {
       "id": "place_state-de",
       "type": "symbol",
-      "metadata": {
-        "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
-      },
       "source": "openmaptiles",
       "source-layer": "place",
       "minzoom": 5,
@@ -2012,9 +1926,6 @@
     {
       "id": "place_country_other-de",
       "type": "symbol",
-      "metadata": {
-        "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
-      },
       "source": "openmaptiles",
       "source-layer": "place",
       "minzoom": 0,
@@ -2069,9 +1980,6 @@
     {
       "id": "place_country_minor-de",
       "type": "symbol",
-      "metadata": {
-        "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
-      },
       "source": "openmaptiles",
       "source-layer": "place",
       "maxzoom": 8,
@@ -2133,9 +2041,6 @@
     {
       "id": "place_country_major-de",
       "type": "symbol",
-      "metadata": {
-        "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
-      },
       "source": "openmaptiles",
       "source-layer": "place",
       "minzoom": 0,
