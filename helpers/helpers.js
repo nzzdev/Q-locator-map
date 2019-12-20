@@ -286,67 +286,69 @@ function getNumberMarkers() {
 
 function getStyleConfig(styleConfig) {
   let defaultStyleConfig = {
-    basic: {
-      background: "#f0f0f2",
-      water: "#cee9f2",
-      waterway: "#add8e6",
-      forest: "#99c7a3",
-      road: "#dfe0e5",
-      roadText: "#b6b6be",
-      railway: "#d8d9db",
-      building: "#e3e3e8",
-      text: "#92929e",
-      boundaryCountry: "#a88ea8",
-      boundaryState: "#c9c4e0",
-      boundaryCommunity: "#d4c1ee",
-      highlightedCountry: "#ffffff",
-      highlightedRegion: "#f4eede"
-    },
-    minimal: {
-      background: "#f0f0f2",
-      water: "#cee1e6",
-      waterway: "#add8e6",
-      forest: "#99c7a3",
-      road: "#ffffff",
-      railway: "#dcdce2",
-      building: "#cdcdcd",
-      text: "#92929e",
-      boundary: "#b6b6be",
-      highlightedCountry: "#ffffff",
-      highlightedRegion: "#f4eede"
-    },
-    nature: {
-      background: "#edece1",
-      water: "#cee9f2",
-      waterway: "#add8e6",
-      forest: "#99c7a3",
-      road: "#dbdad1",
-      railway: "#d9d9d9",
-      building: "#dbdad1",
-      text: "#92929e",
-      boundary: "#b6b6be",
-      highlightedCountry: "#ffffff",
-      highlightedRegion: "#f4eede"
-    },
-    satellite: {
-      background: "#f0f0f2",
-      water: "#cee9f2",
-      waterway: "#add8e6",
-      forest: "#99c7a3",
-      road: "#dfe0e5",
-      railway: "#d8d9db",
-      building: "#e3e3e8",
-      text: "#92929e",
-      boundary: "#ffffff",
-      highlightedCountry: "#ffffff",
-      highlightedRegion: "#f4eede"
-    },
-    minimap: {
-      background: "#ffffff",
-      water: "#cee1e6",
-      boundary: "#b6b6be",
-      text: "#92929e",
-      bbox: "#000000"
+    colors: {
+      basic: {
+        background: "#f0f0f2",
+        water: "#cee9f2",
+        waterway: "#add8e6",
+        forest: "#99c7a3",
+        road: "#dfe0e5",
+        roadText: "#b6b6be",
+        railway: "#d8d9db",
+        building: "#e3e3e8",
+        text: "#92929e",
+        boundaryCountry: "#a88ea8",
+        boundaryState: "#c9c4e0",
+        boundaryCommunity: "#d4c1ee",
+        highlightedCountry: "#ffffff",
+        highlightedRegion: "#f4eede"
+      },
+      minimal: {
+        background: "#f0f0f2",
+        water: "#cee1e6",
+        waterway: "#add8e6",
+        forest: "#99c7a3",
+        road: "#ffffff",
+        railway: "#dcdce2",
+        building: "#cdcdcd",
+        text: "#92929e",
+        boundary: "#b6b6be",
+        highlightedCountry: "#ffffff",
+        highlightedRegion: "#f4eede"
+      },
+      nature: {
+        background: "#edece1",
+        water: "#cee9f2",
+        waterway: "#add8e6",
+        forest: "#99c7a3",
+        road: "#dbdad1",
+        railway: "#d9d9d9",
+        building: "#dbdad1",
+        text: "#92929e",
+        boundary: "#b6b6be",
+        highlightedCountry: "#ffffff",
+        highlightedRegion: "#f4eede"
+      },
+      satellite: {
+        background: "#f0f0f2",
+        water: "#cee9f2",
+        waterway: "#add8e6",
+        forest: "#99c7a3",
+        road: "#dfe0e5",
+        railway: "#d8d9db",
+        building: "#e3e3e8",
+        text: "#92929e",
+        boundary: "#ffffff",
+        highlightedCountry: "#ffffff",
+        highlightedRegion: "#f4eede"
+      },
+      minimap: {
+        background: "#ffffff",
+        water: "#cee1e6",
+        boundary: "#b6b6be",
+        text: "#92929e",
+        bbox: "#000000"
+      }
     },
     labels: {
       textHaloWidth: 2,
