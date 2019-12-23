@@ -166,6 +166,10 @@ export function getStyle(data) {
     // handling of text font
     if (["label", "country"].includes(geojsonProperties.type)) {
       properties.textFont = ["GT America Standard Light"];
+    } else if (geojsonProperties.type === "city") {
+      properties.textFont = ["GT America Standard Regular"];
+    } else if (geojsonProperties.type === "water") {
+      properties.textFont = ["Pensum Pro Regular Italic"];
     }
 
     // handling of text size
@@ -186,7 +190,7 @@ export function getStyle(data) {
 
     // handling of text halo
     if (geojsonProperties.type === "water") {
-      properties.textHaloColor = "#CEE9F2";
+      properties.textHaloColor = "#cee9f2";
     }
 
     // handling of icon properties for arrow marker type

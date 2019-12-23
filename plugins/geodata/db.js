@@ -13,7 +13,6 @@ if (process.env.COUCHDB) {
     }
   };
 }
-
 const db = nano(nanoConfig);
 
 async function get(id) {
