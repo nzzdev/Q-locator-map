@@ -1,5 +1,6 @@
 const points = require("./features.js").points;
 const features = require("./features.js").features;
+const labelingPoints = require("./features.js").labelingPoints;
 
 function createMapPoint() {
   const item = {
@@ -238,6 +239,40 @@ function createMapFeaturesMinimapManual() {
   item.title =
     "FIXTURE: map with several features and manuel zoom level and zoom offset minimap";
   item.subtitle = "subtitle";
+  return item;
+}
+
+function createLabelingPoints() {
+  const item = {
+    title:
+      "FIXTURE: basic map with all marker types for labelling places in map and default options",
+    subtitle: "subtitle",
+    sources: [],
+    notes:
+      "Um z.B. für bestimmte Länder, Orte oder Gewässer die NZZ-Schreibweise zu verwenden, können diese Markertypen verwendet werden",
+    acronym: "abc",
+    geojsonList: [],
+    options: {
+      baseLayer: {
+        style: "basic",
+        layers: {
+          label: true
+        }
+      },
+      minimap: {
+        showMinimap: false,
+        options: {
+          type: "globe",
+          position: "bottom-right"
+        }
+      },
+      labelsBelowMap: false,
+      showLegend: true
+    }
+  };
+  Object.keys(labelingPoints).forEach(point => {
+    item.geojsonList.push(labelingPoints[point]);
+  });
   return item;
 }
 
@@ -521,6 +556,7 @@ module.exports = {
   pointsLabelsBelowOneRow: createMapPointsLabelsBelowOneRow,
   pointsNoMinimap: createMapPointsNoMinimap,
   featuresManualMinimap: createMapFeaturesMinimapManual,
+  labelingPoints: createLabelingPoints,
   baseLayerStreetFewLabels: createMapLayerStreetsFew,
   baseLayerStreetNoLabels: createMapLayerStreetsNo,
   baseLayerTerrain: createMapLayerTerrain,
