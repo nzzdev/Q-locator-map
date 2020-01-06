@@ -377,7 +377,8 @@ function getStyleConfig(styleConfig) {
         textHaloWidthWater: 2
       },
       ocean: {
-        textColorOcean: "#ffffff"
+        textColorOcean: "#ffffff",
+        textHaloColorOcean: "#cee9f2"
       }
     }
   };
