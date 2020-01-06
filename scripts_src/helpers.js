@@ -362,7 +362,7 @@ export function getStyle(data) {
 
         for (let sourceLayer of ["countries", "subdivisions"]) {
           style.layers.splice(index, 0, {
-            id: `highlightedRegion-${highlightRegion}`,
+            id: `highlight-${sourceLayer}-${highlightRegion}`,
             type: "fill",
             source: "regions",
             "source-layer": sourceLayer,
