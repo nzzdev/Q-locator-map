@@ -271,10 +271,7 @@ const points = {
       labelPosition: "top",
       useForInitialView: true
     }
-  }
-};
-
-const labelingPoints = {
+  },
   romaniaCountry: {
     type: "Feature",
     geometry: {
@@ -1200,6 +1197,5 @@ const features = {
 
 module.exports = {
   points: points,
-  features: features,
-  labelingPoints: labelingPoints
+  features: features
 };

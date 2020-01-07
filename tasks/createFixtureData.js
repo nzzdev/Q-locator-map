@@ -1,6 +1,5 @@
 const points = require("./features.js").points;
 const features = require("./features.js").features;
-const labelingPoints = require("./features.js").labelingPoints;
 
 function createMapPoint() {
   const item = {
@@ -100,7 +99,7 @@ function createMapFeatureCollection() {
 function createMapPoints() {
   const item = {
     title:
-      "FIXTURE: basic map with 10 points (all label options) and default options",
+      "FIXTURE: basic map with many points (all label options) and default options",
     subtitle: "subtitle",
     sources: [],
     notes: "Karte mit mehreren Punkten",
@@ -133,7 +132,7 @@ function createMapPoints() {
 function createMapPointsLabelsBelow() {
   const item = createMapPoints();
   item.title =
-    "FIXTURE: map labels below map with 10 points (all label options)";
+    "FIXTURE: map labels below map with many points (all label options)";
   item.subtitle = "subtitle";
   item.options.labelsBelowMap = true;
   return item;
@@ -142,7 +141,7 @@ function createMapPointsLabelsBelow() {
 function createMapPointsLabelsBelowOneRow() {
   const item = createMapPoints();
   item.title =
-    "FIXTURE: map labels below map in one row with 10 points (all label options)";
+    "FIXTURE: map labels below map in one row with many points (all label options)";
   item.subtitle = "subtitle";
   item.options.labelsBelowMap = true;
   item.options.labelsBelowMapOneRow = true;
@@ -222,7 +221,7 @@ function createMapFeatureCollections() {
 
 function createMapPointsNoMinimap() {
   const item = createMapPoints();
-  item.title = "FIXTURE: map with 10 points and no minimap";
+  item.title = "FIXTURE: map with many points and no minimap";
   item.subtitle = "subtitle";
   item.options.minimap = {
     showMinimap: false,
@@ -237,13 +236,13 @@ function createMapPointsNoMinimap() {
 function createMapFeaturesMinimapManual() {
   const item = createMapFeatures();
   item.title =
-    "FIXTURE: map with several features and manuel zoom level and zoom offset minimap";
+    "FIXTURE: map with several features and manual zoom level and zoom offset minimap";
   item.subtitle = "subtitle";
   return item;
 }
 
 function createLabelingPoints() {
-  const item = {
+  return {
     title:
       "FIXTURE: basic map with all marker types for labelling places in map and default options",
     subtitle: "subtitle",
@@ -251,7 +250,12 @@ function createLabelingPoints() {
     notes:
       "Um z.B. für bestimmte Länder, Orte oder Gewässer die NZZ-Schreibweise zu verwenden, können diese Markertypen verwendet werden",
     acronym: "abc",
-    geojsonList: [],
+    geojsonList: [
+      points.romaniaCountry,
+      points.bucharestCapital,
+      points.constantaCity,
+      points.blackSeaWater
+    ],
     options: {
       baseLayer: {
         style: "basic",
@@ -270,10 +274,6 @@ function createLabelingPoints() {
       showLegend: true
     }
   };
-  Object.keys(labelingPoints).forEach(point => {
-    item.geojsonList.push(labelingPoints[point]);
-  });
-  return item;
 }
 
 function createMapLayerStreetsFew() {
