@@ -918,7 +918,7 @@
         "text-letter-spacing": 0.1
       },
       "paint": {
-        "text-color": "{textColorWater}",
+        "text-color": "{colorWaterText}",
         "text-halo-color": "{colorWater}",
         "text-halo-width": "{textHaloWidthWater}",
         "text-halo-blur": "{textHaloWidthWater}"
@@ -943,7 +943,7 @@
         "text-size": "{textSizeWater}"
       },
       "paint": {
-        "text-color": "{textColorWater}",
+        "text-color": "{colorWaterText}",
         "text-halo-color": "{colorWater}",
         "text-halo-width": "{textHaloWidthWater}",
         "text-halo-blur": "{textHaloWidthWater}"
@@ -969,7 +969,7 @@
         "text-letter-spacing": 0.1
       },
       "paint": {
-        "text-color": "{textColorOcean}",
+        "text-color": "{colorOceanText}",
         "text-halo-color": "{colorWater}",
         "text-halo-width": "{textHaloWidthWater}",
         "text-halo-blur": "{textHaloWidthWater}"
@@ -995,7 +995,7 @@
         "text-letter-spacing": 0.1
       },
       "paint": {
-        "text-color": "{textColorOcean}",
+        "text-color": "{colorOceanText}",
         "text-halo-color": "{colorWater}",
         "text-halo-width": "{textHaloWidthWater}",
         "text-halo-blur": "{textHaloWidthWater}"

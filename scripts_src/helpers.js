@@ -26,7 +26,9 @@ export function getStyle(data) {
       JSON.stringify(style)
         .replace(/{colorBackground}/g, colors.background)
         .replace(/{colorWater}/g, colors.water)
+        .replace(/{colorWaterText}/g, colors.waterText)
         .replace(/{colorWaterway}/g, colors.waterway)
+        .replace(/{colorOceanText}/g, colors.oceanText)
         .replace(/{colorForest}/g, colors.forest)
         .replace(/{colorRoad}/g, colors.road)
         .replace(/{colorRoadText}/g, colors.roadText)
@@ -56,16 +58,8 @@ export function getStyle(data) {
           JSON.stringify(labels.water.textSizeWater)
         )
         .replace(
-          /"{textColorWater}"/g,
-          JSON.stringify(labels.water.textColorWater)
-        )
-        .replace(
           /"{textHaloWidthWater}"/g,
           JSON.stringify(labels.water.textHaloWidthWater)
-        )
-        .replace(
-          /"{textColorOcean}"/g,
-          JSON.stringify(labels.ocean.textColorOcean)
         )
         .replace(
           /{fontSansLight}/g,
@@ -89,14 +83,14 @@ export function getStyle(data) {
         .replace(/{toolBaseUrl}/g, data.config.toolBaseUrl)
     );
 
-    if (style.name === "basic") {
+    if (["basic", "minimal"].includes(style.name)) {
       style = JSON.parse(
         JSON.stringify(style)
           .replace(/{colorBoundaryCountry}/g, colors.boundaryCountry)
           .replace(/{colorBoundaryState}/g, colors.boundaryState)
           .replace(/{colorBoundaryCommunity}/g, colors.boundaryCommunity)
       );
-    } else if (["minimal", "nature", "satellite"].includes(style.name)) {
+    } else if (["nature", "satellite"].includes(style.name)) {
       style = JSON.parse(
         JSON.stringify(style).replace(/{colorBoundary}/g, colors.boundary)
       );

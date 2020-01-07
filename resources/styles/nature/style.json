@@ -422,10 +422,6 @@
           ]
         ]
       ],
-      "layout": {
-        "line-cap": "butt",
-        "line-join": "miter"
-      },
       "paint": {
         "line-color": "rgba(245, 245, 245, 1)",
         "line-width": {
@@ -986,10 +982,6 @@
           ]
         ]
       ],
-      "layout": {
-        "line-cap": "butt",
-        "line-join": "miter"
-      },
       "paint": {
         "line-color": "rgba(245, 245, 245, 1)",
         "line-width": {
@@ -1340,9 +1332,7 @@
               1.2
             ]
           ]
-        },
-        "line-blur": 0,
-        "line-opacity": 1
+        }
       }
     },
     {
@@ -1381,9 +1371,7 @@
               1.5
             ]
           ]
-        },
-        "line-blur": 0,
-        "line-opacity": 1
+        }
       }
     },
     {
@@ -1418,8 +1406,6 @@
             ]
           ]
         },
-        "line-blur": 0,
-        "line-opacity": 1,
         "line-dasharray": [0.5, 2, 2]
       }
     },

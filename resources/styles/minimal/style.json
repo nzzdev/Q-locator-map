@@ -28,7 +28,7 @@
       "source-layer": "park",
       "filter": ["==", "$type", "Polygon"],
       "paint": {
-        "fill-color": "rgb(230, 233, 229)",
+        "fill-color": "{colorForest}",
         "fill-opacity": {
           "stops": [
             [5, 0],
@@ -46,7 +46,7 @@
       "maxzoom": 24,
       "filter": ["==", "$type", "LineString"],
       "paint": {
-        "line-color": "rgba(214, 214, 214, 1)"
+        "line-color": "{colorWater}"
       }
     },
     {
@@ -56,10 +56,8 @@
       "source-layer": "water",
       "filter": ["==", "$type", "Polygon"],
       "paint": {
-        "fill-color": "rgba(214, 214, 214, 1)",
-        "fill-antialias": true,
-        "fill-outline-color": "rgba(168, 189, 204, 0)",
-        "fill-translate": [1, 1]
+        "fill-color": "{colorWater}",
+        "fill-outline-color": "#a8bdcc"
       }
     },
     {
@@ -74,8 +72,8 @@
         ["==", "subclass", "ice_shelf"]
       ],
       "paint": {
-        "fill-color": "hsl(0, 0%, 98%)",
-        "fill-opacity": 0.7
+        "fill-color": "#ffffff",
+        "fill-opacity": 0.5
       }
     },
     {
@@ -89,12 +87,8 @@
         ["==", "$type", "LineString"],
         ["all", ["==", "brunnel", "tunnel"], ["==", "class", "motorway"]]
       ],
-      "layout": {
-        "line-cap": "butt",
-        "line-join": "miter"
-      },
       "paint": {
-        "line-color": "rgba(245, 245, 245, 1)",
+        "line-color": "{colorRoad}",
         "line-width": {
           "base": 1.4,
           "stops": [
@@ -118,7 +112,7 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "rgba(203, 203, 203, 1)",
+        "line-color": "{colorBuilding}",
         "line-width": {
           "base": 1.55,
           "stops": [
@@ -126,8 +120,7 @@
             [16, 6],
             [20, 20]
           ]
-        },
-        "line-opacity": 1
+        }
       }
     },
     {
@@ -149,7 +142,7 @@
             [14, 1]
           ]
         },
-        "fill-color": "rgba(203, 203, 203, 1)"
+        "fill-color": "{colorBuilding}"
       }
     },
     {
@@ -168,7 +161,7 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "rgba(203, 203, 203, 1)",
+        "line-color": "{colorBuilding}",
         "line-width": {
           "base": 1.5,
           "stops": [
@@ -195,7 +188,7 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "rgba(216, 216, 216, 1)",
+        "line-color": "{colorRailway}",
         "line-width": {
           "base": 1.3,
           "stops": [
@@ -212,15 +205,8 @@
       "source-layer": "building",
       "minzoom": 15,
       "paint": {
-        "fill-outline-color": "rgba(236, 236, 236, 1)",
-        "fill-color": "rgba(203, 203, 203, 1)",
-        "fill-opacity": {
-          "base": 0.6,
-          "stops": [
-            [14, 0],
-            [15, 0.25]
-          ]
-        }
+        "fill-color": "{colorBuilding}",
+        "fill-outline-color": "{colorBackground}"
       }
     },
     {
@@ -238,8 +224,7 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "rgba(216, 216, 216, 1)",
-        "line-width": 2
+        "line-color": "{colorRailway}"
       }
     },
     {
@@ -257,8 +242,7 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "rgba(216, 216, 216, 1)",
-        "line-width": 2
+        "line-color": "{colorRailway}"
       }
     },
     {
@@ -273,7 +257,7 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "rgba(240, 240, 240, 1)",
+        "line-color": "{colorRoad}",
         "line-width": {
           "base": 1.2,
           "stops": [
@@ -301,7 +285,7 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "rgba(240, 240, 240, 1)",
+        "line-color": "{colorRoad}",
         "line-width": {
           "base": 1.55,
           "stops": [
@@ -328,7 +312,7 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "rgba(245, 245, 245, 1)",
+        "line-color": "{colorRoad}",
         "line-width": {
           "base": 1.3,
           "stops": [
@@ -358,7 +342,7 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "rgba(245, 245, 245, 1)",
+        "line-color": "{colorRoad}",
         "line-width": {
           "base": 1.4,
           "stops": [
@@ -380,12 +364,8 @@
         ["==", "$type", "LineString"],
         ["all", ["==", "brunnel", "bridge"], ["==", "class", "motorway"]]
       ],
-      "layout": {
-        "line-cap": "butt",
-        "line-join": "miter"
-      },
       "paint": {
-        "line-color": "rgba(245, 245, 245, 1)",
+        "line-color": "{colorRoad}",
         "line-width": {
           "base": 1.4,
           "stops": [
@@ -394,8 +374,7 @@
             [20, 35]
           ]
         },
-        "line-dasharray": [2, 0],
-        "line-opacity": 1
+        "line-dasharray": [2, 0]
       }
     },
     {
@@ -414,13 +393,7 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": {
-          "base": 1,
-          "stops": [
-            [5.8, "hsla(0, 0%, 85%, 0.53)"],
-            [6, "rgba(245, 245, 245, 1)"]
-          ]
-        },
+        "line-color": "{colorRoad}",
         "line-width": {
           "base": 1.4,
           "stops": [
@@ -445,9 +418,8 @@
         ["!has", "name:de"]
       ],
       "layout": {
-        "text-size": 10,
+        "text-size": 12,
         "text-max-angle": 30,
-        "text-transform": "none",
         "symbol-spacing": 350,
         "text-font": ["{fontSansRegular}"],
         "symbol-placement": "line",
@@ -456,11 +428,10 @@
         "text-field": "{name:latin}"
       },
       "paint": {
-        "text-color": "#bbb",
-        "text-halo-color": "#fff",
-        "text-translate": [0, 0],
-        "text-halo-width": 2,
-        "text-halo-blur": 1
+        "text-color": "{colorRoadText}",
+        "text-halo-color": "{colorBackground}",
+        "text-halo-width": "{textHaloWidth}",
+        "text-halo-blur": "{textHaloWidth}"
       }
     },
     {
@@ -476,9 +447,8 @@
         ["has", "name:de"]
       ],
       "layout": {
-        "text-size": 10,
+        "text-size": 12,
         "text-max-angle": 30,
-        "text-transform": "uppercase",
         "symbol-spacing": 350,
         "text-font": ["{fontSansRegular}"],
         "symbol-placement": "line",
@@ -487,11 +457,10 @@
         "text-field": "{name:de}"
       },
       "paint": {
-        "text-color": "#bbb",
-        "text-halo-color": "#fff",
-        "text-translate": [0, 0],
-        "text-halo-width": 2,
-        "text-halo-blur": 1
+        "text-color": "{colorRoadText}",
+        "text-halo-color": "{colorBackground}",
+        "text-halo-width": "{textHaloWidth}",
+        "text-halo-blur": "{textHaloWidth}"
       }
     },
     {
@@ -507,16 +476,14 @@
         "line-join": "bevel"
       },
       "paint": {
-        "line-color": "rgba(187, 187, 187, 1)",
+        "line-color": "{colorBoundaryCommunity}",
         "line-width": {
           "stops": [
             [4, 0.1],
             [6, 0.3],
             [10, 0.8]
           ]
-        },
-        "line-blur": 0,
-        "line-opacity": 1
+        }
       }
     },
     {
@@ -532,16 +499,14 @@
         "line-join": "bevel"
       },
       "paint": {
-        "line-color": "rgba(177, 177, 177, 1)",
+        "line-color": "{colorBoundaryState}",
         "line-width": {
           "stops": [
             [4, 0.2],
             [6, 0.4],
             [10, 1.2]
           ]
-        },
-        "line-blur": 0,
-        "line-opacity": 1
+        }
       }
     },
     {
@@ -560,15 +525,13 @@
         "line-join": "bevel"
       },
       "paint": {
-        "line-color": "rgba(158, 158, 158, 1)",
+        "line-color": "{colorBoundaryCountry}",
         "line-width": {
           "stops": [
             [0, 0.5],
             [10, 1.5]
           ]
-        },
-        "line-blur": 0,
-        "line-opacity": 1
+        }
       }
     },
     {
@@ -582,15 +545,13 @@
         "line-join": "bevel"
       },
       "paint": {
-        "line-color": "rgba(158, 158, 158, 1)",
+        "line-color": "{colorBoundaryCountry}",
         "line-width": {
           "stops": [
             [0, 0.5],
             [10, 1.5]
           ]
         },
-        "line-blur": 0,
-        "line-opacity": 1,
         "line-dasharray": [0.5, 2, 2]
       }
     },
@@ -608,19 +569,15 @@
         ["has", "name:de"]
       ],
       "layout": {
-        "text-size": 10,
-        "text-transform": "none",
+        "text-size": "{textSizeCity}",
         "text-font": ["{fontSansRegular}"],
-        "text-justify": "center",
-        "text-offset": [0.5, 0],
-        "text-anchor": "center",
         "text-field": "{name:de}"
       },
       "paint": {
-        "text-color": "rgba(164, 164, 164, 1)",
-        "text-halo-color": "rgba(236, 236, 236, 1)",
-        "text-halo-width": 1,
-        "text-halo-blur": 1
+        "text-color": "{colorText}",
+        "text-halo-color": "{colorBackground}",
+        "text-halo-width": "{textHaloWidth}",
+        "text-halo-blur": "{textHaloWidth}"
       }
     },
     {
@@ -637,21 +594,15 @@
         ["!has", "name:de"]
       ],
       "layout": {
-        "text-size": 10,
-        "text-transform": "none",
+        "text-size": "{textSizeCity}",
         "text-font": ["{fontSansRegular}"],
-        "text-justify": "left",
-        "text-offset": [0.5, 0.2],
-        "icon-size": 0.4,
-        "text-anchor": "left",
         "text-field": "{name:latin}"
       },
       "paint": {
-        "text-color": "rgba(164, 164, 164, 1)",
-        "text-halo-color": "rgba(236, 236, 236, 1)",
-        "text-halo-width": 1,
-        "text-halo-blur": 1,
-        "icon-opacity": 0.7
+        "text-color": "{colorText}",
+        "text-halo-color": "{colorBackground}",
+        "text-halo-width": "{textHaloWidth}",
+        "text-halo-blur": "{textHaloWidth}"
       }
     },
     {
@@ -668,21 +619,15 @@
         ["has", "name:de"]
       ],
       "layout": {
-        "text-size": 10,
-        "text-transform": "none",
+        "text-size": "{textSizeCity}",
         "text-font": ["{fontSansRegular}"],
-        "text-justify": "left",
-        "text-offset": [0.5, 0.2],
-        "icon-size": 0.4,
-        "text-anchor": "left",
         "text-field": "{name:de}"
       },
       "paint": {
-        "text-color": "rgba(164, 164, 164, 1)",
-        "text-halo-color": "rgba(236, 236, 236, 1)",
-        "text-halo-width": 1,
-        "text-halo-blur": 1,
-        "icon-opacity": 0.7
+        "text-color": "{colorText}",
+        "text-halo-color": "{colorBackground}",
+        "text-halo-width": "{textHaloWidth}",
+        "text-halo-blur": "{textHaloWidth}"
       }
     },
     {
@@ -699,34 +644,15 @@
         ["has", "name:de"]
       ],
       "layout": {
-        "text-size": 10,
-        "icon-image": {
-          "base": 1,
-          "stops": [
-            [0, "point"],
-            [8, ""]
-          ]
-        },
-        "text-transform": "none",
+        "text-size": "{textSizeCity}",
         "text-font": ["{fontSansRegular}"],
-        "text-justify": "left",
-        "text-offset": [0.5, 0.2],
-        "icon-size": 0.4,
-        "text-anchor": {
-          "base": 1,
-          "stops": [
-            [0, "left"],
-            [8, "center"]
-          ]
-        },
         "text-field": "{name:de}"
       },
       "paint": {
-        "text-color": "rgba(164, 164, 164, 1)",
-        "text-halo-color": "rgba(236, 236, 236, 1)",
-        "text-halo-width": 1,
-        "text-halo-blur": 1,
-        "icon-opacity": 0.25
+        "text-color": "{colorText}",
+        "text-halo-color": "{colorBackground}",
+        "text-halo-width": "{textHaloWidth}",
+        "text-halo-blur": "{textHaloWidth}"
       }
     },
     {
@@ -748,34 +674,15 @@
         ["has", "name:de"]
       ],
       "layout": {
-        "text-size": 10,
-        "icon-image": {
-          "base": 1,
-          "stops": [
-            [0, "point"],
-            [8, ""]
-          ]
-        },
-        "text-transform": "none",
+        "text-size": "{textSizeCity}",
         "text-font": ["{fontSansRegular}"],
-        "text-justify": "left",
-        "text-offset": [0.5, 0.2],
-        "icon-size": 0.4,
-        "text-anchor": {
-          "base": 1,
-          "stops": [
-            [0, "left"],
-            [8, "center"]
-          ]
-        },
         "text-field": "{name:de}"
       },
       "paint": {
-        "text-color": "rgba(164, 164, 164, 1)",
-        "text-halo-color": "rgba(236, 236, 236, 1)",
-        "text-halo-width": 1,
-        "text-halo-blur": 1,
-        "icon-opacity": 0.25
+        "text-color": "{colorText}",
+        "text-halo-color": "{colorBackground}",
+        "text-halo-width": "{textHaloWidth}",
+        "text-halo-blur": "{textHaloWidth}"
       }
     },
     {
@@ -792,35 +699,15 @@
         ["has", "name:de"]
       ],
       "layout": {
-        "text-size": 13,
-        "icon-image": {
-          "base": 1,
-          "stops": [
-            [0, "point"],
-            [8, ""]
-          ]
-        },
-        "text-transform": "none",
-        "text-font": ["{fontSansRegular}"],
-        "text-justify": "left",
-        "text-offset": [0.5, 0.2],
-        "icon-size": 0.75,
-        "text-anchor": {
-          "base": 1,
-          "stops": [
-            [0, "left"],
-            [8, "center"]
-          ]
-        },
+        "text-size": "{textSizeCapital}",
+        "text-font": ["{fontSansMedium}"],
         "text-field": "{name:de}"
       },
       "paint": {
-        "text-color": "rgba(164, 164, 164, 1)",
-        "text-halo-color": "rgba(236, 236, 236, 1)",
-        "text-halo-width": 1,
-        "text-halo-blur": 1,
-        "icon-opacity": 0.25,
-        "icon-color": "rgba(194, 194, 194, 1)"
+        "text-color": "{colorText}",
+        "text-halo-color": "{colorBackground}",
+        "text-halo-width": "{textHaloWidth}",
+        "text-halo-blur": "{textHaloWidth}"
       }
     },
     {
@@ -842,34 +729,15 @@
         ["has", "name:de"]
       ],
       "layout": {
-        "text-size": 14,
-        "icon-image": {
-          "base": 1,
-          "stops": [
-            [0, "point"],
-            [8, ""]
-          ]
-        },
-        "text-transform": "none",
+        "text-size": "{textSizeCity}",
         "text-font": ["{fontSansRegular}"],
-        "text-justify": "left",
-        "text-offset": [0.5, 0.2],
-        "icon-size": 0.4,
-        "text-anchor": {
-          "base": 1,
-          "stops": [
-            [0, "left"],
-            [8, "center"]
-          ]
-        },
         "text-field": "{name:de}"
       },
       "paint": {
-        "text-color": "rgba(164, 164, 164, 1)",
-        "text-halo-color": "rgba(236, 236, 236, 1)",
-        "text-halo-width": 1,
-        "text-halo-blur": 1,
-        "icon-opacity": 0.25
+        "text-color": "{colorText}",
+        "text-halo-color": "{colorBackground}",
+        "text-halo-width": "{textHaloWidth}",
+        "text-halo-blur": "{textHaloWidth}"
       }
     },
     {
@@ -887,24 +755,19 @@
       ],
       "layout": {
         "text-field": "{name:de}",
-        "text-font": ["{fontSansMedium}"],
+        "text-font": ["{fontSansLight}"],
         "text-transform": "uppercase",
-        "text-size": {
-          "stops": [
-            [3, 9],
-            [10, 16]
-          ]
-        }
+        "text-size": "{textSizeCity}"
       },
       "paint": {
-        "text-color": "rgba(130, 133, 133, 1)",
-        "text-halo-color": "rgba(236, 236, 236, 1)",
-        "text-halo-width": 1,
-        "text-halo-blur": 1
+        "text-color": "{colorText}",
+        "text-halo-color": "{colorBackground}",
+        "text-halo-width": "{textHaloWidth}",
+        "text-halo-blur": "{textHaloWidth}"
       }
     },
     {
-      "id": "place_country_other-de",
+      "id": "place_country-de",
       "type": "symbol",
       "source": "openmaptiles",
       "source-layer": "place",
@@ -914,99 +777,19 @@
         "all",
         ["==", "$type", "Point"],
         ["==", "class", "country"],
-        ["!has", "iso_a2"],
         ["has", "name:de"]
       ],
       "layout": {
         "text-field": "{name:de}",
-        "text-font": ["{fontSansMedium}"],
-        "text-transform": "none",
-        "text-size": {
-          "base": 1,
-          "stops": [
-            [0, 9],
-            [6, 11]
-          ]
-        }
+        "text-font": ["{fontSansLight}"],
+        "text-transform": "{textTransformCountry}",
+        "text-size": "{textSizeCountry}"
       },
       "paint": {
-        "text-halo-width": 1.4,
-        "text-halo-color": "rgba(236, 236, 236, 1)",
-        "text-color": "rgba(148, 148, 148, 1)",
-        "text-halo-blur": 1.4
-      }
-    },
-    {
-      "id": "place_country_minor-de",
-      "type": "symbol",
-      "source": "openmaptiles",
-      "source-layer": "place",
-      "minzoom": 0,
-      "maxzoom": 8,
-      "filter": [
-        "all",
-        ["==", "$type", "Point"],
-        ["==", "class", "country"],
-        [">=", "rank", 2],
-        ["has", "iso_a2"],
-        ["has", "name:de"]
-      ],
-      "layout": {
-        "text-field": "{name:de}",
-        "text-font": ["{fontSansMedium}"],
-        "text-transform": "uppercase",
-        "text-size": {
-          "base": 1,
-          "stops": [
-            [0, 9],
-            [6, 11]
-          ]
-        },
-        "text-letter-spacing": 0,
-        "text-line-height": 1.6
-      },
-      "paint": {
-        "text-halo-width": 1.4,
-        "text-halo-color": "rgba(236, 236, 236, 1)",
-        "text-color": "rgba(109, 109, 109, 1)",
-        "text-halo-blur": 1.4
-      }
-    },
-    {
-      "id": "place_country_major-de",
-      "type": "symbol",
-      "source": "openmaptiles",
-      "source-layer": "place",
-      "minzoom": 0,
-      "maxzoom": 6,
-      "filter": [
-        "all",
-        ["==", "$type", "Point"],
-        ["<=", "rank", 1],
-        ["==", "class", "country"],
-        ["has", "iso_a2"],
-        ["has", "name:de"]
-      ],
-      "layout": {
-        "text-field": "{name:de}",
-        "text-font": ["{fontSansMedium}"],
-        "text-transform": "uppercase",
-        "text-size": {
-          "base": 1.4,
-          "stops": [
-            [0, 10],
-            [3, 12],
-            [4, 14]
-          ]
-        },
-        "text-anchor": "center",
-        "text-letter-spacing": 0
-      },
-      "paint": {
-        "text-halo-width": 1.4,
-        "text-halo-color": "rgba(236, 236, 236, 1)",
-        "text-color": "rgba(109, 109, 109, 1)",
-        "text-halo-blur": 1.4
+        "text-halo-width": "{textHaloWidthCountry}",
+        "text-halo-blur": "{textHaloWidthCountry}",
+        "text-halo-color": "{colorBackground}",
+        "text-color": "{textColorCountry}"
       }
     },
     {
@@ -1021,19 +804,14 @@
         "text-rotation-alignment": "map",
         "symbol-spacing": 500,
         "text-font": ["{fontSerifRegular}"],
-        "text-size": {
-          "stops": [
-            [8, 8],
-            [10, 14]
-          ]
-        },
+        "text-size": "{textSizeWater}",
         "text-letter-spacing": 0.1
       },
       "paint": {
-        "text-color": "rgba(164, 164, 164, 1)",
-        "text-halo-color": "rgba(214, 214, 214, 1)",
-        "text-halo-width": 1,
-        "text-halo-blur": 0
+        "text-color": "{colorWaterText}",
+        "text-halo-color": "{colorWater}",
+        "text-halo-width": "{textHaloWidthWater}",
+        "text-halo-blur": "{textHaloWidthWater}"
       }
     },
     {
@@ -1051,19 +829,16 @@
       ],
       "layout": {
         "text-field": "{name:de}",
-        "text-size": {
-          "stops": [
-            [3, 12],
-            [10, 16]
-          ]
-        },
+        "text-size": "{textSizeWater}",
+
         "text-font": ["{fontSerifRegular}"],
-        "text-transform": "none",
         "text-letter-spacing": 0.1
       },
       "paint": {
-        "text-color": "rgba(149, 149, 149, 1)",
-        "text-halo-color": "rgba(186, 186, 186, 1)"
+        "text-color": "{colorOceanText}",
+        "text-halo-color": "{colorWater}",
+        "text-halo-width": "{textHaloWidthWater}",
+        "text-halo-blur": "{textHaloWidthWater}"
       }
     },
     {
@@ -1081,21 +856,15 @@
       ],
       "layout": {
         "text-field": "{name:de}",
+        "text-size": "{textSizeWater}",
         "text-font": ["{fontSerifRegular}"],
-        "text-size": {
-          "stops": [
-            [0, 10],
-            [2, 14],
-            [4, 18]
-          ]
-        },
-        "text-transform": "uppercase",
         "text-letter-spacing": 0.1
       },
       "paint": {
-        "icon-color": "rgba(109, 109, 109, 1)",
-        "text-color": "rgba(149, 149, 149, 1)",
-        "text-halo-color": "rgba(186, 186, 186, 1)"
+        "text-color": "{colorOceanText}",
+        "text-halo-color": "{colorWater}",
+        "text-halo-width": "{textHaloWidthWater}",
+        "text-halo-blur": "{textHaloWidthWater}"
       }
     }
   ]

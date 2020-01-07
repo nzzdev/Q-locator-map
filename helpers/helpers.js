@@ -290,7 +290,9 @@ function getStyleConfig(styleConfig) {
       basic: {
         background: "#f0f0f2",
         water: "#cee9f2",
+        waterText: "#0093bf",
         waterway: "#add8e6",
+        oceanText: "#ffffff",
         forest: "#99c7a3",
         road: "#dfe0e5",
         roadText: "#b6b6be",
@@ -304,15 +306,19 @@ function getStyleConfig(styleConfig) {
         highlightedRegion: "#f4eede"
       },
       minimal: {
-        background: "#f0f0f2",
-        water: "#cee1e6",
-        waterway: "#add8e6",
-        forest: "#99c7a3",
-        road: "#ffffff",
-        railway: "#dcdce2",
-        building: "#cdcdcd",
-        text: "#92929e",
-        boundary: "#b6b6be",
+        background: "#ececec",
+        water: "#d6d6d6",
+        waterText: "#a4a4a4",
+        oceanText: "#959595",
+        forest: "#e6e9e5",
+        road: "#f0f0f0",
+        roadText: "#bbbbbb",
+        railway: "#d8d8d8",
+        building: "#cbcbcb",
+        text: "#a4a4a4",
+        boundaryCountry: "#9e9e9e",
+        boundaryState: "#b1b1b1",
+        boundaryCommunity: "#bbbbbb",
         highlightedCountry: "#ffffff",
         highlightedRegion: "#f4eede"
       },
@@ -373,12 +379,7 @@ function getStyleConfig(styleConfig) {
       },
       water: {
         textSizeWater: 13,
-        textColorWater: "#0093bf",
         textHaloWidthWater: 2
-      },
-      ocean: {
-        textColorOcean: "#ffffff",
-        textHaloColorOcean: "#cee9f2"
       }
     }
   };
