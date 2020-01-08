@@ -3,10 +3,10 @@ set -o errexit
 set -o nounset
 
 step_root=$(dirname "$0")
-input_dir="$step_root/../2-query-regions/output"
+input_dir="$step_root/../02-query-regions/output"
 output_dir="$step_root/output"
 
-land_polygons="$step_root/../0-land-polygons/land_polygons.shp"
+land_polygons="$step_root/../00-static-data/land-polygons-complete-4326/land_polygons.shp"
 
 mkdir -p "$output_dir"
 

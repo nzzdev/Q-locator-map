@@ -3,8 +3,8 @@ set -o errexit
 set -o nounset
 
 step_root=$(dirname "$0")
-countries_file="$step_root/../1-list-countries/output/countries.json"
-input_dir="$step_root/../3-clip-regions/output"
+countries_file="$step_root/../01-list-countries/output/countries.json"
+input_dir="$step_root/../03-clip-regions/output"
 output_dir="$step_root/output"
 
 mkdir -p "$output_dir"

@@ -3,7 +3,7 @@ set -o errexit
 set -o nounset
 
 step_root=$(dirname "$0")
-input_dir="$step_root/../4-merge-regions/output"
+input_dir="$step_root/../07-merge-regions/output"
 output_dir="$step_root/output"
 
 mkdir -p "$output_dir"
