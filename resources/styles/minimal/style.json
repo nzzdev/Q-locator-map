@@ -57,7 +57,7 @@
       "filter": ["==", "$type", "Polygon"],
       "paint": {
         "fill-color": "{colorWater}",
-        "fill-outline-color": "#a8bdcc"
+        "fill-outline-color": "{colorWater}"
       }
     },
     {
