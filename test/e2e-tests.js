@@ -26,7 +26,25 @@ const fixtures = Object.keys(fixtureData).map(fixture =>
 
 let server;
 const toolRuntimeConfig = {
-  toolBaseUrl: "http://localhost:3001/tools/locator_map"
+  toolBaseUrl: "http://localhost:3001/tools/locator_map",
+  styleConfig: {
+    fonts: {
+      fontBaseUrl:
+        "http://localhost:3001/tools/locator_map/files/locator_map/fonts/",
+      fontSansLight: {
+        name: "GT-America-Standard-Light"
+      },
+      fontSansRegular: {
+        name: "GT-America-Standard-Regular"
+      },
+      fontSansMedium: {
+        name: "GT-America-Standard-Medium"
+      },
+      fontSerifRegular: {
+        name: "PensumPro-Regular-Italic"
+      }
+    }
+  }
 };
 
 before(async () => {
