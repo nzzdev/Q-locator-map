@@ -38,15 +38,12 @@ export function getStyle(data) {
         .replace(/{colorHighlightedCountry}/g, colors.highlightedCountry)
         .replace(/{colorHighlightedRegion}/g, colors.highlightedRegion)
         .replace(/"{textHaloWidth}"/g, labels.textHaloWidth)
+        .replace(/"{textBlurWidth}"/g, labels.textBlurWidth)
         .replace(
           /"{textSizeCountry}"/g,
           JSON.stringify(labels.country.textSizeCountry)
         )
         .replace(/{textColorCountry}/g, labels.country.textColorCountry)
-        .replace(
-          /"{textHaloWidthCountry}"/g,
-          labels.country.textHaloWidthCountry
-        )
         .replace(/{textTransformCountry}/g, labels.country.textTransformCountry)
         .replace(
           /"{textSizeCapital}"/g,
@@ -54,12 +51,8 @@ export function getStyle(data) {
         )
         .replace(/"{textSizeCity}"/g, JSON.stringify(labels.city.textSizeCity))
         .replace(
-          /"{textSizeWater}"/g,
-          JSON.stringify(labels.water.textSizeWater)
-        )
-        .replace(
-          /"{textHaloWidthWater}"/g,
-          JSON.stringify(labels.water.textHaloWidthWater)
+          /"{textTransformLabel}"/g,
+          JSON.stringify(labels.label.textTransformLabel)
         )
         .replace(
           /{fontSansLight}/g,
@@ -212,7 +205,10 @@ export function getStyle(data) {
       textColor: "#05032d",
       textHaloColor: "#ffffff",
       textHaloWidth: 2,
+      textBlurWidth: 1,
       textFont: ["{fontSansMedium}"],
+      textTransform: "none",
+      textLetterSpacing: 0,
       iconImage: geojsonProperties.type,
       iconSize: 1,
       iconAnchor: "center",
@@ -242,32 +238,42 @@ export function getStyle(data) {
 
     // handling of text font
     if (["label", "country"].includes(geojsonProperties.type)) {
-      properties.textFont = ["GT America Standard Light"];
+      properties.textFont = ["{fontSansLight}"];
     } else if (geojsonProperties.type === "city") {
-      properties.textFont = ["GT America Standard Regular"];
+      properties.textFont = ["{fontSansRegular}"];
     } else if (geojsonProperties.type === "water") {
-      properties.textFont = ["Pensum Pro Regular Italic"];
+      properties.textFont = ["{fontSerifRegular}"];
     }
 
     // handling of text size
-    if (["city", "water"].includes(geojsonProperties.type)) {
-      properties.textSize = 13;
+    if (geojsonProperties.type === "country") {
+      properties.textSize = "{textSizeCountry}";
     } else if (geojsonProperties.type === "capital") {
-      properties.textSize = 15;
+      properties.textSize = "{textSizeCapital}";
+    } else if (["label", "city", "water"].includes(geojsonProperties.type)) {
+      properties.textSize = "{textSizeCity}";
     }
 
     // handling of text color
     if (geojsonProperties.type === "country") {
-      properties.textColor = "#6e6e7e";
-    } else if (["capital", "city"].includes(geojsonProperties.type)) {
-      properties.textColor = "#92929e";
+      properties.textColor = "{textColorCountry}";
+      properties.textHaloColor = "{colorBackground}";
+    } else if (["label", "capital", "city"].includes(geojsonProperties.type)) {
+      properties.textColor = "{colorText}";
+      properties.textHaloColor = "{colorBackground}";
     } else if (geojsonProperties.type === "water") {
-      properties.textColor = "#0093bf";
+      properties.textColor = "{colorWaterText}";
+      properties.textHaloColor = "{colorWater}";
     }
 
-    // handling of text halo
-    if (geojsonProperties.type === "water") {
-      properties.textHaloColor = "#cee9f2";
+    // handling of text transforms
+    if (geojsonProperties.type === "country") {
+      properties.textTransform = "{textTransformCountry}";
+    } else if (geojsonProperties.type === "label") {
+      properties.textTransform = "{textTransformLabel}";
+      properties.textLetterSpacing = 0.5;
+    } else if (geojsonProperties.type === "water") {
+      properties.textLetterSpacing = 0.1;
     }
 
     // handling of icon properties for arrow marker type
@@ -409,6 +415,8 @@ export function getStyle(data) {
           "text-anchor": properties.textAnchor,
           "text-justify": properties.textJustify,
           "text-allow-overlap": true,
+          "text-letter-spacing": properties.textLetterSpacing,
+          "text-transform": properties.textTransform,
           "icon-allow-overlap": true,
           "icon-image": properties.iconImage,
           "icon-size": properties.iconSize,
@@ -419,7 +427,8 @@ export function getStyle(data) {
           "text-translate": properties.textTranslate,
           "text-color": properties.textColor,
           "text-halo-color": properties.textHaloColor,
-          "text-halo-width": properties.textHaloWidth
+          "text-halo-width": properties.textHaloWidth,
+          "text-halo-blur": properties.textBlurWidth
         }
       };
 

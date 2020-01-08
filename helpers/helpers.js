@@ -363,6 +363,7 @@ function getStyleConfig(styleConfig) {
     },
     labels: {
       textHaloWidth: 2,
+      textBlurWidth: 1,
       country: {
         textSizeCountry: {
           base: 1,
@@ -373,7 +374,6 @@ function getStyleConfig(styleConfig) {
           ]
         },
         textColorCountry: "#6e6e7e",
-        textHaloWidthCountry: 1.4,
         textTransformCountry: "none"
       },
       capital: {
@@ -382,9 +382,8 @@ function getStyleConfig(styleConfig) {
       city: {
         textSizeCity: 13
       },
-      water: {
-        textSizeWater: 13,
-        textHaloWidthWater: 2
+      label: {
+        textTransformLabel: "uppercase"
       }
     }
   };

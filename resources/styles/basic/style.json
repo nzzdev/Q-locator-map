@@ -543,7 +543,7 @@
         "text-color": "{colorRoadText}",
         "text-halo-color": "{colorBackground}",
         "text-halo-width": "{textHaloWidth}",
-        "text-halo-blur": "{textHaloWidth}"
+        "text-halo-blur": "{textBlurWidth}"
       }
     },
     {
@@ -572,7 +572,7 @@
         "text-color": "{colorRoadText}",
         "text-halo-color": "{colorBackground}",
         "text-halo-width": "{textHaloWidth}",
-        "text-halo-blur": "{textHaloWidth}"
+        "text-halo-blur": "{textBlurWidth}"
       }
     },
     {
@@ -688,7 +688,7 @@
         "text-color": "{colorText}",
         "text-halo-color": "{colorBackground}",
         "text-halo-width": "{textHaloWidth}",
-        "text-halo-blur": "{textHaloWidth}"
+        "text-halo-blur": "{textBlurWidth}"
       }
     },
     {
@@ -713,7 +713,7 @@
         "text-color": "{colorText}",
         "text-halo-color": "{colorBackground}",
         "text-halo-width": "{textHaloWidth}",
-        "text-halo-blur": "{textHaloWidth}"
+        "text-halo-blur": "{textBlurWidth}"
       }
     },
     {
@@ -737,7 +737,7 @@
         "text-color": "{colorText}",
         "text-halo-color": "{colorBackground}",
         "text-halo-width": "{textHaloWidth}",
-        "text-halo-blur": "{textHaloWidth}"
+        "text-halo-blur": "{textBlurWidth}"
       }
     },
     {
@@ -761,7 +761,7 @@
         "text-color": "{colorText}",
         "text-halo-color": "{colorBackground}",
         "text-halo-width": "{textHaloWidth}",
-        "text-halo-blur": "{textHaloWidth}"
+        "text-halo-blur": "{textBlurWidth}"
       }
     },
     {
@@ -791,7 +791,7 @@
         "text-color": "{colorText}",
         "text-halo-color": "{colorBackground}",
         "text-halo-width": "{textHaloWidth}",
-        "text-halo-blur": "{textHaloWidth}"
+        "text-halo-blur": "{textBlurWidth}"
       }
     },
     {
@@ -816,7 +816,7 @@
         "text-color": "{colorText}",
         "text-halo-color": "{colorBackground}",
         "text-halo-width": "{textHaloWidth}",
-        "text-halo-blur": "{textHaloWidth}"
+        "text-halo-blur": "{textBlurWidth}"
       }
     },
     {
@@ -846,7 +846,7 @@
         "text-color": "{colorText}",
         "text-halo-color": "{colorBackground}",
         "text-halo-width": "{textHaloWidth}",
-        "text-halo-blur": "{textHaloWidth}"
+        "text-halo-blur": "{textBlurWidth}"
       }
     },
     {
@@ -872,7 +872,7 @@
         "text-color": "{colorText}",
         "text-halo-color": "{colorBackground}",
         "text-halo-width": "{textHaloWidth}",
-        "text-halo-blur": "{textHaloWidth}"
+        "text-halo-blur": "{textBlurWidth}"
       }
     },
     {
@@ -895,8 +895,8 @@
         "text-size": "{textSizeCountry}"
       },
       "paint": {
-        "text-halo-width": "{textHaloWidthCountry}",
-        "text-halo-blur": "{textHaloWidthCountry}",
+        "text-halo-width": "{textHaloWidth}",
+        "text-halo-blur": "{textBlurWidth}",
         "text-halo-color": "{colorBackground}",
         "text-color": "{textColorCountry}"
       }
@@ -915,14 +915,14 @@
         "text-rotation-alignment": "map",
         "symbol-spacing": 500,
         "text-font": ["{fontSerifRegular}"],
-        "text-size": "{textSizeWater}",
+        "text-size": "{textSizeCity}",
         "text-letter-spacing": 0.1
       },
       "paint": {
         "text-color": "{colorWaterText}",
         "text-halo-color": "{colorWater}",
-        "text-halo-width": "{textHaloWidthWater}",
-        "text-halo-blur": "{textHaloWidthWater}"
+        "text-halo-width": "{textHaloWidth}",
+        "text-halo-blur": "{textBlurWidth}"
       }
     },
     {
@@ -941,13 +941,13 @@
       "layout": {
         "text-field": "{name:de}",
         "text-font": ["{fontSerifRegular}"],
-        "text-size": "{textSizeWater}"
+        "text-size": "{textSizeCity}"
       },
       "paint": {
         "text-color": "{colorWaterText}",
         "text-halo-color": "{colorWater}",
-        "text-halo-width": "{textHaloWidthWater}",
-        "text-halo-blur": "{textHaloWidthWater}"
+        "text-halo-width": "{textHaloWidth}",
+        "text-halo-blur": "{textBlurWidth}"
       }
     },
     {
@@ -965,15 +965,15 @@
       ],
       "layout": {
         "text-field": "{name:de}",
-        "text-size": "{textSizeWater}",
+        "text-size": "{textSizeCity}",
         "text-font": ["{fontSerifRegular}"],
         "text-letter-spacing": 0.1
       },
       "paint": {
         "text-color": "{colorOceanText}",
         "text-halo-color": "{colorWater}",
-        "text-halo-width": "{textHaloWidthWater}",
-        "text-halo-blur": "{textHaloWidthWater}"
+        "text-halo-width": "{textHaloWidth}",
+        "text-halo-blur": "{textBlurWidth}"
       }
     },
     {
@@ -991,15 +991,15 @@
       ],
       "layout": {
         "text-field": "{name:de}",
-        "text-size": "{textSizeWater}",
+        "text-size": "{textSizeCity}",
         "text-font": ["{fontSerifRegular}"],
         "text-letter-spacing": 0.1
       },
       "paint": {
         "text-color": "{colorOceanText}",
         "text-halo-color": "{colorWater}",
-        "text-halo-width": "{textHaloWidthWater}",
-        "text-halo-blur": "{textHaloWidthWater}"
+        "text-halo-width": "{textHaloWidth}",
+        "text-halo-blur": "{textBlurWidth}"
       }
     }
   ]
