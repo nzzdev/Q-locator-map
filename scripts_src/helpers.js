@@ -83,14 +83,14 @@ export function getStyle(data) {
         .replace(/{toolBaseUrl}/g, data.config.toolBaseUrl)
     );
 
-    if (["basic", "minimal"].includes(style.name)) {
+    if (style.name === "basic") {
       style = JSON.parse(
         JSON.stringify(style)
           .replace(/{colorBoundaryCountry}/g, colors.boundaryCountry)
           .replace(/{colorBoundaryState}/g, colors.boundaryState)
           .replace(/{colorBoundaryCommunity}/g, colors.boundaryCommunity)
       );
-    } else if (["nature", "satellite"].includes(style.name)) {
+    } else if (["minimal", "nature", "satellite"].includes(style.name)) {
       style = JSON.parse(
         JSON.stringify(style).replace(/{colorBoundary}/g, colors.boundary)
       );

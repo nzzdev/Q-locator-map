@@ -46,7 +46,7 @@
       "maxzoom": 24,
       "filter": ["==", "$type", "LineString"],
       "paint": {
-        "line-color": "{colorWater}"
+        "line-color": "{colorWaterway}"
       }
     },
     {
@@ -57,7 +57,9 @@
       "filter": ["==", "$type", "Polygon"],
       "paint": {
         "fill-color": "{colorWater}",
-        "fill-outline-color": "{colorWater}"
+        "fill-outline-color": "#a8bdcc",
+        "fill-translate": [1, 1],
+        "fill-opacity": 0.65
       }
     },
     {
@@ -73,7 +75,7 @@
       ],
       "paint": {
         "fill-color": "#ffffff",
-        "fill-opacity": 0.5
+        "fill-opacity": 0.7
       }
     },
     {
@@ -224,7 +226,8 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "{colorRailway}"
+        "line-color": "{colorRailway}",
+        "line-width": 2
       }
     },
     {
@@ -242,7 +245,8 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "{colorRailway}"
+        "line-color": "{colorRailway}",
+        "line-width": 2
       }
     },
     {
@@ -476,7 +480,7 @@
         "line-join": "bevel"
       },
       "paint": {
-        "line-color": "{colorBoundaryCommunity}",
+        "line-color": "{colorBoundary}",
         "line-width": {
           "stops": [
             [4, 0.1],
@@ -499,7 +503,7 @@
         "line-join": "bevel"
       },
       "paint": {
-        "line-color": "{colorBoundaryState}",
+        "line-color": "{colorBoundary}",
         "line-width": {
           "stops": [
             [4, 0.2],
@@ -525,7 +529,7 @@
         "line-join": "bevel"
       },
       "paint": {
-        "line-color": "{colorBoundaryCountry}",
+        "line-color": "{colorBoundary}",
         "line-width": {
           "stops": [
             [0, 0.5],
@@ -545,7 +549,7 @@
         "line-join": "bevel"
       },
       "paint": {
-        "line-color": "{colorBoundaryCountry}",
+        "line-color": "{colorBoundary}",
         "line-width": {
           "stops": [
             [0, 0.5],
@@ -835,7 +839,7 @@
         "text-letter-spacing": 0.1
       },
       "paint": {
-        "text-color": "{colorOceanText}",
+        "text-color": "{colorWaterText}",
         "text-halo-color": "{colorWater}",
         "text-halo-width": "{textHaloWidthWater}",
         "text-halo-blur": "{textHaloWidthWater}"
