@@ -119,15 +119,26 @@ async function init() {
       }
     };
 
-    // TODO: Implement hash caching like styles
-    // const sprite1x = fs.readFileSync(`${resourcesDir}sprites/sprites@1x.png`);
-    // server.app.sprites = {
-    //   "1x": {
-    //     png: sprite1x,
-    //     json: require(`${resourcesDir}sprites/sprites@1x.json`),
-    //     hash: await helpers.getHash(sprite1x)
-    //   }
-    // };
+    const sprite1x = fs.readFileSync(`${resourcesDir}sprites/sprites@1x.png`);
+    const sprite2x = fs.readFileSync(`${resourcesDir}sprites/sprites@2x.png`);
+    const sprite4x = fs.readFileSync(`${resourcesDir}sprites/sprites@4x.png`);
+    server.app.sprites = {
+      "1x": {
+        png: sprite1x,
+        json: require(`${resourcesDir}sprites/sprites@1x.json`),
+        hash: await helpers.getHash(sprite1x)
+      },
+      "2x": {
+        png: sprite2x,
+        json: require(`${resourcesDir}sprites/sprites@2x.json`),
+        hash: await helpers.getHash(sprite2x)
+      },
+      "4x": {
+        png: sprite4x,
+        json: require(`${resourcesDir}sprites/sprites@4x.json`),
+        hash: await helpers.getHash(sprite4x)
+      }
+    };
 
     await server.register(require("@hapi/inert"));
     await server.register(plugins);

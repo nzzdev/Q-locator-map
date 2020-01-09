@@ -57,6 +57,7 @@ async function getConfig(item, itemStateInDb, toolRuntimeConfig, data) {
 
   config.styleConfig = getStyleConfig(toolRuntimeConfig.styleConfig);
   config.fontHash = await getHash(toolRuntimeConfig.styleConfig.fonts);
+  config.spriteHash = data.sprites["1x"].hash;
 
   config.mapboxAccessToken = process.env.MAPBOX_ACCESS_TOKEN;
   config.toolBaseUrl = toolRuntimeConfig.toolBaseUrl;

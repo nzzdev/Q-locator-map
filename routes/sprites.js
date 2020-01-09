@@ -1,16 +1,15 @@
-const path = require("path");
 const Joi = require("@hapi/joi");
 const Boom = require("@hapi/boom");
-const spritesDir = `${__dirname}/../resources/sprites/`;
 
 module.exports = {
   method: "GET",
-  path: "/sprites/{id}.{extension}",
+  path: "/sprites/{hash}/{id}.{extension}",
   options: {
     description: "Returns the sprites",
     tags: ["api"],
     validate: {
       params: {
+        hash: Joi.string().required(),
         id: Joi.string().required(),
         extension: Joi.string().required()
       }
@@ -19,19 +18,25 @@ module.exports = {
   handler: function(request, h) {
     try {
       let id = request.params.id;
+      const sprites = request.server.app.sprites;
       const extension = request.params.extension;
-      let spritePath = path.join(spritesDir, `sprites@1x.${extension}`);
+      const mimeType =
+        extension === "json" ? "application/json; charset=utf-8" : "image/png";
+
+      let spriteFile = sprites["1x"][extension];
       if (id.includes("2x")) {
-        id = id.replace("@2x", "");
-        spritePath = path.join(spritesDir, `sprites@2x.${extension}`);
+        spriteFile = sprites["2x"][extension];
       } else if (id.includes("4x")) {
-        id = id.replace("@4x", "");
-        spritePath = path.join(spritesDir, `sprites@4x.${extension}`);
+        spriteFile = sprites["4x"][extension];
       }
 
       return h
-        .file(spritePath)
-        .header("cache-control", `max-age=${60 * 60 * 24 * 2}, immutable`);
+        .response(spriteFile)
+        .type(mimeType)
+        .header(
+          "cache-control",
+          "max-age=31536000, s-maxage=31536000, stale-while-revalidate=31536000, stale-if-error=31536000, immutable"
+        );
     } catch (error) {
       return Boom.notFound();
     }

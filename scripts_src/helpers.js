@@ -72,6 +72,7 @@ export function getStyle(data) {
         )
         .replace(/{fontBaseUrl}/g, data.config.styleConfig.fonts.fontBaseUrl)
         .replace(/{fontHash}/g, data.config.fontHash)
+        .replace(/{spriteHash}/g, data.config.spriteHash)
         .replace(/{mapboxAccessToken}/g, data.config.mapboxAccessToken)
         .replace(/{toolBaseUrl}/g, data.config.toolBaseUrl)
     );
