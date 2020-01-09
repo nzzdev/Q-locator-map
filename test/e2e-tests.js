@@ -75,6 +75,24 @@ before(async () => {
         hash: await helpers.getHash(satelliteStyle)
       }
     };
+
+    server.app.sprites = {
+      "1x": {
+        png: {},
+        json: {},
+        hash: "hash"
+      },
+      "2x": {
+        png: {},
+        json: {},
+        hash: "hash"
+      },
+      "4x": {
+        png: {},
+        json: {},
+        hash: "hash"
+      }
+    };
   } catch (err) {
     expect(err).to.not.exist();
   }
