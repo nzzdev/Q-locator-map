@@ -355,9 +355,9 @@ function getStyleConfig(styleConfig) {
         highlightedRegion: "#f4eede"
       },
       minimap: {
-        background: "#ffffff",
-        water: "#cee1e6",
-        boundary: "#b6b6be",
+        land: "#ffffff",
+        landOutline: "#b6b6be",
+        water: "#cee9f2",
         text: "#92929e",
         bbox: "#000000"
       }

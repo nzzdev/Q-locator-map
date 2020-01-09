@@ -21,8 +21,8 @@
       "from": { "data": "region" },
       "encode": {
         "update": {
-          "fill": { "value": "white" },
-          "stroke": { "value": "#b6b6be" },
+          "fill": { "signal": "colorLand" },
+          "stroke": { "signal": "colorLandOutline" },
           "strokeWidth": { "value": 0.5 }
         }
       },
@@ -37,7 +37,7 @@
       "type": "text",
       "encode": {
         "enter": {
-          "fill": { "value": "#6e6e7e" },
+          "fill": { "signal": "colorText" },
           "text": { "signal": "label" }
         },
         "update": {

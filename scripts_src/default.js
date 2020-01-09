@@ -36,14 +36,13 @@ export default class LocatorMap {
           minimap.options.region.id &&
           minimap.options.region.id !== ""))
     ) {
-      let bounds = this.map.getBounds().toArray();
-      bounds = JSON.stringify([
-        bounds[0][0],
-        bounds[0][1],
-        bounds[1][0],
-        bounds[1][1]
-      ]);
-      let url = `${this.data.config.toolBaseUrl}/minimap/${minimap.options.type}?bounds=${bounds}&toolBaseUrl=${this.data.config.toolBaseUrl}`;
+      let url = `${this.data.config.toolBaseUrl}/minimap/${
+        minimap.options.type
+      }?bounds=${JSON.stringify(
+        helpers.getBounds(this.map)
+      )}&colors=${encodeURIComponent(
+        JSON.stringify(this.data.config.styleConfig.colors.minimap)
+      )}&toolBaseUrl=${this.data.config.toolBaseUrl}`;
       if (
         minimap.options.region &&
         minimap.options.region.id &&
