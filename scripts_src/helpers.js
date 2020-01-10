@@ -531,8 +531,8 @@ function addHighlightedRegions(style, data) {
         source: `geodata-${highlightRegion}`,
         "source-layer": `geodata-${highlightRegion}`,
         paint: {
-          "fill-color": "#fad250",
-          "fill-opacity": 0.4
+          "fill-color": "{colorHighlightedCountry}",
+          "fill-opacity": 1
         }
       });
     }
