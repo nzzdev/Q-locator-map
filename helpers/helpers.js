@@ -392,6 +392,11 @@ function getStyleConfig(styleConfig) {
   return deepmerge(defaultStyleConfig, styleConfig);
 }
 
+function getMaxCache() {
+  const ONE_YEAR = 60 * 60 * 24 * 365;
+  return `max-age=${ONE_YEAR},s-maxage=${ONE_YEAR},stale-while-revalidate=${ONE_YEAR},stale-if-error=${ONE_YEAR},immutable`;
+}
+
 module.exports = {
   getConfig: getConfig,
   getExactPixelWidth: getExactPixelWidth,
@@ -400,5 +405,6 @@ module.exports = {
   getFeatures: getFeatures,
   getDefaultGeojsonStyles: getDefaultGeojsonStyles,
   getNumberMarkers: getNumberMarkers,
-  getHash: getHash
+  getHash: getHash,
+  getMaxCache: getMaxCache
 };

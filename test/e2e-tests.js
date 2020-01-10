@@ -157,7 +157,7 @@ lab.experiment("stylesheets endpoint", () => {
       const response = await server.inject(`/stylesheet/${filename}`);
       expect(response.statusCode).to.be.equal(200);
       expect(response.headers["cache-control"]).to.be.equal(
-        "max-age=31536000, immutable"
+        helpers.getMaxCache()
       );
     }
   );
