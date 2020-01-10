@@ -271,6 +271,58 @@ const points = {
       labelPosition: "top",
       useForInitialView: true
     }
+  },
+  romaniaCountry: {
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: [24.621384253754172, 45.97168005813427]
+    },
+    properties: {
+      label: "Romania",
+      type: "country",
+      labelPosition: "top",
+      useForInitialView: true
+    }
+  },
+  bucharestCapital: {
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: [26.1, 44.43333333]
+    },
+    properties: {
+      label: "Bucharest",
+      type: "capital",
+      labelPosition: "top",
+      useForInitialView: true
+    }
+  },
+  constantaCity: {
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: [28.63297432541819, 44.1628758880492]
+    },
+    properties: {
+      label: "Constanta",
+      type: "city",
+      labelPosition: "top",
+      useForInitialView: true
+    }
+  },
+  blackSeaWater: {
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: [30.019216343304322, 43.91501963355603]
+    },
+    properties: {
+      label: "Schwarzes Meer",
+      type: "water",
+      labelPosition: "top",
+      useForInitialView: true
+    }
   }
 };
 
@@ -284,7 +336,10 @@ const features = {
     },
     geometry: {
       type: "LineString",
-      coordinates: [[23.316667, 42.69959515809203], [26.1, 44.43333333]]
+      coordinates: [
+        [23.316667, 42.69959515809203],
+        [26.1, 44.43333333]
+      ]
     }
   },
   lineTiranaYerevan: {
@@ -296,7 +351,10 @@ const features = {
     },
     geometry: {
       type: "LineString",
-      coordinates: [[19.816667, 41.31666667], [44.5, 40.16666667]]
+      coordinates: [
+        [19.816667, 41.31666667],
+        [44.5, 40.16666667]
+      ]
     }
   },
   lineSarajevoZagreb: {
@@ -308,7 +366,10 @@ const features = {
     },
     geometry: {
       type: "LineString",
-      coordinates: [[18.416667, 43.86666667], [16, 45.8]]
+      coordinates: [
+        [18.416667, 43.86666667],
+        [16, 45.8]
+      ]
     }
   },
   orangePolygon: {

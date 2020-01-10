@@ -1,26 +1,82 @@
 {
   "version": 8,
-  "name": "Satellite",
+  "name": "satellite",
   "sources": {
     "satellite": {
       "type": "raster",
-      "url": "https://api.mapbox.com/v4/mapbox.satellite.json?secure&access_token=${mapbox_access_token}",
+      "url": "https://api.mapbox.com/v4/mapbox.satellite.json?secure&access_token={mapboxAccessToken}",
       "tileSize": 256
+    },
+    "openmaptiles": {
+      "type": "vector",
+      "tiles": ["{toolBaseUrl}/tiles/openmaptiles/{z}/{x}/{y}.pbf"],
+      "minzoom": 0,
+      "maxzoom": 14,
+      "bounds": [-180, -85.0511, 180, 85.0511],
+      "attribution": "<a href=\"https://www.maptiler.com/copyright/\" target=\"_blank\">&copy; MapTiler</a> <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">&copy; OpenStreetMap contributors</a>"
     }
   },
-  "sprite": "${toolBaseUrl}/sprites/sprites",
-  "glyphs": "${toolBaseUrl}/fonts/{fontstack}/{range}.pbf",
+  "sprite": "{toolBaseUrl}/sprites/{spriteHash}/sprites",
+  "glyphs": "{toolBaseUrl}/fonts/{fontHash}/{fontstack}/{range}.pbf?fontBaseUrl={fontBaseUrl}",
   "layers": [
     {
       "id": "background",
       "type": "background",
-      "paint": { "background-color": "rgb(4,7,14)" }
+      "paint": {
+        "background-color": "{colorBackground}"
+      }
     },
     {
       "id": "satellite",
       "type": "raster",
       "source": "satellite",
       "source-layer": "mapbox_satellite_full"
+    },
+    {
+      "id": "boundary_country",
+      "type": "line",
+      "source": "openmaptiles",
+      "source-layer": "boundary",
+      "filter": [
+        "all",
+        ["==", "admin_level", 2],
+        ["==", "disputed", 0],
+        ["==", "maritime", 0]
+      ],
+      "layout": {
+        "line-cap": "square",
+        "line-join": "bevel"
+      },
+      "paint": {
+        "line-color": "{colorBoundary}",
+        "line-width": {
+          "stops": [
+            [0, 0.5],
+            [10, 1.5]
+          ]
+        }
+      }
+    },
+    {
+      "id": "boundary_country_disputed",
+      "type": "line",
+      "source": "openmaptiles",
+      "source-layer": "boundary",
+      "filter": ["all", ["==", "admin_level", 2], ["==", "disputed", 1]],
+      "layout": {
+        "line-cap": "square",
+        "line-join": "bevel"
+      },
+      "paint": {
+        "line-color": "{colorBoundary}",
+        "line-width": {
+          "stops": [
+            [0, 0.5],
+            [10, 1.5]
+          ]
+        },
+        "line-dasharray": [0.5, 2, 2]
+      }
     }
   ]
 }

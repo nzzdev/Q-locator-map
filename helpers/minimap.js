@@ -9,7 +9,7 @@ const pointMark = {
   from: { data: "bbox" },
   encode: {
     update: {
-      fill: { value: "#d64113" }
+      fill: { signal: "colorBBox" }
     }
   },
   transform: [
@@ -25,8 +25,8 @@ const bboxMark = {
   from: { data: "bbox" },
   encode: {
     update: {
-      stroke: { value: "#d64113" },
-      strokeWidth: 1
+      stroke: { signal: "colorBBox" },
+      strokeWidth: 2
     }
   },
   transform: [
@@ -56,6 +56,22 @@ async function getGlobeVegaSpec(options) {
       spec.marks.push(bboxMark);
     }
 
+    spec.signals.push({
+      name: "colorLand",
+      value: options.colors.land
+    });
+    spec.signals.push({
+      name: "colorLandOutline",
+      value: options.colors.landOutline
+    });
+    spec.signals.push({
+      name: "colorWater",
+      value: options.colors.water
+    });
+    spec.signals.push({
+      name: "colorBBox",
+      value: options.colors.bbox
+    });
     spec.signals.push({
       name: "rotate0",
       value: center[0] * -1
@@ -138,6 +154,22 @@ async function getRegionVegaSpec(options) {
       scaleFactor = spec.width / distance;
     }
 
+    spec.signals.push({
+      name: "colorLand",
+      value: options.colors.land
+    });
+    spec.signals.push({
+      name: "colorLandOutline",
+      value: options.colors.landOutline
+    });
+    spec.signals.push({
+      name: "colorText",
+      value: options.colors.text
+    });
+    spec.signals.push({
+      name: "colorBBox",
+      value: options.colors.bbox
+    });
     spec.signals.push({
       name: "scaleFactor",
       value: scaleFactor

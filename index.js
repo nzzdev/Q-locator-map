@@ -1,8 +1,10 @@
 const Hapi = require("@hapi/hapi");
+const fs = require("fs");
 const NodeGeocoder = require("node-geocoder");
 const helpers = require("./helpers/helpers.js");
 const tileHelpers = require("./helpers/tiles.js");
 const geodataHelpers = require("./plugins/geodata/helpers.js");
+const resourcesDir = "./resources/";
 
 const serverMethodCacheOptions = {
   expiresIn: 7 * 24 * 60 * 60 * 1000,
@@ -93,6 +95,50 @@ async function init() {
       },
       cache: serverMethodCacheOptions
     });
+
+    const basicStyle = require(`${resourcesDir}styles/basic/style.json`);
+    const minimalStyle = require(`${resourcesDir}styles/minimal/style.json`);
+    const natureStyle = require(`${resourcesDir}styles/nature/style.json`);
+    const satelliteStyle = require(`${resourcesDir}styles/satellite/style.json`);
+    server.app.styles = {
+      basic: {
+        style: basicStyle,
+        hash: await helpers.getHash(basicStyle)
+      },
+      minimal: {
+        style: minimalStyle,
+        hash: await helpers.getHash(minimalStyle)
+      },
+      nature: {
+        style: natureStyle,
+        hash: await helpers.getHash(natureStyle)
+      },
+      satellite: {
+        style: satelliteStyle,
+        hash: await helpers.getHash(satelliteStyle)
+      }
+    };
+
+    const sprite1x = fs.readFileSync(`${resourcesDir}sprites/sprites@1x.png`);
+    const sprite2x = fs.readFileSync(`${resourcesDir}sprites/sprites@2x.png`);
+    const sprite4x = fs.readFileSync(`${resourcesDir}sprites/sprites@4x.png`);
+    server.app.sprites = {
+      "1x": {
+        png: sprite1x,
+        json: require(`${resourcesDir}sprites/sprites@1x.json`),
+        hash: await helpers.getHash(sprite1x)
+      },
+      "2x": {
+        png: sprite2x,
+        json: require(`${resourcesDir}sprites/sprites@2x.json`),
+        hash: await helpers.getHash(sprite2x)
+      },
+      "4x": {
+        png: sprite4x,
+        json: require(`${resourcesDir}sprites/sprites@4x.json`),
+        hash: await helpers.getHash(sprite4x)
+      }
+    };
 
     await server.register(require("@hapi/inert"));
     await server.register(plugins);

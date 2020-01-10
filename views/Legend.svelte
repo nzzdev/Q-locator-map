@@ -1,6 +1,6 @@
 <script>
   export let item;
-  export let defaultGeojsonStyles;
+  export let config;
   let legendItems = getLegendItems(item.geojsonList);
 
   function getLegendItems(geojsonList) {
@@ -46,12 +46,12 @@
           if (item.properties["stroke-opacity"]) {
             opacity = item.properties["stroke-opacity"];
           } else {
-            opacity = defaultGeojsonStyles.line["stroke-opacity"];
+            opacity = config.styleConfig.markers.line.opacityLine;
           }
           if (item.properties.stroke) {
             color = item.properties.stroke;
           } else {
-            color = defaultGeojsonStyles.line.stroke;
+            color = config.styleConfig.markers.line.colorLine;
           }
           type = "line";
         } else if (
@@ -61,12 +61,12 @@
           if (item.properties["fill-opacity"]) {
             opacity = item.properties["fill-opacity"];
           } else {
-            opacity = defaultGeojsonStyles.polygon["fill-opacity"];
+            opacity = config.styleConfig.markers.polygon.opacityPolygon;
           }
           if (item.properties.fill) {
             color = item.properties.fill;
           } else {
-            color = defaultGeojsonStyles.polygon.fill;
+            color = config.styleConfig.markers.polygon.fillColorPolygon;
           }
         }
 

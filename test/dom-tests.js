@@ -12,7 +12,7 @@ const fixtureData = require("../tasks/createFixtureData.js");
 const fixtures = Object.keys(fixtureData).map(fixture =>
   require(`${fixturesDir}/${fixture}.json`)
 );
-const defaultGeojsonStyles = require("../helpers/helpers.js").getDefaultGeojsonStyles();
+const helpers = require("../helpers/helpers.js");
 
 // setup svelte
 require("svelte/register");
@@ -21,7 +21,9 @@ const staticTemplate = require("../views/LocatorMap.svelte").default;
 const context = {
   item: fixtures[4],
   displayOptions: {},
-  defaultGeojsonStyles: defaultGeojsonStyles
+  config: {
+    styleConfig: helpers.getStyleConfig({})
+  }
 };
 
 const markup = staticTemplate.render(context).html;
