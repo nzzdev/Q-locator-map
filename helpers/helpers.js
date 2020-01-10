@@ -362,9 +362,16 @@ function getStyleConfig(styleConfig) {
         bbox: "#000000"
       }
     },
-    labels: {
+    markers: {
       textHaloWidth: 2,
       textBlurWidth: 1,
+      textLetterSpacing: 0,
+      textTransform: "none",
+      iconMarker: {
+        textColorIconMarker: "#05032d",
+        textHaloColorIconMarker: "#ffffff",
+        textSizeIconMarker: 14
+      },
       country: {
         textSizeCountry: {
           base: 1,
@@ -384,7 +391,11 @@ function getStyleConfig(styleConfig) {
         textSizeCity: 13
       },
       label: {
-        textTransformLabel: "uppercase"
+        textTransformLabel: "uppercase",
+        textLetterSpacingLabel: 0.5
+      },
+      water: {
+        textLetterSpacingWater: 0.1
       }
     }
   };

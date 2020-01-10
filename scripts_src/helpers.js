@@ -21,57 +21,90 @@ export function getStyle(data) {
 }
 
 function applyConfig(style, data) {
+  const fonts = data.config.styleConfig.fonts;
   const colors = data.config.styleConfig.colors[style.name];
-  const labels = data.config.styleConfig.labels;
+  const markers = data.config.styleConfig.markers;
+
   style = JSON.parse(
     JSON.stringify(style)
-      .replace(/{colorBackground}/g, colors.background)
-      .replace(/{colorWater}/g, colors.water)
-      .replace(/{colorWaterText}/g, colors.waterText)
-      .replace(/{colorWaterway}/g, colors.waterway)
-      .replace(/{colorOceanText}/g, colors.oceanText)
-      .replace(/{colorForest}/g, colors.forest)
-      .replace(/{colorRoad}/g, colors.road)
-      .replace(/{colorRoadText}/g, colors.roadText)
-      .replace(/{colorRailway}/g, colors.railway)
-      .replace(/{colorBuilding}/g, colors.building)
-      .replace(/{colorText}/g, colors.text)
-      .replace(/{colorHighlightedCountry}/g, colors.highlightedCountry)
-      .replace(/{colorHighlightedRegion}/g, colors.highlightedRegion)
-      .replace(/"{textHaloWidth}"/g, labels.textHaloWidth)
-      .replace(/"{textBlurWidth}"/g, labels.textBlurWidth)
+      .replace(/"{colorBackground}"/g, JSON.stringify(colors.background))
+      .replace(/"{colorWater}"/g, JSON.stringify(colors.water))
+      .replace(/"{colorWaterText}"/g, JSON.stringify(colors.waterText))
+      .replace(/"{colorWaterway}"/g, JSON.stringify(colors.waterway))
+      .replace(/"{colorOceanText}"/g, JSON.stringify(colors.oceanText))
+      .replace(/"{colorForest}"/g, JSON.stringify(colors.forest))
+      .replace(/"{colorRoad}"/g, JSON.stringify(colors.road))
+      .replace(/"{colorRoadText}"/g, JSON.stringify(colors.roadText))
+      .replace(/"{colorRailway}"/g, JSON.stringify(colors.railway))
+      .replace(/"{colorBuilding}"/g, JSON.stringify(colors.building))
+      .replace(/"{colorText}"/g, JSON.stringify(colors.text))
+      .replace(
+        /"{colorHighlightedCountry}"/g,
+        JSON.stringify(colors.highlightedCountry)
+      )
+      .replace(
+        /"{colorHighlightedRegion}"/g,
+        JSON.stringify(colors.highlightedRegion)
+      )
+      .replace(/"{textHaloWidth}"/g, JSON.stringify(markers.textHaloWidth))
+      .replace(/"{textBlurWidth}"/g, JSON.stringify(markers.textBlurWidth))
+      .replace(
+        /"{textLetterSpacing}"/g,
+        JSON.stringify(markers.textLetterSpacing)
+      )
+      .replace(/"{textTransform}"/g, JSON.stringify(markers.textTransform))
+      .replace(
+        /"{textColorIconMarker}"/g,
+        JSON.stringify(markers.iconMarker.textColorIconMarker)
+      )
+      .replace(
+        /"{textHaloColorIconMarker}"/g,
+        JSON.stringify(markers.iconMarker.textHaloColorIconMarker)
+      )
+      .replace(
+        /"{textSizeIconMarker}"/g,
+        JSON.stringify(markers.iconMarker.textSizeIconMarker)
+      )
       .replace(
         /"{textSizeCountry}"/g,
-        JSON.stringify(labels.country.textSizeCountry)
+        JSON.stringify(markers.country.textSizeCountry)
       )
-      .replace(/{textColorCountry}/g, labels.country.textColorCountry)
-      .replace(/{textTransformCountry}/g, labels.country.textTransformCountry)
+      .replace(
+        /"{textColorCountry}"/g,
+        JSON.stringify(markers.country.textColorCountry)
+      )
+      .replace(
+        /"{textTransformCountry}"/g,
+        JSON.stringify(markers.country.textTransformCountry)
+      )
       .replace(
         /"{textSizeCapital}"/g,
-        JSON.stringify(labels.capital.textSizeCapital)
+        JSON.stringify(markers.capital.textSizeCapital)
       )
-      .replace(/"{textSizeCity}"/g, JSON.stringify(labels.city.textSizeCity))
+      .replace(/"{textSizeCity}"/g, JSON.stringify(markers.city.textSizeCity))
       .replace(
         /"{textTransformLabel}"/g,
-        JSON.stringify(labels.label.textTransformLabel)
+        JSON.stringify(markers.label.textTransformLabel)
       )
       .replace(
-        /{fontSansLight}/g,
-        data.config.styleConfig.fonts.fontSansLight.name
+        /"{textLetterSpacingLabel}"/g,
+        JSON.stringify(markers.label.textLetterSpacingLabel)
       )
       .replace(
-        /{fontSansRegular}/g,
-        data.config.styleConfig.fonts.fontSansRegular.name
+        /"{textLetterSpacingWater}"/g,
+        JSON.stringify(markers.water.textLetterSpacingWater)
       )
+      .replace(/"{fontSansLight}"/g, JSON.stringify(fonts.fontSansLight.name))
       .replace(
-        /{fontSansMedium}/g,
-        data.config.styleConfig.fonts.fontSansMedium.name
+        /"{fontSansRegular}"/g,
+        JSON.stringify(fonts.fontSansRegular.name)
       )
+      .replace(/"{fontSansMedium}"/g, JSON.stringify(fonts.fontSansMedium.name))
       .replace(
-        /{fontSerifRegular}/g,
-        data.config.styleConfig.fonts.fontSerifRegular.name
+        /"{fontSerifRegular}"/g,
+        JSON.stringify(fonts.fontSerifRegular.name)
       )
-      .replace(/{fontBaseUrl}/g, data.config.styleConfig.fonts.fontBaseUrl)
+      .replace(/{fontBaseUrl}/g, fonts.fontBaseUrl)
       .replace(/{fontHash}/g, data.config.fontHash)
       .replace(/{spriteHash}/g, data.config.spriteHash)
       .replace(/{mapboxAccessToken}/g, data.config.mapboxAccessToken)
@@ -81,13 +114,25 @@ function applyConfig(style, data) {
   if (style.name === "basic") {
     style = JSON.parse(
       JSON.stringify(style)
-        .replace(/{colorBoundaryCountry}/g, colors.boundaryCountry)
-        .replace(/{colorBoundaryState}/g, colors.boundaryState)
-        .replace(/{colorBoundaryCommunity}/g, colors.boundaryCommunity)
+        .replace(
+          /"{colorBoundaryCountry}"/g,
+          JSON.stringify(colors.boundaryCountry)
+        )
+        .replace(
+          /"{colorBoundaryState}"/g,
+          JSON.stringify(colors.boundaryState)
+        )
+        .replace(
+          /"{colorBoundaryCommunity}"/g,
+          JSON.stringify(colors.boundaryCommunity)
+        )
     );
   } else if (["minimal", "nature", "satellite"].includes(style.name)) {
     style = JSON.parse(
-      JSON.stringify(style).replace(/{colorBoundary}/g, colors.boundary)
+      JSON.stringify(style).replace(
+        /"{colorBoundary}"/g,
+        JSON.stringify(colors.boundary)
+      )
     );
   }
   return style;
@@ -202,19 +247,15 @@ function getPointStyleProperties(geojsonProperties) {
     textTranslate: positionProperties.textTranslate,
     textJustify: positionProperties.textJustify,
     textField: "{label}",
-    textSize: 14,
-    textLineHeight: 1.2,
-    textColor: "#05032d",
-    textHaloColor: "#ffffff",
-    textHaloWidth: 2,
-    textBlurWidth: 1,
+    textSize: "{textSizeIconMarker}",
+    textColor: "{textColorIconMarker}",
+    textHaloColor: "{textHaloColorIconMarker}",
+    textHaloWidth: "{textHaloWidth}",
+    textBlurWidth: "{textBlurWidth}",
     textFont: ["{fontSansMedium}"],
-    textTransform: "none",
-    textLetterSpacing: 0,
-    iconImage: geojsonProperties.type,
-    iconSize: 1,
-    iconAnchor: "center",
-    iconOffset: [0, 0]
+    textTransform: "{textTransform}",
+    textLetterSpacing: "{textLetterSpacing}",
+    iconImage: geojsonProperties.type
   };
 
   // special properties handling
@@ -273,9 +314,9 @@ function getPointStyleProperties(geojsonProperties) {
     properties.textTransform = "{textTransformCountry}";
   } else if (geojsonProperties.type === "label") {
     properties.textTransform = "{textTransformLabel}";
-    properties.textLetterSpacing = 0.5;
+    properties.textLetterSpacing = "{textLetterSpacingLabel}";
   } else if (geojsonProperties.type === "water") {
-    properties.textLetterSpacing = 0.1;
+    properties.textLetterSpacing = "{textLetterSpacingWater}";
   }
 
   // handling of icon properties for arrow marker type
@@ -412,7 +453,6 @@ function addFeatures(style, data) {
       layout: {
         "text-field": properties.textField,
         "text-size": properties.textSize,
-        "text-line-height": properties.textLineHeight,
         "text-font": properties.textFont,
         "text-anchor": properties.textAnchor,
         "text-justify": properties.textJustify,
@@ -421,7 +461,6 @@ function addFeatures(style, data) {
         "text-transform": properties.textTransform,
         "icon-allow-overlap": true,
         "icon-image": properties.iconImage,
-        "icon-size": properties.iconSize,
         "icon-anchor": properties.iconAnchor,
         "icon-offset": properties.iconOffset
       },
