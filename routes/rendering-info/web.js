@@ -43,6 +43,12 @@ async function validatePayload(payload, options, next) {
   if (typeof payload.toolRuntimeConfig !== "object") {
     return next(Boom.badRequest(), payload);
   }
+  if (typeof payload.toolRuntimeConfig.styleConfig !== "object") {
+    return next(Boom.badRequest(), payload);
+  }
+  if (typeof payload.toolRuntimeConfig.styleConfig.fonts !== "object") {
+    return next(Boom.badRequest(), payload);
+  }
   await validateAgainstSchema(payload.item, options);
 }
 
