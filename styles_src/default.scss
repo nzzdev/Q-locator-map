@@ -11,12 +11,8 @@
 }
 
 .q-locator-map-scale.mapboxgl-ctrl {
-  border-bottom: 1.5px solid #6e6e7e;
-  color: #6e6e7e;
-  font-weight: 900;
-  -webkit-text-stroke-width: 0.4px;
-  -webkit-text-stroke-color: white;
-  font-size: 8pt;
+  border-bottom: 1.5px solid currentColor;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   text-align: center;
 }
 

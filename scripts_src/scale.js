@@ -7,6 +7,8 @@ export default class ScaleControl {
     this._container = document.createElement("div");
     this._container.classList.add("mapboxgl-ctrl");
     this._container.classList.add("q-locator-map-scale");
+    this._container.classList.add("s-font-note-s");
+    this._container.classList.add("s-color-gray-7");
     this._container.innerHTML = map.getContainer();
 
     this._map.on("move", this._onMove);
