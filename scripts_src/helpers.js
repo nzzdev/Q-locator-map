@@ -355,17 +355,17 @@ function addFeatures(style, data) {
         "line-color": [
           "string",
           ["get", "stroke"],
-          data.config.defaultGeojsonStyles.line["stroke"]
+          data.config.styleConfig.markers.line.colorLine
         ],
         "line-width": [
           "number",
           ["get", "stroke-width"],
-          data.config.defaultGeojsonStyles.line["stroke-width"]
+          data.config.styleConfig.markers.line.widthLine
         ],
         "line-opacity": [
           "number",
           ["get", "stroke-opacity"],
-          data.config.defaultGeojsonStyles.line["stroke-opacity"]
+          data.config.styleConfig.markers.line.opacityLine
         ]
       },
       layout: {
@@ -395,12 +395,12 @@ function addFeatures(style, data) {
         "fill-color": [
           "string",
           ["get", "fill"],
-          data.config.defaultGeojsonStyles.polygon.fill
+          data.config.styleConfig.markers.polygon.fillColorPolygon
         ],
         "fill-opacity": [
           "number",
           ["get", "fill-opacity"],
-          data.config.defaultGeojsonStyles.polygon["fill-opacity"]
+          data.config.styleConfig.markers.polygon.opacityPolygon
         ]
       }
     };
@@ -412,17 +412,17 @@ function addFeatures(style, data) {
         "line-color": [
           "string",
           ["get", "stroke"],
-          data.config.defaultGeojsonStyles.line["stroke"]
+          data.config.styleConfig.markers.polygon.fillColorPolygon
         ],
         "line-width": [
           "number",
           ["get", "stroke-width"],
-          data.config.defaultGeojsonStyles.polygon["stroke-width"]
+          data.config.styleConfig.markers.polygon.outlineWidthPolygon
         ],
         "line-opacity": [
           "number",
           ["get", "stroke-opacity"],
-          data.config.defaultGeojsonStyles.line["stroke-opacity"]
+          data.config.styleConfig.markers.line.opacityLine
         ]
       }
     };

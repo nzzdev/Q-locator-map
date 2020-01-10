@@ -53,8 +53,6 @@ async function getConfig(item, itemStateInDb, toolRuntimeConfig, data) {
     itemStateInDb,
     item.options.labelsBelowMap
   );
-  config.defaultGeojsonStyles = getDefaultGeojsonStyles();
-
   config.styleConfig = getStyleConfig(toolRuntimeConfig.styleConfig);
   config.fontHash = await getHash(toolRuntimeConfig.styleConfig.fonts);
   config.spriteHash = data.sprites["1x"].hash;
@@ -170,21 +168,6 @@ async function getHash(data) {
   return await hasha(JSON.stringify(data), {
     algorithm: "md5"
   });
-}
-
-function getDefaultGeojsonStyles() {
-  return {
-    line: {
-      stroke: "#c31906",
-      "stroke-width": 2,
-      "stroke-opacity": 1
-    },
-    polygon: {
-      "stroke-width": 0,
-      fill: "#c31906",
-      "fill-opacity": 0.35
-    }
-  };
 }
 
 async function getFeatures(geojsonList, itemStateInDb, labelsBelowMap) {
@@ -396,6 +379,16 @@ function getStyleConfig(styleConfig) {
       },
       water: {
         textLetterSpacingWater: 0.1
+      },
+      line: {
+        colorLine: "#c31906",
+        widthLine: 2,
+        opacityLine: 1
+      },
+      polygon: {
+        fillColorPolygon: "#c31906",
+        outlineWidthPolygon: 0,
+        opacityPolygon: 0.35
       }
     }
   };
@@ -410,11 +403,11 @@ function getMaxCache() {
 
 module.exports = {
   getConfig: getConfig,
+  getStyleConfig: getStyleConfig,
   getExactPixelWidth: getExactPixelWidth,
   getFont: getFont,
   getRegionSuggestions: getRegionSuggestions,
   getFeatures: getFeatures,
-  getDefaultGeojsonStyles: getDefaultGeojsonStyles,
   getNumberMarkers: getNumberMarkers,
   getHash: getHash,
   getMaxCache: getMaxCache

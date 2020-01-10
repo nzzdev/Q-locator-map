@@ -6,7 +6,7 @@
   export let id;
   export let item;
   export let displayOptions;
-  export let defaultGeojsonStyles;
+  export let config;
   export let numberMarkers;
 </script>
 
@@ -16,7 +16,7 @@
   data-track-id="q-locator-map"
   style="opacity: 0;">
   <Header {item} {displayOptions} />
-  <Legend {item} {defaultGeojsonStyles} />
+  <Legend {item} {config} />
   <div id="{id}_container" class="q-locator-map-container" />
   <div class="q-locator-map-attribution s-font-note-s s-font-note-s--light">
     Kartengrundlage:
