@@ -38,10 +38,10 @@ function updateScale(map, container, options) {
   // container with maximum length (Default) as 100px.
   // Using spherical law of cosines approximation, the real distance is
   // found between the two coordinates.
-  var maxWidth = (options && options.maxWidth) || 100;
+  let maxWidth = (options && options.maxWidth) || 100;
 
-  var y = map._container.clientHeight / 2;
-  var maxMeters = getDistance(
+  let y = map._container.clientHeight / 2;
+  let maxMeters = getDistance(
     map.unproject([0, y]),
     map.unproject([maxWidth, y])
   );
@@ -49,15 +49,15 @@ function updateScale(map, container, options) {
   // near pretty number and the scale length for the same is found out.
   // Default unit of the scale is based on User's locale.
   if (options && options.unit === "imperial") {
-    var maxFeet = 3.2808 * maxMeters;
+    let maxFeet = 3.2808 * maxMeters;
     if (maxFeet > 5280) {
-      var maxMiles = maxFeet / 5280;
+      let maxMiles = maxFeet / 5280;
       setScale(container, maxWidth, maxMiles, "mi");
     } else {
       setScale(container, maxWidth, maxFeet, "ft");
     }
   } else if (options && options.unit === "nautical") {
-    var maxNauticals = maxMeters / 1852;
+    let maxNauticals = maxMeters / 1852;
     setScale(container, maxWidth, maxNauticals, "nm");
   } else {
     setScale(container, maxWidth, maxMeters, "m");
@@ -65,8 +65,8 @@ function updateScale(map, container, options) {
 }
 
 function setScale(container, maxWidth, maxDistance, unit) {
-  var distance = getRoundNum(maxDistance);
-  var ratio = distance / maxDistance;
+  let distance = getRoundNum(maxDistance);
+  let ratio = distance / maxDistance;
 
   if (unit === "m" && distance >= 1000) {
     distance = distance / 1000;
@@ -83,9 +83,9 @@ function setScale(container, maxWidth, maxDistance, unit) {
 
 function getDistance(latlng1, latlng2) {
   // Uses spherical law of cosines approximation.
-  var R = 6371000;
+  let R = 6371000;
 
-  var rad = Math.PI / 180,
+  let rad = Math.PI / 180,
     lat1 = latlng1.lat * rad,
     lat2 = latlng2.lat * rad,
     a =
@@ -94,18 +94,18 @@ function getDistance(latlng1, latlng2) {
         Math.cos(lat2) *
         Math.cos((latlng2.lng - latlng1.lng) * rad);
 
-  var maxMeters = R * Math.acos(Math.min(a, 1));
+  let maxMeters = R * Math.acos(Math.min(a, 1));
   return maxMeters;
 }
 
 function getDecimalRoundNum(d) {
-  var multiplier = Math.pow(10, Math.ceil(-Math.log(d) / Math.LN10));
+  let multiplier = Math.pow(10, Math.ceil(-Math.log(d) / Math.LN10));
   return Math.round(d * multiplier) / multiplier;
 }
 
 function getRoundNum(num) {
-  var pow10 = Math.pow(10, ("" + Math.floor(num)).length - 1);
-  var d = num / pow10;
+  let pow10 = Math.pow(10, ("" + Math.floor(num)).length - 1);
+  let d = num / pow10;
 
   d =
     d >= 10
