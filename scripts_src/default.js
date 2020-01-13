@@ -33,7 +33,10 @@ export default class LocatorMap {
       minimap.options && minimap.options.position === "bottom-left"
         ? "top-left"
         : "bottom-left";
-    this.map.addControl(new ScaleControl({ maxWidth: 120 }), scalePosition);
+    this.map.addControl(
+      new ScaleControl({ maxWidth: 120, config: this.data.config }),
+      scalePosition
+    );
     if (
       minimap.showMinimap &&
       (minimap.options.type === "globe" ||
@@ -42,12 +45,15 @@ export default class LocatorMap {
           minimap.options.region.id &&
           minimap.options.region.id !== ""))
     ) {
+      let styleConfig = this.data.config.styleConfig.minimap;
+      styleConfig.textFont = this.data.config.styleConfig.fonts.fontSansRegular.name;
+
       let url = `${this.data.config.toolBaseUrl}/minimap/${
         minimap.options.type
       }?bounds=${JSON.stringify(
         helpers.getBounds(this.map)
-      )}&colors=${encodeURIComponent(
-        JSON.stringify(this.data.config.styleConfig.colors.minimap)
+      )}&styleConfig=${encodeURIComponent(
+        JSON.stringify(styleConfig)
       )}&toolBaseUrl=${this.data.config.toolBaseUrl}`;
       if (
         minimap.options.region &&

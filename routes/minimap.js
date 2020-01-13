@@ -17,7 +17,7 @@ module.exports = {
         bounds: Joi.array()
           .length(4)
           .items(Joi.number()),
-        colors: Joi.object().required(),
+        styleConfig: Joi.object().required(),
         toolBaseUrl: Joi.string().required(),
         regionId: Joi.string().optional(),
         regionLabel: Joi.string().optional()
@@ -29,7 +29,7 @@ module.exports = {
       const options = {
         type: request.params.type,
         bounds: request.query.bounds,
-        colors: request.query.colors,
+        styleConfig: request.query.styleConfig,
         toolBaseUrl: request.query.toolBaseUrl,
         region: {}
       };

@@ -9,7 +9,7 @@ const pointMark = {
   from: { data: "bbox" },
   encode: {
     update: {
-      fill: { signal: "colorBBox" }
+      fill: { signal: "bboxColor" }
     }
   },
   transform: [
@@ -25,7 +25,7 @@ const bboxMark = {
   from: { data: "bbox" },
   encode: {
     update: {
-      stroke: { signal: "colorBBox" },
+      stroke: { signal: "bboxColor" },
       strokeWidth: 2
     }
   },
@@ -57,20 +57,20 @@ async function getGlobeVegaSpec(options) {
     }
 
     spec.signals.push({
-      name: "colorLand",
-      value: options.colors.land
+      name: "landColor",
+      value: options.styleConfig.landColor
     });
     spec.signals.push({
-      name: "colorLandOutline",
-      value: options.colors.landOutline
+      name: "landOutlineColor",
+      value: options.styleConfig.landOutlineColor
     });
     spec.signals.push({
-      name: "colorWater",
-      value: options.colors.water
+      name: "waterColor",
+      value: options.styleConfig.waterColor
     });
     spec.signals.push({
-      name: "colorBBox",
-      value: options.colors.bbox
+      name: "bboxColor",
+      value: options.styleConfig.bboxColor
     });
     spec.signals.push({
       name: "rotate0",
@@ -155,20 +155,28 @@ async function getRegionVegaSpec(options) {
     }
 
     spec.signals.push({
-      name: "colorLand",
-      value: options.colors.land
+      name: "landColor",
+      value: options.styleConfig.landColor
     });
     spec.signals.push({
-      name: "colorLandOutline",
-      value: options.colors.landOutline
+      name: "landOutlineColor",
+      value: options.styleConfig.landOutlineColor
     });
     spec.signals.push({
-      name: "colorText",
-      value: options.colors.text
+      name: "textColor",
+      value: options.styleConfig.textColor
     });
     spec.signals.push({
-      name: "colorBBox",
-      value: options.colors.bbox
+      name: "textFont",
+      value: `${options.styleConfig.textFont},nzz-sans-serif,Helvetica,Arial`
+    });
+    spec.signals.push({
+      name: "textSize",
+      value: options.styleConfig.textSize
+    });
+    spec.signals.push({
+      name: "bboxColor",
+      value: options.styleConfig.bboxColor
     });
     spec.signals.push({
       name: "scaleFactor",

@@ -24,7 +24,7 @@
       "from": { "data": "sphere" },
       "encode": {
         "update": {
-          "fill": { "signal": "colorWater" }
+          "fill": { "signal": "waterColor" }
         }
       },
       "transform": [
@@ -39,8 +39,8 @@
       "from": { "data": "region" },
       "encode": {
         "update": {
-          "fill": { "signal": "colorLand" },
-          "stroke": { "signal": "colorLandOutline" },
+          "fill": { "signal": "landColor" },
+          "stroke": { "signal": "landOutlineColor" },
           "strokeWidth": { "value": 0.5 }
         }
       },

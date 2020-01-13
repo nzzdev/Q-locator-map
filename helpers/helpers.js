@@ -336,13 +336,6 @@ function getStyleConfig(styleConfig) {
         boundary: "#ffffff",
         highlightedCountry: "#ffffff",
         highlightedRegion: "#f4eede"
-      },
-      minimap: {
-        land: "#ffffff",
-        landOutline: "#b6b6be",
-        water: "#cee9f2",
-        text: "#92929e",
-        bbox: "#000000"
       }
     },
     markers: {
@@ -375,7 +368,7 @@ function getStyleConfig(styleConfig) {
       },
       label: {
         textTransformLabel: "uppercase",
-        textLetterSpacingLabel: 0.5
+        textLetterSpacingLabel: 0.2
       },
       water: {
         textLetterSpacingWater: 0.1
@@ -390,6 +383,18 @@ function getStyleConfig(styleConfig) {
         outlineWidthPolygon: 0,
         opacityPolygon: 0.35
       }
+    },
+    minimap: {
+      landColor: "#ffffff",
+      landOutlineColor: "#b6b6be",
+      waterColor: "#cee9f2",
+      textColor: "#92929e",
+      bboxColor: "#000000",
+      textSize: 11
+    },
+    scale: {
+      textHaloWidth: 1,
+      borderWidth: 1.5
     }
   };
 
