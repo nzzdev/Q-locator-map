@@ -1,6 +1,7 @@
 import mapboxgl from "mapbox-gl";
 import * as helpers from "./helpers.js";
 import MinimapControl from "./minimap.js";
+import ScaleControl from "./scale.js";
 export default class LocatorMap {
   constructor(element, data = {}) {
     if (element) {
@@ -28,6 +29,11 @@ export default class LocatorMap {
 
   addControls() {
     const minimap = this.data.options.minimap;
+    let scalePosition =
+      minimap.options && minimap.options.position === "bottom-left"
+        ? "top-left"
+        : "bottom-left";
+    this.map.addControl(new ScaleControl({ maxWidth: 120 }), scalePosition);
     if (
       minimap.showMinimap &&
       (minimap.options.type === "globe" ||
