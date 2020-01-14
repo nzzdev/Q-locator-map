@@ -339,6 +339,9 @@ function getStyleConfig(styleConfig) {
       textBlurWidth: 1,
       textLetterSpacing: 0,
       textTransform: "none",
+      textAnchor: "left",
+      textJustify: "left",
+      iconSize: 1,
       iconMarker: {
         textColorIconMarker: "#05032d",
         textHaloColorIconMarker: "#ffffff",
@@ -357,10 +360,14 @@ function getStyleConfig(styleConfig) {
         textTransformCountry: "none"
       },
       capital: {
-        textSizeCapital: 15
+        textSizeCapital: 15,
+        textTranslateCapital: [10, 0],
+        iconImageCapital: "capital"
       },
       city: {
-        textSizeCity: 13
+        textSizeCity: 13,
+        textTranslateCity: [7, 0],
+        iconImageCity: "city"
       },
       label: {
         textTransformLabel: "uppercase",

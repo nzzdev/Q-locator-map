@@ -682,13 +682,18 @@
       "layout": {
         "text-size": "{textSizeCity}",
         "text-font": ["{fontSansRegular}"],
-        "text-field": "{name:de}"
+        "text-field": "{name:de}",
+        "text-anchor": "{textAnchor}",
+        "text-justify": "{textJustify}",
+        "icon-image": "{iconImageCity}",
+        "icon-size": "{iconSize}"
       },
       "paint": {
         "text-color": "{colorText}",
         "text-halo-color": "{colorBackground}",
         "text-halo-width": "{textHaloWidth}",
-        "text-halo-blur": "{textBlurWidth}"
+        "text-halo-blur": "{textBlurWidth}",
+        "text-translate": "{textTranslateCity}"
       }
     },
     {
@@ -707,13 +712,18 @@
       "layout": {
         "text-size": "{textSizeCity}",
         "text-font": ["{fontSansRegular}"],
-        "text-field": "{name:latin}"
+        "text-field": "{name:latin}",
+        "text-anchor": "{textAnchor}",
+        "text-justify": "{textJustify}",
+        "icon-image": "{iconImageCity}",
+        "icon-size": "{iconSize}"
       },
       "paint": {
         "text-color": "{colorText}",
         "text-halo-color": "{colorBackground}",
         "text-halo-width": "{textHaloWidth}",
-        "text-halo-blur": "{textBlurWidth}"
+        "text-halo-blur": "{textBlurWidth}",
+        "text-translate": "{textTranslateCity}"
       }
     },
     {
@@ -731,13 +741,18 @@
       "layout": {
         "text-size": "{textSizeCity}",
         "text-font": ["{fontSansRegular}"],
-        "text-field": "{name:de}"
+        "text-field": "{name:de}",
+        "text-anchor": "{textAnchor}",
+        "text-justify": "{textJustify}",
+        "icon-image": "{iconImageCity}",
+        "icon-size": "{iconSize}"
       },
       "paint": {
         "text-color": "{colorText}",
         "text-halo-color": "{colorBackground}",
         "text-halo-width": "{textHaloWidth}",
-        "text-halo-blur": "{textBlurWidth}"
+        "text-halo-blur": "{textBlurWidth}",
+        "text-translate": "{textTranslateCity}"
       }
     },
     {
@@ -755,13 +770,18 @@
       "layout": {
         "text-size": "{textSizeCity}",
         "text-font": ["{fontSansRegular}"],
-        "text-field": "{name:de}"
+        "text-field": "{name:de}",
+        "text-anchor": "{textAnchor}",
+        "text-justify": "{textJustify}",
+        "icon-image": "{iconImageCity}",
+        "icon-size": "{iconSize}"
       },
       "paint": {
         "text-color": "{colorText}",
         "text-halo-color": "{colorBackground}",
         "text-halo-width": "{textHaloWidth}",
-        "text-halo-blur": "{textBlurWidth}"
+        "text-halo-blur": "{textBlurWidth}",
+        "text-translate": "{textTranslateCity}"
       }
     },
     {
@@ -785,13 +805,18 @@
       "layout": {
         "text-size": "{textSizeCity}",
         "text-font": ["{fontSansRegular}"],
-        "text-field": "{name:de}"
+        "text-field": "{name:de}",
+        "text-anchor": "{textAnchor}",
+        "text-justify": "{textJustify}",
+        "icon-image": "{iconImageCity}",
+        "icon-size": "{iconSize}"
       },
       "paint": {
         "text-color": "{colorText}",
         "text-halo-color": "{colorBackground}",
         "text-halo-width": "{textHaloWidth}",
-        "text-halo-blur": "{textBlurWidth}"
+        "text-halo-blur": "{textBlurWidth}",
+        "text-translate": "{textTranslateCity}"
       }
     },
     {
@@ -810,13 +835,18 @@
       "layout": {
         "text-size": "{textSizeCapital}",
         "text-font": ["{fontSansMedium}"],
-        "text-field": "{name:de}"
+        "text-field": "{name:de}",
+        "text-anchor": "{textAnchor}",
+        "text-justify": "{textJustify}",
+        "icon-image": "{iconImageCapital}",
+        "icon-size": "{iconSize}"
       },
       "paint": {
         "text-color": "{colorText}",
         "text-halo-color": "{colorBackground}",
         "text-halo-width": "{textHaloWidth}",
-        "text-halo-blur": "{textBlurWidth}"
+        "text-halo-blur": "{textBlurWidth}",
+        "text-translate": "{textTranslateCapital}"
       }
     },
     {
@@ -840,13 +870,18 @@
       "layout": {
         "text-size": "{textSizeCity}",
         "text-font": ["{fontSansRegular}"],
-        "text-field": "{name:de}"
+        "text-field": "{name:de}",
+        "text-anchor": "{textAnchor}",
+        "text-justify": "{textJustify}",
+        "icon-image": "{iconImageCity}",
+        "icon-size": "{iconSize}"
       },
       "paint": {
         "text-color": "{colorText}",
         "text-halo-color": "{colorBackground}",
         "text-halo-width": "{textHaloWidth}",
-        "text-halo-blur": "{textBlurWidth}"
+        "text-halo-blur": "{textBlurWidth}",
+        "text-translate": "{textTranslateCity}"
       }
     },
     {

@@ -52,6 +52,10 @@ function applyConfig(style, data) {
         JSON.stringify(markers.textLetterSpacing)
       )
       .replace(/"{textTransform}"/g, JSON.stringify(markers.textTransform))
+      .replace(/"{textAnchor}"/g, JSON.stringify(markers.textAnchor))
+      .replace(/"{textJustify}"/g, JSON.stringify(markers.textJustify))
+      .replace(/"{iconOffset}"/g, JSON.stringify(markers.iconOffset))
+      .replace(/"{iconSize}"/g, JSON.stringify(markers.iconSize))
       .replace(
         /"{textColorIconMarker}"/g,
         JSON.stringify(markers.iconMarker.textColorIconMarker)
@@ -80,7 +84,20 @@ function applyConfig(style, data) {
         /"{textSizeCapital}"/g,
         JSON.stringify(markers.capital.textSizeCapital)
       )
+      .replace(
+        /"{textTranslateCapital}"/g,
+        JSON.stringify(markers.capital.textTranslateCapital)
+      )
+      .replace(
+        /"{iconImageCapital}"/g,
+        JSON.stringify(markers.capital.iconImageCapital)
+      )
       .replace(/"{textSizeCity}"/g, JSON.stringify(markers.city.textSizeCity))
+      .replace(
+        /"{textTranslateCity}"/g,
+        JSON.stringify(markers.city.textTranslateCity)
+      )
+      .replace(/"{iconImageCity}"/g, JSON.stringify(markers.city.iconImageCity))
       .replace(
         /"{textTransformLabel}"/g,
         JSON.stringify(markers.label.textTransformLabel)
@@ -238,7 +255,17 @@ function getPositionProperties(geojsonProperties) {
   }
 }
 
-function getPointStyleProperties(geojsonProperties) {
+function getIconImage(markerType, styleConfig) {
+  if (markerType === "city") {
+    return styleConfig.markers.city.iconImageCity;
+  } else if (markerType === "capital") {
+    return styleConfig.markers.capital.iconImageCapital;
+  } else {
+    return markerType;
+  }
+}
+
+function getPointStyleProperties(geojsonProperties, styleConfig) {
   const positionProperties = getPositionProperties(geojsonProperties);
   // default properties
   const properties = {
@@ -254,7 +281,8 @@ function getPointStyleProperties(geojsonProperties) {
     textFont: ["{fontSansMedium}"],
     textTransform: "{textTransform}",
     textLetterSpacing: "{textLetterSpacing}",
-    iconImage: geojsonProperties.type
+    iconImage: getIconImage(geojsonProperties.type, styleConfig),
+    iconSize: "{iconSize}"
   };
 
   // special properties handling
@@ -270,11 +298,7 @@ function getPointStyleProperties(geojsonProperties) {
   }
 
   // handling of marker types without icon
-  if (
-    ["label", "country", "capital", "city", "water"].includes(
-      geojsonProperties.type
-    )
-  ) {
+  if (["label", "country", "water"].includes(geojsonProperties.type)) {
     properties.iconImage = "";
   }
 
@@ -445,7 +469,10 @@ function addFeatures(style, data) {
   });
 
   data.config.features.points.forEach(feature => {
-    const properties = getPointStyleProperties(feature.geojson.properties);
+    const properties = getPointStyleProperties(
+      feature.geojson.properties,
+      data.config.styleConfig
+    );
     const layer = {
       id: feature.id,
       type: "symbol",
@@ -460,6 +487,7 @@ function addFeatures(style, data) {
         "text-transform": properties.textTransform,
         "icon-allow-overlap": true,
         "icon-image": properties.iconImage,
+        "icon-size": properties.iconSize,
         "icon-anchor": properties.iconAnchor,
         "icon-offset": properties.iconOffset
       },
