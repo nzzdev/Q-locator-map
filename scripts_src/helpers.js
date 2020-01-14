@@ -522,18 +522,26 @@ function addHighlightedRegions(style, data) {
       let index = 1;
       if (data.options.baseLayer.style === "satellite") {
         index = style.layers.length;
+        style.layers.splice(index, 0, {
+          id: `highlightedRegion-${highlightRegion}`,
+          type: "line",
+          source: `geodata-${highlightRegion}`,
+          "source-layer": `geodata-${highlightRegion}`,
+          paint: {
+            "line-color": "{colorHighlightedCountry}"
+          }
+        });
+      } else {
+        style.layers.splice(index, 0, {
+          id: `highlightedRegion-${highlightRegion}`,
+          type: "fill",
+          source: `geodata-${highlightRegion}`,
+          "source-layer": `geodata-${highlightRegion}`,
+          paint: {
+            "fill-color": "{colorHighlightedCountry}"
+          }
+        });
       }
-
-      style.layers.splice(index, 0, {
-        id: `highlightedRegion-${highlightRegion}`,
-        type: "fill",
-        source: `geodata-${highlightRegion}`,
-        "source-layer": `geodata-${highlightRegion}`,
-        paint: {
-          "fill-color": "{colorHighlightedCountry}",
-          "fill-opacity": 1
-        }
-      });
     }
   }
 
