@@ -970,7 +970,7 @@
         "text-letter-spacing": 0.1
       },
       "paint": {
-        "text-color": "{colorOceanText}",
+        "text-color": "{colorWaterText}",
         "text-halo-color": "{colorWater}",
         "text-halo-width": "{textHaloWidth}",
         "text-halo-blur": "{textBlurWidth}"
@@ -996,7 +996,7 @@
         "text-letter-spacing": 0.1
       },
       "paint": {
-        "text-color": "{colorOceanText}",
+        "text-color": "{colorWaterText}",
         "text-halo-color": "{colorWater}",
         "text-halo-width": "{textHaloWidth}",
         "text-halo-blur": "{textBlurWidth}"

@@ -31,7 +31,6 @@ function applyConfig(style, data) {
       .replace(/"{colorWater}"/g, JSON.stringify(colors.water))
       .replace(/"{colorWaterText}"/g, JSON.stringify(colors.waterText))
       .replace(/"{colorWaterway}"/g, JSON.stringify(colors.waterway))
-      .replace(/"{colorOceanText}"/g, JSON.stringify(colors.oceanText))
       .replace(/"{colorForest}"/g, JSON.stringify(colors.forest))
       .replace(/"{colorRoad}"/g, JSON.stringify(colors.road))
       .replace(/"{colorRoadText}"/g, JSON.stringify(colors.roadText))
