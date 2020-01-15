@@ -341,6 +341,7 @@ function getStyleConfig(styleConfig) {
       textTransform: "none",
       textAnchor: "left",
       textJustify: "left",
+      textOffset: [0, 0],
       iconSize: 1,
       iconMarker: {
         textColorIconMarker: "#05032d",
@@ -401,7 +402,9 @@ function getStyleConfig(styleConfig) {
     }
   };
 
-  return deepmerge(defaultStyleConfig, styleConfig);
+  return deepmerge(defaultStyleConfig, styleConfig, {
+    arrayMerge: (destinationArray, sourceArray, options) => sourceArray
+  });
 }
 
 function getMaxCache() {

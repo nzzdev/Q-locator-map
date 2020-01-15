@@ -54,6 +54,7 @@ function applyConfig(style, data) {
       .replace(/"{textTransform}"/g, JSON.stringify(markers.textTransform))
       .replace(/"{textAnchor}"/g, JSON.stringify(markers.textAnchor))
       .replace(/"{textJustify}"/g, JSON.stringify(markers.textJustify))
+      .replace(/"{textOffset}"/g, JSON.stringify(markers.textOffset))
       .replace(/"{iconOffset}"/g, JSON.stringify(markers.iconOffset))
       .replace(/"{iconSize}"/g, JSON.stringify(markers.iconSize))
       .replace(
@@ -154,7 +155,7 @@ function applyConfig(style, data) {
   return style;
 }
 
-function getPositionProperties(geojsonProperties) {
+function getPositionProperties(geojsonProperties, styleConfig) {
   if (
     Sprites[geojsonProperties.type] ||
     ["event", "number"].includes(geojsonProperties.type)
@@ -163,7 +164,7 @@ function getPositionProperties(geojsonProperties) {
     let translateVertical = 0;
     let translateHorizontal = 0;
     let translateFactor = 2;
-    let iconOffset = 6;
+    let iconOffset = 6 * styleConfig.markers.iconSize;
     let cornerTranslateFactor = 1.4;
     if (geojsonProperties.type === "event") {
       geojsonProperties.type = `arrow-${geojsonProperties.labelPosition}`;
@@ -174,10 +175,12 @@ function getPositionProperties(geojsonProperties) {
     }
 
     if (Sprites[geojsonProperties.type]) {
-      translateVertical =
-        Sprites[geojsonProperties.type].height / translateFactor + padding;
-      translateHorizontal =
-        Sprites[geojsonProperties.type].width / translateFactor + 2 * padding;
+      const height =
+        Sprites[geojsonProperties.type].height * styleConfig.markers.iconSize;
+      const width =
+        Sprites[geojsonProperties.type].width * styleConfig.markers.iconSize;
+      translateVertical = height / translateFactor + padding;
+      translateHorizontal = width / translateFactor + 2 * padding;
     }
 
     const properties = {
@@ -266,12 +269,16 @@ function getIconImage(markerType, styleConfig) {
 }
 
 function getPointStyleProperties(geojsonProperties, styleConfig) {
-  const positionProperties = getPositionProperties(geojsonProperties);
+  const positionProperties = getPositionProperties(
+    geojsonProperties,
+    styleConfig
+  );
   // default properties
   const properties = {
     textAnchor: positionProperties.textAnchor,
     textTranslate: positionProperties.textTranslate,
     textJustify: positionProperties.textJustify,
+    textOffset: "{textOffset}",
     textField: "{label}",
     textSize: "{textSizeIconMarker}",
     textColor: "{textColorIconMarker}",
@@ -482,6 +489,7 @@ function addFeatures(style, data) {
         "text-font": properties.textFont,
         "text-anchor": properties.textAnchor,
         "text-justify": properties.textJustify,
+        "text-offset": properties.textOffset,
         "text-allow-overlap": true,
         "text-letter-spacing": properties.textLetterSpacing,
         "text-transform": properties.textTransform,
