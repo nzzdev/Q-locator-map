@@ -337,7 +337,7 @@ function getStyleConfig(styleConfig) {
     markers: {
       textHaloWidth: 2,
       textBlurWidth: 1,
-      textLetterSpacing: 0,
+      textLetterSpacing: 0.2,
       textTransform: "none",
       textAnchor: "left",
       textJustify: "left",
@@ -349,14 +349,7 @@ function getStyleConfig(styleConfig) {
         textSizeIconMarker: 14
       },
       country: {
-        textSizeCountry: {
-          base: 1,
-          stops: [
-            [0, 10],
-            [3, 12],
-            [4, 16]
-          ]
-        },
+        textSizeCountry: 14,
         textColorCountry: "#6e6e7e",
         textTransformCountry: "none"
       },
@@ -371,11 +364,7 @@ function getStyleConfig(styleConfig) {
         iconImageCity: "city"
       },
       label: {
-        textTransformLabel: "uppercase",
-        textLetterSpacingLabel: 0.2
-      },
-      water: {
-        textLetterSpacingWater: 0.1
+        textTransformLabel: "uppercase"
       },
       line: {
         colorLine: "#c31906",

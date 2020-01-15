@@ -103,14 +103,6 @@ function applyConfig(style, data) {
         /"{textTransformLabel}"/g,
         JSON.stringify(markers.label.textTransformLabel)
       )
-      .replace(
-        /"{textLetterSpacingLabel}"/g,
-        JSON.stringify(markers.label.textLetterSpacingLabel)
-      )
-      .replace(
-        /"{textLetterSpacingWater}"/g,
-        JSON.stringify(markers.water.textLetterSpacingWater)
-      )
       .replace(/"{fontSansLight}"/g, JSON.stringify(fonts.fontSansLight.name))
       .replace(
         /"{fontSansRegular}"/g,
@@ -287,7 +279,7 @@ function getPointStyleProperties(geojsonProperties, styleConfig) {
     textBlurWidth: "{textBlurWidth}",
     textFont: ["{fontSansMedium}"],
     textTransform: "{textTransform}",
-    textLetterSpacing: "{textLetterSpacing}",
+    textLetterSpacing: 0,
     iconImage: getIconImage(geojsonProperties.type, styleConfig),
     iconSize: "{iconSize}"
   };
@@ -344,9 +336,9 @@ function getPointStyleProperties(geojsonProperties, styleConfig) {
     properties.textTransform = "{textTransformCountry}";
   } else if (geojsonProperties.type === "label") {
     properties.textTransform = "{textTransformLabel}";
-    properties.textLetterSpacing = "{textLetterSpacingLabel}";
+    properties.textLetterSpacing = "{textLetterSpacing}";
   } else if (geojsonProperties.type === "water") {
-    properties.textLetterSpacing = "{textLetterSpacingWater}";
+    properties.textLetterSpacing = "{textLetterSpacing}";
   }
 
   // handling of icon properties for arrow marker type

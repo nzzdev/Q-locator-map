@@ -741,7 +741,7 @@
         "text-anchor": "{textAnchor}",
         "text-justify": "{textJustify}",
         "text-offset": "{textOffset}",
-        "icon-image": "{iconImageCity}",
+        "icon-image": "{iconImageCapital}",
         "icon-size": "{iconSize}"
       },
       "paint": {
@@ -749,7 +749,7 @@
         "text-halo-color": "{colorBackground}",
         "text-halo-width": "{textHaloWidth}",
         "text-halo-blur": "{textBlurWidth}",
-        "text-translate": "{textTranslateCity}"
+        "text-translate": "{textTranslateCapital}"
       }
     },
     {
@@ -856,7 +856,34 @@
         "text-font": ["{fontSerifRegular}"],
         "text-offset": "{textOffset}",
         "text-size": "{textSizeCity}",
-        "text-letter-spacing": 0.1
+        "text-letter-spacing": "{textLetterSpacing}"
+      },
+      "paint": {
+        "text-color": "{colorWaterText}",
+        "text-halo-color": "{colorWater}",
+        "text-halo-width": "{textHaloWidth}",
+        "text-halo-blur": "{textBlurWidth}"
+      }
+    },
+    {
+      "id": "watername_lake-de",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "water_name",
+      "minzoom": 3,
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        ["has", "name:de"],
+        ["==", "$type", "Point"],
+        ["==", "class", "lake"]
+      ],
+      "layout": {
+        "text-field": "{name:de}",
+        "text-font": ["{fontSerifRegular}"],
+        "text-offset": "{textOffset}",
+        "text-size": "{textSizeCity}",
+        "text-letter-spacing": "{textLetterSpacing}"
       },
       "paint": {
         "text-color": "{colorWaterText}",
@@ -883,7 +910,7 @@
         "text-size": "{textSizeCity}",
         "text-font": ["{fontSerifRegular}"],
         "text-offset": "{textOffset}",
-        "text-letter-spacing": 0.1
+        "text-letter-spacing": "{textLetterSpacing}"
       },
       "paint": {
         "text-color": "{colorWaterText}",
@@ -910,7 +937,7 @@
         "text-size": "{textSizeCity}",
         "text-font": ["{fontSerifRegular}"],
         "text-offset": "{textOffset}",
-        "text-letter-spacing": 0.1
+        "text-letter-spacing": "{textLetterSpacing}"
       },
       "paint": {
         "text-color": "{colorWaterText}",
