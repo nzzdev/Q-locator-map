@@ -29,14 +29,16 @@ export default class LocatorMap {
 
   addControls() {
     const minimap = this.data.options.minimap;
-    let scalePosition =
-      minimap.options && minimap.options.position === "bottom-left"
-        ? "top-left"
-        : "bottom-left";
-    this.map.addControl(
-      new ScaleControl({ maxWidth: 120, config: this.data.config }),
-      scalePosition
-    );
+    if (this.data.options.baseLayer.style !== "satellite") {
+      let scalePosition =
+        minimap.options && minimap.options.position === "bottom-left"
+          ? "top-left"
+          : "bottom-left";
+      this.map.addControl(
+        new ScaleControl({ maxWidth: 120, config: this.data.config }),
+        scalePosition
+      );
+    }
     if (
       minimap.showMinimap &&
       (minimap.options.type === "globe" ||

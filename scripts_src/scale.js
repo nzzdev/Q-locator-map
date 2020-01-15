@@ -4,19 +4,20 @@ export default class ScaleControl {
   }
   onAdd(map) {
     const styleConfig = this.options.config.styleConfig;
+    const colors = styleConfig.colors[this.options.config.style.name];
     this._map = map;
     this._container = document.createElement("div");
     this._container.classList.add("mapboxgl-ctrl");
     this._container.classList.add("q-locator-map-scale");
     this._container.style = `
-    font-size: ${styleConfig.markers.city.textSizeCity}px;
+    font-size: ${styleConfig.scale.textSize}px;
     line-height: 1.4em;
     font-family: ${styleConfig.fonts.fontSansRegular.name},nzz-sans-serif,Helvetica,Arial;
     font-weight: 100;
-    color: ${styleConfig.colors.basic.text};
+    color: ${styleConfig.scale.textColor};
     border-bottom-width: ${styleConfig.scale.borderWidth}px;
-    border-bottom-color: ${styleConfig.colors.basic.text};
-    text-shadow: -${styleConfig.scale.textHaloWidth}px 0 white, 0 ${styleConfig.scale.textHaloWidth}px white, ${styleConfig.scale.textHaloWidth}px 0 white, 0 -${styleConfig.scale.textHaloWidth}px white;`;
+    border-bottom-color: ${styleConfig.scale.textColor};
+    text-shadow: -${styleConfig.scale.textHaloWidth}px 0 ${colors.background}, 0 ${styleConfig.scale.textHaloWidth}px ${colors.background}, ${styleConfig.scale.textHaloWidth}px 0 ${colors.background}, 0 -${styleConfig.scale.textHaloWidth}px ${colors.background};`;
     this._container.innerHTML = map.getContainer();
 
     this._map.on("move", this._onMove);

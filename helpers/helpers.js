@@ -386,6 +386,8 @@ function getStyleConfig(styleConfig) {
       textSize: 11
     },
     scale: {
+      textSize: 12,
+      textColor: "#6e6e7e",
       textHaloWidth: 1,
       borderWidth: 1.5
     }
