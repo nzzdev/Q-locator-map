@@ -205,15 +205,27 @@ async function getFeatures(geojsonList, itemStateInDb, labelsBelowMap) {
       ["Point", "MultiPoint"].includes(geojson.geometry.type)
   );
   pointFeatures = pointFeatures.concat(points).map((feature, index) => {
-    if (labelsBelowMap && feature.properties) {
-      feature.properties.type = "number";
-      feature.properties.index = index + 1;
-    }
     return {
       id: `point-${index}`,
       geojson: feature
     };
   });
+
+  if (labelsBelowMap) {
+    let index = 1;
+    for (let pointFeature of pointFeatures) {
+      if (
+        pointFeature.geojson.properties &&
+        !["country", "capital", "city", "water", "label"].includes(
+          pointFeature.geojson.properties.type
+        )
+      ) {
+        pointFeature.geojson.properties.type = "number";
+        pointFeature.geojson.properties.index = index;
+        index++;
+      }
+    }
+  }
 
   const linestrings = geojsonList.filter(
     geojson =>

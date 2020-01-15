@@ -25,7 +25,10 @@
       return (
         feature.hasOwnProperty("geometry") &&
         feature.geometry.type === "Point" &&
-        feature.properties.hasOwnProperty("label")
+        feature.properties.hasOwnProperty("label") &&
+        !["country", "capital", "city", "water", "label"].includes(
+          feature.properties.type
+        )
       );
     })
     .map((feature, index) => {
