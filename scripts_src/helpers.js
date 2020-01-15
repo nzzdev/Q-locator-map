@@ -535,8 +535,13 @@ function filterByLayer(style, data) {
 function addHighlightedRegions(style, data) {
   if (data.options.highlightRegion && data.options.highlightRegion.length > 0) {
     const highlightRegions = Array.from(
-      new Set(data.options.highlightRegion.map(region => region.id))
+      new Set(
+        data.options.highlightRegion
+          .filter(region => region.id !== "")
+          .map(region => region.id)
+      )
     );
+
     for (let highlightRegion of highlightRegions) {
       style.sources[`geodata-${highlightRegion}`] = {
         type: "vector",
