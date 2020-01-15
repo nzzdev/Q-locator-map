@@ -3,6 +3,7 @@ const fetch = require("node-fetch");
 const turf = require("@turf/turf");
 const minimapRegionVegaSpec = require("../resources/config/minimapRegionVegaSpec.json");
 const minimapGlobeVegaSpec = require("../resources/config/minimapGlobeVegaSpec.json");
+const globeGeojson = require("../resources/config/globe.json");
 const threshold = 500;
 const pointMark = {
   type: "shape",
@@ -37,69 +38,65 @@ const bboxMark = {
   ]
 };
 
-async function getGlobeVegaSpec(options) {
+function getGlobeVegaSpec(options) {
   const spec = JSON.parse(JSON.stringify(minimapGlobeVegaSpec));
-  const geoDataUrl = `${options.toolBaseUrl}/geodata/${options.region.id}.geojson`;
+  spec.height = options.styleConfig.width.globe;
+  spec.width = options.styleConfig.width.globe;
   let bboxFeature = turf.rewind(turf.bboxPolygon(options.bounds), {
     reverse: true
   });
   const center = turf.getCoord(turf.centroid(bboxFeature));
-
-  const response = await fetch(geoDataUrl);
-  if (response.ok) {
-    const region = await response.json();
-    const areaRatio = turf.area(region) / turf.area(bboxFeature);
-    if (areaRatio > threshold) {
-      bboxFeature = turf.point(center);
-      spec.marks.push(pointMark);
-    } else {
-      spec.marks.push(bboxMark);
-    }
-
-    spec.signals.push({
-      name: "landColor",
-      value: options.styleConfig.landColor
-    });
-    spec.signals.push({
-      name: "landOutlineColor",
-      value: options.styleConfig.landOutlineColor
-    });
-    spec.signals.push({
-      name: "waterColor",
-      value: options.styleConfig.waterColor
-    });
-    spec.signals.push({
-      name: "bboxColor",
-      value: options.styleConfig.bboxColor
-    });
-    spec.signals.push({
-      name: "rotate0",
-      value: center[0] * -1
-    });
-    spec.signals.push({
-      name: "rotate1",
-      value: center[1] * -1
-    });
-    spec.data.push({
-      name: "region",
-      values: region,
-      format: {
-        type: "json"
-      }
-    });
-    spec.data.push({
-      name: "bbox",
-      values: bboxFeature,
-      format: {
-        type: "json"
-      }
-    });
+  const areaRatio = turf.area(globeGeojson) / turf.area(bboxFeature);
+  if (areaRatio > threshold) {
+    bboxFeature = turf.point(center);
+    spec.marks.push(pointMark);
+  } else {
+    spec.marks.push(bboxMark);
   }
+
+  spec.signals.push({
+    name: "landColor",
+    value: options.styleConfig.landColor
+  });
+  spec.signals.push({
+    name: "landOutlineColor",
+    value: options.styleConfig.landOutlineColor
+  });
+  spec.signals.push({
+    name: "waterColor",
+    value: options.styleConfig.waterColor
+  });
+  spec.signals.push({
+    name: "bboxColor",
+    value: options.styleConfig.bboxColor
+  });
+  spec.signals.push({
+    name: "rotate0",
+    value: center[0] * -1
+  });
+  spec.signals.push({
+    name: "rotate1",
+    value: center[1] * -1
+  });
+  spec.data.push({
+    name: "region",
+    values: globeGeojson,
+    format: {
+      type: "json"
+    }
+  });
+  spec.data.push({
+    name: "bbox",
+    values: bboxFeature,
+    format: {
+      type: "json"
+    }
+  });
 
   return spec;
 }
 
-function getDimensions(bbox) {
+function getDimensions(bbox, options) {
   const minX = bbox[0];
   const minY = bbox[1];
   const maxX = bbox[2];
@@ -107,7 +104,7 @@ function getDimensions(bbox) {
   const distanceX = turf.distance([minX, minY], [maxX, minY]);
   const distanceY = turf.distance([maxX, minY], [maxX, maxY]);
   let aspectRatio = 1;
-  const defaultDimension = 120;
+  const defaultDimension = options.styleConfig.width.region;
   let width;
   let height;
   if (distanceX > distanceY) {
@@ -143,7 +140,7 @@ async function getRegionVegaSpec(options) {
       spec.marks.push(bboxMark);
     }
     const bbox = turf.bbox(region);
-    const dimensions = getDimensions(bbox);
+    const dimensions = getDimensions(bbox, options);
     spec.width = dimensions.width;
     spec.height = dimensions.height;
     const distance = turf.distance([bbox[0], bbox[1]], [bbox[2], bbox[3]], {
@@ -223,15 +220,7 @@ async function getMinimap(options) {
   if (options.type === "region") {
     spec = await getRegionVegaSpec(options);
   } else {
-    options.region.id = "Q11081619";
-    spec = await getGlobeVegaSpec(options);
-  }
-
-  if (!spec.height) {
-    spec.height = 90;
-  }
-  if (!spec.width) {
-    spec.width = 90;
+    spec = getGlobeVegaSpec(options);
   }
 
   const view = new vega.View(vega.parse(spec)).renderer("none").initialize();

@@ -381,16 +381,21 @@ function getStyleConfig(styleConfig) {
       landColor: "#ffffff",
       landOutlineColor: "#b6b6be",
       waterColor: "#cee9f2",
-      textColor: "#92929e",
+      textColor: "#6e6e7e",
       bboxColor: "#000000",
-      textSize: 11
+      textSize: 12,
+      width: {
+        globe: 90,
+        region: 120
+      }
     },
     scale: {
       textSize: 12,
       textColor: "#6e6e7e",
       textHaloWidth: 1,
       borderWidth: 1.5
-    }
+    },
+    aspectRatioBreakpoint: 450
   };
 
   return deepmerge(defaultStyleConfig, styleConfig, {

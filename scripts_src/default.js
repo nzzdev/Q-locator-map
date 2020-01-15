@@ -22,7 +22,10 @@ export default class LocatorMap {
       this.element.style.height = `${this.width *
         this.data.config.aspectRatio}px`;
     } else {
-      const aspectRatio = this.width > 450 ? 9 / 16 : 1;
+      const aspectRatio =
+        this.width > this.data.config.styleConfig.aspectRatioBreakpoint
+          ? 9 / 16
+          : 1;
       this.element.style.height = `${this.width * aspectRatio}px`;
     }
   }
