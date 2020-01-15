@@ -395,7 +395,8 @@ function getStyleConfig(styleConfig) {
       textHaloWidth: 1,
       borderWidth: 1.5
     },
-    aspectRatioBreakpoint: 450
+    aspectRatioBreakpoint: 450,
+    hasAttribution: true
   };
 
   return deepmerge(defaultStyleConfig, styleConfig, {
