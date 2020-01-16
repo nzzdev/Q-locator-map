@@ -19,8 +19,12 @@ module.exports = {
         extension: Joi.string().required()
       },
       query: {
-        style: Joi.string().optional(),
-        optimize: Joi.boolean().optional()
+        style: Joi.string()
+          .optional()
+          .default(""),
+        optimize: Joi.boolean()
+          .optional()
+          .default(false)
       },
       options: {
         allowUnknown: true
@@ -63,7 +67,7 @@ module.exports = {
                 .header("cache-control", helpers.getMaxCache());
             }
           } else {
-            return new Error();
+            throw new Error(response);
           }
         } else {
           const tile = await request.server.methods.getTile(

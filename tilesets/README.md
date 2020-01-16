@@ -29,6 +29,13 @@ The service can download or delete a tileset. It is designed to run once on a si
     "delete": false,
     "download": false,
     "size": 83030000000
+  },
+  "regions": {
+    "url": "https://nzz-q-assets-stage.s3.amazonaws.com/q-locator-map/regions-2019-12-20.mbtiles",
+    "filename": "regions-2019-12-20.mbtiles",
+    "delete": false,
+    "download": false,
+    "size": 220409856
   }
 }
 ```

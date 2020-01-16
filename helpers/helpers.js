@@ -297,9 +297,7 @@ function getStyleConfig(styleConfig) {
         text: "#92929e",
         boundaryCountry: "#a88ea8",
         boundaryState: "#c9c4e0",
-        boundaryCommunity: "#d4c1ee",
-        highlightedCountry: "#ffffff",
-        highlightedRegion: "#f4eede"
+        boundaryCommunity: "#d4c1ee"
       },
       minimal: {
         background: "#f0f0f2",
@@ -312,9 +310,7 @@ function getStyleConfig(styleConfig) {
         railway: "#d8d8d8",
         building: "#cbcbcb",
         text: "#92929e",
-        boundary: "#cfcfd6",
-        highlightedCountry: "#ffffff",
-        highlightedRegion: "#f4eede"
+        boundary: "#cfcfd6"
       },
       nature: {
         background: "#edece1",
@@ -327,9 +323,7 @@ function getStyleConfig(styleConfig) {
         railway: "#d9d9d9",
         building: "#dbdad1",
         text: "#92929e",
-        boundary: "#b6b6be",
-        highlightedCountry: "#ffffff",
-        highlightedRegion: "#f4eede"
+        boundary: "#b6b6be"
       },
       satellite: {
         background: "#f0f0f2",
@@ -342,9 +336,7 @@ function getStyleConfig(styleConfig) {
         railway: "#d8d8d8",
         building: "#cbcbcb",
         text: "#92929e",
-        boundary: "#ffffff",
-        highlightedCountry: "#ffffff",
-        highlightedRegion: "#f4eede"
+        boundary: "#ffffff"
       }
     },
     markers: {
@@ -389,6 +381,10 @@ function getStyleConfig(styleConfig) {
         outlineWidthPolygon: 0,
         opacityPolygon: 0.35
       }
+    },
+    highlightRegion: {
+      highlightCountryColor: "#ffffff",
+      highlightRegionColor: "#f4eede"
     },
     minimap: {
       landColor: "#ffffff",

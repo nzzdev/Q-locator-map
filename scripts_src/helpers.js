@@ -25,6 +25,7 @@ function applyConfig(style, data) {
   const fonts = data.config.styleConfig.fonts;
   const colors = data.config.styleConfig.colors[styleName];
   const markers = data.config.styleConfig.markers;
+  const highlightRegion = data.config.styleConfig.highlightRegion;
 
   style = JSON.parse(
     JSON.stringify(style)
@@ -39,12 +40,12 @@ function applyConfig(style, data) {
       .replace(/"{colorBuilding}"/g, JSON.stringify(colors.building))
       .replace(/"{colorText}"/g, JSON.stringify(colors.text))
       .replace(
-        /"{colorHighlightedCountry}"/g,
-        JSON.stringify(colors.highlightedCountry)
+        /"{colorHighlightCountry}"/g,
+        JSON.stringify(highlightRegion.highlightCountryColor)
       )
       .replace(
-        /"{colorHighlightedRegion}"/g,
-        JSON.stringify(colors.highlightedRegion)
+        /"{colorHighlightRegion}"/g,
+        JSON.stringify(highlightRegion.highlightRegionColor)
       )
       .replace(/"{textHaloWidth}"/g, JSON.stringify(markers.textHaloWidth))
       .replace(/"{textBlurWidth}"/g, JSON.stringify(markers.textBlurWidth))
@@ -143,6 +144,14 @@ function applyConfig(style, data) {
       JSON.stringify(style).replace(
         /{hillshadeHash}/g,
         data.config.tilesets["hillshade"].hash
+      )
+    );
+  }
+  if (data.config.tilesets["regions"]) {
+    style = JSON.parse(
+      JSON.stringify(style).replace(
+        /{regionsHash}/g,
+        data.config.tilesets["regions"].hash
       )
     );
   }
@@ -389,7 +398,7 @@ function addFeatures(style, data) {
     style.sources[data.config.features.sourceName] = {
       type: "vector",
       tiles: [
-        `${data.config.toolBaseUrl}/tilesets/${data.config.features.hash}/${data.qId}/{z}/{x}/{y}.pbf?appendItemToPayload=${data.qId}`
+        `{toolBaseUrl}/tilesets/${data.config.features.hash}/${data.qId}/{z}/{x}/{y}.pbf?appendItemToPayload=${data.qId}`
       ],
       minzoom: 0,
       maxzoom: 14
@@ -561,6 +570,13 @@ function filterByLayer(style, data) {
 
 function addHighlightedRegions(style, data) {
   if (data.options.highlightRegion && data.options.highlightRegion.length > 0) {
+    style.sources.regions = {
+      type: "vector",
+      tiles: [`{toolBaseUrl}/tiles/{regionsHash}/regions/{z}/{x}/{y}.pbf`],
+      minzoom: 0,
+      maxzoom: 10
+    };
+
     const highlightRegions = Array.from(
       new Set(
         data.options.highlightRegion
@@ -570,37 +586,41 @@ function addHighlightedRegions(style, data) {
     );
 
     for (let highlightRegion of highlightRegions) {
-      style.sources[`geodata-${highlightRegion}`] = {
-        type: "vector",
-        tiles: [
-          `${data.config.toolBaseUrl}/geodata/${highlightRegion}/{z}/{x}/{y}.pbf`
-        ],
-        minzoom: 0,
-        maxzoom: 18
-      };
-
       let index = 1;
+      let regionColor = "{colorHighlightCountry}";
       if (data.options.baseLayer.style === "satellite") {
         index = style.layers.length;
-        style.layers.splice(index, 0, {
-          id: `highlightedRegion-${highlightRegion}`,
-          type: "line",
-          source: `geodata-${highlightRegion}`,
-          "source-layer": `geodata-${highlightRegion}`,
-          paint: {
-            "line-color": "{colorHighlightedCountry}"
+        for (let sourceLayer of ["countries", "subdivisions"]) {
+          if (sourceLayer === "subdivisions") {
+            regionColor = "{colorHighlightRegion}";
           }
-        });
+          style.layers.splice(index, 0, {
+            id: `highlight-${sourceLayer}-${highlightRegion}`,
+            type: "line",
+            source: "regions",
+            "source-layer": sourceLayer,
+            filter: ["==", "wikidata", highlightRegion],
+            paint: {
+              "line-color": regionColor
+            }
+          });
+        }
       } else {
-        style.layers.splice(index, 0, {
-          id: `highlightedRegion-${highlightRegion}`,
-          type: "fill",
-          source: `geodata-${highlightRegion}`,
-          "source-layer": `geodata-${highlightRegion}`,
-          paint: {
-            "fill-color": "{colorHighlightedCountry}"
+        for (let sourceLayer of ["countries", "subdivisions"]) {
+          if (sourceLayer === "subdivisions") {
+            regionColor = "{colorHighlightRegion}";
           }
-        });
+          style.layers.splice(index, 0, {
+            id: `highlight-${sourceLayer}-${highlightRegion}`,
+            type: "fill",
+            source: "regions",
+            "source-layer": sourceLayer,
+            filter: ["==", "wikidata", highlightRegion],
+            paint: {
+              "fill-color": regionColor
+            }
+          });
+        }
       }
     }
   }
