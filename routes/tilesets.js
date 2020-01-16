@@ -4,15 +4,15 @@ const helpers = require("../helpers/helpers.js");
 
 module.exports = {
   method: "POST",
-  path: "/tilesets/{qId}/{hash}/{z}/{x}/{y}.pbf",
+  path: "/tilesets/{hash}/{qId}/{z}/{x}/{y}.pbf",
   options: {
     description: "Returns the tileset in pbf format",
     tags: ["api"],
     cors: true,
     validate: {
       params: {
-        qId: Joi.string().required(),
         hash: Joi.string().required(),
+        qId: Joi.string().required(),
         z: Joi.number().required(),
         x: Joi.number().required(),
         y: Joi.number().required()

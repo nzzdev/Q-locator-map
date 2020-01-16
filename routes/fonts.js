@@ -42,11 +42,13 @@ module.exports = [
     },
     handler: async function(request, h) {
       try {
+        const hash = request.params.hash;
         const fontBaseUrl = request.query.fontBaseUrl;
         const fontstack = request.params.fontstack.split(",");
         const start = request.params.start;
         const end = request.params.end;
         const font = await request.server.methods.getFont(
+          hash,
           fontBaseUrl,
           fontstack[0],
           start,

@@ -46,55 +46,18 @@ async function init() {
     const tilesets = JSON.parse(process.env.TILESETS);
     for (let [key, value] of Object.entries(tilesets)) {
       if (value.path) {
-        server.app.tilesets = server.app.tilesets || {};
-        server.app.tilesets[key] = await tileHelpers.getTileset(value.path);
+        if (!server.app.tilesets) {
+          server.app.tilesets = {};
+        }
+        if (!server.app.tilesets[key]) {
+          server.app.tilesets[key] = {};
+        }
+        server.app.tilesets[key].tileset = await tileHelpers.getTileset(
+          value.path
+        );
+        server.app.tilesets[key].hash = await helpers.getHash(value.path);
       }
     }
-
-    server.method("getTile", tileHelpers.getTile, {
-      bind: {
-        tilesets: server.app.tilesets
-      },
-      cache: serverMethodCacheOptions
-    });
-
-    server.method("getTilesetTile", tileHelpers.getTilesetTile, {
-      bind: {
-        helpers: helpers
-      },
-      generateKey: (item, qId, z, x, y) =>
-        `${qId}_${item.updatedDate}_${z}_${x}_${y}`,
-      cache: serverMethodCacheOptions
-    });
-
-    server.method("getRegionSuggestions", helpers.getRegionSuggestions, {
-      bind: {
-        server: server
-      },
-      generateKey: components => {
-        let key = "";
-        for (let component of components) {
-          key = `${key}_${component[0]}_${component[1]}`;
-        }
-        return key;
-      },
-      cache: serverMethodCacheOptions
-    });
-
-    server.method("getFont", helpers.getFont, {
-      cache: serverMethodCacheOptions
-    });
-
-    server.method("getGeodataGeojson", geodataHelpers.getGeodataGeojson, {
-      cache: serverMethodCacheOptions
-    });
-
-    server.method("getGeodataTile", geodataHelpers.getGeodataTile, {
-      bind: {
-        server: server
-      },
-      cache: serverMethodCacheOptions
-    });
 
     const basicStyle = require(`${resourcesDir}styles/basic/style.json`);
     const minimalStyle = require(`${resourcesDir}styles/minimal/style.json`);
@@ -139,6 +102,52 @@ async function init() {
         hash: await helpers.getHash(sprite4x)
       }
     };
+
+    server.method("getTile", tileHelpers.getTile, {
+      bind: {
+        tilesets: server.app.tilesets,
+        styles: server.app.styles
+      },
+      cache: serverMethodCacheOptions
+    });
+
+    server.method("getTilesetTile", tileHelpers.getTilesetTile, {
+      bind: {
+        helpers: helpers
+      },
+      generateKey: (item, qId, z, x, y) =>
+        `${qId}_${item.updatedDate}_${z}_${x}_${y}`,
+      cache: serverMethodCacheOptions
+    });
+
+    server.method("getRegionSuggestions", helpers.getRegionSuggestions, {
+      bind: {
+        server: server
+      },
+      generateKey: components => {
+        let key = "";
+        for (let component of components) {
+          key = `${key}_${component[0]}_${component[1]}`;
+        }
+        return key;
+      },
+      cache: serverMethodCacheOptions
+    });
+
+    server.method("getFont", helpers.getFont, {
+      cache: serverMethodCacheOptions
+    });
+
+    server.method("getGeodataGeojson", geodataHelpers.getGeodataGeojson, {
+      cache: serverMethodCacheOptions
+    });
+
+    server.method("getGeodataTile", geodataHelpers.getGeodataTile, {
+      bind: {
+        server: server
+      },
+      cache: serverMethodCacheOptions
+    });
 
     await server.register(require("@hapi/inert"));
     await server.register(plugins);

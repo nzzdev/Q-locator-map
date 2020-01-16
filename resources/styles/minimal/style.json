@@ -1,10 +1,12 @@
 {
   "version": 8,
-  "name": "minimal",
+  "name": "{styleName}",
   "sources": {
     "openmaptiles": {
       "type": "vector",
-      "tiles": ["{toolBaseUrl}/tiles/openmaptiles/{z}/{x}/{y}.pbf"],
+      "tiles": [
+        "{toolBaseUrl}/tiles/{openmaptilesHash}/openmaptiles/{z}/{x}/{y}.pbf?style={styleName}&optimize=true"
+      ],
       "minzoom": 0,
       "maxzoom": 14,
       "bounds": [-180, -85.0511, 180, 85.0511],

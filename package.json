@@ -21,6 +21,7 @@
     "@hapi/joi": "^15.1.1",
     "@mapbox/glyph-pbf-composite": "0.0.3",
     "@mapbox/mbtiles": "^0.11.0",
+    "@mapbox/vtshaver": "^0.2.1",
     "@turf/turf": "^5.1.6",
     "ajv": "^6.10.2",
     "clone": "^2.1.2",

@@ -21,8 +21,9 @@ export function getStyle(data) {
 }
 
 function applyConfig(style, data) {
+  const styleName = data.options.baseLayer.style;
   const fonts = data.config.styleConfig.fonts;
-  const colors = data.config.styleConfig.colors[style.name];
+  const colors = data.config.styleConfig.colors[styleName];
   const markers = data.config.styleConfig.markers;
 
   style = JSON.parse(
@@ -113,6 +114,7 @@ function applyConfig(style, data) {
         /"{fontSerifRegular}"/g,
         JSON.stringify(fonts.fontSerifRegular.name)
       )
+      .replace(/{styleName}/g, data.options.baseLayer.style)
       .replace(/{fontBaseUrl}/g, fonts.fontBaseUrl)
       .replace(/{fontHash}/g, data.config.fontHash)
       .replace(/{spriteHash}/g, data.config.spriteHash)
@@ -120,7 +122,32 @@ function applyConfig(style, data) {
       .replace(/{toolBaseUrl}/g, data.config.toolBaseUrl)
   );
 
-  if (style.name === "basic") {
+  if (data.config.tilesets["openmaptiles"]) {
+    style = JSON.parse(
+      JSON.stringify(style).replace(
+        /{openmaptilesHash}/g,
+        data.config.tilesets["openmaptiles"].hash
+      )
+    );
+  }
+  if (data.config.tilesets["contours"]) {
+    style = JSON.parse(
+      JSON.stringify(style).replace(
+        /{contoursHash}/g,
+        data.config.tilesets["contours"].hash
+      )
+    );
+  }
+  if (data.config.tilesets["hillshade"]) {
+    style = JSON.parse(
+      JSON.stringify(style).replace(
+        /{hillshadeHash}/g,
+        data.config.tilesets["hillshade"].hash
+      )
+    );
+  }
+
+  if (styleName === "basic") {
     style = JSON.parse(
       JSON.stringify(style)
         .replace(
@@ -136,7 +163,7 @@ function applyConfig(style, data) {
           JSON.stringify(colors.boundaryCommunity)
         )
     );
-  } else if (["minimal", "nature", "satellite"].includes(style.name)) {
+  } else if (["minimal", "nature", "satellite"].includes(styleName)) {
     style = JSON.parse(
       JSON.stringify(style).replace(
         /"{colorBoundary}"/g,
@@ -362,7 +389,7 @@ function addFeatures(style, data) {
     style.sources[data.config.features.sourceName] = {
       type: "vector",
       tiles: [
-        `${data.config.toolBaseUrl}/tilesets/${data.qId}/${data.config.features.hash}/{z}/{x}/{y}.pbf?appendItemToPayload=${data.qId}`
+        `${data.config.toolBaseUrl}/tilesets/${data.config.features.hash}/${data.qId}/{z}/{x}/{y}.pbf?appendItemToPayload=${data.qId}`
       ],
       minzoom: 0,
       maxzoom: 14

@@ -1,10 +1,12 @@
 {
   "version": 8,
-  "name": "nature",
+  "name": "{styleName}",
   "sources": {
     "openmaptiles": {
       "type": "vector",
-      "tiles": ["{toolBaseUrl}/tiles/openmaptiles/{z}/{x}/{y}.pbf"],
+      "tiles": [
+        "{toolBaseUrl}/tiles/{openmaptilesHash}/openmaptiles/{z}/{x}/{y}.pbf?style={styleName}&optimize=true"
+      ],
       "minzoom": 0,
       "maxzoom": 14,
       "bounds": [-180, -85.0511, 180, 85.0511],
@@ -12,7 +14,7 @@
     },
     "contours": {
       "type": "vector",
-      "tiles": ["{toolBaseUrl}/tiles/contours/{z}/{x}/{y}.pbf"],
+      "tiles": ["{toolBaseUrl}/tiles/{contoursHash}/contours/{z}/{x}/{y}.pbf"],
       "minzoom": 9,
       "maxzoom": 14,
       "bounds": [-180, -85.0511, 180, 85.0511],
@@ -20,7 +22,9 @@
     },
     "hillshade": {
       "type": "raster",
-      "tiles": ["{toolBaseUrl}/tiles/hillshade/{z}/{x}/{y}.png"],
+      "tiles": [
+        "{toolBaseUrl}/tiles/{hillshadeHash}/hillshade/{z}/{x}/{y}.png"
+      ],
       "minzoom": 0,
       "maxzoom": 12,
       "bounds": [-179.98067, -57.000384, 179.972533, 72.000695],

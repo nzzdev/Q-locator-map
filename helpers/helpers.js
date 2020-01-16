@@ -54,6 +54,7 @@ async function getConfig(item, itemStateInDb, toolRuntimeConfig, data) {
     item.options.labelsBelowMap
   );
   config.styleConfig = getStyleConfig(toolRuntimeConfig.styleConfig);
+  config.tilesets = data.tilesets;
   config.fontHash = await getHash(toolRuntimeConfig.styleConfig.fonts);
   config.spriteHash = data.sprites["1x"].hash;
 
@@ -91,7 +92,7 @@ function getExactPixelWidth(toolRuntimeConfig) {
   return undefined;
 }
 
-async function getFont(fontBaseUrl, fontName, start, end) {
+async function getFont(hash, fontBaseUrl, fontName, start, end) {
   const response = await fetch(`${fontBaseUrl}${fontName}.otf`);
   if (response.ok) {
     const fontFile = await response.buffer();
