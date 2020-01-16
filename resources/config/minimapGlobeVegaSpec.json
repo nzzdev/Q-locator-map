@@ -41,7 +41,8 @@
         "update": {
           "fill": { "signal": "landColor" },
           "stroke": { "signal": "landOutlineColor" },
-          "strokeWidth": { "value": 0.5 }
+          "strokeWidth": { "value": 0.5 },
+          "strokeOpacity": { "value": 0.8 }
         }
       },
       "transform": [

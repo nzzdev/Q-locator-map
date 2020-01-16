@@ -39,10 +39,16 @@ module.exports = {
 
       try {
         if (tilesets[id] && tilesets[id].url) {
-          const tileUrl = tilesets[id].url
+          let tileUrl = tilesets[id].url
             .replace("{z}", z)
             .replace("{x}", x)
             .replace("{y}", y);
+
+          if (style && optimize) {
+            tileUrl = tileUrl
+              .replace("{styleName}", style)
+              .replace("{optimize}", optimize);
+          }
           const response = await fetch(tileUrl);
           if (response.ok) {
             if (extension === "png") {
