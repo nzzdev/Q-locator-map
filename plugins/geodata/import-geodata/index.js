@@ -1,5 +1,5 @@
+const fs = require("fs");
 const path = require("path");
-const shapefile = require("shapefile");
 const FormData = require("form-data");
 const fetch = require("node-fetch");
 const promptly = require("promptly");
@@ -7,17 +7,14 @@ const querystring = require("querystring");
 
 const datasets = JSON.parse(process.env.DATASETS);
 
-async function getGeojsons(shp, dbf) {
-  try {
-    const result = await shapefile.read(shp, dbf, {
-      encoding: "utf-8"
-    });
-    if (result) {
-      return result.features;
-    }
-  } catch (error) {
-    console.error(error);
-  }
+function getGeojsons(geojsonPath) {
+  const filenames = fs.readdirSync(geojsonPath);
+  const features = filenames.map(filename => {
+    const file = path.join(geojsonPath, filename);
+    const featureCollection = JSON.parse(fs.readFileSync(file));
+    return featureCollection.features[0];
+  });
+  return features;
 }
 
 async function saveGeojson(id, geojson, bearer) {
@@ -100,9 +97,7 @@ async function getBearerToken() {
       return `Bearer ${body.access_token}`;
     } else {
       throw new Error(
-        `Error occured while authenticating: (${response.status}) ${
-          response.statusText
-        }`
+        `Error occured while authenticating: (${response.status}) ${response.statusText}`
       );
     }
   } else {
@@ -154,11 +149,8 @@ async function main() {
     const bearer = await getBearerToken();
     for (let dataset of datasets) {
       if (!dataset.disable) {
-        const shapefilePath = path.join(__dirname, dataset.path);
-        let geojsons = await getGeojsons(
-          `${shapefilePath}.shp`,
-          `${shapefilePath}.dbf`
-        );
+        const geojsonPath = path.join(__dirname, dataset.path);
+        let geojsons = getGeojsons(geojsonPath);
         if (dataset.item) {
           geojsons = geojsons.filter(
             geojson => geojson.properties[dataset.id] === dataset.item
