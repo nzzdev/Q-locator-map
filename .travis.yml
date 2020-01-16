@@ -9,6 +9,7 @@ cache:
   directories:
     - node_modules
 install:
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test && sudo apt-key update && sudo apt-get update && sudo apt-get install gcc-4.9 && sudo apt-get upgrade libstdc++6
   - npm install
 before_script:
   - DOCKER_IMAGE_NAME="q-locator-map"
