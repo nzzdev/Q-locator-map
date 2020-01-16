@@ -33,6 +33,6 @@
       </span>
     </div>
   {/if}
-  <LabelsBelowMap {item} {numberMarkers} />
+  <LabelsBelowMap {item} {config} {numberMarkers} />
   <Footer {item} />
 </div>
