@@ -113,14 +113,15 @@ function getDimensions(spec, bbox, options) {
   const minDimension = options.styleConfig.region.minWidth;
   let width;
   let height;
+  const padding = 8;
   if (distanceX > distanceY) {
     aspectRatio = distanceY / distanceX;
     width = defaultDimension;
-    height = defaultDimension * aspectRatio;
+    height = defaultDimension * aspectRatio + padding;
     if (height < minDimension) height = minDimension;
   } else if (distanceX < distanceY) {
     aspectRatio = distanceX / distanceY;
-    width = defaultDimension * aspectRatio;
+    width = defaultDimension * aspectRatio + padding;
     if (width < minDimension) width = minDimension;
     height = defaultDimension;
   }
@@ -133,26 +134,15 @@ function getDimensions(spec, bbox, options) {
     scaleFactor = width / distance;
   }
 
-  let translateX = spec.width - width / 2;
-  let translateY = spec.height - height / 2;
-  if (spec.width === width) {
-    translateX = spec.width / 2;
-  }
-  if (spec.height === height) {
-    translateY = spec.height / 2;
-  }
-
   return {
-    translateX: translateX,
-    translateY: translateY,
+    width: width,
+    height: height,
     scaleFactor: scaleFactor
   };
 }
 
 async function getRegionVegaSpec(options) {
   const spec = JSON.parse(JSON.stringify(minimapRegionVegaSpec));
-  spec.width = options.styleConfig.region.width;
-  spec.height = options.styleConfig.region.width;
   const geoDataUrl = `${options.toolBaseUrl}/geodata/${options.region.id}.geojson`;
   let bboxFeature = turf.bboxPolygon(options.bounds);
 
@@ -169,6 +159,8 @@ async function getRegionVegaSpec(options) {
     }
     const bbox = turf.bbox(region);
     const dimensions = getDimensions(spec, bbox, options);
+    spec.width = dimensions.width;
+    spec.height = dimensions.height;
 
     let projection = "azimuthalEqualArea";
     // Use albersUsa projection for usa region (wikidataId: Q30)
@@ -206,14 +198,6 @@ async function getRegionVegaSpec(options) {
     spec.signals.push({
       name: "scaleFactor",
       value: dimensions.scaleFactor
-    });
-    spec.signals.push({
-      name: "translateX",
-      value: dimensions.translateX
-    });
-    spec.signals.push({
-      name: "translateY",
-      value: dimensions.translateY
     });
     spec.signals.push({
       name: "rotate0",

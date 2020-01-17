@@ -9,7 +9,7 @@
       "name": "projection",
       "type": { "signal": "projection" },
       "scale": { "signal": "scaleFactor" },
-      "translate": { "signal": "[translateX, translateY]" },
+      "translate": { "signal": "[width/2, height/2]" },
       "rotate": [{ "signal": "rotate0" }, { "signal": "rotate1" }, 0]
     }
   ],
@@ -37,8 +37,8 @@
       "type": "text",
       "encode": {
         "update": {
-          "x": { "signal": "translateX" },
-          "y": { "signal": "translateY" },
+          "x": { "signal": "width/2" },
+          "y": { "signal": "height/2" },
           "align": { "value": "center" },
           "baseline": { "value": "middle" },
           "text": { "signal": "label" },
