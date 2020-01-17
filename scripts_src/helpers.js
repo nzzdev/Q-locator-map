@@ -1,6 +1,6 @@
 import Sprites from "../resources/sprites/sprites@1x.json";
 import turfBBox from "@turf/bbox";
-import turfCentroid from "@turf/centroid";
+import turfBooleanPointInPolygon from "@turf/boolean-point-in-polygon";
 import turfHelpers from "@turf/helpers";
 
 export function getStyle(data) {
@@ -550,6 +550,14 @@ function addFeatures(style, data) {
       layer.source = feature.id;
     }
     style.layers.splice(style.layers.length, 0, layer);
+    if (feature.geojson.properties.type === "country") {
+      const highlightedLayer = JSON.parse(JSON.stringify(layer));
+      const id = `${highlightedLayer.id}--highlighted`;
+      highlightedLayer.id = id;
+      highlightedLayer.layout["text-font"] = ["{fontSansMedium}"];
+      highlightedLayer.paint["text-halo-color"] = "{colorHighlightCountry}";
+      style.layers.splice(style.layers.length, 0, highlightedLayer);
+    }
   });
 
   return style;
@@ -585,7 +593,11 @@ export function hightlightCountryLabels(map, data) {
     )
   );
 
-  // Get labels of highlighted countries
+  // Find labels contained in highlighted regions
+  const style = map.getStyle();
+  const highlightedLayers = style.layers
+    .filter(layer => layer.id.includes("--highlighted"))
+    .map(layer => layer.id);
   const highlightedLabels = [];
   for (let highlightRegion of highlightRegions) {
     const relatedSourceFeatures = map.querySourceFeatures("regions", {
@@ -593,38 +605,59 @@ export function hightlightCountryLabels(map, data) {
       filter: ["==", "wikidata", highlightRegion]
     });
     if (relatedSourceFeatures.length > 0) {
-      const centroids = relatedSourceFeatures.map(feature =>
-        turfCentroid(feature)
+      const bbox = turfBBox(
+        turfHelpers.featureCollection(relatedSourceFeatures)
       );
-      const bbox = turfBBox(turfHelpers.featureCollection(centroids));
       const geometry = [
         map.project([bbox[0], bbox[1]]),
         map.project([bbox[2], bbox[3]])
       ];
-      const relatedRenderedFeatures = map.queryRenderedFeatures(geometry, {
-        layers: ["place_country-de"]
+
+      let relatedRenderedFeatures = map.queryRenderedFeatures(geometry, {
+        layers: highlightedLayers
       });
-      if (relatedRenderedFeatures.length === 1) {
-        highlightedLabels.push(
-          relatedRenderedFeatures[0].properties["name:de"]
-        );
+
+      relatedRenderedFeatures = relatedRenderedFeatures.filter(
+        relatedRenderedFeature => {
+          return relatedSourceFeatures.some(relatedSourceFeature =>
+            turfBooleanPointInPolygon(
+              relatedRenderedFeature,
+              relatedSourceFeature
+            )
+          );
+        }
+      );
+      for (let relatedRenderedFeature of relatedRenderedFeatures) {
+        const properties = relatedRenderedFeature.properties;
+        if (properties["name:de"]) {
+          highlightedLabels.push(properties["name:de"]);
+        } else if (properties.label) {
+          highlightedLabels.push(properties.label);
+        }
       }
     }
   }
 
-  // Filter country labels of highlighted countries
-  const countryLayerFilter = map.getFilter("place_country-de");
-  const highlightedCountryFilter = map.getFilter(
-    "place_country-de--highlighted"
-  );
-  const highlightedLabelFilter = ["any"];
-  for (let highlightedLabel of highlightedLabels) {
-    countryLayerFilter.push(["!=", "name:de", highlightedLabel]);
-    highlightedLabelFilter.push(["==", "name:de", highlightedLabel]);
+  if (highlightedLabels.length > 0) {
+    // Apply different style to labels of highlighted regions
+    for (let highlightedLayer of highlightedLayers) {
+      const layer = highlightedLayer.replace("--highlighted", "");
+      const layerFilter = map.getFilter(layer) || ["all"];
+      const highlightedLayerFilter = map.getFilter(highlightedLayer) || ["all"];
+      const layerLabelFilter = ["any"];
+      const highlightedLabelFilter = ["any"];
+      for (let highlightedLabel of highlightedLabels) {
+        layerLabelFilter.push(["!=", "name:de", highlightedLabel]);
+        layerLabelFilter.push(["!=", "label", highlightedLabel]);
+        highlightedLabelFilter.push(["==", "name:de", highlightedLabel]);
+        highlightedLabelFilter.push(["==", "label", highlightedLabel]);
+      }
+      layerFilter.push(layerLabelFilter);
+      highlightedLayerFilter.push(highlightedLabelFilter);
+      map.setFilter(layer, layerFilter);
+      map.setFilter(highlightedLayer, highlightedLayerFilter);
+    }
   }
-  map.setFilter("place_country-de", countryLayerFilter);
-  highlightedCountryFilter.push(highlightedLabelFilter);
-  map.setFilter("place_country-de--highlighted", highlightedCountryFilter);
 }
 
 function addHighlightedRegions(style, data) {
