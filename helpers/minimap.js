@@ -151,6 +151,17 @@ async function getRegionVegaSpec(options) {
       scaleFactor = spec.width / distance;
     }
 
+    let projection = "azimuthalEqualArea";
+
+    // Use albersUsa projection for usa region (wikidataId: Q30)
+    if (options.region.id === "Q30") {
+      projection = "albersUsa";
+    }
+
+    spec.signals.push({
+      name: "projection",
+      value: projection
+    });
     spec.signals.push({
       name: "landColor",
       value: options.styleConfig.landColor

@@ -9,7 +9,7 @@
     {
       "name": "projection",
       "scale": { "signal": "scaleFactor" },
-      "type": "azimuthalEqualArea",
+      "type": { "signal": "projection" },
       "translate": { "signal": "[width/2, height/2]" },
       "rotate": [{ "signal": "rotate0" }, { "signal": "rotate1" }, 0]
     }
