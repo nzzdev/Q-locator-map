@@ -2,6 +2,7 @@ const Hapi = require("@hapi/hapi");
 const fs = require("fs");
 const NodeGeocoder = require("node-geocoder");
 const helpers = require("./helpers/helpers.js");
+const minimapHelpers = require("./helpers/minimap.js");
 const tileHelpers = require("./helpers/tiles.js");
 const geodataHelpers = require("./plugins/geodata/helpers.js");
 const resourcesDir = "./resources/";
@@ -135,6 +136,10 @@ async function init() {
     });
 
     server.method("getFont", helpers.getFont, {
+      cache: serverMethodCacheOptions
+    });
+
+    server.method("getRegionGeojson", minimapHelpers.getRegionGeojson, {
       cache: serverMethodCacheOptions
     });
 

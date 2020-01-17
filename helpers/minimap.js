@@ -1,5 +1,6 @@
 const vega = require("vega");
 const fetch = require("node-fetch");
+const Boom = require("@hapi/boom");
 const turf = require("@turf/turf");
 const minimapRegionVegaSpec = require("../resources/config/minimapRegionVegaSpec.json");
 const minimapGlobeVegaSpec = require("../resources/config/minimapGlobeVegaSpec.json");
@@ -141,96 +142,109 @@ function getDimensions(spec, bbox, options) {
   };
 }
 
+async function getRegionGeojson(toolBaseUrl, id) {
+  try {
+    const url = `${toolBaseUrl}/geodata/${id}.geojson`;
+    const response = await fetch(url);
+    if (response.ok) {
+      return await response.json();
+    } else {
+      return Boom.notFound();
+    }
+  } catch (error) {
+    return Boom.notFound();
+  }
+}
+
 async function getRegionVegaSpec(options) {
   const spec = JSON.parse(JSON.stringify(minimapRegionVegaSpec));
-  const geoDataUrl = `${options.toolBaseUrl}/geodata/${options.region.id}.geojson`;
   let bboxFeature = turf.bboxPolygon(options.bounds);
 
-  const response = await fetch(geoDataUrl);
-  if (response.ok) {
-    const region = await response.json();
-    const center = turf.getCoord(turf.centerOfMass(region));
-    const areaRatio = turf.area(region) / turf.area(bboxFeature);
-    if (areaRatio > threshold) {
-      bboxFeature = turf.centroid(bboxFeature);
-      spec.marks.push(pointMark);
-    } else {
-      spec.marks.push(bboxMark);
-    }
-    const bbox = turf.bbox(region);
-    const dimensions = getDimensions(spec, bbox, options);
-    spec.width = dimensions.width;
-    spec.height = dimensions.height;
-
-    let projection = "azimuthalEqualArea";
-    // Use albersUsa projection for usa region (wikidataId: Q30)
-    if (options.region.id === "Q30") {
-      projection = "albersUsa";
-    }
-    spec.signals.push({
-      name: "projection",
-      value: projection
-    });
-    spec.signals.push({
-      name: "landColor",
-      value: options.styleConfig.landColor
-    });
-    spec.signals.push({
-      name: "landOutlineColor",
-      value: options.styleConfig.landOutlineColor
-    });
-    spec.signals.push({
-      name: "textColor",
-      value: options.styleConfig.textColor
-    });
-    spec.signals.push({
-      name: "textFont",
-      value: `${options.styleConfig.textFont},nzz-sans-serif,Helvetica,Arial`
-    });
-    spec.signals.push({
-      name: "textSize",
-      value: options.styleConfig.textSize
-    });
-    spec.signals.push({
-      name: "bboxColor",
-      value: options.styleConfig.bboxColor
-    });
-    spec.signals.push({
-      name: "scaleFactor",
-      value: dimensions.scaleFactor
-    });
-    spec.signals.push({
-      name: "rotate0",
-      value: center[0] * -1
-    });
-    spec.signals.push({
-      name: "rotate1",
-      value: center[1] * -1
-    });
-
-    let label = region.properties.name_de ? region.properties.name_de : "";
-    if (options.region.label && options.region.label !== "") {
-      label = options.region.label;
-    }
-    spec.signals.push({
-      name: "label",
-      value: label
-    });
-    spec.data.push({
-      name: "region",
-      values: region,
-      format: {
-        type: "json"
-      }
-    });
-    spec.data.push({
-      name: "bbox",
-      values: bboxFeature,
-      format: {
-        type: "json"
-      }
-    });
+  const region = await options.getRegionGeojson(
+    options.toolBaseUrl,
+    options.region.id
+  );
+  const center = turf.getCoord(turf.centerOfMass(region));
+  const areaRatio = turf.area(region) / turf.area(bboxFeature);
+  if (areaRatio > threshold) {
+    bboxFeature = turf.centroid(bboxFeature);
+    spec.marks.push(pointMark);
+  } else {
+    spec.marks.push(bboxMark);
   }
+  const bbox = turf.bbox(region);
+  const dimensions = getDimensions(spec, bbox, options);
+  spec.width = dimensions.width;
+  spec.height = dimensions.height;
+
+  let projection = "azimuthalEqualArea";
+  // Use albersUsa projection for usa region (wikidataId: Q30)
+  if (options.region.id === "Q30") {
+    projection = "albersUsa";
+  }
+  spec.signals.push({
+    name: "projection",
+    value: projection
+  });
+  spec.signals.push({
+    name: "landColor",
+    value: options.styleConfig.landColor
+  });
+  spec.signals.push({
+    name: "landOutlineColor",
+    value: options.styleConfig.landOutlineColor
+  });
+  spec.signals.push({
+    name: "textColor",
+    value: options.styleConfig.textColor
+  });
+  spec.signals.push({
+    name: "textFont",
+    value: `${options.styleConfig.textFont},nzz-sans-serif,Helvetica,Arial`
+  });
+  spec.signals.push({
+    name: "textSize",
+    value: options.styleConfig.textSize
+  });
+  spec.signals.push({
+    name: "bboxColor",
+    value: options.styleConfig.bboxColor
+  });
+  spec.signals.push({
+    name: "scaleFactor",
+    value: dimensions.scaleFactor
+  });
+  spec.signals.push({
+    name: "rotate0",
+    value: center[0] * -1
+  });
+  spec.signals.push({
+    name: "rotate1",
+    value: center[1] * -1
+  });
+
+  let label = region.properties.name_de ? region.properties.name_de : "";
+  if (options.region.label && options.region.label !== "") {
+    label = options.region.label;
+  }
+  spec.signals.push({
+    name: "label",
+    value: label
+  });
+  spec.data.push({
+    name: "region",
+    values: region,
+    format: {
+      type: "json"
+    }
+  });
+  spec.data.push({
+    name: "bbox",
+    values: bboxFeature,
+    format: {
+      type: "json"
+    }
+  });
 
   return spec;
 }
@@ -250,5 +264,6 @@ async function getMinimap(options) {
 }
 
 module.exports = {
-  getMinimap: getMinimap
+  getMinimap: getMinimap,
+  getRegionGeojson: getRegionGeojson
 };

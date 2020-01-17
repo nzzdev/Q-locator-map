@@ -31,7 +31,8 @@ module.exports = {
         bounds: request.query.bounds,
         styleConfig: request.query.styleConfig,
         toolBaseUrl: request.query.toolBaseUrl,
-        region: {}
+        region: {},
+        getRegionGeojson: request.server.methods.getRegionGeojson
       };
 
       if (options.type === "region") {
