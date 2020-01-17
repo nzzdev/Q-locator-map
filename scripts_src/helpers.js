@@ -1,4 +1,7 @@
 import Sprites from "../resources/sprites/sprites@1x.json";
+import turfBBox from "@turf/bbox";
+import turfCentroid from "@turf/centroid";
+import turfHelpers from "@turf/helpers";
 
 export function getStyle(data) {
   return fetch(
@@ -566,6 +569,62 @@ function filterByLayer(style, data) {
     }
   }
   return style;
+}
+
+export function hasLabels(data) {
+  const baseLayer = data.options.baseLayer;
+  return baseLayer && baseLayer.layers && baseLayer.layers.label;
+}
+
+export function hightlightCountryLabels(map, data) {
+  const highlightRegions = Array.from(
+    new Set(
+      data.options.highlightRegion
+        .filter(region => region.id !== "")
+        .map(region => region.id)
+    )
+  );
+
+  // Get labels of highlighted countries
+  const highlightedLabels = [];
+  for (let highlightRegion of highlightRegions) {
+    const relatedSourceFeatures = map.querySourceFeatures("regions", {
+      sourceLayer: "countries",
+      filter: ["==", "wikidata", highlightRegion]
+    });
+    if (relatedSourceFeatures.length > 0) {
+      const centroids = relatedSourceFeatures.map(feature =>
+        turfCentroid(feature)
+      );
+      const bbox = turfBBox(turfHelpers.featureCollection(centroids));
+      const geometry = [
+        map.project([bbox[0], bbox[1]]),
+        map.project([bbox[2], bbox[3]])
+      ];
+      const relatedRenderedFeatures = map.queryRenderedFeatures(geometry, {
+        layers: ["place_country-de"]
+      });
+      if (relatedRenderedFeatures.length === 1) {
+        highlightedLabels.push(
+          relatedRenderedFeatures[0].properties["name:de"]
+        );
+      }
+    }
+  }
+
+  // Filter country labels of highlighted countries
+  const countryLayerFilter = map.getFilter("place_country-de");
+  const highlightedCountryFilter = map.getFilter(
+    "place_country-de--highlighted"
+  );
+  const highlightedLabelFilter = ["any"];
+  for (let highlightedLabel of highlightedLabels) {
+    countryLayerFilter.push(["!=", "name:de", highlightedLabel]);
+    highlightedLabelFilter.push(["==", "name:de", highlightedLabel]);
+  }
+  map.setFilter("place_country-de", countryLayerFilter);
+  highlightedCountryFilter.push(highlightedLabelFilter);
+  map.setFilter("place_country-de--highlighted", highlightedCountryFilter);
 }
 
 function addHighlightedRegions(style, data) {
