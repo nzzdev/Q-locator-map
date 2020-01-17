@@ -80,7 +80,10 @@ module.exports = {
             optimize
           );
           if (extension === "png") {
-            return h.response(tile).type("image/png");
+            return h
+              .response(tile)
+              .type("image/png")
+              .header("cache-control", helpers.getMaxCache());
           } else {
             return h
               .response(tile)
