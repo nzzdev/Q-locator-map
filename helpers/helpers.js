@@ -393,9 +393,12 @@ function getStyleConfig(styleConfig) {
       textColor: "#6e6e7e",
       bboxColor: "#000000",
       textSize: 12,
-      width: {
-        globe: 90,
-        region: 120
+      globe: {
+        width: 90
+      },
+      region: {
+        width: 120,
+        minWidth: 40
       }
     },
     scale: {

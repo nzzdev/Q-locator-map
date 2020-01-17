@@ -40,8 +40,8 @@ const bboxMark = {
 
 function getGlobeVegaSpec(options) {
   const spec = JSON.parse(JSON.stringify(minimapGlobeVegaSpec));
-  spec.height = options.styleConfig.width.globe;
-  spec.width = options.styleConfig.width.globe;
+  spec.height = options.styleConfig.globe.width;
+  spec.width = options.styleConfig.globe.width;
   let bboxFeature = turf.rewind(turf.bboxPolygon(options.bounds), {
     reverse: true
   });
@@ -96,42 +96,70 @@ function getGlobeVegaSpec(options) {
   return spec;
 }
 
-function getDimensions(bbox, options) {
+function getDimensions(spec, bbox, options) {
   const minX = bbox[0];
   const minY = bbox[1];
   const maxX = bbox[2];
   const maxY = bbox[3];
-  const distanceX = turf.distance([minX, minY], [maxX, minY]);
-  const distanceY = turf.distance([maxX, minY], [maxX, maxY]);
+
+  const distanceX = turf.distance([minX, minY], [maxX, minY], {
+    units: "radians"
+  });
+  const distanceY = turf.distance([maxX, minY], [maxX, maxY], {
+    units: "radians"
+  });
   let aspectRatio = 1;
-  const defaultDimension = options.styleConfig.width.region;
+  const defaultDimension = options.styleConfig.region.width;
+  const minDimension = options.styleConfig.region.minWidth;
   let width;
   let height;
   if (distanceX > distanceY) {
     aspectRatio = distanceY / distanceX;
     width = defaultDimension;
     height = defaultDimension * aspectRatio;
+    if (height < minDimension) height = minDimension;
   } else if (distanceX < distanceY) {
     aspectRatio = distanceX / distanceY;
     width = defaultDimension * aspectRatio;
+    if (width < minDimension) width = minDimension;
     height = defaultDimension;
   }
 
+  const distance = turf.distance([minX, minY], [maxX, maxY], {
+    units: "radians"
+  });
+  let scaleFactor = height / distance;
+  if (width > height) {
+    scaleFactor = width / distance;
+  }
+
+  let translateX = spec.width - width / 2;
+  let translateY = spec.height - height / 2;
+  if (spec.width === width) {
+    translateX = spec.width / 2;
+  }
+  if (spec.height === height) {
+    translateY = spec.height / 2;
+  }
+
   return {
-    width: width,
-    height: height
+    translateX: translateX,
+    translateY: translateY,
+    scaleFactor: scaleFactor
   };
 }
 
 async function getRegionVegaSpec(options) {
   const spec = JSON.parse(JSON.stringify(minimapRegionVegaSpec));
+  spec.width = options.styleConfig.region.width;
+  spec.height = options.styleConfig.region.width;
   const geoDataUrl = `${options.toolBaseUrl}/geodata/${options.region.id}.geojson`;
   let bboxFeature = turf.bboxPolygon(options.bounds);
 
   const response = await fetch(geoDataUrl);
   if (response.ok) {
     const region = await response.json();
-    const center = turf.getCoord(turf.centroid(region));
+    const center = turf.getCoord(turf.centerOfMass(region));
     const areaRatio = turf.area(region) / turf.area(bboxFeature);
     if (areaRatio > threshold) {
       bboxFeature = turf.centroid(bboxFeature);
@@ -140,24 +168,13 @@ async function getRegionVegaSpec(options) {
       spec.marks.push(bboxMark);
     }
     const bbox = turf.bbox(region);
-    const dimensions = getDimensions(bbox, options);
-    spec.width = dimensions.width;
-    spec.height = dimensions.height;
-    const distance = turf.distance([bbox[0], bbox[1]], [bbox[2], bbox[3]], {
-      units: "radians"
-    });
-    let scaleFactor = spec.height / distance;
-    if (spec.width > spec.height) {
-      scaleFactor = spec.width / distance;
-    }
+    const dimensions = getDimensions(spec, bbox, options);
 
     let projection = "azimuthalEqualArea";
-
     // Use albersUsa projection for usa region (wikidataId: Q30)
     if (options.region.id === "Q30") {
       projection = "albersUsa";
     }
-
     spec.signals.push({
       name: "projection",
       value: projection
@@ -188,7 +205,15 @@ async function getRegionVegaSpec(options) {
     });
     spec.signals.push({
       name: "scaleFactor",
-      value: scaleFactor
+      value: dimensions.scaleFactor
+    });
+    spec.signals.push({
+      name: "translateX",
+      value: dimensions.translateX
+    });
+    spec.signals.push({
+      name: "translateY",
+      value: dimensions.translateY
     });
     spec.signals.push({
       name: "rotate0",
