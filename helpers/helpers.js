@@ -340,8 +340,8 @@ function getStyleConfig(styleConfig) {
       }
     },
     markers: {
-      textHaloWidth: 2,
-      textBlurWidth: 1,
+      textHaloWidth: 1,
+      textBlurWidth: 0.1,
       textLetterSpacing: 0.2,
       textTransform: "none",
       textAnchor: "left",

@@ -612,7 +612,7 @@ export function hightlightCountryLabels(map, data) {
     const highlightedLayers = style.layers
       .filter(layer => layer.id.includes("--highlighted"))
       .map(layer => layer.id);
-    const highlightedLabels = [];
+    let highlightedLabels = new Set();
     for (let highlightRegion of highlightRegions) {
       const relatedSourceFeatures = map.querySourceFeatures("regions", {
         sourceLayer: "countries",
@@ -644,14 +644,15 @@ export function hightlightCountryLabels(map, data) {
         for (let relatedRenderedFeature of relatedRenderedFeatures) {
           const properties = relatedRenderedFeature.properties;
           if (properties["name:de"]) {
-            highlightedLabels.push(properties["name:de"]);
+            highlightedLabels.add(properties["name:de"]);
           } else if (properties.label) {
-            highlightedLabels.push(properties.label);
+            highlightedLabels.add(properties.label);
           }
         }
       }
     }
 
+    highlightedLabels = Array.from(highlightedLabels);
     if (highlightedLabels.length > 0) {
       // Apply different style to labels of highlighted regions
       for (let highlightedLayer of highlightedLayers) {
@@ -664,13 +665,31 @@ export function hightlightCountryLabels(map, data) {
         if (map.getLayer(highlightedLayer) && map.getFilter(highlightedLayer)) {
           highlightedLayerFilter = map.getFilter(highlightedLayer);
         }
-        const layerLabelFilter = ["any"];
+        const layerLabelFilter = ["all"];
         const highlightedLabelFilter = ["any"];
         for (let highlightedLabel of highlightedLabels) {
-          layerLabelFilter.push(["!=", "name:de", highlightedLabel]);
-          layerLabelFilter.push(["!=", "label", highlightedLabel]);
-          highlightedLabelFilter.push(["==", "name:de", highlightedLabel]);
-          highlightedLabelFilter.push(["==", "label", highlightedLabel]);
+          const filter = ["any"];
+          filter.push([
+            "all",
+            ["has", "label"],
+            ["!=", "label", highlightedLabel]
+          ]);
+          filter.push([
+            "all",
+            ["has", "name:de"],
+            ["!=", "name:de", highlightedLabel]
+          ]);
+          layerLabelFilter.push(filter);
+          highlightedLabelFilter.push([
+            "all",
+            ["has", "label"],
+            ["==", "label", highlightedLabel]
+          ]);
+          highlightedLabelFilter.push([
+            "all",
+            ["has", "name:de"],
+            ["==", "name:de", highlightedLabel]
+          ]);
         }
         layerFilter.push(layerLabelFilter);
         highlightedLayerFilter.push(highlightedLabelFilter);
