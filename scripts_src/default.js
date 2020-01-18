@@ -170,7 +170,6 @@ export default class LocatorMap {
       this.preventLabelsAroundViewport();
       this.addControls();
       if (
-        helpers.hasLabels(this.data) &&
         this.data.options.baseLayer.style !== "satellite" &&
         this.data.options.highlightRegion &&
         this.data.options.highlightRegion.length > 0

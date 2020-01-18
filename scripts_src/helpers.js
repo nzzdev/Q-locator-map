@@ -579,11 +579,6 @@ function filterByLayer(style, data) {
   return style;
 }
 
-export function hasLabels(data) {
-  const baseLayer = data.options.baseLayer;
-  return baseLayer && baseLayer.layers && baseLayer.layers.label;
-}
-
 export function hightlightCountryLabels(map, data) {
   const highlightRegions = Array.from(
     new Set(
