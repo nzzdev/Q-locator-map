@@ -1,6 +1,5 @@
 const Hapi = require("@hapi/hapi");
 const fs = require("fs");
-const NodeGeocoder = require("node-geocoder");
 const helpers = require("./helpers/helpers.js");
 const minimapHelpers = require("./helpers/minimap.js");
 const tileHelpers = require("./helpers/tiles.js");
@@ -29,11 +28,6 @@ const routes = require("./routes/routes.js");
 
 async function init() {
   try {
-    server.app.geocoder = NodeGeocoder({
-      provider: "opencage",
-      apiKey: process.env.OPENCAGE_APIKEY
-    });
-
     server.cache.provision({
       provider: {
         constructor: require("@hapi/catbox-memory"),
@@ -121,18 +115,16 @@ async function init() {
       cache: serverMethodCacheOptions
     });
 
-    server.method("getRegionSuggestions", helpers.getRegionSuggestions, {
-      bind: {
-        server: server
-      },
-      generateKey: components => {
-        let key = "";
-        for (let component of components) {
-          key = `${key}_${component[0]}_${component[1]}`;
-        }
-        return key;
-      },
-      cache: serverMethodCacheOptions
+    server.app.tilesets["regions"].tileset.getTile(0, 0, 0, (error, tile) => {
+      if (error) throw error;
+      const tiles = [{ buffer: tile, z: 0, x: 0, y: 0 }];
+      server.method("getRegionSuggestions", helpers.getRegionSuggestions, {
+        bind: {
+          server: server,
+          tiles: tiles
+        },
+        cache: serverMethodCacheOptions
+      });
     });
 
     server.method("getFont", helpers.getFont, {
