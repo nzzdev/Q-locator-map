@@ -550,7 +550,13 @@ function addFeatures(style, data) {
       layer.source = feature.id;
     }
     style.layers.splice(style.layers.length, 0, layer);
-    if (feature.geojson.properties.type === "country") {
+
+    // Add layer for labels of highlighted regions
+    const highlightRegions = getHighlightRegions(data);
+    if (
+      highlightRegions.length > 0 &&
+      feature.geojson.properties.type === "country"
+    ) {
       const highlightedLayer = JSON.parse(JSON.stringify(layer));
       const id = `${highlightedLayer.id}--highlighted`;
       highlightedLayer.id = id;
@@ -579,98 +585,115 @@ function filterByLayer(style, data) {
   return style;
 }
 
-export function hightlightCountryLabels(map, data) {
-  const highlightRegions = Array.from(
-    new Set(
-      data.options.highlightRegion
-        .filter(region => region.id !== "")
-        .map(region => region.id)
-    )
-  );
-
-  // Find labels contained in highlighted regions
-  const style = map.getStyle();
-  const highlightedLayers = style.layers
-    .filter(layer => layer.id.includes("--highlighted"))
-    .map(layer => layer.id);
-  const highlightedLabels = [];
-  for (let highlightRegion of highlightRegions) {
-    const relatedSourceFeatures = map.querySourceFeatures("regions", {
-      sourceLayer: "countries",
-      filter: ["==", "wikidata", highlightRegion]
-    });
-    if (relatedSourceFeatures.length > 0) {
-      const bbox = turfBBox(
-        turfHelpers.featureCollection(relatedSourceFeatures)
-      );
-      const geometry = [
-        map.project([bbox[0], bbox[1]]),
-        map.project([bbox[2], bbox[3]])
-      ];
-
-      let relatedRenderedFeatures = map.queryRenderedFeatures(geometry, {
-        layers: highlightedLayers
-      });
-
-      relatedRenderedFeatures = relatedRenderedFeatures.filter(
-        relatedRenderedFeature => {
-          return relatedSourceFeatures.some(relatedSourceFeature =>
-            turfBooleanPointInPolygon(
-              relatedRenderedFeature,
-              relatedSourceFeature
-            )
-          );
-        }
-      );
-      for (let relatedRenderedFeature of relatedRenderedFeatures) {
-        const properties = relatedRenderedFeature.properties;
-        if (properties["name:de"]) {
-          highlightedLabels.push(properties["name:de"]);
-        } else if (properties.label) {
-          highlightedLabels.push(properties.label);
-        }
-      }
-    }
-  }
-
-  if (highlightedLabels.length > 0) {
-    // Apply different style to labels of highlighted regions
-    for (let highlightedLayer of highlightedLayers) {
-      const layer = highlightedLayer.replace("--highlighted", "");
-      const layerFilter = map.getFilter(layer) || ["all"];
-      const highlightedLayerFilter = map.getFilter(highlightedLayer) || ["all"];
-      const layerLabelFilter = ["any"];
-      const highlightedLabelFilter = ["any"];
-      for (let highlightedLabel of highlightedLabels) {
-        layerLabelFilter.push(["!=", "name:de", highlightedLabel]);
-        layerLabelFilter.push(["!=", "label", highlightedLabel]);
-        highlightedLabelFilter.push(["==", "name:de", highlightedLabel]);
-        highlightedLabelFilter.push(["==", "label", highlightedLabel]);
-      }
-      layerFilter.push(layerLabelFilter);
-      highlightedLayerFilter.push(highlightedLabelFilter);
-      map.setFilter(layer, layerFilter);
-      map.setFilter(highlightedLayer, highlightedLayerFilter);
-    }
-  }
-}
-
-function addHighlightedRegions(style, data) {
+function getHighlightRegions(data) {
+  const highlightRegion = [];
   if (data.options.highlightRegion && data.options.highlightRegion.length > 0) {
-    style.sources.regions = {
-      type: "vector",
-      tiles: [`{toolBaseUrl}/tiles/{regionsHash}/regions/{z}/{x}/{y}.pbf`],
-      minzoom: 0,
-      maxzoom: 10
-    };
-
-    const highlightRegions = Array.from(
+    return Array.from(
       new Set(
         data.options.highlightRegion
           .filter(region => region.id !== "")
           .map(region => region.id)
       )
     );
+  }
+  return highlightRegion;
+}
+
+function hasLabels(data) {
+  const baseLayer = data.options.baseLayer;
+  return baseLayer && baseLayer.layers && baseLayer.layers.label;
+}
+
+export function hightlightCountryLabels(map, data) {
+  const highlightRegions = getHighlightRegions(data);
+  if (highlightRegions.length > 0) {
+    // Find labels contained in highlighted regions
+    const style = map.getStyle();
+    const highlightedLayers = style.layers
+      .filter(layer => layer.id.includes("--highlighted"))
+      .map(layer => layer.id);
+    const highlightedLabels = [];
+    for (let highlightRegion of highlightRegions) {
+      const relatedSourceFeatures = map.querySourceFeatures("regions", {
+        sourceLayer: "countries",
+        filter: ["==", "wikidata", highlightRegion]
+      });
+      if (relatedSourceFeatures.length > 0) {
+        const bbox = turfBBox(
+          turfHelpers.featureCollection(relatedSourceFeatures)
+        );
+        const geometry = [
+          map.project([bbox[0], bbox[1]]),
+          map.project([bbox[2], bbox[3]])
+        ];
+
+        let relatedRenderedFeatures = map.queryRenderedFeatures(geometry, {
+          layers: highlightedLayers
+        });
+
+        relatedRenderedFeatures = relatedRenderedFeatures.filter(
+          relatedRenderedFeature => {
+            return relatedSourceFeatures.some(relatedSourceFeature =>
+              turfBooleanPointInPolygon(
+                relatedRenderedFeature,
+                relatedSourceFeature
+              )
+            );
+          }
+        );
+        for (let relatedRenderedFeature of relatedRenderedFeatures) {
+          const properties = relatedRenderedFeature.properties;
+          if (properties["name:de"]) {
+            highlightedLabels.push(properties["name:de"]);
+          } else if (properties.label) {
+            highlightedLabels.push(properties.label);
+          }
+        }
+      }
+    }
+
+    if (highlightedLabels.length > 0) {
+      // Apply different style to labels of highlighted regions
+      for (let highlightedLayer of highlightedLayers) {
+        let layerFilter = ["all"];
+        let highlightedLayerFilter = ["all"];
+        const layer = highlightedLayer.replace("--highlighted", "");
+        if (map.getLayer(layer) && map.getFilter(layer)) {
+          layerFilter = map.getFilter(layer);
+        }
+        if (map.getLayer(highlightedLayer) && map.getFilter(highlightedLayer)) {
+          highlightedLayerFilter = map.getFilter(highlightedLayer);
+        }
+        const layerLabelFilter = ["any"];
+        const highlightedLabelFilter = ["any"];
+        for (let highlightedLabel of highlightedLabels) {
+          layerLabelFilter.push(["!=", "name:de", highlightedLabel]);
+          layerLabelFilter.push(["!=", "label", highlightedLabel]);
+          highlightedLabelFilter.push(["==", "name:de", highlightedLabel]);
+          highlightedLabelFilter.push(["==", "label", highlightedLabel]);
+        }
+        layerFilter.push(layerLabelFilter);
+        highlightedLayerFilter.push(highlightedLabelFilter);
+        if (map.getLayer(layer)) {
+          map.setFilter(layer, layerFilter);
+        }
+        if (map.getLayer(highlightedLayer)) {
+          map.setFilter(highlightedLayer, highlightedLayerFilter);
+        }
+      }
+    }
+  }
+}
+
+function addHighlightedRegions(style, data) {
+  const highlightRegions = getHighlightRegions(data);
+  if (highlightRegions.length > 0) {
+    style.sources.regions = {
+      type: "vector",
+      tiles: [`{toolBaseUrl}/tiles/{regionsHash}/regions/{z}/{x}/{y}.pbf`],
+      minzoom: 0,
+      maxzoom: 10
+    };
 
     for (let highlightRegion of highlightRegions) {
       let index = 1;
@@ -710,8 +733,41 @@ function addHighlightedRegions(style, data) {
         }
       }
     }
+    // Add layer for labels of highlighted regions
+    if (hasLabels(data) && data.options.baseLayer.style !== "satellite") {
+      let countryLabelLayerIndex = style.layers
+        .map(layer => layer.id)
+        .indexOf("place_country-de");
+      countryLabelLayerIndex = countryLabelLayerIndex + 1;
+      style.layers.splice(countryLabelLayerIndex, 0, {
+        id: "place_country-de--highlighted",
+        type: "symbol",
+        source: "openmaptiles",
+        "source-layer": "place",
+        minzoom: 0,
+        maxzoom: 8,
+        filter: [
+          "all",
+          ["==", "$type", "Point"],
+          ["==", "class", "country"],
+          ["has", "name:de"]
+        ],
+        layout: {
+          "text-field": "{name:de}",
+          "text-font": ["{fontSansMedium}"],
+          "text-offset": "{textOffset}",
+          "text-transform": "{textTransformCountry}",
+          "text-size": "{textSizeCountry}"
+        },
+        paint: {
+          "text-halo-width": "{textHaloWidth}",
+          "text-halo-blur": "{textBlurWidth}",
+          "text-halo-color": "{colorHighlightCountry}",
+          "text-color": "{textColorCountry}"
+        }
+      });
+    }
   }
-
   return style;
 }
 

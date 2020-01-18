@@ -169,11 +169,7 @@ export default class LocatorMap {
     this.map.on("load", () => {
       this.preventLabelsAroundViewport();
       this.addControls();
-      if (
-        this.data.options.baseLayer.style !== "satellite" &&
-        this.data.options.highlightRegion &&
-        this.data.options.highlightRegion.length > 0
-      ) {
+      if (this.data.options.baseLayer.style !== "satellite") {
         helpers.hightlightCountryLabels(this.map, this.data);
       }
       this.element.parentNode.style.opacity = "1";

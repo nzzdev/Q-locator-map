@@ -1054,33 +1054,6 @@
       }
     },
     {
-      "id": "place_country-de--highlighted",
-      "type": "symbol",
-      "source": "openmaptiles",
-      "source-layer": "place",
-      "minzoom": 0,
-      "maxzoom": 6,
-      "filter": [
-        "all",
-        ["==", "$type", "Point"],
-        ["==", "class", "country"],
-        ["has", "name:de"]
-      ],
-      "layout": {
-        "text-field": "{name:de}",
-        "text-font": ["{fontSansMedium}"],
-        "text-offset": "{textOffset}",
-        "text-transform": "{textTransformCountry}",
-        "text-size": "{textSizeCountry}"
-      },
-      "paint": {
-        "text-halo-width": "{textHaloWidth}",
-        "text-halo-blur": "{textBlurWidth}",
-        "text-halo-color": "{colorHighlightCountry}",
-        "text-color": "{textColorCountry}"
-      }
-    },
-    {
       "id": "watername_lake_line-de",
       "type": "symbol",
       "source": "openmaptiles",
