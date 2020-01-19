@@ -1,5 +1,6 @@
 const Hapi = require("@hapi/hapi");
 const fs = require("fs");
+const fetch = require("node-fetch");
 const helpers = require("./helpers/helpers.js");
 const minimapHelpers = require("./helpers/minimap.js");
 const tileHelpers = require("./helpers/tiles.js");
@@ -40,13 +41,18 @@ async function init() {
     });
     const tilesets = JSON.parse(process.env.TILESETS);
     for (let [key, value] of Object.entries(tilesets)) {
+      if (!server.app.tilesets) {
+        server.app.tilesets = {};
+      }
+      if (!server.app.tilesets[key]) {
+        server.app.tilesets[key] = {};
+      }
+
+      if (value.url) {
+        server.app.tilesets[key].url = value.url;
+        server.app.tilesets[key].hash = "hash";
+      }
       if (value.path) {
-        if (!server.app.tilesets) {
-          server.app.tilesets = {};
-        }
-        if (!server.app.tilesets[key]) {
-          server.app.tilesets[key] = {};
-        }
         server.app.tilesets[key].tileset = await tileHelpers.getTileset(
           value.path
         );
@@ -115,17 +121,42 @@ async function init() {
       cache: serverMethodCacheOptions
     });
 
-    server.app.tilesets["regions"].tileset.getTile(0, 0, 0, (error, tile) => {
-      if (error) throw error;
-      const tiles = [{ buffer: tile, z: 0, x: 0, y: 0 }];
-      server.method("getRegionSuggestions", helpers.getRegionSuggestions, {
-        bind: {
-          server: server,
-          tiles: tiles
-        },
-        cache: serverMethodCacheOptions
+    const z = 0;
+    const y = 0;
+    const x = 0;
+    if (server.app.tilesets["regions"] && server.app.tilesets["regions"].url) {
+      const tileUrl = server.app.tilesets["regions"].url
+        .replace("{z}", z)
+        .replace("{x}", y)
+        .replace("{y}", x);
+      const response = await fetch(tileUrl);
+      if (response.ok) {
+        const tile = await response.buffer();
+        const tiles = [{ buffer: tile, z: z, x: x, y: y }];
+        server.method("getRegionSuggestions", helpers.getRegionSuggestions, {
+          bind: {
+            server: server,
+            tiles: tiles
+          },
+          cache: serverMethodCacheOptions
+        });
+      }
+    } else if (
+      server.app.tilesets["regions"] &&
+      server.app.tilesets["regions"].tileset
+    ) {
+      server.app.tilesets["regions"].tileset.getTile(z, y, x, (error, tile) => {
+        if (error) throw error;
+        const tiles = [{ buffer: tile, z: z, x: x, y: y }];
+        server.method("getRegionSuggestions", helpers.getRegionSuggestions, {
+          bind: {
+            server: server,
+            tiles: tiles
+          },
+          cache: serverMethodCacheOptions
+        });
       });
-    });
+    }
 
     server.method("getFont", helpers.getFont, {
       cache: serverMethodCacheOptions
