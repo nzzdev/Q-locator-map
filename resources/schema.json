@@ -122,7 +122,7 @@
             "style": {
               "title": "Kartenstil",
               "type": "string",
-              "default": "streets",
+              "default": "basic",
               "enum": ["basic", "minimal", "nature", "satellite"],
               "Q:options": {
                 "enum_titles": ["Standard", "Minimal", "Natur", "Satellit"]
