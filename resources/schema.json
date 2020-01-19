@@ -82,6 +82,13 @@
               "Q:options": {
                 "openInDialog": {
                   "buttonText": "Kartenbereich definieren"
+                },
+                "dynamicSchema": {
+                  "type": "ToolEndpoint",
+                  "config": {
+                    "endpoint": "dynamic-schema/bounds",
+                    "fields": ["geojsonList"]
+                  }
                 }
               },
               "type": "array",

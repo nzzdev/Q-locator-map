@@ -39,6 +39,31 @@ module.exports = {
             enum_titles: [...new Set(enum_titles)]
           }
         };
+      } else if (request.params.optionName === "bounds") {
+        // calculate a bouding box of all features
+        let boundsPolygon = turf.bboxPolygon(
+          turf.bbox(
+            turf.featureCollection(
+              item.geojsonList.map(feature =>
+                turf.bboxPolygon(turf.bbox(feature))
+              )
+            )
+          )
+        );
+
+        // if the bounds area is smaller than 100000 m2 add a buffer of 10 km
+        const area = turf.area(boundsPolygon);
+        if (area < 100000) {
+          boundsPolygon = turf.buffer(boundsPolygon, 10);
+        }
+
+        const bounds = turf.bbox(boundsPolygon);
+        return {
+          bounds: [
+            [bounds[0], bounds[1]],
+            [bounds[2], bounds[3]]
+          ]
+        };
       }
     } catch (error) {
       return Boom.badRequest();
