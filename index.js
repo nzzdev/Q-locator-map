@@ -1,5 +1,6 @@
 const Hapi = require("@hapi/hapi");
 const fs = require("fs");
+const util = require("util");
 const fetch = require("node-fetch");
 const helpers = require("./helpers/helpers.js");
 const minimapHelpers = require("./helpers/minimap.js");
@@ -51,10 +52,12 @@ async function init() {
       if (value.url) {
         server.app.tilesets[key].url = value.url;
         server.app.tilesets[key].hash = "hash";
-      }
-      if (value.path) {
+      } else if (value.path) {
         server.app.tilesets[key].tileset = await tileHelpers.getTileset(
           value.path
+        );
+        server.app.tilesets[key].tileset.getTile = util.promisify(
+          server.app.tilesets[key].tileset.getTile
         );
         server.app.tilesets[key].hash = await helpers.getHash(value.path);
       }
@@ -121,40 +124,38 @@ async function init() {
       cache: serverMethodCacheOptions
     });
 
-    const z = 0;
-    const y = 0;
-    const x = 0;
-    if (server.app.tilesets["regions"] && server.app.tilesets["regions"].url) {
-      const tileUrl = server.app.tilesets["regions"].url
-        .replace("{z}", z)
-        .replace("{x}", y)
-        .replace("{y}", x);
-      const response = await fetch(tileUrl);
-      if (response.ok) {
-        const tile = await response.buffer();
-        const tiles = [{ buffer: tile, z: z, x: x, y: y }];
-        server.method("getRegionSuggestions", helpers.getRegionSuggestions, {
-          bind: {
-            server: server,
-            tiles: tiles
-          },
-          cache: serverMethodCacheOptions
-        });
+    if (server.app.tilesets["regions"]) {
+      const z = 0;
+      const y = 0;
+      const x = 0;
+      const tiles = [{ z: z, x: x, y: y }];
+      if (server.app.tilesets["regions"].url) {
+        const tileUrl = server.app.tilesets["regions"].url
+          .replace("{z}", z)
+          .replace("{x}", y)
+          .replace("{y}", x);
+        const response = await fetch(tileUrl);
+        if (response.ok) {
+          const tile = await response.buffer();
+          tiles[0].buffer = tile;
+        }
+      } else if (
+        server.app.tilesets["regions"] &&
+        server.app.tilesets["regions"].tileset
+      ) {
+        const tile = await server.app.tilesets["regions"].tileset.getTile(
+          z,
+          y,
+          x
+        );
+        tiles[0].buffer = tile;
       }
-    } else if (
-      server.app.tilesets["regions"] &&
-      server.app.tilesets["regions"].tileset
-    ) {
-      server.app.tilesets["regions"].tileset.getTile(z, y, x, (error, tile) => {
-        if (error) throw error;
-        const tiles = [{ buffer: tile, z: z, x: x, y: y }];
-        server.method("getRegionSuggestions", helpers.getRegionSuggestions, {
-          bind: {
-            server: server,
-            tiles: tiles
-          },
-          cache: serverMethodCacheOptions
-        });
+      server.method("getRegionSuggestions", helpers.getRegionSuggestions, {
+        bind: {
+          server: server,
+          tiles: tiles
+        },
+        cache: serverMethodCacheOptions
       });
     }
 
