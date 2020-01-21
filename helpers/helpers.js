@@ -394,6 +394,7 @@ function getStyleConfig(styleConfig) {
       highlightRegionColor: "#f0e397"
     },
     minimap: {
+      hasShadow: true,
       landColor: "#ffffff",
       landOutlineColor: "#b6b6be",
       waterColor: "#cee9f2",
