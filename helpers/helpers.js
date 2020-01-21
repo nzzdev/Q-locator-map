@@ -287,7 +287,6 @@ function getStyleConfig(styleConfig) {
         waterway: "#add8e6",
         forest: "#99c7a3",
         road: "#dfe0e5",
-        roadText: "#b6b6be",
         railway: "#d8d9db",
         building: "#e3e3e8",
         text: "#92929e",
@@ -302,7 +301,6 @@ function getStyleConfig(styleConfig) {
         waterway: "#d6d6d6",
         forest: "#e6e9e5",
         road: "#f5f5f5",
-        roadText: "#bbbbbb",
         railway: "#d8d8d8",
         building: "#cbcbcb",
         text: "#92929e",
@@ -315,7 +313,6 @@ function getStyleConfig(styleConfig) {
         waterway: "#add8e6",
         forest: "#99c7a3",
         road: "#dbdad1",
-        roadText: "#92929e",
         railway: "#d9d9d9",
         building: "#dbdad1",
         text: "#92929e",
@@ -328,7 +325,6 @@ function getStyleConfig(styleConfig) {
         waterway: "#d6d6d6",
         forest: "#e6e9e5",
         road: "#f5f5f5",
-        roadText: "#bbbbbb",
         railway: "#d8d8d8",
         building: "#cbcbcb",
         text: "#92929e",
@@ -340,7 +336,12 @@ function getStyleConfig(styleConfig) {
       textBlurWidth: 0.1,
       textLetterSpacing: 0.2,
       textTransform: "none",
-      textAnchor: "left",
+      textAnchor: {
+        stops: [
+          [7.99, "left"],
+          [8, "center"]
+        ]
+      },
       textJustify: "left",
       textOffset: [0, 0],
       iconSize: 1,
@@ -357,12 +358,22 @@ function getStyleConfig(styleConfig) {
       capital: {
         textSizeCapital: 15,
         textTranslateCapital: [10, 0],
-        iconImageCapital: "capital"
+        iconImageCapital: {
+          stops: [
+            [7.99, "capital"],
+            [8, ""]
+          ]
+        }
       },
       city: {
         textSizeCity: 13,
         textTranslateCity: [7, 0],
-        iconImageCity: "city"
+        iconImageCity: {
+          stops: [
+            [7.99, "city"],
+            [8, ""]
+          ]
+        }
       },
       label: {
         textTransformLabel: "uppercase"
@@ -380,7 +391,7 @@ function getStyleConfig(styleConfig) {
     },
     highlightRegion: {
       highlightCountryColor: "#ffffff",
-      highlightRegionColor: "#f4eede"
+      highlightRegionColor: "#f0e397"
     },
     minimap: {
       landColor: "#ffffff",
@@ -398,7 +409,7 @@ function getStyleConfig(styleConfig) {
       }
     },
     scale: {
-      textSize: 12,
+      textSize: 11,
       textColor: "#6e6e7e",
       textHaloWidth: 1,
       borderWidth: 1.5

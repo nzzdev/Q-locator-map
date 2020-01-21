@@ -76,18 +76,26 @@ function updateScale(map, container, options) {
 function setScale(container, maxWidth, maxDistance, unit) {
   let distance = getRoundNum(maxDistance);
   let ratio = distance / maxDistance;
+  let shortUnit = "";
 
   if (unit === "m" && distance >= 1000) {
     distance = distance / 1000;
     unit = " Kilometer";
+    shortUnit = " km";
   }
 
   if (unit === "m") {
     unit = " Meter";
+    shortUnit = " m";
   }
 
-  container.style.width = maxWidth * ratio + "px";
-  container.innerHTML = distance + unit;
+  const width = maxWidth * ratio;
+  container.style.width = width + "px";
+  if (width > 65) {
+    container.innerHTML = distance + unit;
+  } else {
+    container.innerHTML = distance + shortUnit;
+  }
 }
 
 function getDistance(latlng1, latlng2) {
