@@ -1,8 +1,12 @@
 const Hapi = require("@hapi/hapi");
-const NodeGeocoder = require("node-geocoder");
+const fs = require("fs");
+const util = require("util");
+const fetch = require("node-fetch");
 const helpers = require("./helpers/helpers.js");
+const minimapHelpers = require("./helpers/minimap.js");
 const tileHelpers = require("./helpers/tiles.js");
 const geodataHelpers = require("./plugins/geodata/helpers.js");
+const resourcesDir = "./resources/";
 
 const serverMethodCacheOptions = {
   expiresIn: 7 * 24 * 60 * 60 * 1000,
@@ -26,11 +30,6 @@ const routes = require("./routes/routes.js");
 
 async function init() {
   try {
-    server.app.geocoder = NodeGeocoder({
-      provider: "opencage",
-      apiKey: process.env.OPENCAGE_APIKEY
-    });
-
     server.cache.provision({
       provider: {
         constructor: require("@hapi/catbox-memory"),
@@ -43,15 +42,75 @@ async function init() {
     });
     const tilesets = JSON.parse(process.env.TILESETS);
     for (let [key, value] of Object.entries(tilesets)) {
-      if (value.path) {
-        server.app.tilesets = server.app.tilesets || {};
-        server.app.tilesets[key] = await tileHelpers.getTileset(value.path);
+      if (!server.app.tilesets) {
+        server.app.tilesets = {};
+      }
+      if (!server.app.tilesets[key]) {
+        server.app.tilesets[key] = {};
+      }
+
+      if (value.url) {
+        server.app.tilesets[key].url = value.url;
+        server.app.tilesets[key].hash = "hash";
+      } else if (value.path) {
+        server.app.tilesets[key].tileset = await tileHelpers.getTileset(
+          value.path
+        );
+        server.app.tilesets[key].tileset.getTile = util.promisify(
+          server.app.tilesets[key].tileset.getTile
+        );
+        server.app.tilesets[key].hash = await helpers.getHash(value.path);
       }
     }
 
+    const basicStyle = require(`${resourcesDir}styles/basic/style.json`);
+    const minimalStyle = require(`${resourcesDir}styles/minimal/style.json`);
+    const natureStyle = require(`${resourcesDir}styles/nature/style.json`);
+    const satelliteStyle = require(`${resourcesDir}styles/satellite/style.json`);
+    server.app.styles = {
+      basic: {
+        style: basicStyle,
+        hash: await helpers.getHash(basicStyle)
+      },
+      minimal: {
+        style: minimalStyle,
+        hash: await helpers.getHash(minimalStyle)
+      },
+      nature: {
+        style: natureStyle,
+        hash: await helpers.getHash(natureStyle)
+      },
+      satellite: {
+        style: satelliteStyle,
+        hash: await helpers.getHash(satelliteStyle)
+      }
+    };
+
+    const sprite1x = fs.readFileSync(`${resourcesDir}sprites/sprites@1x.png`);
+    const sprite2x = fs.readFileSync(`${resourcesDir}sprites/sprites@2x.png`);
+    const sprite4x = fs.readFileSync(`${resourcesDir}sprites/sprites@4x.png`);
+    server.app.sprites = {
+      "1x": {
+        png: sprite1x,
+        json: require(`${resourcesDir}sprites/sprites@1x.json`),
+        hash: await helpers.getHash(sprite1x)
+      },
+      "2x": {
+        png: sprite2x,
+        json: require(`${resourcesDir}sprites/sprites@2x.json`),
+        hash: await helpers.getHash(sprite2x)
+      },
+      "4x": {
+        png: sprite4x,
+        json: require(`${resourcesDir}sprites/sprites@4x.json`),
+        hash: await helpers.getHash(sprite4x)
+      }
+    };
+
     server.method("getTile", tileHelpers.getTile, {
       bind: {
-        tilesets: server.app.tilesets
+        tilesets: server.app.tilesets,
+        styles: server.app.styles
       },
       cache: serverMethodCacheOptions
     });
@@ -65,21 +124,46 @@ async function init() {
       cache: serverMethodCacheOptions
     });
 
-    server.method("getRegionSuggestions", helpers.getRegionSuggestions, {
-      bind: {
-        server: server
-      },
-      generateKey: components => {
-        let key = "";
-        for (let component of components) {
-          key = `${key}_${component[0]}_${component[1]}`;
+    if (server.app.tilesets["regions"]) {
+      const z = 0;
+      const y = 0;
+      const x = 0;
+      const tiles = [{ z: z, x: x, y: y }];
+      if (server.app.tilesets["regions"].url) {
+        const tileUrl = server.app.tilesets["regions"].url
+          .replace("{z}", z)
+          .replace("{x}", y)
+          .replace("{y}", x);
+        const response = await fetch(tileUrl);
+        if (response.ok) {
+          const tile = await response.buffer();
+          tiles[0].buffer = tile;
         }
-        return key;
-      },
+      } else if (
+        server.app.tilesets["regions"] &&
+        server.app.tilesets["regions"].tileset
+      ) {
+        const tile = await server.app.tilesets["regions"].tileset.getTile(
+          z,
+          y,
+          x
+        );
+        tiles[0].buffer = tile;
+      }
+      server.method("getRegionSuggestions", helpers.getRegionSuggestions, {
+        bind: {
+          server: server,
+          tiles: tiles
+        },
+        cache: serverMethodCacheOptions
+      });
+    }
+
+    server.method("getFont", helpers.getFont, {
       cache: serverMethodCacheOptions
     });
 
-    server.method("getFont", helpers.getFont, {
+    server.method("getRegionGeojson", minimapHelpers.getRegionGeojson, {
       cache: serverMethodCacheOptions
     });
 

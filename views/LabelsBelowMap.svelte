@@ -1,6 +1,10 @@
 <script>
   export let item;
+  export let config;
   export let numberMarkers;
+
+  const labelWidth = 24 * config.styleConfig.markers.iconSize;
+  const labelIconStyle = `height: ${labelWidth}px; width: ${labelWidth}px;`;
   let numberedLabels = item.geojsonList
     .map(item => {
       if (!item.hasOwnProperty("type")) {
@@ -25,7 +29,10 @@
       return (
         feature.hasOwnProperty("geometry") &&
         feature.geometry.type === "Point" &&
-        feature.properties.hasOwnProperty("label")
+        feature.properties.hasOwnProperty("label") &&
+        !["country", "capital", "city", "water", "label"].includes(
+          feature.properties.type
+        )
       );
     })
     .map((feature, index) => {
@@ -55,7 +62,7 @@
     class="q-locator-map-labels {item.options.labelsBelowMapOneRow === true ? 'q-locator-map-labels--one-row' : ''}">
     {#each numberedLabels as label}
       <div class="q-locator-map-labels__label s-font-note">
-        <div class="q-locator-map-labels__icon">
+        <div class="q-locator-map-labels__icon" style={labelIconStyle}>
           {@html label.icon}
         </div>
         <div>{label.text}</div>

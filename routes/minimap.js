@@ -1,6 +1,7 @@
 const Joi = require("@hapi/joi");
 const Boom = require("@hapi/boom");
 const minimapHelpers = require("../helpers/minimap.js");
+const helpers = require("../helpers/helpers.js");
 
 module.exports = {
   method: "GET",
@@ -16,6 +17,7 @@ module.exports = {
         bounds: Joi.array()
           .length(4)
           .items(Joi.number()),
+        styleConfig: Joi.object().required(),
         toolBaseUrl: Joi.string().required(),
         regionId: Joi.string().optional(),
         regionLabel: Joi.string().optional()
@@ -27,8 +29,10 @@ module.exports = {
       const options = {
         type: request.params.type,
         bounds: request.query.bounds,
+        styleConfig: request.query.styleConfig,
         toolBaseUrl: request.query.toolBaseUrl,
-        region: {}
+        region: {},
+        getRegionGeojson: request.server.methods.getRegionGeojson
       };
 
       if (options.type === "region") {
@@ -43,10 +47,7 @@ module.exports = {
           markup: markup
         })
         .type("application/json")
-        .header(
-          "cache-control",
-          "max-age=31536000, s-maxage=31536000, stale-while-revalidate=31536000, stale-if-error=31536000, immutable"
-        );
+        .header("cache-control", helpers.getMaxCache());
     } catch (error) {
       return Boom.notFound();
     }

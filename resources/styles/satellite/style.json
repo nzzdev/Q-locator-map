@@ -1,20 +1,22 @@
 {
   "version": 8,
-  "name": "Satellite",
+  "name": "satellite",
   "sources": {
     "satellite": {
       "type": "raster",
-      "url": "https://api.mapbox.com/v4/mapbox.satellite.json?secure&access_token=${mapbox_access_token}",
+      "url": "https://api.mapbox.com/v4/mapbox.satellite.json?secure&access_token={mapboxAccessToken}",
       "tileSize": 256
     }
   },
-  "sprite": "${toolBaseUrl}/sprites/sprites",
-  "glyphs": "${toolBaseUrl}/fonts/{fontstack}/{range}.pbf",
+  "sprite": "{toolBaseUrl}/sprites/{spriteHash}/sprites",
+  "glyphs": "{toolBaseUrl}/fonts/{fontHash}/{fontstack}/{range}.pbf?fontBaseUrl={fontBaseUrl}",
   "layers": [
     {
       "id": "background",
       "type": "background",
-      "paint": { "background-color": "rgb(4,7,14)" }
+      "paint": {
+        "background-color": "{colorBackground}"
+      }
     },
     {
       "id": "satellite",

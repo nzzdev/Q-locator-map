@@ -6,8 +6,13 @@
 
 .q-locator-map-minimap.mapboxgl-ctrl {
   display: flex;
-  filter: drop-shadow(8px 8px 10px rgba(0, 0, 0, 0.2));
   margin: 0;
+  padding: 8px;
+}
+
+.q-locator-map-scale.mapboxgl-ctrl {
+  border-bottom-style: solid;
+  text-align: center;
 }
 
 .q-locator-map-labels {
@@ -22,8 +27,6 @@
   .q-locator-map-labels__icon {
     display: flex;
     align-items: center;
-    height: 24px;
-    width: 24px;
     padding-right: 4px;
   }
 }
@@ -38,4 +41,14 @@
     white-space: nowrap;
     padding-left: 8px;
   }
+}
+
+.q-locator-map-attribution {
+  margin-top: 4px;
+}
+
+.q-locator-map-attribution a,
+.q-locator-map-attribution a:visited {
+  color: currentColor;
+  text-decoration: none;
 }

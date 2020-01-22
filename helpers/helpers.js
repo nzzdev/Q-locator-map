@@ -3,13 +3,17 @@ const path = require("path");
 const zlib = require("zlib");
 const hasha = require("hasha");
 const turf = require("@turf/turf");
+const fetch = require("node-fetch");
 const Boom = require("@hapi/boom");
 const fontnik = require("fontnik");
 const glyphCompose = require("@mapbox/glyph-pbf-composite");
 const glob = require("glob");
 const tilesHelpers = require("./tiles.js");
+const deepmerge = require("deepmerge");
+const util = require("util");
+const vtquery = util.promisify(require("@mapbox/vtquery"));
 
-async function getConfig(item, itemStateInDb) {
+async function getConfig(item, itemStateInDb, toolRuntimeConfig, data) {
   const config = {};
   let geojsonList = item.geojsonList;
 
@@ -51,8 +55,26 @@ async function getConfig(item, itemStateInDb) {
     itemStateInDb,
     item.options.labelsBelowMap
   );
-  config.defaultGeojsonStyles = getDefaultGeojsonStyles();
+  config.styleConfig = getStyleConfig(toolRuntimeConfig.styleConfig);
+  config.tilesets = data.tilesets;
+  config.fontHash = await getHash(toolRuntimeConfig.styleConfig.fonts);
+  config.spriteHash = data.sprites["1x"].hash;
+
+  config.mapboxAccessToken = process.env.MAPBOX_ACCESS_TOKEN;
+  config.toolBaseUrl = toolRuntimeConfig.toolBaseUrl;
+  config.styles = getStyles(data.styles);
   return config;
+}
+
+function getStyles(styles) {
+  const styleHashes = {};
+  for (let [key, value] of Object.entries(styles)) {
+    styleHashes[key] = {
+      hash: value.hash
+    };
+  }
+
+  return styleHashes;
 }
 
 function getExactPixelWidth(toolRuntimeConfig) {
@@ -72,127 +94,51 @@ function getExactPixelWidth(toolRuntimeConfig) {
   return undefined;
 }
 
-const fontsDir = `${__dirname}/../resources/fonts/`;
-const notoSansRegular = fs.readFileSync(
-  path.join(fontsDir, "NotoSans-Regular.ttf")
-);
-const notoSansBold = fs.readFileSync(path.join(fontsDir, "NotoSans-Bold.ttf"));
-const notoSansItalic = fs.readFileSync(
-  path.join(fontsDir, "NotoSans-Italic.ttf")
-);
-const gtAmericaStandardLight = fs.readFileSync(
-  path.join(fontsDir, "GT-America-Standard-Light.otf")
-);
-const gtAmericaStandardRegular = fs.readFileSync(
-  path.join(fontsDir, "GT-America-Standard-Regular.otf")
-);
-const gtAmericaStandardMedium = fs.readFileSync(
-  path.join(fontsDir, "GT-America-Standard-Medium.otf")
-);
-const pensumProRegular = fs.readFileSync(
-  path.join(fontsDir, "PensumPro-Regular.otf")
-);
-const pensumProRegularItalic = fs.readFileSync(
-  path.join(fontsDir, "PensumPro-RegularItalic.otf")
-);
-const pensumProMedium = fs.readFileSync(
-  path.join(fontsDir, "PensumPro-Medium.otf")
-);
-const pensumProBold = fs.readFileSync(
-  path.join(fontsDir, "PensumPro-Bold.otf")
-);
-
-const fonts = [
-  "GT America Standard Light",
-  "GT America Standard Regular",
-  "GT America Standard Medium",
-  "PensumPro Regular",
-  "PensumPro Regular Italic",
-  "PensumPro Medium",
-  "PensumPro Bold",
-  "Noto Sans Regular",
-  "Noto Sans Bold",
-  "Noto Sans Italic"
-];
-
-function getFonts() {
-  return fonts;
-}
-
-function getFontFile(fontName) {
-  if (fontName === fonts[0]) {
-    return gtAmericaStandardLight;
-  } else if (fontName === fonts[1]) {
-    return gtAmericaStandardRegular;
-  } else if (fontName === fonts[2]) {
-    return gtAmericaStandardMedium;
-  } else if (fontName === fonts[3]) {
-    return pensumProRegular;
-  } else if (fontName === fonts[4]) {
-    return pensumProRegularItalic;
-  } else if (fontName === fonts[5]) {
-    return pensumProMedium;
-  } else if (fontName === fonts[6]) {
-    return pensumProBold;
-  } else if (fontName === fonts[7]) {
-    return notoSansRegular;
-  } else if (fontName === fonts[8]) {
-    return notoSansBold;
-  } else if (fontName === fonts[9]) {
-    return notoSansItalic;
-  } else {
-    return gtAmericaStandardRegular;
+async function getFont(hash, fontBaseUrl, fontName, start, end) {
+  const response = await fetch(`${fontBaseUrl}${fontName}.otf`);
+  if (response.ok) {
+    const fontFile = await response.buffer();
+    return await new Promise((resolve, reject) => {
+      fontnik.range(
+        {
+          font: fontFile,
+          start: start,
+          end: end
+        },
+        (error, data) => {
+          if (error) {
+            reject(Boom.notFound());
+          } else {
+            const glyph = glyphCompose.combine([data]);
+            zlib.gzip(glyph, (error, compressedGlyph) => {
+              if (error) {
+                reject(Boom.notFound());
+              } else {
+                resolve(compressedGlyph);
+              }
+            });
+          }
+        }
+      );
+    });
   }
 }
 
-async function getFont(fontName, start, end) {
-  const fontFile = getFontFile(fontName);
-  return await new Promise((resolve, reject) => {
-    fontnik.range(
-      {
-        font: fontFile,
-        start: start,
-        end: end
-      },
-      (error, data) => {
-        if (error) {
-          reject(Boom.notFound());
-        } else {
-          const glyph = glyphCompose.combine([data]);
-          zlib.gzip(glyph, (error, compressedGlyph) => {
-            if (error) {
-              reject(Boom.notFound());
-            } else {
-              resolve(compressedGlyph);
-            }
-          });
-        }
-      }
-    );
-  });
-}
-
-async function getRegionSuggestions(components, countryCode) {
+async function getRegionSuggestions(lng, lat) {
   try {
     const enums = [];
     const enum_titles = [];
     const wikidataIds = new Set();
-    for (let [key, value] of components) {
-      const geocoderResponse = await this.server.app.geocoder.geocode({
-        address: value,
-        countryCode: countryCode
-      });
-      if (
-        geocoderResponse.raw.status.code === 200 &&
-        geocoderResponse.raw.results.length > 0
-      ) {
-        for (let geocoderResult of geocoderResponse.raw.results) {
-          const wikidataId = geocoderResult.annotations.wikidata;
-          if (wikidataId) {
-            wikidataIds.add(wikidataId);
-          }
-        }
-      }
+    const options = {
+      radius: 0,
+      limit: 5,
+      geometry: "polygon",
+      dedupe: true
+    };
+
+    const result = await vtquery(this.tiles, [lng, lat], options);
+    for (let feature of result.features) {
+      wikidataIds.add(feature.properties.wikidata);
     }
 
     for (let wikidataId of wikidataIds.values()) {
@@ -215,25 +161,10 @@ async function getRegionSuggestions(components, countryCode) {
   }
 }
 
-async function getHash(features) {
-  return await hasha(JSON.stringify(features), {
+async function getHash(data) {
+  return await hasha(JSON.stringify(data), {
     algorithm: "md5"
   });
-}
-
-function getDefaultGeojsonStyles() {
-  return {
-    line: {
-      stroke: "#c31906",
-      "stroke-width": 2,
-      "stroke-opacity": 1
-    },
-    polygon: {
-      "stroke-width": 0,
-      fill: "#c31906",
-      "fill-opacity": 0.35
-    }
-  };
 }
 
 async function getFeatures(geojsonList, itemStateInDb, labelsBelowMap) {
@@ -271,15 +202,27 @@ async function getFeatures(geojsonList, itemStateInDb, labelsBelowMap) {
       ["Point", "MultiPoint"].includes(geojson.geometry.type)
   );
   pointFeatures = pointFeatures.concat(points).map((feature, index) => {
-    if (labelsBelowMap && feature.properties) {
-      feature.properties.type = "number";
-      feature.properties.index = index + 1;
-    }
     return {
       id: `point-${index}`,
       geojson: feature
     };
   });
+
+  if (labelsBelowMap) {
+    let index = 1;
+    for (let pointFeature of pointFeatures) {
+      if (
+        pointFeature.geojson.properties &&
+        !["country", "capital", "city", "water", "label"].includes(
+          pointFeature.geojson.properties.type
+        )
+      ) {
+        pointFeature.geojson.properties.type = "number";
+        pointFeature.geojson.properties.index = index;
+        index++;
+      }
+    }
+  }
 
   const linestrings = geojsonList.filter(
     geojson =>
@@ -334,13 +277,166 @@ function getNumberMarkers() {
     });
 }
 
+function getStyleConfig(styleConfig) {
+  let defaultStyleConfig = {
+    colors: {
+      basic: {
+        background: "#f0f0f2",
+        water: "#cee9f2",
+        waterText: "#0093bf",
+        waterway: "#add8e6",
+        forest: "#99c7a3",
+        road: "#dfe0e5",
+        railway: "#d8d9db",
+        building: "#e3e3e8",
+        text: "#92929e",
+        boundaryCountry: "#a88ea8",
+        boundaryState: "#c9c4e0",
+        boundaryCommunity: "#d4c1ee"
+      },
+      minimal: {
+        background: "#f0f0f2",
+        water: "#cee1e6",
+        waterText: "#0093bf",
+        waterway: "#d6d6d6",
+        forest: "#e6e9e5",
+        road: "#f5f5f5",
+        railway: "#d8d8d8",
+        building: "#cbcbcb",
+        text: "#92929e",
+        boundary: "#cfcfd6"
+      },
+      nature: {
+        background: "#edece1",
+        water: "#cee9f2",
+        waterText: "#0093bf",
+        waterway: "#add8e6",
+        forest: "#99c7a3",
+        road: "#dbdad1",
+        railway: "#d9d9d9",
+        building: "#dbdad1",
+        text: "#92929e",
+        boundary: "#b6b6be"
+      },
+      satellite: {
+        background: "#f0f0f2",
+        water: "#cee1e6",
+        waterText: "#0093bf",
+        waterway: "#d6d6d6",
+        forest: "#e6e9e5",
+        road: "#f5f5f5",
+        railway: "#d8d8d8",
+        building: "#cbcbcb",
+        text: "#92929e",
+        boundary: "#ffffff"
+      }
+    },
+    markers: {
+      textHaloWidth: 1,
+      textBlurWidth: 0.1,
+      textLetterSpacing: 0.2,
+      textTransform: "none",
+      textAnchor: {
+        stops: [
+          [7.99, "left"],
+          [8, "center"]
+        ]
+      },
+      textJustify: "left",
+      textOffset: [0, 0],
+      iconSize: 1,
+      iconMarker: {
+        textColorIconMarker: "#05032d",
+        textHaloColorIconMarker: "#ffffff",
+        textSizeIconMarker: 14
+      },
+      country: {
+        textSizeCountry: 14,
+        textColorCountry: "#6e6e7e",
+        textTransformCountry: "none"
+      },
+      capital: {
+        textSizeCapital: 15,
+        textTranslateCapital: [10, 0],
+        iconImageCapital: {
+          stops: [
+            [7.99, "capital"],
+            [8, ""]
+          ]
+        }
+      },
+      city: {
+        textSizeCity: 13,
+        textTranslateCity: [7, 0],
+        iconImageCity: {
+          stops: [
+            [7.99, "city"],
+            [8, ""]
+          ]
+        }
+      },
+      label: {
+        textTransformLabel: "uppercase"
+      },
+      line: {
+        colorLine: "#c31906",
+        widthLine: 2,
+        opacityLine: 1
+      },
+      polygon: {
+        fillColorPolygon: "#c31906",
+        outlineWidthPolygon: 0,
+        opacityPolygon: 0.35
+      }
+    },
+    highlightRegion: {
+      highlightCountryColor: "#ffffff",
+      highlightRegionColor: "#f0e397"
+    },
+    minimap: {
+      hasShadow: true,
+      landColor: "#ffffff",
+      landOutlineColor: "#b6b6be",
+      waterColor: "#cee9f2",
+      textColor: "#6e6e7e",
+      bboxColor: "#000000",
+      textSize: 12,
+      globe: {
+        width: 90
+      },
+      region: {
+        width: 120,
+        minWidth: 40
+      }
+    },
+    scale: {
+      textSize: 11,
+      textColor: "#6e6e7e",
+      textHaloWidth: 1,
+      borderWidth: 1.5
+    },
+    aspectRatioBreakpoint: 450,
+    hasAttribution: true
+  };
+
+  return deepmerge(defaultStyleConfig, styleConfig, {
+    arrayMerge: (destinationArray, sourceArray, options) => sourceArray
+  });
+}
+
+function getMaxCache() {
+  const ONE_YEAR = 60 * 60 * 24 * 365;
+  return `max-age=${ONE_YEAR},s-maxage=${ONE_YEAR},stale-while-revalidate=${ONE_YEAR},stale-if-error=${ONE_YEAR},immutable`;
+}
+
 module.exports = {
   getConfig: getConfig,
+  getStyleConfig: getStyleConfig,
   getExactPixelWidth: getExactPixelWidth,
   getFont: getFont,
-  getFonts: getFonts,
   getRegionSuggestions: getRegionSuggestions,
   getFeatures: getFeatures,
-  getDefaultGeojsonStyles: getDefaultGeojsonStyles,
-  getNumberMarkers: getNumberMarkers
+  getNumberMarkers: getNumberMarkers,
+  getHash: getHash,
+  getMaxCache: getMaxCache
 };

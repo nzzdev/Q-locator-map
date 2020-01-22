@@ -1,34 +1,44 @@
 const zlib = require("zlib");
+const util = require("util");
 const Boom = require("@hapi/boom");
-const mbtiles = require("@mapbox/mbtiles");
+const mbtiles = util.promisify(require("@mapbox/mbtiles"));
 const vtpbf = require("vt-pbf");
 const geojsonvt = require("geojson-vt");
 const clone = require("clone");
 const turf = require("@turf/turf");
+const shaver = require("@mapbox/vtshaver");
+const shave = util.promisify(shaver.shave);
 
 function getTileset(path) {
-  const tilesetPath = `${path}?mode=ro`;
-  return new Promise(function(resolve, reject) {
-    new mbtiles(tilesetPath, function(err, tileset) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(tileset);
-      }
-    });
-  });
+  try {
+    const tilesetPath = `${path}?mode=ro`;
+    return new mbtiles(tilesetPath);
+  } catch (error) {
+    return error;
+  }
 }
 
-async function getTile(tileset, z, x, y) {
-  return await new Promise((resolve, reject) => {
-    this.tilesets[tileset].getTile(z, x, y, (error, tile) => {
-      if (error) {
-        reject(Boom.notFound());
-      } else {
-        resolve(tile);
-      }
-    });
-  });
+async function getTile(hash, tileset, z, x, y, styleName, optimize) {
+  try {
+    const tile = await this.tilesets[tileset].tileset.getTile(z, x, y);
+    if (styleName && optimize) {
+      const filters = new shaver.Filters(
+        shaver.styleToFilters(this.styles[styleName].style)
+      );
+      const options = {
+        filters: filters,
+        zoom: z,
+        compress: {
+          type: "gzip"
+        }
+      };
+      return await shave(tile, options);
+    } else {
+      return tile;
+    }
+  } catch (error) {
+    return Boom.notFound();
+  }
 }
 
 // Returns the number `num` modulo `range` in such a way so it lies within
@@ -54,9 +64,20 @@ const antimeridianArea = {
   properties: {},
   geometry: {
     type: "Polygon",
-    coordinates: [[[70, -90], [335, -90], [335, 90], [70, 90], [70, -90]]]
+    coordinates: [
+      [
+        [70, -90],
+        [335, -90],
+        [335, 90],
+        [70, 90],
+        [70, -90]
+      ]
+    ]
   },
-  bbox: [[70, -90], [335, 90]]
+  bbox: [
+    [70, -90],
+    [335, 90]
+  ]
 };
 
 const regularArea = {
@@ -64,9 +85,20 @@ const regularArea = {
   properties: {},
   geometry: {
     type: "Polygon",
-    coordinates: [[[70, -90], [-25, -90], [-25, 90], [70, 90], [70, -90]]]
+    coordinates: [
+      [
+        [70, -90],
+        [-25, -90],
+        [-25, 90],
+        [70, 90],
+        [70, -90]
+      ]
+    ]
   },
-  bbox: [[70, -90], [-25, 90]]
+  bbox: [
+    [70, -90],
+    [-25, 90]
+  ]
 };
 
 function insideArea(geojsonList, area) {

@@ -1,6 +1,7 @@
 const db = require("./db.js");
 const Joi = require("@hapi/joi");
 const Boom = require("@hapi/boom");
+const helpers = require("../../helpers/helpers.js");
 
 module.exports = {
   name: "geodata",
@@ -168,10 +169,7 @@ module.exports = {
             .response(tile)
             .type("application/x-protobuf")
             .header("Content-Encoding", "gzip")
-            .header(
-              "cache-control",
-              "max-age=31536000, s-maxage=31536000, stale-while-revalidate=31536000, stale-if-error=31536000, immutable"
-            );
+            .header("cache-control", helpers.getMaxCache());
         } catch (error) {
           return Boom.notFound();
         }

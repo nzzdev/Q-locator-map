@@ -1,17 +1,18 @@
 const Joi = require("@hapi/joi");
 const Boom = require("@hapi/boom");
+const helpers = require("../helpers/helpers.js");
 
 module.exports = {
   method: "POST",
-  path: "/tilesets/{qId}/{hash}/{z}/{x}/{y}.pbf",
+  path: "/tilesets/{hash}/{qId}/{z}/{x}/{y}.pbf",
   options: {
     description: "Returns the tileset in pbf format",
     tags: ["api"],
     cors: true,
     validate: {
       params: {
-        qId: Joi.string().required(),
         hash: Joi.string().required(),
+        qId: Joi.string().required(),
         z: Joi.number().required(),
         x: Joi.number().required(),
         y: Joi.number().required()
@@ -39,10 +40,7 @@ module.exports = {
           .response(tile)
           .type("application/x-protobuf")
           .header("Content-Encoding", "gzip")
-          .header(
-            "cache-control",
-            "max-age=31536000, s-maxage=31536000, stale-while-revalidate=31536000, stale-if-error=31536000, immutable"
-          );
+          .header("cache-control", helpers.getMaxCache());
       } catch (error) {
         return Boom.notFound();
       }

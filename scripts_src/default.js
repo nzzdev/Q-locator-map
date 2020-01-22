@@ -1,6 +1,7 @@
 import mapboxgl from "mapbox-gl";
 import * as helpers from "./helpers.js";
 import MinimapControl from "./minimap.js";
+import ScaleControl from "./scale.js";
 export default class LocatorMap {
   constructor(element, data = {}) {
     if (element) {
@@ -21,14 +22,26 @@ export default class LocatorMap {
       this.element.style.height = `${this.width *
         this.data.config.aspectRatio}px`;
     } else {
-      const aspectRatio = this.width > 450 ? 9 / 16 : 1;
+      const aspectRatio =
+        this.width > this.data.config.styleConfig.aspectRatioBreakpoint
+          ? 9 / 16
+          : 1;
       this.element.style.height = `${this.width * aspectRatio}px`;
     }
   }
 
   addControls() {
-    let attributionPosition = "bottom-right";
     const minimap = this.data.options.minimap;
+    if (this.data.options.baseLayer.style !== "satellite") {
+      let scalePosition =
+        minimap.options && minimap.options.position === "bottom-left"
+          ? "top-left"
+          : "bottom-left";
+      this.map.addControl(
+        new ScaleControl({ maxWidth: 120, config: this.data.config }),
+        scalePosition
+      );
+    }
     if (
       minimap.showMinimap &&
       (minimap.options.type === "globe" ||
@@ -37,17 +50,16 @@ export default class LocatorMap {
           minimap.options.region.id &&
           minimap.options.region.id !== ""))
     ) {
-      if (minimap.options.position === "bottom-right") {
-        attributionPosition = "bottom-left";
-      }
-      let bounds = this.map.getBounds().toArray();
-      bounds = JSON.stringify([
-        bounds[0][0],
-        bounds[0][1],
-        bounds[1][0],
-        bounds[1][1]
-      ]);
-      let url = `${this.data.toolBaseUrl}/minimap/${minimap.options.type}?bounds=${bounds}&toolBaseUrl=${this.data.toolBaseUrl}`;
+      let styleConfig = this.data.config.styleConfig.minimap;
+      styleConfig.textFont = this.data.config.styleConfig.fonts.fontSansRegular.name;
+
+      let url = `${this.data.config.toolBaseUrl}/minimap/${
+        minimap.options.type
+      }?bounds=${JSON.stringify(
+        helpers.getBounds(this.map)
+      )}&styleConfig=${encodeURIComponent(
+        JSON.stringify(styleConfig)
+      )}&toolBaseUrl=${this.data.config.toolBaseUrl}`;
       if (
         minimap.options.region &&
         minimap.options.region.id &&
@@ -69,20 +81,15 @@ export default class LocatorMap {
           }
         })
         .then(result => {
+          const options = {
+            markup: result.markup,
+            styleConfig: styleConfig
+          };
           this.map.addControl(
-            new MinimapControl({
-              minimapMarkup: result.markup
-            }),
+            new MinimapControl(options),
             minimap.options.position
           );
         });
-    }
-
-    if (this.data.options.baseLayer.style !== "satellite") {
-      this.map.addControl(
-        new mapboxgl.AttributionControl(),
-        attributionPosition
-      );
     }
   }
 
@@ -164,6 +171,7 @@ export default class LocatorMap {
     this.map.on("load", () => {
       this.preventLabelsAroundViewport();
       this.addControls();
+      helpers.hightlightCountryLabels(this.map, this.data);
       this.element.parentNode.style.opacity = "1";
       this.onDetached();
     });
