@@ -38,7 +38,6 @@ function applyConfig(style, data) {
       .replace(/"{colorWaterway}"/g, JSON.stringify(colors.waterway))
       .replace(/"{colorForest}"/g, JSON.stringify(colors.forest))
       .replace(/"{colorRoad}"/g, JSON.stringify(colors.road))
-      .replace(/"{colorRoadText}"/g, JSON.stringify(colors.roadText))
       .replace(/"{colorRailway}"/g, JSON.stringify(colors.railway))
       .replace(/"{colorBuilding}"/g, JSON.stringify(colors.building))
       .replace(/"{colorText}"/g, JSON.stringify(colors.text))
@@ -384,6 +383,28 @@ function getPointStyleProperties(geojsonProperties, styleConfig) {
   if (geojsonProperties.type.includes("arrow")) {
     properties.iconAnchor = positionProperties.textAnchor;
     properties.iconOffset = positionProperties.iconOffset;
+  }
+
+  // handling of icon visibility for city and capital type
+  if (["city", "capital"].includes(geojsonProperties.type)) {
+    properties.textAnchor = {
+      stops: [
+        [7.99, properties.textAnchor],
+        [8, "center"]
+      ]
+    };
+    properties.textTranslate = {
+      stops: [
+        [7.99, properties.textTranslate],
+        [8, [0, 0]]
+      ]
+    };
+    properties.textJustify = {
+      stops: [
+        [7.99, properties.textJustify],
+        [8, "center"]
+      ]
+    };
   }
 
   return properties;

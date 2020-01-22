@@ -81,10 +81,12 @@ export default class LocatorMap {
           }
         })
         .then(result => {
+          const options = {
+            markup: result.markup,
+            styleConfig: styleConfig
+          };
           this.map.addControl(
-            new MinimapControl({
-              minimapMarkup: result.markup
-            }),
+            new MinimapControl(options),
             minimap.options.position
           );
         });

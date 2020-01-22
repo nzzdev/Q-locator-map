@@ -435,7 +435,7 @@
         "text-field": "{name:latin}"
       },
       "paint": {
-        "text-color": "{colorRoadText}",
+        "text-color": "{colorText}",
         "text-halo-color": "{colorBackground}",
         "text-halo-width": "{textHaloWidth}",
         "text-halo-blur": "{textBlurWidth}"
@@ -465,7 +465,7 @@
         "text-field": "{name:de}"
       },
       "paint": {
-        "text-color": "{colorRoadText}",
+        "text-color": "{colorText}",
         "text-halo-color": "{colorBackground}",
         "text-halo-width": "{textHaloWidth}",
         "text-halo-blur": "{textBlurWidth}"

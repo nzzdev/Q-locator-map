@@ -451,7 +451,7 @@
       "type": "fill",
       "source": "openmaptiles",
       "source-layer": "building",
-      "minzoom": 14,
+      "minzoom": 13,
       "paint": {
         "fill-color": "{colorBackground}",
         "fill-outline-color": "#ffffff",
@@ -463,7 +463,7 @@
       "type": "fill",
       "source": "openmaptiles",
       "source-layer": "building",
-      "minzoom": 14,
+      "minzoom": 13,
       "paint": {
         "fill-color": "{colorBuilding}",
         "fill-outline-color": "{colorBackground}"
@@ -543,7 +543,7 @@
         "text-field": "{name:latin}"
       },
       "paint": {
-        "text-color": "{colorRoadText}",
+        "text-color": "{colorText}",
         "text-halo-color": "{colorBackground}",
         "text-halo-width": "{textHaloWidth}",
         "text-halo-blur": "{textBlurWidth}"
@@ -573,7 +573,7 @@
         "text-field": "{name:de}"
       },
       "paint": {
-        "text-color": "{colorRoadText}",
+        "text-color": "{colorText}",
         "text-halo-color": "{colorBackground}",
         "text-halo-width": "{textHaloWidth}",
         "text-halo-blur": "{textBlurWidth}"
