@@ -91,7 +91,7 @@ function setScale(container, maxWidth, maxDistance, unit) {
 
   const width = maxWidth * ratio;
   container.style.width = width + "px";
-  if (width > 65) {
+  if (width > 70) {
     container.innerHTML = distance + unit;
   } else {
     container.innerHTML = distance + shortUnit;
