@@ -10,6 +10,8 @@ const glyphCompose = require("@mapbox/glyph-pbf-composite");
 const glob = require("glob");
 const tilesHelpers = require("./tiles.js");
 const deepmerge = require("deepmerge");
+const util = require("util");
+const vtquery = util.promisify(require("@mapbox/vtquery"));
 
 async function getConfig(item, itemStateInDb, toolRuntimeConfig, data) {
   const config = {};
@@ -122,27 +124,21 @@ async function getFont(hash, fontBaseUrl, fontName, start, end) {
   }
 }
 
-async function getRegionSuggestions(components, countryCode) {
+async function getRegionSuggestions(lng, lat) {
   try {
     const enums = [];
     const enum_titles = [];
     const wikidataIds = new Set();
-    for (let [key, value] of components) {
-      const geocoderResponse = await this.server.app.geocoder.geocode({
-        address: value,
-        countryCode: countryCode
-      });
-      if (
-        geocoderResponse.raw.status.code === 200 &&
-        geocoderResponse.raw.results.length > 0
-      ) {
-        for (let geocoderResult of geocoderResponse.raw.results) {
-          const wikidataId = geocoderResult.annotations.wikidata;
-          if (wikidataId) {
-            wikidataIds.add(wikidataId);
-          }
-        }
-      }
+    const options = {
+      radius: 0,
+      limit: 5,
+      geometry: "polygon",
+      dedupe: true
+    };
+
+    const result = await vtquery(this.tiles, [lng, lat], options);
+    for (let feature of result.features) {
+      wikidataIds.add(feature.properties.wikidata);
     }
 
     for (let wikidataId of wikidataIds.values()) {

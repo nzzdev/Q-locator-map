@@ -39,11 +39,13 @@ module.exports = {
       const style = request.query.style;
       const optimize = request.query.optimize;
       const extension = request.params.extension;
-      const tilesets = JSON.parse(process.env.TILESETS);
 
       try {
-        if (tilesets[id] && tilesets[id].url) {
-          let tileUrl = tilesets[id].url
+        if (
+          request.server.app.tilesets[id] &&
+          request.server.app.tilesets[id].url
+        ) {
+          let tileUrl = request.server.app.tilesets[id].url
             .replace("{z}", z)
             .replace("{x}", x)
             .replace("{y}", y);
