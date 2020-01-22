@@ -55,6 +55,26 @@ function getGlobeVegaSpec(options) {
     spec.marks.push(bboxMark);
   }
 
+  if (!options.styleConfig.hasShadow) {
+    spec.marks.push({
+      type: "shape",
+      from: { data: "sphere" },
+      encode: {
+        update: {
+          stroke: { signal: "landOutlineColor" },
+          strokeWidth: { signal: 0.5 }
+        }
+      },
+      transform: [
+        {
+          type: "geoshape",
+          projection: "projection"
+        }
+      ]
+    });
+    spec.padding = 2;
+  }
+
   spec.signals.push({
     name: "landColor",
     value: options.styleConfig.landColor
