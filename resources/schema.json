@@ -82,6 +82,13 @@
               "Q:options": {
                 "openInDialog": {
                   "buttonText": "Kartenbereich definieren"
+                },
+                "dynamicSchema": {
+                  "type": "ToolEndpoint",
+                  "config": {
+                    "endpoint": "dynamic-schema/bounds",
+                    "fields": ["geojsonList"]
+                  }
                 }
               },
               "type": "array",
@@ -115,7 +122,7 @@
             "style": {
               "title": "Kartenstil",
               "type": "string",
-              "default": "streets",
+              "default": "basic",
               "enum": ["basic", "minimal", "nature", "satellite"],
               "Q:options": {
                 "enum_titles": ["Standard", "Minimal", "Natur", "Satellit"]
