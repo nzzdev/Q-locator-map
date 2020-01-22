@@ -1,15 +1,14 @@
 {
   "$schema": "https://vega.github.io/schema/vega/v5.json",
   "autosize": "none",
-  "padding": 4,
   "signals": [],
   "data": [],
 
   "projections": [
     {
       "name": "projection",
+      "type": { "signal": "projection" },
       "scale": { "signal": "scaleFactor" },
-      "type": "azimuthalEqualArea",
       "translate": { "signal": "[width/2, height/2]" },
       "rotate": [{ "signal": "rotate0" }, { "signal": "rotate1" }, 0]
     }
@@ -21,9 +20,10 @@
       "from": { "data": "region" },
       "encode": {
         "update": {
-          "fill": { "value": "white" },
-          "stroke": { "value": "#b6b6be" },
-          "strokeWidth": { "value": 0.5 }
+          "fill": { "signal": "landColor" },
+          "stroke": { "signal": "landOutlineColor" },
+          "strokeWidth": { "value": 0.5 },
+          "strokeOpacity": { "value": 0.8 }
         }
       },
       "transform": [
@@ -36,23 +36,17 @@
     {
       "type": "text",
       "encode": {
-        "enter": {
-          "fill": { "value": "#6e6e7e" },
-          "text": { "signal": "label" }
-        },
         "update": {
-          "opacity": { "value": 1 },
           "x": { "signal": "width/2" },
           "y": { "signal": "height/2" },
           "align": { "value": "center" },
           "baseline": { "value": "middle" },
-          "font": { "value": "nzz-sans-serif" },
-          "fontSize": { "value": 11 },
+          "text": { "signal": "label" },
+          "font": { "signal": "textFont" },
+          "fontSize": { "signal": "textSize" },
           "fontWeight": { "value": 100 },
-          "limit": { "value": 0 }
-        },
-        "hover": {
-          "opacity": { "value": 0.5 }
+          "fill": { "signal": "textColor" },
+          "lineBreak": { "value": " " }
         }
       }
     }

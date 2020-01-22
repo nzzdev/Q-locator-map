@@ -7,7 +7,6 @@ const scriptsDir = "../../scripts/";
 const scriptHashMap = require(`${scriptsDir}/hashMap.json`);
 const viewsDir = `${__dirname}/../../views/`;
 const helpers = require("../../helpers/helpers.js");
-const defaultGeojsonStyles = require("../../helpers/helpers.js").getDefaultGeojsonStyles();
 const numberMarkers = helpers.getNumberMarkers();
 
 // setup svelte
@@ -43,6 +42,12 @@ async function validatePayload(payload, options, next) {
   if (typeof payload.toolRuntimeConfig !== "object") {
     return next(Boom.badRequest(), payload);
   }
+  if (typeof payload.toolRuntimeConfig.styleConfig !== "object") {
+    return next(Boom.badRequest(), payload);
+  }
+  if (typeof payload.toolRuntimeConfig.styleConfig.fonts !== "object") {
+    return next(Boom.badRequest(), payload);
+  }
   await validateAgainstSchema(payload.item, options);
 }
 
@@ -66,12 +71,14 @@ module.exports = {
     const context = {
       item: item,
       displayOptions: toolRuntimeConfig.displayOptions || {},
-      id: `q_locator_map_${request.query._id}_${Math.floor(
-        Math.random() * 100000
-      )}`.replace(/-/g, ""),
-      config: await helpers.getConfig(item, request.payload.itemStateInDb),
+      id: `q_locator_map_${toolRuntimeConfig.requestId}`,
+      config: await helpers.getConfig(
+        item,
+        request.payload.itemStateInDb,
+        toolRuntimeConfig,
+        request.server.app
+      ),
       width: helpers.getExactPixelWidth(toolRuntimeConfig),
-      defaultGeojsonStyles: defaultGeojsonStyles,
       numberMarkers: numberMarkers
     };
 
@@ -91,12 +98,10 @@ module.exports = {
           new window._q_locator_map.LocatorMap(document.querySelector('#${
             context.id
           }_container'), ${JSON.stringify({
+            qId: context.item.id,
             config: context.config,
             options: context.item.options,
-            width: context.width,
-            qId: context.item.id,
-            toolBaseUrl: toolRuntimeConfig.toolBaseUrl,
-            itemStateInDb: request.payload.itemStateInDb
+            width: context.width
           })})`
         }
       ],

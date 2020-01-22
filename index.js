@@ -1,8 +1,11 @@
 const Hapi = require("@hapi/hapi");
+const fs = require("fs");
 const NodeGeocoder = require("node-geocoder");
 const helpers = require("./helpers/helpers.js");
+const minimapHelpers = require("./helpers/minimap.js");
 const tileHelpers = require("./helpers/tiles.js");
 const geodataHelpers = require("./plugins/geodata/helpers.js");
+const resourcesDir = "./resources/";
 
 const serverMethodCacheOptions = {
   expiresIn: 7 * 24 * 60 * 60 * 1000,
@@ -44,14 +47,67 @@ async function init() {
     const tilesets = JSON.parse(process.env.TILESETS);
     for (let [key, value] of Object.entries(tilesets)) {
       if (value.path) {
-        server.app.tilesets = server.app.tilesets || {};
-        server.app.tilesets[key] = await tileHelpers.getTileset(value.path);
+        if (!server.app.tilesets) {
+          server.app.tilesets = {};
+        }
+        if (!server.app.tilesets[key]) {
+          server.app.tilesets[key] = {};
+        }
+        server.app.tilesets[key].tileset = await tileHelpers.getTileset(
+          value.path
+        );
+        server.app.tilesets[key].hash = await helpers.getHash(value.path);
       }
     }
 
+    const basicStyle = require(`${resourcesDir}styles/basic/style.json`);
+    const minimalStyle = require(`${resourcesDir}styles/minimal/style.json`);
+    const natureStyle = require(`${resourcesDir}styles/nature/style.json`);
+    const satelliteStyle = require(`${resourcesDir}styles/satellite/style.json`);
+    server.app.styles = {
+      basic: {
+        style: basicStyle,
+        hash: await helpers.getHash(basicStyle)
+      },
+      minimal: {
+        style: minimalStyle,
+        hash: await helpers.getHash(minimalStyle)
+      },
+      nature: {
+        style: natureStyle,
+        hash: await helpers.getHash(natureStyle)
+      },
+      satellite: {
+        style: satelliteStyle,
+        hash: await helpers.getHash(satelliteStyle)
+      }
+    };
+
+    const sprite1x = fs.readFileSync(`${resourcesDir}sprites/sprites@1x.png`);
+    const sprite2x = fs.readFileSync(`${resourcesDir}sprites/sprites@2x.png`);
+    const sprite4x = fs.readFileSync(`${resourcesDir}sprites/sprites@4x.png`);
+    server.app.sprites = {
+      "1x": {
+        png: sprite1x,
+        json: require(`${resourcesDir}sprites/sprites@1x.json`),
+        hash: await helpers.getHash(sprite1x)
+      },
+      "2x": {
+        png: sprite2x,
+        json: require(`${resourcesDir}sprites/sprites@2x.json`),
+        hash: await helpers.getHash(sprite2x)
+      },
+      "4x": {
+        png: sprite4x,
+        json: require(`${resourcesDir}sprites/sprites@4x.json`),
+        hash: await helpers.getHash(sprite4x)
+      }
+    };
+
     server.method("getTile", tileHelpers.getTile, {
       bind: {
-        tilesets: server.app.tilesets
+        tilesets: server.app.tilesets,
+        styles: server.app.styles
       },
       cache: serverMethodCacheOptions
     });
@@ -80,6 +136,10 @@ async function init() {
     });
 
     server.method("getFont", helpers.getFont, {
+      cache: serverMethodCacheOptions
+    });
+
+    server.method("getRegionGeojson", minimapHelpers.getRegionGeojson, {
       cache: serverMethodCacheOptions
     });
 

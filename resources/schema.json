@@ -377,7 +377,7 @@
                   "Punktumrahmung (prominent)",
                   "Land",
                   "Hauptstadt",
-                  "Stadt/Ortschaft/Dorf",
+                  "Stadt",
                   "Gewässer",
                   "Gebiet",
                   "Ort (ungenau)",
@@ -394,7 +394,7 @@
                   "Zug",
                   "Tram",
                   "Schiff",
-                  "Stadt",
+                  "Dorf",
                   "Hochhaus",
                   "Fabrik",
                   "Friedhof",
@@ -416,27 +416,27 @@
             "labelPosition": {
               "title": "Position der Beschriftung",
               "type": "string",
-              "default": "top",
+              "default": "right",
               "enum": [
+                "right",
+                "left",
                 "top",
                 "bottom",
-                "left",
-                "right",
-                "topleft",
                 "topright",
-                "bottomleft",
-                "bottomright"
+                "bottomright",
+                "topleft",
+                "bottomleft"
               ],
               "Q:options": {
                 "enum_titles": [
+                  "rechts",
+                  "links",
                   "oben",
                   "unten",
-                  "links",
-                  "rechts",
-                  "oben links",
                   "oben rechts",
-                  "unten links",
-                  "unten rechts"
+                  "unten rechts",
+                  "oben links",
+                  "unten links"
                 ]
               }
             },

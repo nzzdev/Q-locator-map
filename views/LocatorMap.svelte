@@ -6,7 +6,7 @@
   export let id;
   export let item;
   export let displayOptions;
-  export let defaultGeojsonStyles;
+  export let config;
   export let numberMarkers;
 </script>
 
@@ -16,21 +16,23 @@
   data-track-id="q-locator-map"
   style="opacity: 0;">
   <Header {item} {displayOptions} />
-  <Legend {item} {defaultGeojsonStyles} />
+  <Legend {item} {config} />
   <div id="{id}_container" class="q-locator-map-container" />
-  {#if item.options.baseLayer.style !== 'satellite'}
-    <div class="q-locator-map-attribution s-font-note-s s-font-note-s--light">
+  {#if config.styleConfig.hasAttribution}
+    <div
+      class="q-locator-map-attribution s-font-note-s s-font-note-s--light
+      s-color-gray-6">
       Kartengrundlage:
       <span>
-        <a href="https://www.maptiler.com/copyright/" target="_blank">
-          &copy; MapTiler,
-        </a>
         <a href="https://www.openstreetmap.org/copyright" target="_blank">
-          &copy; OpenStreetMap contributors
+          &copy; OpenStreetMap
+        </a>
+        <a href="https://www.maptiler.com/copyright/" target="_blank">
+          &copy; MapTiler
         </a>
       </span>
     </div>
   {/if}
-  <LabelsBelowMap {item} {numberMarkers} />
+  <LabelsBelowMap {item} {config} {numberMarkers} />
   <Footer {item} />
 </div>

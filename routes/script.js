@@ -1,3 +1,5 @@
+const helpers = require("../helpers/helpers.js");
+
 module.exports = {
   method: "GET",
   path: "/script/{filename}.{hash}.{extension}",
@@ -11,6 +13,6 @@ module.exports = {
     return h
       .file(`${request.params.filename}.${request.params.extension}`)
       .type("text/javascript")
-      .header("cache-control", `max-age=${60 * 60 * 24 * 365}, immutable`); // 1 year
+      .header("cache-control", helpers.getMaxCache());
   }
 };
