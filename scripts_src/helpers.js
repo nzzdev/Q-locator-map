@@ -315,7 +315,7 @@ function getPointStyleProperties(geojsonProperties, styleConfig) {
     textHaloColor: "{textHaloColorIconMarker}",
     textHaloWidth: "{textHaloWidth}",
     textBlurWidth: "{textBlurWidth}",
-    textFont: ["{fontSansMedium}"],
+    textFont: styleConfig.markers.iconMarker.textFontIconMarker,
     textTransform: "{textTransform}",
     textLetterSpacing: 0,
     iconImage: getIconImage(geojsonProperties.type, styleConfig),

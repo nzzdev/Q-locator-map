@@ -348,7 +348,8 @@ function getStyleConfig(styleConfig) {
       iconMarker: {
         textColorIconMarker: "#05032d",
         textHaloColorIconMarker: "#ffffff",
-        textSizeIconMarker: 14
+        textSizeIconMarker: 14,
+        textFontIconMarker: ["{fontSansMedium}"]
       },
       country: {
         textSizeCountry: 14,
