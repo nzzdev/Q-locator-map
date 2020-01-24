@@ -342,6 +342,8 @@ function getPointStyleProperties(geojsonProperties, styleConfig) {
   // handling of text font
   if (["label", "country"].includes(geojsonProperties.type)) {
     properties.textFont = ["{fontSansLight}"];
+  } else if (geojsonProperties.type === "capital") {
+    properties.textFont = ["{fontSansMedium}"];
   } else if (geojsonProperties.type === "city") {
     properties.textFont = ["{fontSansRegular}"];
   } else if (geojsonProperties.type === "water") {
@@ -720,6 +722,10 @@ export function hightlightCountryLabels(map, data) {
         if (map.getLayer(highlightedLayer)) {
           map.setFilter(highlightedLayer, highlightedLayerFilter);
         }
+      }
+    } else {
+      for (let highlightedLayer of highlightedLayers) {
+        map.removeLayer(highlightedLayer);
       }
     }
   }
