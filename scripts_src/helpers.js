@@ -723,6 +723,10 @@ export function hightlightCountryLabels(map, data) {
           map.setFilter(highlightedLayer, highlightedLayerFilter);
         }
       }
+    } else {
+      for (let highlightedLayer of highlightedLayers) {
+        map.removeLayer(highlightedLayer);
+      }
     }
   }
 }
