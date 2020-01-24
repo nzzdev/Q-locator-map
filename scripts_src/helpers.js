@@ -342,6 +342,8 @@ function getPointStyleProperties(geojsonProperties, styleConfig) {
   // handling of text font
   if (["label", "country"].includes(geojsonProperties.type)) {
     properties.textFont = ["{fontSansLight}"];
+  } else if (geojsonProperties.type === "capital") {
+    properties.textFont = ["{fontSansMedium}"];
   } else if (geojsonProperties.type === "city") {
     properties.textFont = ["{fontSansRegular}"];
   } else if (geojsonProperties.type === "water") {
