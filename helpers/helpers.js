@@ -392,7 +392,7 @@ function getStyleConfig(styleConfig) {
     },
     highlightRegion: {
       highlightCountryColor: "#ffffff",
-      highlightRegionColor: "#f0e397"
+      highlightRegionColor: "#d7cddc"
     },
     minimap: {
       hasShadow: true,
