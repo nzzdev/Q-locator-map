@@ -256,7 +256,7 @@ async function getFeatures(geojsonList, itemStateInDb, labelsBelowMap) {
     polygons: polygonFeatures
   };
 
-  features.hash = await getHash(features);
+  features.hash = await getHash(geojsonList);
   features.type = itemStateInDb ? "vector" : "geojson";
   features.sourceName = itemStateInDb ? "overlays" : "";
   return features;
