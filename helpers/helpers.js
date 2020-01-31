@@ -316,7 +316,8 @@ function getStyleConfig(styleConfig) {
         railway: "#d9d9d9",
         building: "#dbdad1",
         text: "#92929e",
-        boundary: "#b6b6be"
+        boundary: "#b6b6be",
+        hillshadeOpacity: 0.2
       },
       satellite: {
         background: "#f0f0f2",

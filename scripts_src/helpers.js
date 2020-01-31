@@ -181,6 +181,15 @@ function applyConfig(style, data) {
         JSON.stringify(colors.boundary)
       )
     );
+
+    if (styleName === "nature") {
+      style = JSON.parse(
+        JSON.stringify(style).replace(
+          /"{hillshadeOpacity}"/g,
+          JSON.stringify(colors.hillshadeOpacity)
+        )
+      );
+    }
   }
   return style;
 }

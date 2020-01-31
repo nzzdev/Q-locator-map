@@ -58,7 +58,7 @@
       "type": "raster",
       "source": "hillshade",
       "paint": {
-        "raster-opacity": 0.2,
+        "raster-opacity": "{hillshadeOpacity}",
         "raster-fade-duration": 300,
         "raster-contrast": 1,
         "raster-saturation": 1,
