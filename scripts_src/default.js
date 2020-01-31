@@ -34,7 +34,9 @@ export default class LocatorMap {
     const minimap = this.data.options.minimap;
     if (this.data.options.baseLayer.style !== "satellite") {
       let scalePosition =
-        minimap.options && minimap.options.position === "bottom-left"
+        minimap.showMinimap &&
+        minimap.options &&
+        minimap.options.position === "bottom-left"
           ? "top-left"
           : "bottom-left";
       this.map.addControl(
