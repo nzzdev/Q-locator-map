@@ -81,11 +81,15 @@ function getGlobeVegaSpec(options) {
   });
   spec.signals.push({
     name: "landOutlineColor",
-    value: options.styleConfig.landOutlineColor
+    value: options.styleConfig.globe.landOutlineColor
+  });
+  spec.signals.push({
+    name: "landOutlineWidth",
+    value: options.styleConfig.globe.landOutlineWidth
   });
   spec.signals.push({
     name: "waterColor",
-    value: options.styleConfig.waterColor
+    value: options.styleConfig.globe.waterColor
   });
   spec.signals.push({
     name: "bboxColor",
@@ -212,7 +216,11 @@ async function getRegionVegaSpec(options) {
   });
   spec.signals.push({
     name: "landOutlineColor",
-    value: options.styleConfig.landOutlineColor
+    value: options.styleConfig.region.landOutlineColor
+  });
+  spec.signals.push({
+    name: "landOutlineWidth",
+    value: options.styleConfig.region.landOutlineWidth
   });
   spec.signals.push({
     name: "textColor",

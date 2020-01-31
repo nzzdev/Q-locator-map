@@ -397,17 +397,20 @@ function getStyleConfig(styleConfig) {
     minimap: {
       hasShadow: true,
       landColor: "#ffffff",
-      landOutlineColor: "#b6b6be",
-      waterColor: "#cee9f2",
       textColor: "#6e6e7e",
       bboxColor: "#000000",
       textSize: 12,
       globe: {
-        width: 90
+        width: 90,
+        landOutlineColor: "#b6b6be",
+        landOutlineWidth: 0.5,
+        waterColor: "#cee9f2"
       },
       region: {
         width: 120,
-        minWidth: 40
+        minWidth: 40,
+        landOutlineColor: "#b6b6be",
+        landOutlineWidth: 0.5
       }
     },
     scale: {
