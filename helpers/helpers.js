@@ -256,7 +256,7 @@ async function getFeatures(geojsonList, itemStateInDb, labelsBelowMap) {
     polygons: polygonFeatures
   };
 
-  features.hash = await getHash(features);
+  features.hash = await getHash(geojsonList);
   features.type = itemStateInDb ? "vector" : "geojson";
   features.sourceName = itemStateInDb ? "overlays" : "";
   return features;
@@ -316,7 +316,8 @@ function getStyleConfig(styleConfig) {
         railway: "#d9d9d9",
         building: "#dbdad1",
         text: "#92929e",
-        boundary: "#b6b6be"
+        boundary: "#b6b6be",
+        hillshadeOpacity: 0.2
       },
       satellite: {
         background: "#f0f0f2",
@@ -392,22 +393,25 @@ function getStyleConfig(styleConfig) {
     },
     highlightRegion: {
       highlightCountryColor: "#ffffff",
-      highlightRegionColor: "#f0e397"
+      highlightRegionColor: "#d7cddc"
     },
     minimap: {
       hasShadow: true,
       landColor: "#ffffff",
-      landOutlineColor: "#b6b6be",
-      waterColor: "#cee9f2",
       textColor: "#6e6e7e",
       bboxColor: "#000000",
       textSize: 12,
       globe: {
-        width: 90
+        width: 90,
+        landOutlineColor: "#b6b6be",
+        landOutlineWidth: 0.5,
+        waterColor: "#cee9f2"
       },
       region: {
         width: 120,
-        minWidth: 40
+        minWidth: 40,
+        landOutlineColor: "#b6b6be",
+        landOutlineWidth: 0.5
       }
     },
     scale: {
