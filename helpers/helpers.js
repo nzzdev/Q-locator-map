@@ -130,7 +130,7 @@ async function getRegionSuggestions(lng, lat) {
     const enum_titles = [];
     const wikidataIds = new Set();
     const options = {
-      radius: 0,
+      radius: 50000,
       limit: 5,
       geometry: "polygon",
       dedupe: true

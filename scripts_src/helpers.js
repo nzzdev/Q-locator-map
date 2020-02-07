@@ -623,7 +623,7 @@ function getHighlightRegions(data) {
     return Array.from(
       new Set(
         data.options.highlightRegion
-          .filter(region => region.id !== "")
+          .filter(region => region.id && region.id !== "")
           .map(region => region.id)
       )
     );

@@ -188,7 +188,14 @@
                   },
                   "properties": {
                     "id": {
-                      "type": "string",
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
                       "default": "",
                       "Q:options": {
                         "selectType": "select",
@@ -246,7 +253,14 @@
             "properties": {
               "id": {
                 "title": "Region",
-                "type": "string",
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
                 "default": "",
                 "Q:options": {
                   "selectType": "select",
