@@ -385,7 +385,7 @@ function getStyleConfig(styleConfig) {
         colorLine: "#c31906",
         widthLine: 2,
         opacityLine: 1,
-        dashedLine: [2, 3]
+        dashedLine: [1, 3]
       },
       polygon: {
         fillColorPolygon: "#c31906",
