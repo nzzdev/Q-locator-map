@@ -234,7 +234,8 @@ async function getFeatures(geojsonList, itemStateInDb, labelsBelowMap) {
     .map((feature, index) => {
       return {
         id: `linestring-${index}`,
-        geojson: !itemStateInDb ? feature : undefined
+        geojson: !itemStateInDb ? feature : undefined,
+        properties: feature.properties
       };
     });
 
@@ -383,7 +384,8 @@ function getStyleConfig(styleConfig) {
       line: {
         colorLine: "#c31906",
         widthLine: 2,
-        opacityLine: 1
+        opacityLine: 1,
+        dashedLine: [2, 3]
       },
       polygon: {
         fillColorPolygon: "#c31906",
