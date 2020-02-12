@@ -3,7 +3,7 @@
   export let config;
   export let numberMarkers;
 
-  const labelWidth = 24 * config.styleConfig.markers.iconSize;
+  const labelWidth = 18 * config.styleConfig.markers.iconSize;
   const labelIconStyle = `height: ${labelWidth}px; width: ${labelWidth}px;`;
   let numberedLabels = item.geojsonList
     .map(item => {
