@@ -34,9 +34,9 @@ module.exports = {
         }
 
         return {
-          enum: [...new Set(enums)],
+          enum: enums,
           "Q:options": {
-            enum_titles: [...new Set(enum_titles)]
+            enum_titles: enum_titles
           }
         };
       } else if (request.params.optionName === "bounds") {
