@@ -142,12 +142,17 @@ async function getRegionSuggestions(lng, lat) {
     }
 
     for (let wikidataId of wikidataIds.values()) {
-      const geodataResponse = await this.server.inject(
-        `/geodata/${wikidataId}`
-      );
-      if (geodataResponse.statusCode === 200) {
-        const version = geodataResponse.result.versions.pop();
-        enum_titles.push(version.label);
+      const region = await this.server.methods.getGeodataGeojson(wikidataId);
+
+      if (region) {
+        let label = "";
+        if (region.properties.name_de) {
+          label = region.properties.name_de;
+        } else if (region.properties.name) {
+          label = region.properties.name;
+        }
+
+        enum_titles.push(label);
         enums.push(wikidataId);
       }
     }

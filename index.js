@@ -3,7 +3,6 @@ const fs = require("fs");
 const util = require("util");
 const fetch = require("node-fetch");
 const helpers = require("./helpers/helpers.js");
-const minimapHelpers = require("./helpers/minimap.js");
 const tileHelpers = require("./helpers/tiles.js");
 const geodataHelpers = require("./plugins/geodata/helpers.js");
 const resourcesDir = "./resources/";
@@ -21,11 +20,6 @@ const server = Hapi.server({
   }
 });
 
-const plugins = [
-  {
-    plugin: require("./plugins/geodata/index.js")
-  }
-];
 const routes = require("./routes/routes.js");
 
 async function init() {
@@ -163,23 +157,11 @@ async function init() {
       cache: serverMethodCacheOptions
     });
 
-    server.method("getRegionGeojson", minimapHelpers.getRegionGeojson, {
-      cache: serverMethodCacheOptions
-    });
-
     server.method("getGeodataGeojson", geodataHelpers.getGeodataGeojson, {
       cache: serverMethodCacheOptions
     });
 
-    server.method("getGeodataTile", geodataHelpers.getGeodataTile, {
-      bind: {
-        server: server
-      },
-      cache: serverMethodCacheOptions
-    });
-
     await server.register(require("@hapi/inert"));
-    await server.register(plugins);
     server.route(routes);
 
     await server.start();

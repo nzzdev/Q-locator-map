@@ -34,24 +34,8 @@ async function insert(doc) {
   }
 }
 
-async function remove(id) {
-  const response = await get(id);
-  if (response.docs.length >= 1) {
-    const doc = response.docs.pop();
-    const result = await db.destroy(doc._id, doc._rev);
-    if (result.ok) {
-      return {
-        status: "success"
-      };
-    }
-  } else {
-    throw new Error("Not Found");
-  }
-}
-
 module.exports = {
   db: db,
   get: get,
-  insert: insert,
-  remove: remove
+  insert: insert
 };
