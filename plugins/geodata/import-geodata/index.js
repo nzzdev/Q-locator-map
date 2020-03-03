@@ -3,7 +3,7 @@ const path = require("path");
 const FormData = require("form-data");
 const fetch = require("node-fetch");
 const promptly = require("promptly");
-const querystring = require("querystring");
+const db = require("../db.js");
 
 const datasets = JSON.parse(process.env.DATASETS);
 
@@ -47,27 +47,23 @@ async function saveGeojson(id, geojson, bearer) {
 
 async function saveVersion(id, version, dataset) {
   try {
-    let url = `${process.env.Q_TOOL_BASE_URL}/geodata/${id}`;
-    if (Number.isInteger(dataset.version)) {
-      url = `${url}?${querystring.stringify({ version: dataset.version })}`;
-    }
-    return await fetch(url, {
-      method: "POST",
-      body: JSON.stringify(version),
-      headers: {
-        "Content-Type": "application/json"
+    const versionNumber = dataset.version ? dataset.version - 1 : -1;
+    const response = await db.get(id);
+    if (response.docs.length === 0) {
+      const doc = {
+        id: id,
+        versions: [version]
+      };
+      return await db.insert(doc);
+    } else {
+      const doc = response.docs.pop();
+      if (versionNumber >= 0 && doc.versions[versionNumber]) {
+        doc.versions[versionNumber] = version;
+      } else {
+        doc.versions.push(version);
       }
-    });
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-async function deleteVersion(id) {
-  try {
-    return await fetch(`${process.env.Q_TOOL_BASE_URL}/geodata/${id}`, {
-      method: "DELETE"
-    });
+      return await db.insert(doc);
+    }
   } catch (error) {
     console.log(error);
   }

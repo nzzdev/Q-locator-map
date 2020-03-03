@@ -166,28 +166,11 @@ function getDimensions(spec, bbox, options) {
   };
 }
 
-async function getRegionGeojson(toolBaseUrl, id) {
-  try {
-    const url = `${toolBaseUrl}/geodata/${id}.geojson`;
-    const response = await fetch(url);
-    if (response.ok) {
-      return await response.json();
-    } else {
-      return Boom.notFound();
-    }
-  } catch (error) {
-    return Boom.notFound();
-  }
-}
-
 async function getRegionVegaSpec(options) {
   const spec = JSON.parse(JSON.stringify(minimapRegionVegaSpec));
   let bboxFeature = turf.bboxPolygon(options.bounds);
 
-  const region = await options.getRegionGeojson(
-    options.toolBaseUrl,
-    options.region.id
-  );
+  const region = await options.getGeodataGeojson(options.region.id);
   const center = turf.getCoord(turf.centerOfMass(region));
   const areaRatio = turf.area(region) / turf.area(bboxFeature);
   if (areaRatio > threshold) {
@@ -251,10 +234,15 @@ async function getRegionVegaSpec(options) {
     value: center[1] * -1
   });
 
-  let label = region.properties.name_de ? region.properties.name_de : "";
+  let label = "";
   if (options.region.label && options.region.label !== "") {
     label = options.region.label;
+  } else if (region.properties.name_de) {
+    label = region.properties.name_de;
+  } else if (region.properties.name) {
+    label = region.properties.name;
   }
+
   spec.signals.push({
     name: "label",
     value: label
@@ -292,6 +280,5 @@ async function getMinimap(options) {
 }
 
 module.exports = {
-  getMinimap: getMinimap,
-  getRegionGeojson: getRegionGeojson
+  getMinimap: getMinimap
 };

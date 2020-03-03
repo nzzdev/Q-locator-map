@@ -30,9 +30,8 @@ module.exports = {
         type: request.params.type,
         bounds: request.query.bounds,
         styleConfig: request.query.styleConfig,
-        toolBaseUrl: request.query.toolBaseUrl,
         region: {},
-        getRegionGeojson: request.server.methods.getRegionGeojson
+        getGeodataGeojson: request.server.methods.getGeodataGeojson
       };
 
       if (options.type === "region") {

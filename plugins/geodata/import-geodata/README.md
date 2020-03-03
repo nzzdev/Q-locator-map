@@ -138,7 +138,7 @@ The script does the following things:
 
 - Reads the geojsons from step 6 above
 - Uploads the geojsons to S3 using the Q-Server `/files` route
-- Stores the metadata in the geodata database using the `/geodata/{id}` route of the Q-Locator-Map tool
+- Stores the metadata in the geodata database
 
 ## Configuration
 
@@ -149,6 +149,12 @@ process.env.Q_SERVER_BASE_URL = "https://q-server.st-staging.nzz.ch";
 process.env.Q_TOOL_BASE_URL =
   "https://q-server.st-staging.nzz.ch/tools/locator_map";
 process.env.LD_USERNAME = "manuel.roth@nzz.ch";
+process.env.COUCHDB = `{
+  "host": "...",
+  "database": "...",
+  "user": "...",
+  "pass": "..."
+}`;
 process.env.DATASETS = JSON.stringify([
   {
     disable: true,

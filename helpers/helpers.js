@@ -126,11 +126,10 @@ async function getFont(hash, fontBaseUrl, fontName, start, end) {
 
 async function getRegionSuggestions(lng, lat) {
   try {
-    const enums = [];
-    const enum_titles = [];
+    const regionSuggestions = [];
     const wikidataIds = new Set();
     const options = {
-      radius: 0,
+      radius: 50000,
       limit: 5,
       geometry: "polygon",
       dedupe: true
@@ -142,20 +141,20 @@ async function getRegionSuggestions(lng, lat) {
     }
 
     for (let wikidataId of wikidataIds.values()) {
-      const geodataResponse = await this.server.inject(
-        `/geodata/${wikidataId}`
-      );
-      if (geodataResponse.statusCode === 200) {
-        const version = geodataResponse.result.versions.pop();
-        enum_titles.push(version.label);
-        enums.push(wikidataId);
+      const region = await this.server.methods.getGeodataGeojson(wikidataId);
+
+      if (region && region.properties) {
+        let label = "";
+        if (region.properties.name_de) {
+          label = region.properties.name_de;
+        } else if (region.properties.name) {
+          label = region.properties.name;
+        }
+        regionSuggestions.push({ id: wikidataId, label: label });
       }
     }
 
-    return {
-      enums: enums,
-      enum_titles: enum_titles
-    };
+    return regionSuggestions;
   } catch (error) {
     return Boom.notFound();
   }
@@ -234,7 +233,8 @@ async function getFeatures(geojsonList, itemStateInDb, labelsBelowMap) {
     .map((feature, index) => {
       return {
         id: `linestring-${index}`,
-        geojson: !itemStateInDb ? feature : undefined
+        geojson: !itemStateInDb ? feature : undefined,
+        properties: feature.properties
       };
     });
 
@@ -383,7 +383,8 @@ function getStyleConfig(styleConfig) {
       line: {
         colorLine: "#c31906",
         widthLine: 2,
-        opacityLine: 1
+        opacityLine: 1,
+        dashedLine: [1, 3]
       },
       polygon: {
         fillColorPolygon: "#c31906",

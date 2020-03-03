@@ -22,23 +22,24 @@
 .q-locator-map-labels__label {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
+  margin-top: 4px;
 
   .q-locator-map-labels__icon {
     display: flex;
     align-items: center;
-    padding-right: 4px;
+    margin-right: 4px;
   }
 }
 
 .q-locator-map-labels--one-row {
   display: flex;
   flex-wrap: wrap;
+  margin-top: 4px;
   margin-left: -8px;
   align-content: center;
 
   .q-locator-map-labels__label {
-    white-space: nowrap;
     padding-left: 8px;
   }
 }

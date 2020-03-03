@@ -466,6 +466,12 @@ function addFeatures(style, data) {
         "line-join": "round"
       }
     };
+
+    if (feature.properties["stroke-dashed"]) {
+      layer.paint["line-dasharray"] =
+        data.config.styleConfig.markers.line.dashedLine;
+    }
+
     if (data.config.features.type === "vector") {
       layer.source = data.config.features.sourceName;
       layer["source-layer"] = feature.id;
@@ -623,7 +629,7 @@ function getHighlightRegions(data) {
     return Array.from(
       new Set(
         data.options.highlightRegion
-          .filter(region => region.id !== "")
+          .filter(region => region.id && region.id !== "")
           .map(region => region.id)
       )
     );

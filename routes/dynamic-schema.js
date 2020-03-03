@@ -16,8 +16,7 @@ module.exports = {
       const item = request.payload.item;
 
       if (request.params.optionName === "region") {
-        let enums = [];
-        let enum_titles = [];
+        let regions = [];
 
         const centerPoints = item.geojsonList.map(geojson => {
           return turf.center(geojson);
@@ -29,14 +28,20 @@ module.exports = {
             coordinates[0],
             coordinates[1]
           );
-          enums = enums.concat(regionSuggestions.enums);
-          enum_titles = enum_titles.concat(regionSuggestions.enum_titles);
+          for (let regionSuggestion of regionSuggestions) {
+            const index = regions.findIndex(
+              region => region.id === regionSuggestion.id
+            );
+            if (index === -1) {
+              regions.push(regionSuggestion);
+            }
+          }
         }
 
         return {
-          enum: [...new Set(enums)],
+          enum: regions.map(region => region.id),
           "Q:options": {
-            enum_titles: [...new Set(enum_titles)]
+            enum_titles: regions.map(region => region.label)
           }
         };
       } else if (request.params.optionName === "bounds") {

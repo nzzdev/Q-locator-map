@@ -1,8 +1,5 @@
 const Boom = require("@hapi/boom");
 const fetch = require("node-fetch");
-const vtpbf = require("vt-pbf");
-const geojsonvt = require("geojson-vt");
-const zlib = require("zlib");
 const db = require("./db.js");
 
 function getValidGeodataUrl(geodataEntry, version) {
@@ -34,24 +31,6 @@ async function getGeodataGeojson(id, version) {
   }
 }
 
-async function getGeodataTile(id, z, x, y, version) {
-  try {
-    const geodata = await this.server.methods.getGeodataGeojson(id, version);
-    const tileIndex = geojsonvt(geodata);
-    const tile = tileIndex.getTile(z, x, y);
-    if (tile) {
-      const tileObject = {};
-      tileObject[`geodata-${id}`] = tile;
-      return zlib.gzipSync(vtpbf.fromGeojsonVt(tileObject, { version: 2 }));
-    } else {
-      return Boom.notFound();
-    }
-  } catch (error) {
-    return Boom.notFound();
-  }
-}
-
 module.exports = {
-  getGeodataGeojson: getGeodataGeojson,
-  getGeodataTile: getGeodataTile
+  getGeodataGeojson: getGeodataGeojson
 };
