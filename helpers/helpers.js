@@ -126,8 +126,7 @@ async function getFont(hash, fontBaseUrl, fontName, start, end) {
 
 async function getRegionSuggestions(lng, lat) {
   try {
-    const enums = [];
-    const enum_titles = [];
+    const regionSuggestions = [];
     const wikidataIds = new Set();
     const options = {
       radius: 50000,
@@ -151,16 +150,11 @@ async function getRegionSuggestions(lng, lat) {
         } else if (region.properties.name) {
           label = region.properties.name;
         }
-
-        enum_titles.push(label);
-        enums.push(wikidataId);
+        regionSuggestions.push({ id: wikidataId, label: label });
       }
     }
 
-    return {
-      enums: enums,
-      enum_titles: enum_titles
-    };
+    return regionSuggestions;
   } catch (error) {
     return Boom.notFound();
   }
