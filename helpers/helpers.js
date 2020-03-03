@@ -144,7 +144,7 @@ async function getRegionSuggestions(lng, lat) {
     for (let wikidataId of wikidataIds.values()) {
       const region = await this.server.methods.getGeodataGeojson(wikidataId);
 
-      if (region) {
+      if (region && region.properties) {
         let label = "";
         if (region.properties.name_de) {
           label = region.properties.name_de;
