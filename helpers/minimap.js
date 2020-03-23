@@ -1,6 +1,4 @@
 const vega = require("vega");
-const fetch = require("node-fetch");
-const Boom = require("@hapi/boom");
 const turf = require("@turf/turf");
 const minimapRegionVegaSpec = require("../resources/config/minimapRegionVegaSpec.json");
 const minimapGlobeVegaSpec = require("../resources/config/minimapGlobeVegaSpec.json");
