@@ -43,33 +43,35 @@ ScaleControl.prototype.setUnit = function setUnit(unit) {
 };
 
 function updateScale(map, container, options) {
-  // A horizontal scale is imagined to be present at center of the map
-  // container with maximum length (Default) as 100px.
-  // Using spherical law of cosines approximation, the real distance is
-  // found between the two coordinates.
-  let maxWidth = (options && options.maxWidth) || 100;
+  if (map !== undefined && container !== undefined) {
+    // A horizontal scale is imagined to be present at center of the map
+    // container with maximum length (Default) as 100px.
+    // Using spherical law of cosines approximation, the real distance is
+    // found between the two coordinates.
+    let maxWidth = (options && options.maxWidth) || 100;
 
-  let y = map._container.clientHeight / 2;
-  let maxMeters = getDistance(
-    map.unproject([0, y]),
-    map.unproject([maxWidth, y])
-  );
-  // The real distance corresponding to 100px scale length is rounded off to
-  // near pretty number and the scale length for the same is found out.
-  // Default unit of the scale is based on User's locale.
-  if (options && options.unit === "imperial") {
-    let maxFeet = 3.2808 * maxMeters;
-    if (maxFeet > 5280) {
-      let maxMiles = maxFeet / 5280;
-      setScale(container, maxWidth, maxMiles, "mi");
+    let y = map._container.clientHeight / 2;
+    let maxMeters = getDistance(
+      map.unproject([0, y]),
+      map.unproject([maxWidth, y])
+    );
+    // The real distance corresponding to 100px scale length is rounded off to
+    // near pretty number and the scale length for the same is found out.
+    // Default unit of the scale is based on User's locale.
+    if (options && options.unit === "imperial") {
+      let maxFeet = 3.2808 * maxMeters;
+      if (maxFeet > 5280) {
+        let maxMiles = maxFeet / 5280;
+        setScale(container, maxWidth, maxMiles, "mi");
+      } else {
+        setScale(container, maxWidth, maxFeet, "ft");
+      }
+    } else if (options && options.unit === "nautical") {
+      let maxNauticals = maxMeters / 1852;
+      setScale(container, maxWidth, maxNauticals, "nm");
     } else {
-      setScale(container, maxWidth, maxFeet, "ft");
+      setScale(container, maxWidth, maxMeters, "m");
     }
-  } else if (options && options.unit === "nautical") {
-    let maxNauticals = maxMeters / 1852;
-    setScale(container, maxWidth, maxNauticals, "nm");
-  } else {
-    setScale(container, maxWidth, maxMeters, "m");
   }
 }
 
