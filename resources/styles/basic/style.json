@@ -632,8 +632,8 @@
       "filter": [
         "all",
         ["==", "admin_level", 2],
-        ["==", "disputed", 0],
-        ["==", "maritime", 0]
+        ["==", "maritime", 0],
+        ["==", "disputed", 0]
       ],
       "layout": {
         "line-cap": "square",
@@ -654,7 +654,12 @@
       "type": "line",
       "source": "openmaptiles",
       "source-layer": "boundary",
-      "filter": ["all", ["==", "admin_level", 2], ["==", "disputed", 1]],
+      "filter": [
+        "all",
+        ["==", "admin_level", 2],
+        ["==", "maritime", 0],
+        ["==", "disputed", 1]
+      ],
       "layout": {
         "line-cap": "square",
         "line-join": "bevel"
