@@ -95,7 +95,6 @@ module.exports = {
         "Element.prototype.classList",
         "IntersectionObserver",
         "IntersectionObserverEntry",
-        "requestIdleCallback",
       ],
       stylesheets: [
         {
