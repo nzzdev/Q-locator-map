@@ -4,7 +4,6 @@ import MinimapControl from "./minimap.js";
 import ScaleControl from "./scale.js";
 export default class LocatorMap {
   constructor(element, data = {}) {
-    this.inViewport = false;
     if (element) {
       this.element = element;
       this.data = data;
@@ -12,10 +11,6 @@ export default class LocatorMap {
         this.data.width || this.element.getBoundingClientRect().width;
       this.setHeight();
       this.createIntersectionObserver();
-      if (this.inViewport && this.map === undefined) {
-        console.log("Is on page load in viewport");
-        this.init();
-      }
     }
   }
 
@@ -31,12 +26,12 @@ export default class LocatorMap {
       };
 
       observer = new IntersectionObserver((entries) => {
-        this.inViewport = entries[0].isIntersecting;
-        if (this.inViewport && this.map === undefined) {
+        const inViewport = entries[0].isIntersecting;
+        if (inViewport && this.map === undefined) {
           // Initialize map if it is within the viewport
           console.log("Is after scroll in viewport");
-          this.init();
-        } else if (!this.inViewport && this.map !== undefined) {
+          window.requestIdleCallback(this.init.bind(this));
+        } else if (!inViewport && this.map !== undefined) {
           console.log("Was removed after left viewport");
           // Release all resources associated with the map as soon as the map is out of the viewport
           this.map.remove();
@@ -44,8 +39,6 @@ export default class LocatorMap {
         }
       }, options);
       observer.observe(this.element);
-    } else {
-      this.inViewport = true;
     }
   }
 
