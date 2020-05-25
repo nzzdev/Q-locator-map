@@ -30,14 +30,12 @@ export default class LocatorMap {
           const inViewport = entry.isIntersecting;
           if (inViewport && this.map === undefined) {
             // Initialize map if it is within the viewport
-            console.log("Is after scroll in viewport");
             if ("requestIdleCallback" in window) {
               window.requestIdleCallback(this.init.bind(this));
             } else {
               this.init();
             }
           } else if (!inViewport && this.map !== undefined) {
-            console.log("Was removed after left viewport");
             // Release all resources associated with the map as soon as the map is out of the viewport
             this.map.remove();
             delete this.map;
