@@ -84,7 +84,14 @@ module.exports = {
 
     const renderingInfo = {
       polyfills: [
+        "fetch",
         "Promise",
+        "Set",
+        "Array.prototype.includes",
+        "Array.from",
+        "Array.prototype.forEach",
+        "Object.keys",
+        "Object.entries",
         "Element.prototype.classList",
         "IntersectionObserver",
         "IntersectionObserverEntry",

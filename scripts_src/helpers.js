@@ -9,12 +9,12 @@ export function getStyle(data) {
       data.config.styles[data.options.baseLayer.style].hash
     }/${data.options.baseLayer.style}`
   )
-    .then(response => {
+    .then((response) => {
       if (response.ok) {
         return response.json();
       }
     })
-    .then(style => {
+    .then((style) => {
       style = filterByLayer(style, data);
       style = addHighlightedRegions(style, data);
       style = addFeatures(style, data);
@@ -226,7 +226,7 @@ function getPositionProperties(geojsonProperties, styleConfig) {
       textAnchor: "bottom",
       textJustify: "center",
       textTranslate: [0, -translateVertical],
-      iconOffset: [0, iconOffset]
+      iconOffset: [0, iconOffset],
     };
     if (geojsonProperties.labelPosition === "bottom") {
       properties.textAnchor = "top";
@@ -246,44 +246,44 @@ function getPositionProperties(geojsonProperties, styleConfig) {
       properties.textAnchor = "bottom-right";
       properties.textTranslate = [
         -translateHorizontal / cornerTranslateFactor,
-        -translateVertical / cornerTranslateFactor
+        -translateVertical / cornerTranslateFactor,
       ];
       properties.iconOffset = [
         iconOffset / cornerTranslateFactor,
-        iconOffset / cornerTranslateFactor
+        iconOffset / cornerTranslateFactor,
       ];
       properties.textJustify = "right";
     } else if (geojsonProperties.labelPosition === "topright") {
       properties.textAnchor = "bottom-left";
       properties.textTranslate = [
         translateHorizontal / cornerTranslateFactor,
-        -translateVertical / cornerTranslateFactor
+        -translateVertical / cornerTranslateFactor,
       ];
       properties.iconOffset = [
         -iconOffset / cornerTranslateFactor,
-        iconOffset / cornerTranslateFactor
+        iconOffset / cornerTranslateFactor,
       ];
       properties.textJustify = "left";
     } else if (geojsonProperties.labelPosition === "bottomleft") {
       properties.textAnchor = "top-right";
       properties.textTranslate = [
         -translateHorizontal / cornerTranslateFactor,
-        translateVertical / cornerTranslateFactor
+        translateVertical / cornerTranslateFactor,
       ];
       properties.iconOffset = [
         iconOffset / cornerTranslateFactor,
-        -iconOffset / cornerTranslateFactor
+        -iconOffset / cornerTranslateFactor,
       ];
       properties.textJustify = "right";
     } else if (geojsonProperties.labelPosition === "bottomright") {
       properties.textAnchor = "top-left";
       properties.textTranslate = [
         translateHorizontal / cornerTranslateFactor,
-        translateVertical / cornerTranslateFactor
+        translateVertical / cornerTranslateFactor,
       ];
       properties.iconOffset = [
         -iconOffset / cornerTranslateFactor,
-        -iconOffset / cornerTranslateFactor
+        -iconOffset / cornerTranslateFactor,
       ];
       properties.textJustify = "left";
     }
@@ -292,7 +292,7 @@ function getPositionProperties(geojsonProperties, styleConfig) {
     return {
       textAnchor: "center",
       textJustify: "center",
-      textTranslate: [0, 0]
+      textTranslate: [0, 0],
     };
   }
 }
@@ -328,7 +328,7 @@ function getPointStyleProperties(geojsonProperties, styleConfig) {
     textTransform: "{textTransform}",
     textLetterSpacing: 0,
     iconImage: getIconImage(geojsonProperties.type, styleConfig),
-    iconSize: "{iconSize}"
+    iconSize: "{iconSize}",
   };
 
   // special properties handling
@@ -401,20 +401,20 @@ function getPointStyleProperties(geojsonProperties, styleConfig) {
     properties.textAnchor = {
       stops: [
         [7.99, properties.textAnchor],
-        [8, "center"]
-      ]
+        [8, "center"],
+      ],
     };
     properties.textTranslate = {
       stops: [
         [7.99, properties.textTranslate],
-        [8, [0, 0]]
-      ]
+        [8, [0, 0]],
+      ],
     };
     properties.textJustify = {
       stops: [
         [7.99, properties.textJustify],
-        [8, "center"]
-      ]
+        [8, "center"],
+      ],
     };
   }
 
@@ -433,14 +433,14 @@ function addFeatures(style, data) {
     style.sources[data.config.features.sourceName] = {
       type: "vector",
       tiles: [
-        `{toolBaseUrl}/tilesets/${data.config.features.hash}/${data.qId}/{z}/{x}/{y}.pbf?appendItemToPayload=${data.qId}`
+        `{toolBaseUrl}/tilesets/${data.config.features.hash}/${data.qId}/{z}/{x}/{y}.pbf?appendItemToPayload=${data.qId}`,
       ],
       minzoom: 0,
-      maxzoom: 14
+      maxzoom: 14,
     };
   }
 
-  data.config.features.linestrings.forEach(feature => {
+  data.config.features.linestrings.forEach((feature) => {
     const layer = {
       id: feature.id,
       type: "line",
@@ -448,23 +448,23 @@ function addFeatures(style, data) {
         "line-color": [
           "string",
           ["get", "stroke"],
-          data.config.styleConfig.markers.line.colorLine
+          data.config.styleConfig.markers.line.colorLine,
         ],
         "line-width": [
           "number",
           ["get", "stroke-width"],
-          data.config.styleConfig.markers.line.widthLine
+          data.config.styleConfig.markers.line.widthLine,
         ],
         "line-opacity": [
           "number",
           ["get", "stroke-opacity"],
-          data.config.styleConfig.markers.line.opacityLine
-        ]
+          data.config.styleConfig.markers.line.opacityLine,
+        ],
       },
       layout: {
         "line-cap": "round",
-        "line-join": "round"
-      }
+        "line-join": "round",
+      },
     };
 
     if (feature.properties["stroke-dashed"]) {
@@ -478,7 +478,7 @@ function addFeatures(style, data) {
     } else {
       style.sources[feature.id] = {
         type: "geojson",
-        data: feature.geojson
+        data: feature.geojson,
       };
       layer.source = feature.id;
     }
@@ -486,7 +486,7 @@ function addFeatures(style, data) {
     style.layers.splice(index, 0, layer);
   });
 
-  data.config.features.polygons.forEach(feature => {
+  data.config.features.polygons.forEach((feature) => {
     const fillLayer = {
       id: feature.id,
       type: "fill",
@@ -494,14 +494,14 @@ function addFeatures(style, data) {
         "fill-color": [
           "string",
           ["get", "fill"],
-          data.config.styleConfig.markers.polygon.fillColorPolygon
+          data.config.styleConfig.markers.polygon.fillColorPolygon,
         ],
         "fill-opacity": [
           "number",
           ["get", "fill-opacity"],
-          data.config.styleConfig.markers.polygon.opacityPolygon
-        ]
-      }
+          data.config.styleConfig.markers.polygon.opacityPolygon,
+        ],
+      },
     };
 
     const outlineLayer = {
@@ -511,19 +511,19 @@ function addFeatures(style, data) {
         "line-color": [
           "string",
           ["get", "stroke"],
-          data.config.styleConfig.markers.polygon.fillColorPolygon
+          data.config.styleConfig.markers.polygon.fillColorPolygon,
         ],
         "line-width": [
           "number",
           ["get", "stroke-width"],
-          data.config.styleConfig.markers.polygon.outlineWidthPolygon
+          data.config.styleConfig.markers.polygon.outlineWidthPolygon,
         ],
         "line-opacity": [
           "number",
           ["get", "stroke-opacity"],
-          data.config.styleConfig.markers.line.opacityLine
-        ]
-      }
+          data.config.styleConfig.markers.line.opacityLine,
+        ],
+      },
     };
 
     if (data.config.features.type === "vector") {
@@ -534,7 +534,7 @@ function addFeatures(style, data) {
     } else {
       style.sources[feature.id] = {
         type: "geojson",
-        data: feature.geojson
+        data: feature.geojson,
       };
       fillLayer.source = feature.id;
       outlineLayer.source = feature.id;
@@ -544,7 +544,7 @@ function addFeatures(style, data) {
     style.layers.splice(index, 0, outlineLayer);
   });
 
-  data.config.features.points.forEach(feature => {
+  data.config.features.points.forEach((feature) => {
     const properties = getPointStyleProperties(
       feature.geojson.properties,
       data.config.styleConfig
@@ -566,15 +566,15 @@ function addFeatures(style, data) {
         "icon-image": properties.iconImage,
         "icon-size": properties.iconSize,
         "icon-anchor": properties.iconAnchor,
-        "icon-offset": properties.iconOffset
+        "icon-offset": properties.iconOffset,
       },
       paint: {
         "text-translate": properties.textTranslate,
         "text-color": properties.textColor,
         "text-halo-color": properties.textHaloColor,
         "text-halo-width": properties.textHaloWidth,
-        "text-halo-blur": properties.textBlurWidth
-      }
+        "text-halo-blur": properties.textBlurWidth,
+      },
     };
 
     if (data.config.features.type === "vector") {
@@ -583,7 +583,7 @@ function addFeatures(style, data) {
     } else {
       style.sources[feature.id] = {
         type: "geojson",
-        data: feature.geojson
+        data: feature.geojson,
       };
       layer.source = feature.id;
     }
@@ -614,11 +614,13 @@ function filterByLayer(style, data) {
     baseLayer.layers &&
     Object.keys(baseLayer.layers).length > 0
   ) {
-    for (let [layer, value] of Object.entries(baseLayer.layers)) {
+    Object.entries(baseLayer.layers).forEach((entry) => {
+      const layer = entry[0];
+      const value = entry[1];
       if (layer === "label" && !value) {
-        style.layers = style.layers.filter(layer => layer.type !== "symbol");
+        style.layers = style.layers.filter((layer) => layer.type !== "symbol");
       }
-    }
+    });
   }
   return style;
 }
@@ -629,8 +631,8 @@ function getHighlightRegions(data) {
     return Array.from(
       new Set(
         data.options.highlightRegion
-          .filter(region => region.id && region.id !== "")
-          .map(region => region.id)
+          .filter((region) => region.id && region.id !== "")
+          .map((region) => region.id)
       )
     );
   }
@@ -648,13 +650,13 @@ export function hightlightCountryLabels(map, data) {
     // Find labels contained in highlighted regions
     const style = map.getStyle();
     const highlightedLayers = style.layers
-      .filter(layer => layer.id.includes("--highlighted"))
-      .map(layer => layer.id);
+      .filter((layer) => layer.id.includes("--highlighted"))
+      .map((layer) => layer.id);
     let highlightedLabels = new Set();
-    for (let highlightRegion of highlightRegions) {
+    highlightRegions.forEach((highlightRegion) => {
       const relatedSourceFeatures = map.querySourceFeatures("regions", {
         sourceLayer: "countries",
-        filter: ["==", "wikidata", highlightRegion]
+        filter: ["==", "wikidata", highlightRegion],
       });
       if (relatedSourceFeatures.length > 0) {
         const bbox = turfBBox(
@@ -662,16 +664,16 @@ export function hightlightCountryLabels(map, data) {
         );
         const geometry = [
           map.project([bbox[0], bbox[1]]),
-          map.project([bbox[2], bbox[3]])
+          map.project([bbox[2], bbox[3]]),
         ];
 
         let relatedRenderedFeatures = map.queryRenderedFeatures(geometry, {
-          layers: highlightedLayers
+          layers: highlightedLayers,
         });
 
         relatedRenderedFeatures = relatedRenderedFeatures.filter(
-          relatedRenderedFeature => {
-            return relatedSourceFeatures.some(relatedSourceFeature =>
+          (relatedRenderedFeature) => {
+            return relatedSourceFeatures.some((relatedSourceFeature) =>
               turfBooleanPointInPolygon(
                 relatedRenderedFeature,
                 relatedSourceFeature
@@ -679,21 +681,21 @@ export function hightlightCountryLabels(map, data) {
             );
           }
         );
-        for (let relatedRenderedFeature of relatedRenderedFeatures) {
+        relatedRenderedFeatures.forEach((relatedRenderedFeature) => {
           const properties = relatedRenderedFeature.properties;
           if (properties["name:de"]) {
             highlightedLabels.add(properties["name:de"]);
           } else if (properties.label) {
             highlightedLabels.add(properties.label);
           }
-        }
+        });
       }
-    }
+    });
 
     highlightedLabels = Array.from(highlightedLabels);
     if (highlightedLabels.length > 0) {
       // Apply different style to labels of highlighted regions
-      for (let highlightedLayer of highlightedLayers) {
+      highlightedLayers.forEach((highlightedLayer) => {
         let layerFilter = ["all"];
         let highlightedLayerFilter = ["all"];
         const layer = highlightedLayer.replace("--highlighted", "");
@@ -705,30 +707,30 @@ export function hightlightCountryLabels(map, data) {
         }
         const layerLabelFilter = ["all"];
         const highlightedLabelFilter = ["any"];
-        for (let highlightedLabel of highlightedLabels) {
+        highlightedLabels.forEach((highlightedLabel) => {
           const filter = ["any"];
           filter.push([
             "all",
             ["has", "label"],
-            ["!=", "label", highlightedLabel]
+            ["!=", "label", highlightedLabel],
           ]);
           filter.push([
             "all",
             ["has", "name:de"],
-            ["!=", "name:de", highlightedLabel]
+            ["!=", "name:de", highlightedLabel],
           ]);
           layerLabelFilter.push(filter);
           highlightedLabelFilter.push([
             "all",
             ["has", "label"],
-            ["==", "label", highlightedLabel]
+            ["==", "label", highlightedLabel],
           ]);
           highlightedLabelFilter.push([
             "all",
             ["has", "name:de"],
-            ["==", "name:de", highlightedLabel]
+            ["==", "name:de", highlightedLabel],
           ]);
-        }
+        });
         layerFilter.push(layerLabelFilter);
         highlightedLayerFilter.push(highlightedLabelFilter);
         if (map.getLayer(layer)) {
@@ -737,11 +739,11 @@ export function hightlightCountryLabels(map, data) {
         if (map.getLayer(highlightedLayer)) {
           map.setFilter(highlightedLayer, highlightedLayerFilter);
         }
-      }
+      });
     } else {
-      for (let highlightedLayer of highlightedLayers) {
+      highlightedLayers.forEach((highlightedLayer) => {
         map.removeLayer(highlightedLayer);
-      }
+      });
     }
   }
 }
@@ -753,15 +755,15 @@ function addHighlightedRegions(style, data) {
       type: "vector",
       tiles: [`{toolBaseUrl}/tiles/{regionsHash}/regions/{z}/{x}/{y}.pbf`],
       minzoom: 0,
-      maxzoom: 10
+      maxzoom: 10,
     };
 
-    for (let highlightRegion of highlightRegions) {
+    highlightRegions.forEach((highlightRegion) => {
       let index = 1;
       let regionColor = "{colorHighlightCountry}";
       if (data.options.baseLayer.style === "satellite") {
         index = style.layers.length;
-        for (let sourceLayer of ["countries", "subdivisions"]) {
+        ["countries", "subdivisions"].forEach((sourceLayer) => {
           if (sourceLayer === "subdivisions") {
             regionColor = "{colorHighlightRegion}";
           }
@@ -772,12 +774,12 @@ function addHighlightedRegions(style, data) {
             "source-layer": sourceLayer,
             filter: ["==", "wikidata", highlightRegion],
             paint: {
-              "line-color": regionColor
-            }
+              "line-color": regionColor,
+            },
           });
-        }
+        });
       } else {
-        for (let sourceLayer of ["countries", "subdivisions"]) {
+        ["countries", "subdivisions"].forEach((sourceLayer) => {
           if (sourceLayer === "subdivisions") {
             regionColor = "{colorHighlightRegion}";
           }
@@ -788,16 +790,16 @@ function addHighlightedRegions(style, data) {
             "source-layer": sourceLayer,
             filter: ["==", "wikidata", highlightRegion],
             paint: {
-              "fill-color": regionColor
-            }
+              "fill-color": regionColor,
+            },
           });
-        }
+        });
       }
-    }
+    });
     // Add layer for labels of highlighted regions
     if (hasLabels(data) && data.options.baseLayer.style !== "satellite") {
       let countryLabelLayerIndex = style.layers
-        .map(layer => layer.id)
+        .map((layer) => layer.id)
         .indexOf("place_country-de");
       countryLabelLayerIndex = countryLabelLayerIndex + 1;
       style.layers.splice(countryLabelLayerIndex, 0, {
@@ -811,21 +813,21 @@ function addHighlightedRegions(style, data) {
           "all",
           ["==", "$type", "Point"],
           ["==", "class", "country"],
-          ["has", "name:de"]
+          ["has", "name:de"],
         ],
         layout: {
           "text-field": "{name:de}",
           "text-font": ["{fontSansMedium}"],
           "text-offset": "{textOffset}",
           "text-transform": "{textTransformCountry}",
-          "text-size": "{textSizeCountry}"
+          "text-size": "{textSizeCountry}",
         },
         paint: {
           "text-halo-width": "{textHaloWidth}",
           "text-halo-blur": "{textBlurWidth}",
           "text-halo-color": "{colorHighlightCountry}",
-          "text-color": "{textColorCountry}"
-        }
+          "text-color": "{textColorCountry}",
+        },
       });
     }
   }
@@ -838,7 +840,7 @@ export function getBounds(map) {
     round(bounds[0][0]),
     round(bounds[0][1]),
     round(bounds[1][0]),
-    round(bounds[1][1])
+    round(bounds[1][1]),
   ];
 }
 
