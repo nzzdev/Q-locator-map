@@ -17,8 +17,8 @@ export default class LocatorMap {
   createIntersectionObserver() {
     if (typeof IntersectionObserver !== "undefined") {
       let observer;
-      const top = 100;
-      const bottom = 100;
+      const top = 200;
+      const bottom = 200;
       const left = 0;
       const right = 0;
       const options = {
