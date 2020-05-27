@@ -43,6 +43,8 @@ export default class LocatorMap {
         });
       }, options);
       observer.observe(this.element);
+    } else {
+      this.init();
     }
   }
 
