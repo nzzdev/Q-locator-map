@@ -10,17 +10,49 @@ export default class LocatorMap {
       this.width =
         this.data.width || this.element.getBoundingClientRect().width;
       this.setHeight();
-      helpers.getStyle(this.data).then(style => {
-        this.data.config.style = style;
-        this.render();
-      });
+      this.createIntersectionObserver();
+    }
+  }
+
+  createIntersectionObserver() {
+    if (typeof IntersectionObserver !== "undefined") {
+      let observer;
+      const top = 200;
+      const bottom = 200;
+      const left = 0;
+      const right = 0;
+      const options = {
+        rootMargin: `${top}% ${right}% ${bottom}% ${left}%`,
+      };
+
+      observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          const inViewport = entry.isIntersecting;
+          if (inViewport && this.map === undefined) {
+            // Initialize map if it is within the viewport
+            if ("requestIdleCallback" in window) {
+              window.requestIdleCallback(this.init.bind(this));
+            } else {
+              this.init();
+            }
+          } else if (!inViewport && this.map !== undefined) {
+            // Release all resources associated with the map as soon as the map is out of the viewport
+            this.map.remove();
+            delete this.map;
+          }
+        });
+      }, options);
+      observer.observe(this.element);
+    } else {
+      this.init();
     }
   }
 
   setHeight() {
     if (this.data.config.aspectRatio) {
-      this.element.style.height = `${this.width *
-        this.data.config.aspectRatio}px`;
+      this.element.style.height = `${
+        this.width * this.data.config.aspectRatio
+      }px`;
     } else {
       const aspectRatio =
         this.width > this.data.config.styleConfig.aspectRatioBreakpoint
@@ -77,15 +109,15 @@ export default class LocatorMap {
         url = `${url}&regionLabel=${minimap.options.region.label}`;
       }
       fetch(url)
-        .then(response => {
+        .then((response) => {
           if (response.ok) {
             return response.json();
           }
         })
-        .then(result => {
+        .then((result) => {
           const options = {
             markup: result.markup,
-            styleConfig: styleConfig
+            styleConfig: styleConfig,
           };
           this.map.addControl(
             new MinimapControl(options),
@@ -109,10 +141,10 @@ export default class LocatorMap {
             [this.viewport._sw.lng, this.viewport._ne.lat],
             [this.viewport._ne.lng, this.viewport._ne.lat],
             [this.viewport._ne.lng, this.viewport._sw.lat],
-            [this.viewport._sw.lng, this.viewport._sw.lat]
-          ]
-        }
-      }
+            [this.viewport._sw.lng, this.viewport._sw.lat],
+          ],
+        },
+      },
     });
 
     const width = 5;
@@ -126,56 +158,46 @@ export default class LocatorMap {
       layout: {
         "icon-image": "pixel",
         "symbol-placement": "line",
-        "symbol-spacing": 5
-      }
+        "symbol-spacing": 5,
+      },
     });
   }
 
-  onDetached() {
-    // Clean up and release all resources associated with the map as soon as the map gets removed from DOM
-    const observer = new MutationObserver((mutationList, observer) => {
-      for (let mutation of mutationList) {
-        if (mutation.removedNodes.length > 0) {
-          this.map.remove();
-          observer.disconnect();
-        }
+  init() {
+    helpers.getStyle(this.data).then((style) => {
+      this.data.config.style = style;
+
+      this.options = {
+        container: this.element,
+        style: this.data.config.style,
+        interactive: false,
+        attributionControl: false,
+        fadeDuration: 0,
+        fitBoundsOptions: { padding: 60, duration: 0 },
+      };
+
+      if (this.data.config.zoom) {
+        this.options.fitBoundsOptions.maxZoom = this.data.config.zoom;
       }
-    });
-    observer.observe(this.element.parentNode.parentNode, {
-      childList: true
-    });
-  }
+      if (this.data.config.bbox) {
+        this.options.bounds = new mapboxgl.LngLatBounds(this.data.config.bbox);
+        this.options.fitBoundsOptions.padding = 0;
+      } else if (this.data.config.bounds) {
+        this.options.bounds = new mapboxgl.LngLatBounds(
+          this.data.config.bounds
+        );
+      } else {
+        this.options.center = this.data.config.center;
+        this.options.zoom = this.data.config.zoom;
+      }
 
-  render() {
-    this.options = {
-      container: this.element,
-      style: this.data.config.style,
-      interactive: false,
-      attributionControl: false,
-      fadeDuration: 0,
-      fitBoundsOptions: { padding: 60, duration: 0 }
-    };
-
-    if (this.data.config.zoom) {
-      this.options.fitBoundsOptions.maxZoom = this.data.config.zoom;
-    }
-    if (this.data.config.bbox) {
-      this.options.bounds = new mapboxgl.LngLatBounds(this.data.config.bbox);
-      this.options.fitBoundsOptions.padding = 0;
-    } else if (this.data.config.bounds) {
-      this.options.bounds = new mapboxgl.LngLatBounds(this.data.config.bounds);
-    } else {
-      this.options.center = this.data.config.center;
-      this.options.zoom = this.data.config.zoom;
-    }
-
-    this.map = new mapboxgl.Map(this.options);
-    this.map.on("load", () => {
-      this.preventLabelsAroundViewport();
-      this.addControls();
-      helpers.hightlightCountryLabels(this.map, this.data);
-      this.element.parentNode.style.opacity = "1";
-      this.onDetached();
+      this.map = new mapboxgl.Map(this.options);
+      this.map.on("load", () => {
+        this.preventLabelsAroundViewport();
+        this.addControls();
+        helpers.hightlightCountryLabels(this.map, this.data);
+        this.element.parentNode.style.opacity = "1";
+      });
     });
   }
 }

@@ -17,7 +17,7 @@ const staticTemplate = require(viewsDir + "LocatorMap.svelte").default;
 // hence we fetch the JSON schema...
 const schemaString = JSON.parse(
   fs.readFileSync(`${__dirname}/../../resources/schema.json`, {
-    encoding: "utf-8"
+    encoding: "utf-8",
   })
 );
 const Ajv = require("ajv");
@@ -57,12 +57,12 @@ module.exports = {
   options: {
     validate: {
       options: {
-        allowUnknown: true
+        allowUnknown: true,
       },
-      payload: validatePayload
-    }
+      payload: validatePayload,
+    },
   },
-  handler: async function(request, h) {
+  handler: async function (request, h) {
     const item = request.payload.item;
 
     const toolRuntimeConfig = request.payload.toolRuntimeConfig;
@@ -79,19 +79,32 @@ module.exports = {
         request.server.app
       ),
       width: helpers.getExactPixelWidth(toolRuntimeConfig),
-      numberMarkers: numberMarkers
+      numberMarkers: numberMarkers,
     };
 
     const renderingInfo = {
-      polyfills: ["Promise", "Element.prototype.classList"],
+      polyfills: [
+        "fetch",
+        "Promise",
+        "Set",
+        "Array.prototype.includes",
+        "Array.from",
+        "Array.prototype.forEach",
+        "Object.keys",
+        "Object.entries",
+        "Element.prototype.classList",
+        "IntersectionObserver",
+        "IntersectionObserverEntry",
+        "requestIdleCallback",
+      ],
       stylesheets: [
         {
-          name: styleHashMap["default"]
-        }
+          name: styleHashMap["default"],
+        },
       ],
       scripts: [
         {
-          name: scriptHashMap["default"]
+          name: scriptHashMap["default"],
         },
         {
           content: `
@@ -101,13 +114,13 @@ module.exports = {
             qId: context.item.id,
             config: context.config,
             options: context.item.options,
-            width: context.width
-          })})`
-        }
+            width: context.width,
+          })})`,
+        },
       ],
-      markup: staticTemplate.render(context).html
+      markup: staticTemplate.render(context).html,
     };
 
     return renderingInfo;
-  }
+  },
 };
