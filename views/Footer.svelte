@@ -20,7 +20,7 @@
     {#each item.sources as source, index}
       {#if source.text !== ''}
         {#if source.link && source.link.url && source.link.isValid}
-          <a href={source.link.url} target="blank" rel="noopener noreferrer">
+          <a href={source.link.url} target="_blank" rel="noopener noreferrer">
             {source.text}
           </a>
         {:else}{source.text}{/if}

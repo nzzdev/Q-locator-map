@@ -6,7 +6,6 @@ const turf = require("@turf/turf");
 const fetch = require("node-fetch");
 const Boom = require("@hapi/boom");
 const fontnik = require("fontnik");
-const glyphCompose = require("@mapbox/glyph-pbf-composite");
 const glob = require("glob");
 const tilesHelpers = require("./tiles.js");
 const deepmerge = require("deepmerge");
@@ -40,7 +39,7 @@ async function getConfig(item, itemStateInDb, toolRuntimeConfig, data) {
     config.zoom = 9;
   } else {
     geojsonList = tilesHelpers.transformCoordinates(geojsonList);
-    const bboxPolygons = geojsonList.map(geojson => {
+    const bboxPolygons = geojsonList.map((geojson) => {
       return turf.bboxPolygon(turf.bbox(geojson));
     });
     config.bounds = turf.bbox(turf.featureCollection(bboxPolygons));
@@ -70,7 +69,7 @@ function getStyles(styles) {
   const styleHashes = {};
   for (let [key, value] of Object.entries(styles)) {
     styleHashes[key] = {
-      hash: value.hash
+      hash: value.hash,
     };
   }
 
@@ -103,18 +102,23 @@ async function getFont(hash, fontBaseUrl, fontName, start, end) {
         {
           font: fontFile,
           start: start,
-          end: end
+          end: end,
         },
-        (error, data) => {
+        (error, glyphs) => {
           if (error) {
             reject(Boom.notFound());
           } else {
-            const glyph = glyphCompose.combine([data]);
-            zlib.gzip(glyph, (error, compressedGlyph) => {
+            fontnik.composite([glyphs], (error, glyphsPBF) => {
               if (error) {
                 reject(Boom.notFound());
               } else {
-                resolve(compressedGlyph);
+                zlib.gzip(glyphsPBF, (error, compressedPBF) => {
+                  if (error) {
+                    reject(Boom.notFound());
+                  } else {
+                    resolve(compressedPBF);
+                  }
+                });
               }
             });
           }
@@ -132,7 +136,7 @@ async function getRegionSuggestions(lng, lat) {
       radius: 50000,
       limit: 5,
       geometry: "polygon",
-      dedupe: true
+      dedupe: true,
     };
 
     const result = await vtquery(this.tiles, [lng, lat], options);
@@ -162,7 +166,7 @@ async function getRegionSuggestions(lng, lat) {
 
 async function getHash(data) {
   return await hasha(JSON.stringify(data), {
-    algorithm: "md5"
+    algorithm: "md5",
   });
 }
 
@@ -171,7 +175,7 @@ async function getFeatures(geojsonList, itemStateInDb, labelsBelowMap) {
   let linestringFeatures = [];
   let polygonFeatures = [];
   const featureCollections = geojsonList.filter(
-    geojson => geojson.type === "FeatureCollection"
+    (geojson) => geojson.type === "FeatureCollection"
   );
 
   for (const featureCollection of featureCollections) {
@@ -196,14 +200,14 @@ async function getFeatures(geojsonList, itemStateInDb, labelsBelowMap) {
   }
 
   const points = geojsonList.filter(
-    geojson =>
+    (geojson) =>
       geojson.type === "Feature" &&
       ["Point", "MultiPoint"].includes(geojson.geometry.type)
   );
   pointFeatures = pointFeatures.concat(points).map((feature, index) => {
     return {
       id: `point-${index}`,
-      geojson: feature
+      geojson: feature,
     };
   });
 
@@ -224,7 +228,7 @@ async function getFeatures(geojsonList, itemStateInDb, labelsBelowMap) {
   }
 
   const linestrings = geojsonList.filter(
-    geojson =>
+    (geojson) =>
       geojson.type === "Feature" &&
       ["LineString", "MultiLineString"].includes(geojson.geometry.type)
   );
@@ -234,26 +238,26 @@ async function getFeatures(geojsonList, itemStateInDb, labelsBelowMap) {
       return {
         id: `linestring-${index}`,
         geojson: !itemStateInDb ? feature : undefined,
-        properties: feature.properties
+        properties: feature.properties,
       };
     });
 
   const polygons = geojsonList.filter(
-    geojson =>
+    (geojson) =>
       geojson.type === "Feature" &&
       ["Polygon", "MultiPolygon"].includes(geojson.geometry.type)
   );
   polygonFeatures = polygonFeatures.concat(polygons).map((feature, index) => {
     return {
       id: `polygon-${index}`,
-      geojson: !itemStateInDb ? feature : undefined
+      geojson: !itemStateInDb ? feature : undefined,
     };
   });
 
   const features = {
     points: pointFeatures,
     linestrings: linestringFeatures,
-    polygons: polygonFeatures
+    polygons: polygonFeatures,
   };
 
   features.hash = await getHash(geojsonList);
@@ -269,10 +273,10 @@ function getNumberMarkers() {
         path.join(__dirname, "../resources/sprites/marker/number-*.svg")
       )
     )
-    .map(f => {
+    .map((f) => {
       return {
         id: path.basename(f).replace(".svg", ""),
-        svg: fs.readFileSync(f).toString("utf8")
+        svg: fs.readFileSync(f).toString("utf8"),
       };
     });
 }
@@ -292,7 +296,7 @@ function getStyleConfig(styleConfig) {
         text: "#92929e",
         boundaryCountry: "#a88ea8",
         boundaryState: "#c9c4e0",
-        boundaryCommunity: "#d4c1ee"
+        boundaryCommunity: "#d4c1ee",
       },
       minimal: {
         background: "#f0f0f2",
@@ -304,7 +308,7 @@ function getStyleConfig(styleConfig) {
         railway: "#d8d8d8",
         building: "#cbcbcb",
         text: "#92929e",
-        boundary: "#cfcfd6"
+        boundary: "#cfcfd6",
       },
       nature: {
         background: "#edece1",
@@ -317,7 +321,7 @@ function getStyleConfig(styleConfig) {
         building: "#dbdad1",
         text: "#92929e",
         boundary: "#b6b6be",
-        hillshadeOpacity: 0.2
+        hillshadeOpacity: 0.2,
       },
       satellite: {
         background: "#f0f0f2",
@@ -329,8 +333,8 @@ function getStyleConfig(styleConfig) {
         railway: "#d8d8d8",
         building: "#cbcbcb",
         text: "#92929e",
-        boundary: "#ffffff"
-      }
+        boundary: "#ffffff",
+      },
     },
     markers: {
       textHaloWidth: 1,
@@ -340,8 +344,8 @@ function getStyleConfig(styleConfig) {
       textAnchor: {
         stops: [
           [7.99, "left"],
-          [8, "center"]
-        ]
+          [8, "center"],
+        ],
       },
       textJustify: "left",
       textOffset: [0, 0],
@@ -350,12 +354,12 @@ function getStyleConfig(styleConfig) {
         textColorIconMarker: "#05032d",
         textHaloColorIconMarker: "#ffffff",
         textSizeIconMarker: 14,
-        textFontIconMarker: ["{fontSansMedium}"]
+        textFontIconMarker: ["{fontSansMedium}"],
       },
       country: {
         textSizeCountry: 14,
         textColorCountry: "#6e6e7e",
-        textTransformCountry: "none"
+        textTransformCountry: "none",
       },
       capital: {
         textSizeCapital: 15,
@@ -363,9 +367,9 @@ function getStyleConfig(styleConfig) {
         iconImageCapital: {
           stops: [
             [7.99, "capital"],
-            [8, ""]
-          ]
-        }
+            [8, ""],
+          ],
+        },
       },
       city: {
         textSizeCity: 13,
@@ -373,28 +377,28 @@ function getStyleConfig(styleConfig) {
         iconImageCity: {
           stops: [
             [7.99, "city"],
-            [8, ""]
-          ]
-        }
+            [8, ""],
+          ],
+        },
       },
       label: {
-        textTransformLabel: "uppercase"
+        textTransformLabel: "uppercase",
       },
       line: {
         colorLine: "#c31906",
         widthLine: 2,
         opacityLine: 1,
-        dashedLine: [1, 3]
+        dashedLine: [1, 3],
       },
       polygon: {
         fillColorPolygon: "#c31906",
         outlineWidthPolygon: 0,
-        opacityPolygon: 0.35
-      }
+        opacityPolygon: 0.35,
+      },
     },
     highlightRegion: {
       highlightCountryColor: "#ffffff",
-      highlightRegionColor: "#d7cddc"
+      highlightRegionColor: "#d7cddc",
     },
     minimap: {
       hasShadow: true,
@@ -406,27 +410,27 @@ function getStyleConfig(styleConfig) {
         width: 90,
         landOutlineColor: "#b6b6be",
         landOutlineWidth: 0.5,
-        waterColor: "#cee9f2"
+        waterColor: "#cee9f2",
       },
       region: {
         width: 120,
         minWidth: 40,
         landOutlineColor: "#b6b6be",
-        landOutlineWidth: 0.5
-      }
+        landOutlineWidth: 0.5,
+      },
     },
     scale: {
       textSize: 11,
       textColor: "#6e6e7e",
       textHaloWidth: 1,
-      borderWidth: 1.5
+      borderWidth: 1.5,
     },
     aspectRatioBreakpoint: 450,
-    hasAttribution: true
+    hasAttribution: true,
   };
 
   return deepmerge(defaultStyleConfig, styleConfig, {
-    arrayMerge: (destinationArray, sourceArray, options) => sourceArray
+    arrayMerge: (destinationArray, sourceArray, options) => sourceArray,
   });
 }
 
@@ -444,5 +448,5 @@ module.exports = {
   getFeatures: getFeatures,
   getNumberMarkers: getNumberMarkers,
   getHash: getHash,
-  getMaxCache: getMaxCache
+  getMaxCache: getMaxCache,
 };

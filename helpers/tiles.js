@@ -2,6 +2,7 @@ const zlib = require("zlib");
 const util = require("util");
 const Boom = require("@hapi/boom");
 const mbtiles = util.promisify(require("@mapbox/mbtiles"));
+const sqlite3 = require("sqlite3");
 const vtpbf = require("vt-pbf");
 const geojsonvt = require("geojson-vt");
 const clone = require("clone");
@@ -9,10 +10,31 @@ const turf = require("@turf/turf");
 const shaver = require("@mapbox/vtshaver");
 const shave = util.promisify(shaver.shave);
 
-function getTileset(path) {
+async function getTileset(path) {
   try {
-    const tilesetPath = `${path}?mode=ro`;
-    return new mbtiles(tilesetPath);
+    const tileset = await new mbtiles(`${path}?mode=ro`);
+
+    // sqlite uses file locking which can often cause problems when accessing files via NFS:
+    //    "Do not use SQLite with NFS."
+    // Source: https://stackoverflow.com/a/9962003/1805388
+    //
+    // The following is a workaround to open the sqlite DB such that file locking is disabled.
+    // Note: This works only because we are never writing to the DB.
+    //
+    // Inside @mapbox/mbtiles, the sqlite DB is opened here: https://github.com/mapbox/node-mbtiles/blob/v0.11.0/lib/mbtiles.js#L69
+    // We re-open it below with file locking disabled, which makes it work over NFS with broken file locking.
+    //
+    // Relevant info from section "URI Filenames" in the documentation for sqlite3_open_v2():
+    // - If URI filename interpretation is enabled, and the filename argument begins with "file:", then the filename is interpreted as a URI.
+    // - URI filename interpretation is enabled if the SQLITE_OPEN_URI flag is set in the third argument to sqlite3_open_v2().
+    // - nolock: The nolock parameter is a boolean query parameter which if set disables file locking in rollback journal modes.
+    // Source: https://sqlite.org/c3ref/open.html
+    tileset._db = new sqlite3.Database(
+      `file:${path}?nolock=1`,
+      sqlite3.OPEN_READONLY | sqlite3.OPEN_URI
+    );
+
+    return tileset;
   } catch (error) {
     return error;
   }
