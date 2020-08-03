@@ -14,9 +14,9 @@ async function downloadTileset(url, path, size) {
   if (response.ok) {
     const progressStream = progress({
       length: size,
-      time: 1000 /* ms */
+      time: 1000 /* ms */,
     });
-    progressStream.on("progress", progress => {
+    progressStream.on("progress", (progress) => {
       console.log(`Progress: ${Math.round(progress.percentage * 10) / 10} %\r`);
     });
     response.body
@@ -61,6 +61,9 @@ async function main() {
         }
       }
     }
+
+    // Keep node process running forever
+    setInterval(() => {}, 1 << 30);
   } catch (error) {
     console.log(error);
   }
