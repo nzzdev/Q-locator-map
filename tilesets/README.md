@@ -13,7 +13,7 @@ The service can download or delete a tileset. It is designed to run once on a si
     "url": "https://openmaptiles.com/download/.eJwFwcERwCAIBMBefMvMCacJtWTyECL9l5Ddp23cLCIlToawQHHVkGuY2UoMsFpv27y4ywUrphAGucNT8CGXu-ZZs_VBur4_m44VEg.XSNhSQ.yP4kLh3nZelCDDTMnG_H_I9DDV8/osm-2019-06-24-v3.10-planet.mbtiles",
     "filename": "openmaptiles-2019-06-24-v3.10-planet.mbtiles",
     "delete": false,
-    "download": true,
+    "download": false,
     "size": 66330000000
   },
   "contours": {
