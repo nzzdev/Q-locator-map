@@ -9,16 +9,16 @@ const pointMark = {
   from: { data: "bbox" },
   encode: {
     update: {
-      fill: { signal: "bboxColor" }
-    }
+      fill: { signal: "bboxColor" },
+    },
   },
   transform: [
     {
       type: "geoshape",
       projection: "projection",
-      pointRadius: 2
-    }
-  ]
+      pointRadius: 2,
+    },
+  ],
 };
 const bboxMark = {
   type: "shape",
@@ -26,15 +26,15 @@ const bboxMark = {
   encode: {
     update: {
       stroke: { signal: "bboxColor" },
-      strokeWidth: 2
-    }
+      strokeWidth: 2,
+    },
   },
   transform: [
     {
       type: "geoshape",
-      projection: "projection"
-    }
-  ]
+      projection: "projection",
+    },
+  ],
 };
 
 function getGlobeVegaSpec(options) {
@@ -42,7 +42,7 @@ function getGlobeVegaSpec(options) {
   spec.height = options.styleConfig.globe.width;
   spec.width = options.styleConfig.globe.width;
   let bboxFeature = turf.rewind(turf.bboxPolygon(options.bounds), {
-    reverse: true
+    reverse: true,
   });
   const center = turf.getCoord(turf.centroid(bboxFeature));
   const areaRatio = turf.area(globeGeojson) / turf.area(bboxFeature);
@@ -60,60 +60,60 @@ function getGlobeVegaSpec(options) {
       encode: {
         update: {
           stroke: { signal: "landOutlineColor" },
-          strokeWidth: { signal: 0.5 }
-        }
+          strokeWidth: { signal: 0.5 },
+        },
       },
       transform: [
         {
           type: "geoshape",
-          projection: "projection"
-        }
-      ]
+          projection: "projection",
+        },
+      ],
     });
     spec.padding = 2;
   }
 
   spec.signals.push({
     name: "landColor",
-    value: options.styleConfig.landColor
+    value: options.styleConfig.landColor,
   });
   spec.signals.push({
     name: "landOutlineColor",
-    value: options.styleConfig.globe.landOutlineColor
+    value: options.styleConfig.globe.landOutlineColor,
   });
   spec.signals.push({
     name: "landOutlineWidth",
-    value: options.styleConfig.globe.landOutlineWidth
+    value: options.styleConfig.globe.landOutlineWidth,
   });
   spec.signals.push({
     name: "waterColor",
-    value: options.styleConfig.globe.waterColor
+    value: options.styleConfig.globe.waterColor,
   });
   spec.signals.push({
     name: "bboxColor",
-    value: options.styleConfig.bboxColor
+    value: options.styleConfig.bboxColor,
   });
   spec.signals.push({
     name: "rotate0",
-    value: center[0] * -1
+    value: center[0] * -1,
   });
   spec.signals.push({
     name: "rotate1",
-    value: center[1] * -1
+    value: center[1] * -1,
   });
   spec.data.push({
     name: "region",
     values: globeGeojson,
     format: {
-      type: "json"
-    }
+      type: "json",
+    },
   });
   spec.data.push({
     name: "bbox",
     values: bboxFeature,
     format: {
-      type: "json"
-    }
+      type: "json",
+    },
   });
 
   return spec;
@@ -126,10 +126,10 @@ function getDimensions(spec, bbox, options) {
   const maxY = bbox[3];
 
   const distanceX = turf.distance([minX, minY], [maxX, minY], {
-    units: "radians"
+    units: "radians",
   });
   const distanceY = turf.distance([maxX, minY], [maxX, maxY], {
-    units: "radians"
+    units: "radians",
   });
   let aspectRatio = 1;
   const defaultDimension = options.styleConfig.region.width;
@@ -150,7 +150,7 @@ function getDimensions(spec, bbox, options) {
   }
 
   const distance = turf.distance([minX, minY], [maxX, maxY], {
-    units: "radians"
+    units: "radians",
   });
   let scaleFactor = height / distance;
   if (width > height) {
@@ -160,14 +160,15 @@ function getDimensions(spec, bbox, options) {
   return {
     width: width,
     height: height,
-    scaleFactor: scaleFactor
+    scaleFactor: scaleFactor,
   };
 }
 
 async function getRegionVegaSpec(options) {
   const spec = JSON.parse(JSON.stringify(minimapRegionVegaSpec));
-  let bboxFeature = turf.bboxPolygon(options.bounds);
-
+  let bboxFeature = turf.rewind(turf.bboxPolygon(options.bounds), {
+    reverse: true,
+  });
   const region = await options.getGeodataGeojson(options.region.id);
   const center = turf.getCoord(turf.centerOfMass(region));
   const areaRatio = turf.area(region) / turf.area(bboxFeature);
@@ -189,47 +190,47 @@ async function getRegionVegaSpec(options) {
   }
   spec.signals.push({
     name: "projection",
-    value: projection
+    value: projection,
   });
   spec.signals.push({
     name: "landColor",
-    value: options.styleConfig.landColor
+    value: options.styleConfig.landColor,
   });
   spec.signals.push({
     name: "landOutlineColor",
-    value: options.styleConfig.region.landOutlineColor
+    value: options.styleConfig.region.landOutlineColor,
   });
   spec.signals.push({
     name: "landOutlineWidth",
-    value: options.styleConfig.region.landOutlineWidth
+    value: options.styleConfig.region.landOutlineWidth,
   });
   spec.signals.push({
     name: "textColor",
-    value: options.styleConfig.textColor
+    value: options.styleConfig.textColor,
   });
   spec.signals.push({
     name: "textFont",
-    value: `${options.styleConfig.textFont},nzz-sans-serif,Helvetica,Arial`
+    value: `${options.styleConfig.textFont},nzz-sans-serif,Helvetica,Arial`,
   });
   spec.signals.push({
     name: "textSize",
-    value: options.styleConfig.textSize
+    value: options.styleConfig.textSize,
   });
   spec.signals.push({
     name: "bboxColor",
-    value: options.styleConfig.bboxColor
+    value: options.styleConfig.bboxColor,
   });
   spec.signals.push({
     name: "scaleFactor",
-    value: dimensions.scaleFactor
+    value: dimensions.scaleFactor,
   });
   spec.signals.push({
     name: "rotate0",
-    value: center[0] * -1
+    value: center[0] * -1,
   });
   spec.signals.push({
     name: "rotate1",
-    value: center[1] * -1
+    value: center[1] * -1,
   });
 
   let label = "";
@@ -243,21 +244,21 @@ async function getRegionVegaSpec(options) {
 
   spec.signals.push({
     name: "label",
-    value: label
+    value: label,
   });
   spec.data.push({
     name: "region",
     values: region,
     format: {
-      type: "json"
-    }
+      type: "json",
+    },
   });
   spec.data.push({
     name: "bbox",
     values: bboxFeature,
     format: {
-      type: "json"
-    }
+      type: "json",
+    },
   });
 
   return spec;
@@ -278,5 +279,5 @@ async function getMinimap(options) {
 }
 
 module.exports = {
-  getMinimap: getMinimap
+  getMinimap: getMinimap,
 };
