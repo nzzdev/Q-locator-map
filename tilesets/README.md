@@ -40,6 +40,13 @@ The service can download or delete a tileset. It is designed to run once on a si
 }
 ```
 
+### Tileset URLs
+
+In order to update the tilesets, the following download URLs can be used:
+
+- For OpenMapTiles: Get URLs from the [download page](https://openmaptiles.com/downloads/planet/) (login with MapTiler/OpenMapTiles account)
+- For regions: Create a new release of [osm-regions](https://github.com/nzzdev/osm-regions) and get tiles from there
+
 ## Deployment
 
 The docker image can be built and uploaded by running the `build-docker.sh` script.
