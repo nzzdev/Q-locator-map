@@ -428,7 +428,7 @@ function addFeatures(style, data) {
     }
     return ascending;
   }, []);
-  const index = allSymbolIndices[1] || style.layers.length;
+  const index = allSymbolIndices[0] || style.layers.length;
   if (data.config.features.type === "vector") {
     style.sources[data.config.features.sourceName] = {
       type: "vector",
