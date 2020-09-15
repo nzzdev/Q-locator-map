@@ -21,13 +21,13 @@ const createFixtureData = require("./createFixtureData.js");
 function writeHashmap(hashmapPath, files, fileext) {
   const hashMap = {};
   files
-    .map(file => {
+    .map((file) => {
       const hash = crypto.createHash("md5");
       hash.update(file.content, { encoding: "utf8" });
       file.hash = hash.digest("hex");
       return file;
     })
-    .map(file => {
+    .map((file) => {
       hashMap[file.name] = `${file.name}.${file.hash.substring(
         0,
         8
@@ -40,7 +40,7 @@ function writeHashmap(hashmapPath, files, fileext) {
 async function compileStylesheet(name) {
   return new Promise((resolve, reject) => {
     const filePath = `${stylesDir}${name}.scss`;
-    fs.access(filePath, fs.constants.R_OK, err => {
+    fs.access(filePath, fs.constants.R_OK, (err) => {
       if (err) {
         reject(new Error(`stylesheet ${filePath} cannot be read`));
         process.exit(1);
@@ -48,7 +48,7 @@ async function compileStylesheet(name) {
       sass.render(
         {
           file: filePath,
-          outputStyle: "compressed"
+          outputStyle: "compressed",
         },
         (err, sassResult) => {
           if (err) {
@@ -59,9 +59,9 @@ async function compileStylesheet(name) {
               .use(autoprefixer)
               .use(cssnano)
               .process(sassResult.css, {
-                from: `${stylesDir}${name}.css`
+                from: `${stylesDir}${name}.css`,
               })
-              .then(prefixedResult => {
+              .then((prefixedResult) => {
                 if (prefixedResult.warnings().length > 0) {
                   console.log(`failed to compile stylesheet ${name}`);
                   process.exit(1);
@@ -81,11 +81,11 @@ async function buildStyles() {
     const styleFiles = [
       {
         name: "default",
-        content: await compileStylesheet("default")
-      }
+        content: await compileStylesheet("default"),
+      },
     ];
 
-    styleFiles.map(file => {
+    styleFiles.map((file) => {
       fs.writeFileSync(`styles/${file.name}.css`, file.content);
     });
 
@@ -105,19 +105,19 @@ async function buildScripts() {
         json({ namedExports: false }),
         buble({
           transforms: {
-            dangerousForOf: true
-          }
+            dangerousForOf: true,
+          },
         }),
         terser(),
         resolve({ browser: true }),
-        commonjs()
-      ]
+        commonjs(),
+      ],
     };
     const outputOptions = {
       format: "iife",
       name: "window._q_locator_map.LocatorMap",
       file: `scripts/${filename}.js`,
-      sourcemap: false
+      sourcemap: false,
     };
     // create the bundle and write it to disk
     const bundle = await rollup.rollup(inputOptions);
@@ -127,8 +127,8 @@ async function buildScripts() {
     const scriptFiles = [
       {
         name: filename,
-        content: output[0].code
-      }
+        content: output[0].code,
+      },
     ];
 
     writeHashmap("scripts/hashMap.json", scriptFiles, "js");
@@ -148,10 +148,10 @@ function buildFixtures() {
 }
 
 Promise.all([buildScripts(), buildStyles(), buildFixtures()])
-  .then(res => {
+  .then((res) => {
     console.log("build complete");
   })
-  .catch(err => {
+  .catch((err) => {
     console.error(err.message);
     process.exit(1);
   });
