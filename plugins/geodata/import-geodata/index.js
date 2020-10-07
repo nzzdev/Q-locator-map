@@ -9,11 +9,15 @@ const datasets = JSON.parse(process.env.DATASETS);
 
 function getGeojsons(geojsonPath) {
   const filenames = fs.readdirSync(geojsonPath);
-  const features = filenames.map(filename => {
-    const file = path.join(geojsonPath, filename);
-    const featureCollection = JSON.parse(fs.readFileSync(file));
-    return featureCollection.features[0];
-  });
+  const features = filenames
+    .filter((filename) => {
+      return path.extname(filename).toLowerCase() === ".json";
+    })
+    .map((filename) => {
+      const file = path.join(geojsonPath, filename);
+      const featureCollection = JSON.parse(fs.readFileSync(file));
+      return featureCollection.features[0];
+    });
   return features;
 }
 
@@ -22,7 +26,7 @@ async function saveGeojson(id, geojson, bearer) {
     const form = new FormData();
     form.append("file", JSON.stringify(geojson), {
       filename: `${id}.json`,
-      contentType: "application/json"
+      contentType: "application/json",
     });
     const formHeaders = form.getHeaders();
 
@@ -31,8 +35,8 @@ async function saveGeojson(id, geojson, bearer) {
       body: form,
       headers: {
         ...formHeaders,
-        Authorization: bearer
-      }
+        Authorization: bearer,
+      },
     });
     if (response.ok) {
       const json = await response.json();
@@ -52,7 +56,7 @@ async function saveVersion(id, version, dataset) {
     if (response.docs.length === 0) {
       const doc = {
         id: id,
-        versions: [version]
+        versions: [version],
       };
       return await db.insert(doc);
     } else {
@@ -74,7 +78,7 @@ async function getBearerToken() {
     const password = await promptly.password(
       "Enter your livingdocs password: ",
       {
-        replace: "*"
+        replace: "*",
       }
     );
 
@@ -84,8 +88,8 @@ async function getBearerToken() {
         method: "POST",
         body: JSON.stringify({
           username: process.env.LD_USERNAME,
-          password: password.trim()
-        })
+          password: password.trim(),
+        }),
       }
     );
     if (response.ok) {
@@ -120,14 +124,14 @@ async function saveGeodata(geojson, dataset, bearer) {
         validFrom: dataset.validFrom,
         source: {
           url: dataset.source.url,
-          label: dataset.source.label
+          label: dataset.source.label,
         },
         format: {
-          geojson: url
-        }
+          geojson: url,
+        },
       };
       const response = await saveVersion(id, version, dataset);
-      if (response.ok) {
+      if (response.status === "success") {
         console.log(`Successfully stored ${id}`);
       } else {
         throw new Error(`${id} couldn't be saved: ${JSON.stringify(response)}`);
@@ -149,7 +153,7 @@ async function main() {
         let geojsons = getGeojsons(geojsonPath);
         if (dataset.item) {
           geojsons = geojsons.filter(
-            geojson => geojson.properties[dataset.id] === dataset.item
+            (geojson) => geojson.properties[dataset.id] === dataset.item
           );
         }
         for (let geojson of geojsons) {
