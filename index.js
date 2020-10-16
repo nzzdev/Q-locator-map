@@ -10,14 +10,14 @@ const resourcesDir = "./resources/";
 const serverMethodCacheOptions = {
   expiresIn: 7 * 24 * 60 * 60 * 1000,
   cache: "memoryCache",
-  generateTimeout: 2 * 1000
+  generateTimeout: 2 * 1000,
 };
 
 const server = Hapi.server({
   port: process.env.PORT || 3000,
   routes: {
-    cors: true
-  }
+    cors: true,
+  },
 });
 
 const routes = require("./routes/routes.js");
@@ -29,10 +29,10 @@ async function init() {
         constructor: require("@hapi/catbox-memory"),
         options: {
           partition: "memoryCache",
-          maxByteSize: process.env.MEMORY_CACHE_SIZE || 1000000000 // ~ 1GB
-        }
+          maxByteSize: process.env.MEMORY_CACHE_SIZE || 1000000000, // ~ 1GB
+        },
       },
-      name: "memoryCache"
+      name: "memoryCache",
     });
     const tilesets = JSON.parse(process.env.TILESETS);
     for (let [key, value] of Object.entries(tilesets)) {
@@ -53,7 +53,9 @@ async function init() {
         server.app.tilesets[key].tileset.getTile = util.promisify(
           server.app.tilesets[key].tileset.getTile
         );
-        server.app.tilesets[key].hash = await helpers.getHash(value.path);
+        const nameMapping = require(`${resourcesDir}config/nameMapping.json`);
+        nameMapping.path = value.path;
+        server.app.tilesets[key].hash = await helpers.getHash(nameMapping);
       }
     }
 
@@ -64,20 +66,20 @@ async function init() {
     server.app.styles = {
       basic: {
         style: basicStyle,
-        hash: await helpers.getHash(basicStyle)
+        hash: await helpers.getHash(basicStyle),
       },
       minimal: {
         style: minimalStyle,
-        hash: await helpers.getHash(minimalStyle)
+        hash: await helpers.getHash(minimalStyle),
       },
       nature: {
         style: natureStyle,
-        hash: await helpers.getHash(natureStyle)
+        hash: await helpers.getHash(natureStyle),
       },
       satellite: {
         style: satelliteStyle,
-        hash: await helpers.getHash(satelliteStyle)
-      }
+        hash: await helpers.getHash(satelliteStyle),
+      },
     };
 
     const sprite1x = fs.readFileSync(`${resourcesDir}sprites/sprites@1x.png`);
@@ -87,35 +89,35 @@ async function init() {
       "1x": {
         png: sprite1x,
         json: require(`${resourcesDir}sprites/sprites@1x.json`),
-        hash: await helpers.getHash(sprite1x)
+        hash: await helpers.getHash(sprite1x),
       },
       "2x": {
         png: sprite2x,
         json: require(`${resourcesDir}sprites/sprites@2x.json`),
-        hash: await helpers.getHash(sprite2x)
+        hash: await helpers.getHash(sprite2x),
       },
       "4x": {
         png: sprite4x,
         json: require(`${resourcesDir}sprites/sprites@4x.json`),
-        hash: await helpers.getHash(sprite4x)
-      }
+        hash: await helpers.getHash(sprite4x),
+      },
     };
 
     server.method("getTile", tileHelpers.getTile, {
       bind: {
         tilesets: server.app.tilesets,
-        styles: server.app.styles
+        styles: server.app.styles,
       },
-      cache: serverMethodCacheOptions
+      cache: serverMethodCacheOptions,
     });
 
     server.method("getTilesetTile", tileHelpers.getTilesetTile, {
       bind: {
-        helpers: helpers
+        helpers: helpers,
       },
       generateKey: (item, qId, z, x, y) =>
         `${qId}_${item.updatedDate}_${z}_${x}_${y}`,
-      cache: serverMethodCacheOptions
+      cache: serverMethodCacheOptions,
     });
 
     if (server.app.tilesets["regions"]) {
@@ -147,18 +149,18 @@ async function init() {
       server.method("getRegionSuggestions", helpers.getRegionSuggestions, {
         bind: {
           server: server,
-          tiles: tiles
+          tiles: tiles,
         },
-        cache: serverMethodCacheOptions
+        cache: serverMethodCacheOptions,
       });
     }
 
     server.method("getFont", helpers.getFont, {
-      cache: serverMethodCacheOptions
+      cache: serverMethodCacheOptions,
     });
 
     server.method("getGeodataGeojson", geodataHelpers.getGeodataGeojson, {
-      cache: serverMethodCacheOptions
+      cache: serverMethodCacheOptions,
     });
 
     await server.register(require("@hapi/inert"));

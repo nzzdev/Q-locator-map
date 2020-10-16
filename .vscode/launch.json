@@ -8,7 +8,8 @@
       "type": "node",
       "request": "launch",
       "name": "Debug locator map tool",
-      "program": "${workspaceFolder}/dev.js"
+      "program": "${workspaceFolder}/dev.js",
+      "runtimeVersion": "10.21.0"
     },
     {
       "type": "node",
