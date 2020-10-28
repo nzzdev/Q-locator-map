@@ -10,8 +10,13 @@
     "url": "https://github.com/nzzdev/Q-locator-map.git"
   },
   "dependencies": {
+    "@mapbox/mbtiles": "^0.12.1",
+    "@mapbox/tile-decorator": "^4.0.0",
+    "@mapbox/tilelive": "^6.1.0",
     "fs-extra": "^8.1.0",
     "node-fetch": "^2.6.0",
-    "progress-stream": "^2.0.0"
+    "progress-stream": "^2.0.0",
+    "stream-transform": "^2.0.2",
+    "zlib": "^1.0.5"
   }
 }
