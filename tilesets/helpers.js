@@ -3,10 +3,13 @@ const zlib = require("zlib");
 const decorator = require("@mapbox/tile-decorator");
 const util = require("util");
 
-const nameMapping = {
-  Weißrussland: "Weissrussland",
+const nameMappings = {
   Moldawien: "Moldau",
   Schweiz: "CHANGED",
+};
+
+const replaceMappings = {
+  ß: "ss",
 };
 
 const labelLayerList = [
@@ -18,7 +21,7 @@ const labelLayerList = [
   "water_name",
   "waterway",
 ];
-const nameWhitelist = ["name", "name:de"];
+const nameAllowlist = ["name", "name:de"];
 
 function getValueIndices(layer, key) {
   const keyIndex = layer.keys.indexOf(key);
@@ -39,14 +42,18 @@ function getValueIndices(layer, key) {
 }
 
 function getValue(layer, key, valueIndex) {
-  const currentValue = layer.values[valueIndex];
-  if (key === "name" && nameMapping[currentValue]) {
-    return nameMapping[currentValue];
-  } else if (key === "name:de" && nameMapping[currentValue]) {
-    return nameMapping[currentValue];
-  } else {
-    return layer.values[valueIndex];
+  let currentValue = layer.values[valueIndex];
+  if (["name", "name:de"].includes(key)) {
+    if (nameMappings[currentValue]) {
+      return nameMappings[currentValue];
+    }
+
+    for (const [key, value] of Object.entries(replaceMappings)) {
+      currentValue = currentValue.replace(new RegExp(key, "gi"), value);
+    }
   }
+
+  return currentValue;
 }
 
 function getChangedValues(layer) {
@@ -68,7 +75,7 @@ function getFilteredTile(tile) {
       const keysToKeep = layer.keys.filter((key) => {
         return (
           !key.startsWith("name") ||
-          (key.startsWith("name") && nameWhitelist.includes(key))
+          (key.startsWith("name") && nameAllowlist.includes(key))
         );
       });
       decorator.selectLayerKeys(layer, keysToKeep);
