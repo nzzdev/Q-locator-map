@@ -27,7 +27,9 @@
       "type": "node",
       "request": "launch",
       "name": "Debug tilesets script",
-      "program": "${workspaceFolder}/tilesets/dev.js"
+      "program": "${workspaceFolder}/tilesets/dev.js",
+      "cwd": "${workspaceFolder}/tilesets/",
+      "runtimeVersion": "12.18.0"
     }
   ]
 }
