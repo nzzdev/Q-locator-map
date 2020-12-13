@@ -2,15 +2,7 @@ const transform = require("stream-transform");
 const zlib = require("zlib");
 const decorator = require("@mapbox/tile-decorator");
 const util = require("util");
-
-const nameMappings = {
-  Moldawien: "Moldau",
-  Schweiz: "CHANGED",
-};
-
-const replaceMappings = {
-  ß: "ss",
-};
+const mapping = require("./mapping.json");
 
 const labelLayerList = [
   "aerodrom_label",
@@ -21,7 +13,7 @@ const labelLayerList = [
   "water_name",
   "waterway",
 ];
-const nameAllowlist = ["name", "name:de"];
+const nameAllowlist = ["name:latin", "name:de"];
 
 function getValueIndices(layer, key) {
   const keyIndex = layer.keys.indexOf(key);
@@ -42,15 +34,17 @@ function getValueIndices(layer, key) {
 }
 
 function getValue(layer, key, valueIndex) {
-  let currentValue = layer.values[valueIndex];
-  if (["name", "name:de"].includes(key)) {
-    if (nameMappings[currentValue]) {
-      return nameMappings[currentValue];
+  const currentValue = layer.values[valueIndex];
+  if (nameAllowlist.includes(key)) {
+    if (mapping.nameMapping[currentValue]) {
+      return mapping.nameMapping[currentValue];
     }
 
-    for (const [key, value] of Object.entries(replaceMappings)) {
-      currentValue = currentValue.replace(new RegExp(key, "gi"), value);
+    let currentValueCopy = currentValue.slice();
+    for (const [key, value] of Object.entries(mapping.replaceMapping)) {
+      currentValueCopy = currentValueCopy.replace(new RegExp(key, "gi"), value);
     }
+    return currentValueCopy;
   }
 
   return currentValue;
