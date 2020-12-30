@@ -9,7 +9,6 @@ const mbtiles = require("@mapbox/mbtiles");
 const rmdir = util.promisify(fs.rmdir);
 const move = util.promisify(require("mv"));
 const unlink = util.promisify(fs.unlink);
-const path = require("path");
 const { getTransformStream, report } = require("./helpers.js");
 
 mbtiles.registerProtocols(tilelive);
@@ -81,23 +80,21 @@ async function main() {
           if (process.env.ENV === "local") {
             directory = "./data/";
           }
-          if (tileset.transform) {
-            directory = "./transform/";
-            await rmdir(directory, { recursive: true });
-          }
-          const tilesetPath = path.join(directory, tileset.filename);
+          const tilesetPath = `${directory}${tileset.filename}`;
           if (tileset.download && tileset.url) {
             await downloadTileset(tileset.url, tilesetPath, tileset.size);
           }
 
           if (tileset.transform) {
-            await transformTileset(tilesetPath);
-            let destinationPath = `/data/${tileset.filename}`;
-            if (process.env.ENV === "local") {
-              destinationPath = `./data/${tileset.filename}`;
-            }
-            await move(`./${tilesetPath}-transformed`, destinationPath);
-            await rmdir(directory, { recursive: true });
+            await move(tilesetPath, `./transform/${tileset.filename}`, {
+              mkdirp: true,
+            });
+            await transformTileset(`./transform/${tileset.filename}`);
+            await move(
+              `./transform/${tileset.filename}-transformed`,
+              tilesetPath
+            );
+            await rmdir("./transform/", { recursive: true });
           }
           if (
             !tileset.download &&
