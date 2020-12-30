@@ -13,7 +13,6 @@ const path = require("path");
 const { getTransformStream, report } = require("./helpers.js");
 
 mbtiles.registerProtocols(tilelive);
-process.env.UV_THREADPOOL_SIZE = 8;
 
 async function downloadTileset(url, path, size) {
   try {
