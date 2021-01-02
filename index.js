@@ -53,9 +53,7 @@ async function init() {
         server.app.tilesets[key].tileset.getTile = util.promisify(
           server.app.tilesets[key].tileset.getTile
         );
-        const nameMapping = require(`${resourcesDir}config/nameMapping.json`);
-        nameMapping.path = value.path;
-        server.app.tilesets[key].hash = await helpers.getHash(nameMapping);
+        server.app.tilesets[key].hash = await helpers.getHash(value.path);
       }
     }
 

@@ -11,6 +11,7 @@ const move = util.promisify(require("mv"));
 const unlink = util.promisify(fs.unlink);
 const { getTransformStream, report } = require("./helpers.js");
 
+process.env.UV_THREADPOOL_SIZE = 8;
 mbtiles.registerProtocols(tilelive);
 
 async function downloadTileset(url, path, size) {

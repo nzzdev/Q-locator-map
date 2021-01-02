@@ -9,8 +9,6 @@ const clone = require("clone");
 const turf = require("@turf/turf");
 const shaver = require("@mapbox/vtshaver");
 const shave = util.promisify(shaver.shave);
-const decorator = require("@mapbox/tile-decorator");
-const nameMapping = require("../resources/config/nameMapping.json");
 
 async function getTileset(path) {
   try {
@@ -42,82 +40,9 @@ async function getTileset(path) {
   }
 }
 
-const labelLayerList = [
-  "aerodrom_label",
-  "mountain_peak",
-  "place",
-  "poi",
-  "transportation_name",
-  "water_name",
-  "waterway",
-];
-const nameWhitelist = ["name", "name:de"];
-
-function getValueIndices(layer, key) {
-  var keyIndex = layer.keys.indexOf(key);
-  var valueIndices = new Set();
-
-  for (var i = 0; i < layer.features.length; i++) {
-    var tags = layer.features[i].tags;
-    for (var j = 0; j < tags.length; j += 2) {
-      if (tags[j] === keyIndex) {
-        var value = layer.values[tags[j + 1]];
-        if (value !== undefined) valueIndices.add(tags[j + 1]);
-        else throw new Error(key + " not found");
-        break;
-      }
-    }
-  }
-  return valueIndices;
-}
-
-function getValue(layer, key, valueIndex) {
-  const currentValue = layer.values[valueIndex];
-  if (key === "name" && nameMapping[currentValue]) {
-    return nameMapping[currentValue];
-  } else if (key === "name:de" && nameMapping[currentValue]) {
-    return nameMapping[currentValue];
-  } else {
-    return layer.values[valueIndex];
-  }
-}
-
-function getChangedValues(layer) {
-  layer.keys.forEach((key) => {
-    const valueIndices = getValueIndices(layer, key);
-    for (let valueIndex of valueIndices.values()) {
-      layer.values[valueIndex] = getValue(layer, key, valueIndex);
-    }
-  });
-  return layer.values;
-}
-
-function getFilteredTile(tile) {
-  tile.layers
-    .filter((layer) => {
-      return labelLayerList.includes(layer.name);
-    })
-    .forEach((layer) => {
-      const keysToKeep = layer.keys.filter((key) => {
-        return (
-          !key.startsWith("name") ||
-          (key.startsWith("name") && nameWhitelist.includes(key))
-        );
-      });
-      decorator.selectLayerKeys(layer, keysToKeep);
-      delete layer.keyLookup;
-      delete layer.valLookup;
-      layer.values = getChangedValues(layer);
-    });
-  return tile;
-}
-
 async function getTile(hash, tileset, z, x, y, styleName, optimize) {
   try {
-    let tile = await this.tilesets[tileset].tileset.getTile(z, x, y);
-    tile = decorator.write(
-      getFilteredTile(decorator.read(zlib.gunzipSync(tile)))
-    );
+    const tile = await this.tilesets[tileset].tileset.getTile(z, x, y);
     if (styleName && optimize) {
       const filters = new shaver.Filters(
         shaver.styleToFilters(this.styles[styleName].style)
