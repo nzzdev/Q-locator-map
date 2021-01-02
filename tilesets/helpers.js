@@ -113,13 +113,13 @@ function report(stats, p) {
 }
 
 function formatDuration(duration) {
-  var seconds = duration % 60;
+  let seconds = duration % 60;
   duration -= seconds;
-  var minutes = (duration % 3600) / 60;
+  let minutes = (duration % 3600) / 60;
   duration -= minutes * 60;
-  var hours = (duration % 86400) / 3600;
+  let hours = (duration % 86400) / 3600;
   duration -= hours * 3600;
-  var days = duration / 86400;
+  let days = duration / 86400;
 
   return (
     (days > 0 ? days + "d " : "") +
