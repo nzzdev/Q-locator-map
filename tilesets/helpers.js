@@ -42,8 +42,9 @@ function getValue(layer, key, valueIndex) {
 
     let currentValueCopy = currentValue.slice();
     for (const [key, value] of Object.entries(mapping.replaceMapping)) {
-      currentValueCopy = currentValueCopy.replace(new RegExp(key, "gi"), value);
+      currentValueCopy = currentValueCopy.replace(new RegExp(key, "g"), value);
     }
+
     return currentValueCopy;
   }
 
