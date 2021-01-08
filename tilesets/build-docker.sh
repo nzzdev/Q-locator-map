@@ -1,6 +1,6 @@
 #!/bin/bash
 DOCKER_IMAGE_NAME="q-locator-map-tilesets"
-DOCKER_TAG="v1.1.0"
+DOCKER_TAG="v1.1.1"
 echo "DOCKER TAG is '$DOCKER_TAG'"
 read -p "Enter dockerhub username:" DOCKER_USERNAME
 read -s -p "Enter dockerhub password: " DOCKER_PASSWORD
