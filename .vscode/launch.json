@@ -8,7 +8,8 @@
       "type": "node",
       "request": "launch",
       "name": "Debug locator map tool",
-      "program": "${workspaceFolder}/dev.js"
+      "program": "${workspaceFolder}/dev.js",
+      "runtimeVersion": "10.21.0"
     },
     {
       "type": "node",
@@ -21,6 +22,14 @@
       "request": "launch",
       "name": "Debug generate-sprites script",
       "program": "${workspaceFolder}/resources/sprites/generateSprites.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug tilesets script",
+      "program": "${workspaceFolder}/tilesets/dev.js",
+      "cwd": "${workspaceFolder}/tilesets/",
+      "runtimeVersion": "12.18.0"
     }
   ]
 }

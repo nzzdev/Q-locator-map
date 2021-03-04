@@ -1,6 +1,6 @@
 {
   "name": "q-locator-map-tilesets",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "description": "Service to manage tilesets for the q-locator-maps tool",
   "main": "index.js",
   "author": "",
@@ -10,8 +10,14 @@
     "url": "https://github.com/nzzdev/Q-locator-map.git"
   },
   "dependencies": {
+    "@mapbox/mbtiles": "^0.12.1",
+    "@mapbox/tile-decorator": "^4.0.0",
+    "@mapbox/tilelive": "^6.1.0",
     "fs-extra": "^8.1.0",
+    "mv": "^2.1.1",
     "node-fetch": "^2.6.0",
-    "progress-stream": "^2.0.0"
+    "progress-stream": "^2.0.0",
+    "stream-transform": "^2.0.2",
+    "zlib": "^1.0.5"
   }
 }
