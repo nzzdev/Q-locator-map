@@ -59,13 +59,13 @@
 
 {#if item.options.labelsBelowMap === true}
   <div
-    class="q-locator-map-labels {item.options.labelsBelowMapOneRow === true ? 'q-locator-map-labels--one-row' : ''}">
+    class="s-q-item__annotation-legend s-font-note {item.options.labelsBelowMapOneRow === true ? 'q-locator-map-labels--one-row' : ''}">
     {#each numberedLabels as label}
-      <div class="q-locator-map-labels__label s-font-note">
-        <div class="q-locator-map-labels__icon" style={labelIconStyle}>
+      <div class="s-q-item__annotation-legend__item">
+        <div class="s-q-item__annotation-legend__item__icon">
           {@html label.icon}
         </div>
-        <div>{label.text}</div>
+        <div class="s-q-item__annotation-legend__item__label">{label.text}</div>
       </div>
     {/each}
   </div>
