@@ -1,12 +1,14 @@
 <script>
-  export let item;
-  export let config;
-  export let numberMarkers;
+  import AnnotationPoint from "./AnnotationPoint.svelte";
 
-  const labelWidth = 18 * config.styleConfig.markers.iconSize;
-  const labelIconStyle = `height: ${labelWidth}px; width: ${labelWidth}px;`;
+  export let item;
+  export let annotationRadius = 8;
+
+  let x = "50%";
+  let y = "50%";
+
   let numberedLabels = item.geojsonList
-    .map(item => {
+    .map((item) => {
       if (!item.hasOwnProperty("type")) {
         return undefined;
       }
@@ -25,7 +27,7 @@
       }
       return features;
     }, [])
-    .filter(feature => {
+    .filter((feature) => {
       return (
         feature.hasOwnProperty("geometry") &&
         feature.geometry.type === "Point" &&
@@ -35,37 +37,30 @@
         )
       );
     })
-    .map((feature, index) => {
-      const number = index + 1;
-      const numberMarker = numberMarkers.find(numberMarker => {
-        return `number-${number}` === numberMarker.id;
-      });
-      if (numberMarker) {
-        return {
-          text: feature.properties.label,
-          icon: numberMarker.svg
-        };
-      } else {
-        return {
-          text: feature.properties.label,
-          icon: ""
-        };
-      }
-    })
-    .filter(label => {
+    .map((feature, index) => ({
+      id: index + 1,
+      text: feature.properties.label,
+    }))
+    .filter((label) => {
       return label !== null;
     });
 </script>
 
 {#if item.options.labelsBelowMap === true}
   <div
-    class="s-q-item__annotation-legend s-font-note {item.options.labelsBelowMapOneRow === true ? 'q-locator-map-labels--one-row' : ''}">
-    {#each numberedLabels as label}
+    class="s-q-item__annotation-legend s-font-note {item.options
+      .labelsBelowMapOneRow === true
+      ? 'q-locator-map-labels--one-row'
+      : ''}"
+  >
+    {#each numberedLabels as { id, text }}
       <div class="s-q-item__annotation-legend__item">
         <div class="s-q-item__annotation-legend__item__icon">
-          {@html label.icon}
+          <svg width="1.4em" height="1.4em">
+            <AnnotationPoint {id} radius={annotationRadius} {x} {y} />
+          </svg>
         </div>
-        <div class="s-q-item__annotation-legend__item__label">{label.text}</div>
+        <div class="s-q-item__annotation-legend__item__label">{text}</div>
       </div>
     {/each}
   </div>

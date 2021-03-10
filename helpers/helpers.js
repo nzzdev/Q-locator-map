@@ -266,21 +266,6 @@ async function getFeatures(geojsonList, itemStateInDb, labelsBelowMap) {
   return features;
 }
 
-function getNumberMarkers() {
-  return glob
-    .sync(
-      path.resolve(
-        path.join(__dirname, "../resources/sprites/marker/number-*.svg")
-      )
-    )
-    .map((f) => {
-      return {
-        id: path.basename(f).replace(".svg", ""),
-        svg: fs.readFileSync(f).toString("utf8"),
-      };
-    });
-}
-
 function getStyleConfig(styleConfig) {
   let defaultStyleConfig = {
     colors: {
@@ -446,7 +431,6 @@ module.exports = {
   getFont: getFont,
   getRegionSuggestions: getRegionSuggestions,
   getFeatures: getFeatures,
-  getNumberMarkers: getNumberMarkers,
   getHash: getHash,
   getMaxCache: getMaxCache,
 };

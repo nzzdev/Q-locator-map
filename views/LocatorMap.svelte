@@ -1,13 +1,12 @@
 <script>
   import Header from "./Header.svelte";
   import Legend from "./Legend.svelte";
-  import LabelsBelowMap from "./LabelsBelowMap.svelte";
+  import AnnotationsLegend from "./Annotations/AnnotationsLegend.svelte";
   import Footer from "./Footer.svelte";
   export let id;
   export let item;
   export let displayOptions;
   export let config;
-  export let numberMarkers;
 </script>
 
 <div
@@ -39,6 +38,6 @@
       </span>
     </div>
   {/if}
-  <LabelsBelowMap {item} {config} {numberMarkers} />
+  <AnnotationsLegend {item}  />
   <Footer {item} />
 </div>
