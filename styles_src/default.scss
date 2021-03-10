@@ -15,31 +15,14 @@
   text-align: center;
 }
 
-.q-locator-map-labels {
-  margin-top: 8px;
-}
-
-.q-locator-map-labels__label {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  margin-top: 4px;
-
-  .q-locator-map-labels__icon {
-    display: flex;
-    align-items: center;
-    margin-right: 4px;
-  }
-}
-
 .q-locator-map-labels--one-row {
   display: flex;
-  flex-wrap: wrap;
+  flex-flow: row wrap;
   margin-top: 4px;
   margin-left: -8px;
   align-content: center;
 
-  .q-locator-map-labels__label {
+  .s-q-item__annotation-legend__item {
     padding-left: 8px;
   }
 }
