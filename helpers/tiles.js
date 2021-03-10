@@ -51,8 +51,8 @@ async function getTile(hash, tileset, z, x, y, styleName, optimize) {
         filters: filters,
         zoom: z,
         compress: {
-          type: "gzip"
-        }
+          type: "gzip",
+        },
       };
       return await shave(tile, options);
     } else {
@@ -73,8 +73,8 @@ function wrapNum(x, range, includeMax) {
 }
 
 function normalizeCoordinates(geojsonList, range) {
-  return clone(geojsonList).map(function(geojson) {
-    turf.coordEach(geojson, currentCoord => {
+  return clone(geojsonList).map(function (geojson) {
+    turf.coordEach(geojson, (currentCoord) => {
       currentCoord[0] = wrapNum(currentCoord[0], range, true);
     });
     return geojson;
@@ -92,14 +92,14 @@ const antimeridianArea = {
         [335, -90],
         [335, 90],
         [70, 90],
-        [70, -90]
-      ]
-    ]
+        [70, -90],
+      ],
+    ],
   },
   bbox: [
     [70, -90],
-    [335, 90]
-  ]
+    [335, 90],
+  ],
 };
 
 const regularArea = {
@@ -113,18 +113,18 @@ const regularArea = {
         [-25, -90],
         [-25, 90],
         [70, 90],
-        [70, -90]
-      ]
-    ]
+        [70, -90],
+      ],
+    ],
   },
   bbox: [
     [70, -90],
-    [-25, 90]
-  ]
+    [-25, 90],
+  ],
 };
 
 function insideArea(geojsonList, area) {
-  return geojsonList.every(geojson => {
+  return geojsonList.every((geojson) => {
     try {
       const center = turf.center(geojson);
       return turf.booleanContains(area, center);
@@ -156,21 +156,21 @@ async function getTilesetTile(item, qId, z, x, y) {
     const geojsonList = getTransformedGeoJSON(item.geojsonList);
     const features = await this.helpers.getFeatures(geojsonList);
     const tileObject = {};
-    features.points.forEach(feature => {
+    features.points.forEach((feature) => {
       const tileIndex = geojsonvt(feature.geojson);
       const tile = tileIndex.getTile(z, x, y);
       if (tile) {
         tileObject[feature.id] = tile;
       }
     });
-    features.linestrings.forEach(feature => {
+    features.linestrings.forEach((feature) => {
       const tileIndex = geojsonvt(feature.geojson);
       const tile = tileIndex.getTile(z, x, y);
       if (tile) {
         tileObject[feature.id] = tile;
       }
     });
-    features.polygons.forEach(feature => {
+    features.polygons.forEach((feature) => {
       const tileIndex = geojsonvt(feature.geojson);
       const tile = tileIndex.getTile(z, x, y);
       if (tile) {
@@ -187,5 +187,5 @@ module.exports = {
   getTileset: getTileset,
   getTile: getTile,
   getTilesetTile: getTilesetTile,
-  transformCoordinates: transformCoordinates
+  transformCoordinates: transformCoordinates,
 };

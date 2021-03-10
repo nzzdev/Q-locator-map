@@ -7,7 +7,6 @@ const scriptsDir = "../../scripts/";
 const scriptHashMap = require(`${scriptsDir}/hashMap.json`);
 const viewsDir = `${__dirname}/../../views/`;
 const helpers = require("../../helpers/helpers.js");
-const numberMarkers = helpers.getNumberMarkers();
 
 // setup svelte
 require("svelte/register");
@@ -78,8 +77,7 @@ module.exports = {
         toolRuntimeConfig,
         request.server.app
       ),
-      width: helpers.getExactPixelWidth(toolRuntimeConfig),
-      numberMarkers: numberMarkers,
+      width: helpers.getExactPixelWidth(toolRuntimeConfig)
     };
 
     const renderingInfo = {
