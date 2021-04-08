@@ -119,51 +119,6 @@ function getGlobeVegaSpec(options) {
   return spec;
 }
 
-function getDimensions(spec, bbox, options) {
-  const minX = bbox[0];
-  const minY = bbox[1];
-  const maxX = bbox[2];
-  const maxY = bbox[3];
-
-  const distanceX = turf.distance([minX, minY], [maxX, minY], {
-    units: "radians",
-  });
-  const distanceY = turf.distance([maxX, minY], [maxX, maxY], {
-    units: "radians",
-  });
-  let aspectRatio = 1;
-  const defaultDimension = options.styleConfig.region.width;
-  const minDimension = options.styleConfig.region.minWidth;
-  let width;
-  let height;
-  const padding = 8;
-  if (distanceX > distanceY) {
-    aspectRatio = distanceY / distanceX;
-    width = defaultDimension;
-    height = defaultDimension * aspectRatio + padding;
-    if (height < minDimension) height = minDimension;
-  } else if (distanceX < distanceY) {
-    aspectRatio = distanceX / distanceY;
-    width = defaultDimension * aspectRatio + padding;
-    if (width < minDimension) width = minDimension;
-    height = defaultDimension;
-  }
-
-  const distance = turf.distance([minX, minY], [maxX, maxY], {
-    units: "radians",
-  });
-  let scaleFactor = height / distance;
-  if (width > height) {
-    scaleFactor = width / distance;
-  }
-
-  return {
-    width: width,
-    height: height,
-    scaleFactor: scaleFactor,
-  };
-}
-
 async function getRegionVegaSpec(options) {
   const spec = JSON.parse(JSON.stringify(minimapRegionVegaSpec));
   let bboxFeature = turf.rewind(turf.bboxPolygon(options.bounds), {
@@ -178,10 +133,13 @@ async function getRegionVegaSpec(options) {
   } else {
     spec.marks.push(bboxMark);
   }
+  
   const bbox = turf.bbox(region);
-  const dimensions = getDimensions(spec, bbox, options);
-  spec.width = dimensions.width;
-  spec.height = dimensions.height;
+  const defaultDimension = options.styleConfig.region.width;
+  const distance = turf.distance([bbox[0], bbox[1]], [bbox[2], bbox[3]], {
+    units: "radians",
+  });
+  const scaleFactor = defaultDimension / distance;
 
   let projection = "azimuthalEqualArea";
   // Use albersUsa projection for usa region (wikidataId: Q30)
@@ -222,7 +180,7 @@ async function getRegionVegaSpec(options) {
   });
   spec.signals.push({
     name: "scaleFactor",
-    value: dimensions.scaleFactor,
+    value: scaleFactor,
   });
   spec.signals.push({
     name: "rotate0",

@@ -1,7 +1,7 @@
 import Sprites from "../resources/sprites/sprites@1x.json";
 import turfBBox from "@turf/bbox";
 import turfBooleanPointInPolygon from "@turf/boolean-point-in-polygon";
-import turfHelpers from "@turf/helpers";
+import * as turfHelpers from "@turf/helpers";
 
 export function getStyle(data) {
   return fetch(
