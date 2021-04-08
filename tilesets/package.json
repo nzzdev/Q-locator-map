@@ -15,7 +15,7 @@
     "@mapbox/tilelive": "^6.1.0",
     "fs-extra": "^8.1.0",
     "mv": "^2.1.1",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "progress-stream": "^2.0.0",
     "stream-transform": "^2.0.2",
     "zlib": "^1.0.5"
