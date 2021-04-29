@@ -271,9 +271,9 @@ function getStyleConfig(styleConfig) {
     colors: {
       basic: {
         background: "#f0f0f2",
-        water: "#cee9f2",
-        waterText: "#0093bf",
-        waterway: "#add8e6",
+        water: "#d0e2ec",
+        waterText: "#428cb3",
+        waterway: "#d0e2ec",
         forest: "#99c7a3",
         road: "#dfe0e5",
         railway: "#d8d9db",
@@ -286,7 +286,7 @@ function getStyleConfig(styleConfig) {
       minimal: {
         background: "#f0f0f2",
         water: "#cee1e6",
-        waterText: "#0093bf",
+        waterText: "#428cb3",
         waterway: "#d6d6d6",
         forest: "#e6e9e5",
         road: "#f5f5f5",
@@ -297,9 +297,9 @@ function getStyleConfig(styleConfig) {
       },
       nature: {
         background: "#edece1",
-        water: "#cee9f2",
-        waterText: "#0093bf",
-        waterway: "#add8e6",
+        water: "#d0e2ec",
+        waterText: "#428cb3",
+        waterway: "#d0e2ec",
         forest: "#99c7a3",
         road: "#dbdad1",
         railway: "#d9d9d9",
@@ -311,7 +311,7 @@ function getStyleConfig(styleConfig) {
       satellite: {
         background: "#f0f0f2",
         water: "#cee1e6",
-        waterText: "#0093bf",
+        waterText: "#428cb3",
         waterway: "#d6d6d6",
         forest: "#e6e9e5",
         road: "#f5f5f5",
@@ -395,7 +395,7 @@ function getStyleConfig(styleConfig) {
         width: 90,
         landOutlineColor: "#b6b6be",
         landOutlineWidth: 0.5,
-        waterColor: "#cee9f2",
+        waterColor: "#d0e2ec",
       },
       region: {
         width: 120,

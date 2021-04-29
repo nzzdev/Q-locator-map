@@ -102,8 +102,8 @@ toolRuntimeConfig: {
     colors: {
       basic: {
         background: "#f0f0f2",
-        water: "#cee9f2",
-        waterText: "#0093bf",
+        water: "#d0e2ec",
+        waterText: "#428cb3",
         waterway: "#add8e6",
         forest: "#99c7a3",
         road: "#dfe0e5",
@@ -117,7 +117,7 @@ toolRuntimeConfig: {
       minimal: {
         background: "#f0f0f2",
         water: "#cee1e6",
-        waterText: "#0093bf",
+        waterText: "#428cb3",
         waterway: "#d6d6d6",
         forest: "#e6e9e5",
         road: "#f5f5f5",
@@ -128,8 +128,8 @@ toolRuntimeConfig: {
       },
       nature: {
         background: "#edece1",
-        water: "#cee9f2",
-        waterText: "#0093bf",
+        water: "#d0e2ec",
+        waterText: "#428cb3",
         waterway: "#add8e6",
         forest: "#99c7a3",
         road: "#dbdad1",
@@ -142,7 +142,7 @@ toolRuntimeConfig: {
       satellite: {
         background: "#f0f0f2",
         water: "#cee1e6",
-        waterText: "#0093bf",
+        waterText: "#428cb3",
         waterway: "#d6d6d6",
         forest: "#e6e9e5",
         road: "#f5f5f5",
@@ -226,7 +226,7 @@ toolRuntimeConfig: {
         width: 90,
         landOutlineColor: "#b6b6be",
         landOutlineWidth: 0.5,
-        waterColor: "#cee9f2"
+        waterColor: "#d0e2ec"
       },
       region: {
         width: 120,
