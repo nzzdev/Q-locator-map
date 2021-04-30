@@ -20,22 +20,20 @@
   {#if config.styleConfig.hasAttribution}
     <div
       class="q-locator-map-attribution s-font-note-s s-font-note-s--light">
-      <span class="s-color-gray-6">
-        Kartengrundlage:
-        <span>
-          <a
-            href="https://www.openstreetmap.org/copyright"
-            target="_blank"
-            rel="noopener noreferrer">
-            &copy; Openstreetmap,
-          </a>
-          <a
-            href="https://www.maptiler.com/copyright/"
-            target="_blank"
-            rel="noopener noreferrer">
-            &copy; Maptiler
-          </a>
-        </span>
+      Kartengrundlage:
+      <span>
+        <a
+          href="https://www.openstreetmap.org/copyright"
+          target="_blank"
+          rel="noopener noreferrer">
+          &copy; Openstreetmap,
+        </a>
+        <a
+          href="https://www.maptiler.com/copyright/"
+          target="_blank"
+          rel="noopener noreferrer">
+          &copy; Maptiler
+        </a>
       </span>
     </div>
   {/if}
