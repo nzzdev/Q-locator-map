@@ -19,8 +19,7 @@
   <div id="{id}_container" class="q-locator-map-container" />
   {#if config.styleConfig.hasAttribution}
     <div
-      class="q-locator-map-attribution s-font-note-s s-font-note-s--light
-      s-color-gray-6">
+      class="q-locator-map-attribution s-font-note-s s-font-note-s--light">
       Kartengrundlage:
       <span>
         <a
