@@ -310,9 +310,9 @@ function getStyleConfig(styleConfig) {
       },
       satellite: {
         background: "#f0f0f2",
-        water: "#cee1e6",
+        water: "#d0e2ec",
         waterText: "#428cb3",
-        waterway: "#d6d6d6",
+        waterway: "#d0e2ec",
         forest: "#e6e9e5",
         road: "#f5f5f5",
         railway: "#d8d8d8",
