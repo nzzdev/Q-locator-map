@@ -92,8 +92,7 @@
       "source-layer": "water",
       "filter": ["==", "$type", "Polygon"],
       "paint": {
-        "fill-color": "{colorWater}",
-        "fill-outline-color": "#e9f5f6"
+        "fill-color": "{colorWater}"
       }
     },
     {

@@ -106,7 +106,6 @@
       "filter": ["all", ["==", "class", "wood"]],
       "paint": {
         "fill-color": "{colorForest}",
-        "fill-outline-color": "{colorForest}",
         "fill-opacity": 0.25,
         "fill-translate": [1, 1]
       }
@@ -120,7 +119,6 @@
       "filter": ["all", ["==", "$type", "Polygon"], ["==", "class", "ice"]],
       "paint": {
         "fill-color": "#ffffff",
-        "fill-outline-color": "#ffffff",
         "fill-opacity": {
           "base": 1,
           "stops": [
@@ -149,7 +147,6 @@
       "filter": ["all", ["==", "$type", "Polygon"]],
       "paint": {
         "fill-color": "{colorWater}",
-        "fill-outline-color": "#a8bdcc",
         "fill-translate": [1, 1]
       }
     },
