@@ -335,7 +335,7 @@ function getPointStyleProperties(geojsonProperties, styleConfig) {
 
   // handling of labels below map
   if (geojsonProperties.type.includes("number")) {
-    const maxNumberMarker = 20;
+    const maxNumberMarker = 30;
     if (geojsonProperties.index <= maxNumberMarker) {
       properties.textField = "";
     } else if (geojsonProperties.index > maxNumberMarker) {
