@@ -9,7 +9,6 @@ module.exports = [
     options: {
       description: "Returns list of fonts",
       tags: ["api"],
-      cors: true
     },
     handler: async function(request, h) {
       return [

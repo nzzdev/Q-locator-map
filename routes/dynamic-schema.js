@@ -9,7 +9,6 @@ module.exports = {
     validate: {
       payload: Joi.object()
     },
-    cors: true
   },
   handler: async function(request, h) {
     try {
