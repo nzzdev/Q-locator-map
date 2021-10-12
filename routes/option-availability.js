@@ -1,5 +1,5 @@
 const Boom = require("@hapi/boom");
-const Joi = require("@hapi/joi");
+const Joi = require("joi");
 
 function hasLabelsBelowMap(item) {
   return item.options.labelsBelowMap === true;
@@ -14,27 +14,27 @@ module.exports = {
   path: "/option-availability/{optionName}",
   options: {
     validate: {
-      payload: Joi.object()
+      payload: Joi.object(),
     },
-    cors: true
+    cors: true,
   },
-  handler: function(request, h) {
+  handler: function (request, h) {
     const item = request.payload.item;
 
     if (request.params.optionName === "labelsBelowMapOneRow") {
       return {
-        available: hasLabelsBelowMap(item) && hasMoreThanOneLabel(item)
+        available: hasLabelsBelowMap(item) && hasMoreThanOneLabel(item),
       };
     }
     if (request.params.optionName === "minimap-options") {
       return {
-        available: item.options.minimap.showMinimap
+        available: item.options.minimap.showMinimap,
       };
     }
 
     if (request.params.optionName === "region") {
       return {
-        available: item.options.minimap.options.type === "region"
+        available: item.options.minimap.options.type === "region",
       };
     }
 
@@ -43,10 +43,10 @@ module.exports = {
         available:
           item.options.dimension &&
           item.options.dimension.bbox &&
-          item.options.dimension.bbox.length === 4
+          item.options.dimension.bbox.length === 4,
       };
     }
 
     return Boom.badRequest();
-  }
+  },
 };

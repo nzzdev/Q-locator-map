@@ -1,4 +1,5 @@
 const Hapi = require("@hapi/hapi");
+const Joi = require("joi");
 const fs = require("fs");
 const util = require("util");
 const fetch = require("node-fetch");
@@ -161,6 +162,7 @@ async function init() {
     });
 
     await server.register(require("@hapi/inert"));
+    server.validator(Joi);
     server.route(routes);
 
     await server.start();

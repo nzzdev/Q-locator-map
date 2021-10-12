@@ -1,4 +1,4 @@
-const Joi = require("@hapi/joi");
+const Joi = require("joi");
 const Boom = require("@hapi/boom");
 const minimapHelpers = require("../helpers/minimap.js");
 const helpers = require("../helpers/helpers.js");
@@ -11,27 +11,25 @@ module.exports = {
     tags: ["api"],
     validate: {
       params: {
-        type: Joi.string().required()
+        type: Joi.string().required(),
       },
       query: {
-        bounds: Joi.array()
-          .length(4)
-          .items(Joi.number()),
+        bounds: Joi.array().length(4).items(Joi.number()),
         styleConfig: Joi.object().required(),
         toolBaseUrl: Joi.string().required(),
         regionId: Joi.string().optional(),
-        regionLabel: Joi.string().optional()
-      }
-    }
+        regionLabel: Joi.string().optional(),
+      },
+    },
   },
-  handler: async function(request, h) {
+  handler: async function (request, h) {
     try {
       const options = {
         type: request.params.type,
         bounds: request.query.bounds,
         styleConfig: request.query.styleConfig,
         region: {},
-        getGeodataGeojson: request.server.methods.getGeodataGeojson
+        getGeodataGeojson: request.server.methods.getGeodataGeojson,
       };
 
       if (options.type === "region") {
@@ -43,12 +41,12 @@ module.exports = {
 
       return h
         .response({
-          markup: markup
+          markup: markup,
         })
         .type("application/json")
         .header("cache-control", helpers.getMaxCache());
     } catch (error) {
       return Boom.notFound();
     }
-  }
+  },
 };

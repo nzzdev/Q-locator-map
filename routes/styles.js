@@ -1,4 +1,4 @@
-const Joi = require("@hapi/joi");
+const Joi = require("joi");
 const Boom = require("@hapi/boom");
 const helpers = require("../helpers/helpers.js");
 
@@ -11,8 +11,8 @@ module.exports = {
     validate: {
       params: {
         hash: Joi.string().required(),
-        id: Joi.string().required()
-      }
+        id: Joi.string().required(),
+      },
     },
     handler: async (request, h) => {
       const id = request.params.id;
@@ -26,6 +26,6 @@ module.exports = {
       } else {
         return Boom.notFound();
       }
-    }
-  }
+    },
+  },
 };

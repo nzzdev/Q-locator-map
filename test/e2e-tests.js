@@ -1,6 +1,7 @@
 const Lab = require("@hapi/lab");
 const Code = require("@hapi/code");
 const Hapi = require("@hapi/hapi");
+const Joi = require("joi");
 const lab = (exports.lab = Lab.script());
 process.env.OPENCAGE_APIKEY = "test";
 
@@ -20,7 +21,7 @@ const routes = require("../routes/routes.js");
 
 const fixturesDir = "../resources/fixtures/data";
 const fixtureData = require("../tasks/createFixtureData.js");
-const fixtures = Object.keys(fixtureData).map(fixture =>
+const fixtures = Object.keys(fixtureData).map((fixture) =>
   require(`${fixturesDir}/${fixture}.json`)
 );
 
@@ -32,19 +33,19 @@ const toolRuntimeConfig = {
       fontBaseUrl:
         "http://localhost:3001/tools/locator_map/files/locator_map/fonts/",
       fontSansLight: {
-        name: "GT-America-Standard-Light"
+        name: "GT-America-Standard-Light",
       },
       fontSansRegular: {
-        name: "GT-America-Standard-Regular"
+        name: "GT-America-Standard-Regular",
       },
       fontSansMedium: {
-        name: "GT-America-Standard-Medium"
+        name: "GT-America-Standard-Medium",
       },
       fontSerifRegular: {
-        name: "PensumPro-Regular-Italic"
-      }
-    }
-  }
+        name: "PensumPro-Regular-Italic",
+      },
+    },
+  },
 };
 
 before(async () => {
@@ -52,46 +53,47 @@ before(async () => {
     server = Hapi.server({
       port: process.env.PORT || 3000,
       routes: {
-        cors: true
-      }
+        cors: true,
+      },
     });
     await server.register(require("@hapi/inert"));
+    server.validator(Joi);
     server.route(routes);
     server.app.styles = {
       basic: {
         style: basicStyle,
-        hash: await helpers.getHash(basicStyle)
+        hash: await helpers.getHash(basicStyle),
       },
       minimal: {
         style: minimalStyle,
-        hash: await helpers.getHash(minimalStyle)
+        hash: await helpers.getHash(minimalStyle),
       },
       nature: {
         style: natureStyle,
-        hash: await helpers.getHash(natureStyle)
+        hash: await helpers.getHash(natureStyle),
       },
       satellite: {
         style: satelliteStyle,
-        hash: await helpers.getHash(satelliteStyle)
-      }
+        hash: await helpers.getHash(satelliteStyle),
+      },
     };
 
     server.app.sprites = {
       "1x": {
         png: {},
         json: {},
-        hash: "hash"
+        hash: "hash",
       },
       "2x": {
         png: {},
         json: {},
-        hash: "hash"
+        hash: "hash",
       },
       "4x": {
         png: {},
         json: {},
-        hash: "hash"
-      }
+        hash: "hash",
+      },
     };
   } catch (err) {
     expect(err).to.not.exist();
@@ -125,7 +127,7 @@ lab.experiment("locales endpoint", () => {
   it("returns 200 for en translations", async () => {
     const request = {
       method: "GET",
-      url: "/locales/en/translation.json"
+      url: "/locales/en/translation.json",
     };
     const response = await server.inject(request);
     expect(response.statusCode).to.be.equal(200);
@@ -133,7 +135,7 @@ lab.experiment("locales endpoint", () => {
   it("returns 200 for fr translations", async () => {
     const request = {
       method: "GET",
-      url: "/locales/fr/translation.json"
+      url: "/locales/fr/translation.json",
     };
     const response = await server.inject(request);
     expect(response.statusCode).to.be.equal(200);
@@ -141,7 +143,7 @@ lab.experiment("locales endpoint", () => {
   it("returns 200 for de translations", async () => {
     const request = {
       method: "GET",
-      url: "/locales/de/translation.json"
+      url: "/locales/de/translation.json",
     };
     const response = await server.inject(request);
     expect(response.statusCode).to.be.equal(200);
@@ -169,7 +171,7 @@ lab.experiment("stylesheets endpoint", () => {
 });
 
 // all the fixtures render
-lab.experiment("all fixtures render", async () => {
+lab.experiment("all fixtures render", () => {
   for (let fixture of fixtures) {
     it(`doesnt fail in rendering fixture ${fixture.title}`, async () => {
       const request = {
@@ -177,8 +179,8 @@ lab.experiment("all fixtures render", async () => {
         url: "/rendering-info/web",
         payload: {
           item: fixture,
-          toolRuntimeConfig: toolRuntimeConfig
-        }
+          toolRuntimeConfig: toolRuntimeConfig,
+        },
       };
       const response = await server.inject(request);
       expect(response.statusCode).to.be.equal(200);
@@ -194,10 +196,10 @@ lab.experiment("rendering-info", () => {
       payload: {
         item: {
           some: "object",
-          that: "doesn't validate against the schema"
+          that: "doesn't validate against the schema",
         },
-        toolRuntimeConfig: toolRuntimeConfig
-      }
+        toolRuntimeConfig: toolRuntimeConfig,
+      },
     };
     const response = await server.inject(request);
     expect(response.statusCode).to.be.equal(400);
@@ -211,8 +213,8 @@ lab.experiment("assets", () => {
       method: "POST",
       payload: {
         item: fixtures[0],
-        toolRuntimeConfig: toolRuntimeConfig
-      }
+        toolRuntimeConfig: toolRuntimeConfig,
+      },
     });
     const stylesheetRes = await server.inject(
       `/stylesheet/${res.result.stylesheets[0].name}`

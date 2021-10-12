@@ -1,5 +1,5 @@
 const Boom = require("@hapi/boom");
-const Joi = require("@hapi/joi");
+const Joi = require("joi");
 const turf = require("@turf/turf");
 
 module.exports = {
@@ -7,30 +7,31 @@ module.exports = {
   path: "/dynamic-schema/{optionName}",
   options: {
     validate: {
-      payload: Joi.object()
+      payload: Joi.object(),
     },
-    cors: true
+    cors: true,
   },
-  handler: async function(request, h) {
+  handler: async function (request, h) {
     try {
       const item = request.payload.item;
 
       if (request.params.optionName === "region") {
         let regions = [];
 
-        const centerPoints = item.geojsonList.map(geojson => {
+        const centerPoints = item.geojsonList.map((geojson) => {
           return turf.center(geojson);
         });
 
         for (const centerPoint of centerPoints) {
           const coordinates = centerPoint.geometry.coordinates;
-          const regionSuggestions = await request.server.methods.getRegionSuggestions(
-            coordinates[0],
-            coordinates[1]
-          );
+          const regionSuggestions =
+            await request.server.methods.getRegionSuggestions(
+              coordinates[0],
+              coordinates[1]
+            );
           for (let regionSuggestion of regionSuggestions) {
             const index = regions.findIndex(
-              region => region.id === regionSuggestion.id
+              (region) => region.id === regionSuggestion.id
             );
             if (index === -1) {
               regions.push(regionSuggestion);
@@ -39,17 +40,17 @@ module.exports = {
         }
 
         return {
-          enum: regions.map(region => region.id),
+          enum: regions.map((region) => region.id),
           "Q:options": {
-            enum_titles: regions.map(region => region.label)
-          }
+            enum_titles: regions.map((region) => region.label),
+          },
         };
       } else if (request.params.optionName === "bounds") {
         // calculate a bouding box of all features
         let boundsPolygon = turf.bboxPolygon(
           turf.bbox(
             turf.featureCollection(
-              item.geojsonList.map(feature =>
+              item.geojsonList.map((feature) =>
                 turf.bboxPolygon(turf.bbox(feature))
               )
             )
@@ -66,13 +67,13 @@ module.exports = {
         return {
           bounds: [
             [bounds[0], bounds[1]],
-            [bounds[2], bounds[3]]
-          ]
+            [bounds[2], bounds[3]],
+          ],
         };
       }
     } catch (error) {
       return Boom.badRequest();
     }
     return Boom.badRequest();
-  }
+  },
 };
