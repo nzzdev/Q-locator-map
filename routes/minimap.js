@@ -3,6 +3,45 @@ const Boom = require("@hapi/boom");
 const minimapHelpers = require("../helpers/minimap.js");
 const helpers = require("../helpers/helpers.js");
 
+const Bourne = require("@hapi/bourne");
+const customJoi = Joi.extend(
+  {
+    type: "object",
+    base: Joi.object(),
+    coerce: {
+      from: "string",
+      method(value, helpers) {
+        if (value[0] !== "{" && !/^\s*\{/.test(value)) {
+          return;
+        }
+
+        try {
+          return { value: Bourne.parse(value) };
+        } catch (ignoreErr) {}
+      },
+    },
+  },
+  {
+    type: "array",
+    base: Joi.array(),
+    coerce: {
+      from: "string",
+      method(value) {
+        if (
+          typeof value !== "string" ||
+          (value[0] !== "[" && !/^\s*\[/.test(value))
+        ) {
+          return;
+        }
+
+        try {
+          return { value: Bourne.parse(value) };
+        } catch (ignoreErr) {}
+      },
+    },
+  }
+);
+
 module.exports = {
   method: "GET",
   path: "/minimap/{type}",
@@ -14,8 +53,8 @@ module.exports = {
         type: Joi.string().required(),
       },
       query: {
-        bounds: Joi.array().length(4).items(Joi.number()),
-        styleConfig: Joi.object().required(),
+        bounds: customJoi.array().length(4).items(Joi.number()),
+        styleConfig: customJoi.object().required(),
         toolBaseUrl: Joi.string().required(),
         regionId: Joi.string().optional(),
         regionLabel: Joi.string().optional(),
