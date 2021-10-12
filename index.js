@@ -104,7 +104,6 @@ async function init() {
     server.method("getTile", tileHelpers.getTile, {
       bind: {
         tilesets: server.app.tilesets,
-        styles: server.app.styles,
       },
       cache: serverMethodCacheOptions,
     });
