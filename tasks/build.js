@@ -8,11 +8,11 @@ const postcssImport = require("postcss-import");
 const autoprefixer = require("autoprefixer");
 const cssnano = require("cssnano");
 const rollup = require("rollup");
-const buble = require("rollup-plugin-buble");
+const buble = require("@rollup/plugin-buble");
 const { terser } = require("rollup-plugin-terser");
-const resolve = require("rollup-plugin-node-resolve");
-const commonjs = require("rollup-plugin-commonjs");
-const json = require("rollup-plugin-json");
+const { nodeResolve } = require("@rollup/plugin-node-resolve");
+const commonjs = require("@rollup/plugin-commonjs");
+const json = require("@rollup/plugin-json");
 
 const stylesDir = `${__dirname}/../styles_src/`;
 const scriptsDir = `${__dirname}/../scripts_src/`;
@@ -103,13 +103,9 @@ async function buildScripts() {
       input: `${scriptsDir}${filename}.js`,
       plugins: [
         json({ namedExports: false }),
-        buble({
-          transforms: {
-            dangerousForOf: true,
-          },
-        }),
+        buble({ transforms: { dangerousForOf: true } }),
         terser(),
-        resolve({ browser: true }),
+        nodeResolve({ browser: true }),
         commonjs(),
       ],
     };

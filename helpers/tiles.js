@@ -7,8 +7,6 @@ const vtpbf = require("vt-pbf");
 const geojsonvt = require("geojson-vt");
 const clone = require("clone");
 const turf = require("@turf/turf");
-const shaver = require("@mapbox/vtshaver");
-const shave = util.promisify(shaver.shave);
 
 async function getTileset(path) {
   try {
@@ -40,24 +38,9 @@ async function getTileset(path) {
   }
 }
 
-async function getTile(hash, tileset, z, x, y, styleName, optimize) {
+async function getTile(hash, tileset, z, x, y) {
   try {
-    const tile = await this.tilesets[tileset].tileset.getTile(z, x, y);
-    if (styleName && optimize) {
-      const filters = new shaver.Filters(
-        shaver.styleToFilters(this.styles[styleName].style)
-      );
-      const options = {
-        filters: filters,
-        zoom: z,
-        compress: {
-          type: "gzip",
-        },
-      };
-      return await shave(tile, options);
-    } else {
-      return tile;
-    }
+    return await this.tilesets[tileset].tileset.getTile(z, x, y);
   } catch (error) {
     return Boom.notFound();
   }

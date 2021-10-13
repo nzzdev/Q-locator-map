@@ -5,7 +5,7 @@
     "openmaptiles": {
       "type": "vector",
       "tiles": [
-        "{toolBaseUrl}/tiles/{openmaptilesHash}/openmaptiles/{z}/{x}/{y}.pbf?style={styleName}&optimize=true"
+        "{toolBaseUrl}/tiles/{openmaptilesHash}/openmaptiles/{z}/{x}/{y}.pbf"
       ],
       "minzoom": 0,
       "maxzoom": 14,

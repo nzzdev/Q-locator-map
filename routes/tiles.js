@@ -1,4 +1,4 @@
-const Joi = require("@hapi/joi");
+const Joi = require("joi");
 const Boom = require("@hapi/boom");
 const fetch = require("node-fetch");
 const helpers = require("../helpers/helpers.js");
@@ -16,19 +16,11 @@ module.exports = {
         z: Joi.number().required(),
         x: Joi.number().required(),
         y: Joi.number().required(),
-        extension: Joi.string().required()
-      },
-      query: {
-        style: Joi.string()
-          .optional()
-          .default(""),
-        optimize: Joi.boolean()
-          .optional()
-          .default(false)
+        extension: Joi.string().required(),
       },
       options: {
-        allowUnknown: true
-      }
+        allowUnknown: true,
+      },
     },
     handler: async (request, h) => {
       const hash = request.params.hash;
@@ -36,8 +28,6 @@ module.exports = {
       const z = request.params.z;
       const x = request.params.x;
       const y = request.params.y;
-      const style = request.query.style;
-      const optimize = request.query.optimize;
       const extension = request.params.extension;
 
       try {
@@ -45,16 +35,11 @@ module.exports = {
           request.server.app.tilesets[id] &&
           request.server.app.tilesets[id].url
         ) {
-          let tileUrl = request.server.app.tilesets[id].url
+          const tileUrl = request.server.app.tilesets[id].url
             .replace("{z}", z)
             .replace("{x}", x)
             .replace("{y}", y);
 
-          if (style && optimize) {
-            tileUrl = tileUrl
-              .replace("{styleName}", style)
-              .replace("{optimize}", optimize);
-          }
           const response = await fetch(tileUrl);
           if (response.ok) {
             if (extension === "png") {
@@ -72,15 +57,7 @@ module.exports = {
             throw new Error(response);
           }
         } else {
-          const tile = await request.server.methods.getTile(
-            hash,
-            id,
-            z,
-            x,
-            y,
-            style,
-            optimize
-          );
+          const tile = await request.server.methods.getTile(hash, id, z, x, y);
           if (extension === "png") {
             return h
               .response(tile)
@@ -97,6 +74,6 @@ module.exports = {
       } catch (error) {
         return Boom.notFound();
       }
-    }
-  }
+    },
+  },
 };

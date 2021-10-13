@@ -1,4 +1,4 @@
-const Joi = require("@hapi/joi");
+const Joi = require("joi");
 const Boom = require("@hapi/boom");
 const helpers = require("../helpers/helpers.js");
 
@@ -15,11 +15,11 @@ module.exports = {
         qId: Joi.string().required(),
         z: Joi.number().required(),
         x: Joi.number().required(),
-        y: Joi.number().required()
+        y: Joi.number().required(),
       },
       options: {
-        allowUnknown: true
-      }
+        allowUnknown: true,
+      },
     },
     handler: async (request, h) => {
       try {
@@ -44,6 +44,6 @@ module.exports = {
       } catch (error) {
         return Boom.notFound();
       }
-    }
-  }
+    },
+  },
 };
