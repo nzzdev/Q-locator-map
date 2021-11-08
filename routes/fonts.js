@@ -1,4 +1,4 @@
-const Joi = require("@hapi/joi");
+const Joi = require("joi");
 const Boom = require("@hapi/boom");
 const helpers = require("../helpers/helpers.js");
 
@@ -10,16 +10,16 @@ module.exports = [
       description: "Returns list of fonts",
       tags: ["api"],
     },
-    handler: async function(request, h) {
+    handler: async function (request, h) {
       return [
         "GT-America-Standard-Light",
         "GT-America-Standard-Regular",
         "GT-America-Standard-Medium",
         "PensumPro-Regular-Italic",
         "UniversLTStd-LightCn",
-        "UniversNextPro-MediumCond"
+        "UniversNextPro-MediumCond",
       ];
-    }
+    },
   },
   {
     method: "GET",
@@ -32,14 +32,14 @@ module.exports = [
           hash: Joi.string().required(),
           fontstack: Joi.string().required(),
           start: Joi.number().required(),
-          end: Joi.number().required()
+          end: Joi.number().required(),
         },
         query: {
-          fontBaseUrl: Joi.string().required()
-        }
-      }
+          fontBaseUrl: Joi.string().required(),
+        },
+      },
     },
-    handler: async function(request, h) {
+    handler: async function (request, h) {
       try {
         const hash = request.params.hash;
         const fontBaseUrl = request.query.fontBaseUrl;
@@ -61,6 +61,6 @@ module.exports = [
       } catch (error) {
         return Boom.notFound();
       }
-    }
-  }
+    },
+  },
 ];

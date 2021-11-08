@@ -1,4 +1,4 @@
-const Joi = require("@hapi/joi");
+const Joi = require("joi");
 const Boom = require("@hapi/boom");
 const helpers = require("../helpers/helpers.js");
 
@@ -12,11 +12,11 @@ module.exports = {
       params: {
         hash: Joi.string().required(),
         id: Joi.string().required(),
-        extension: Joi.string().required()
-      }
-    }
+        extension: Joi.string().required(),
+      },
+    },
   },
-  handler: function(request, h) {
+  handler: function (request, h) {
     try {
       let id = request.params.id;
       const sprites = request.server.app.sprites;
@@ -38,5 +38,5 @@ module.exports = {
     } catch (error) {
       return Boom.notFound();
     }
-  }
+  },
 };
