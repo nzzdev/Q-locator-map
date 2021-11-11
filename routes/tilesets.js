@@ -8,7 +8,6 @@ module.exports = {
   options: {
     description: "Returns the tileset in pbf format",
     tags: ["api"],
-    cors: true,
     validate: {
       params: {
         hash: Joi.string().required(),
