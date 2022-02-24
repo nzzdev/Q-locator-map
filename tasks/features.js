@@ -1,329 +1,368 @@
 const points = {
+  crimeaHeavyTop: {
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: [33.6704814596219, 45.75738557088067],
+    },
+    properties: {
+      type: "point",
+      label: "Crimea",
+      labelPosition: "top",
+      useForInitialView: true,
+    },
+  },
+  volgogradHeavyTop: {
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: [44.5133, 48.708],
+    },
+    properties: {
+      label: "Volgograd",
+      type: "point",
+      labelPosition: "top",
+      useForInitialView: true,
+    },
+  },
+  ukraineHeavyTop: {
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: [31.009584505772523, 49.457188301871895],
+    },
+    properties: {
+      type: "point",
+      label: "Ukraine",
+      labelPosition: "top",
+      useForInitialView: true,
+    },
+  },
   bucharestHeavyTop: {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [26.1, 44.43333333]
+      coordinates: [26.1, 44.43333333],
     },
     properties: {
       label: "Bukarest",
       type: "point",
       labelPosition: "top",
-      useForInitialView: true
-    }
+      useForInitialView: true,
+    },
   },
   sofiaHeavyBottom: {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [23.316667, 42.68333333]
+      coordinates: [23.316667, 42.68333333],
     },
     properties: {
       label: "Sofia",
       type: "point",
       labelPosition: "bottom",
-      useForInitialView: true
-    }
+      useForInitialView: true,
+    },
   },
   honoluluHeavyTop: {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [-157.8556764, 21.304547]
+      coordinates: [-157.8556764, 21.304547],
     },
     properties: {
       label: "Honolulu",
       type: "point",
       labelPosition: "top",
-      useForInitialView: true
-    }
+      useForInitialView: true,
+    },
   },
   tokioHeavyTop: {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [139.4049033, 34.6968642]
+      coordinates: [139.4049033, 34.6968642],
     },
     properties: {
       label: "Tokio",
       type: "point",
       labelPosition: "top",
-      useForInitialView: true
-    }
+      useForInitialView: true,
+    },
   },
   zurichHeavyTop: {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [8.540008664131166, 47.38041593812454]
+      coordinates: [8.540008664131166, 47.38041593812454],
     },
     properties: {
       label: "oben",
       type: "point",
       labelPosition: "top",
-      useForInitialView: true
-    }
+      useForInitialView: true,
+    },
   },
   zurichHeavyBottom: {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [8.540553823113443, 47.374801772543734]
+      coordinates: [8.540553823113443, 47.374801772543734],
     },
     properties: {
       label: "unten",
       type: "point",
       labelPosition: "bottom",
-      useForInitialView: true
-    }
+      useForInitialView: true,
+    },
   },
   zurichHeavyLeft: {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [8.536566048860552, 47.37704678398289]
+      coordinates: [8.536566048860552, 47.37704678398289],
     },
     properties: {
       label: "links",
       type: "point",
       labelPosition: "left",
-      useForInitialView: true
-    }
+      useForInitialView: true,
+    },
   },
   zurichHeavyRight: {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [8.543513640761377, 47.377138053663884]
+      coordinates: [8.543513640761377, 47.377138053663884],
     },
     properties: {
       label: "rechts",
       type: "point",
       labelPosition: "right",
-      useForInitialView: true
-    }
+      useForInitialView: true,
+    },
   },
   zurichHeavyTopRight: {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [8.545700311660768, 47.378964776293124]
+      coordinates: [8.545700311660768, 47.378964776293124],
     },
     properties: {
       label: "obenrechts",
       type: "point",
       labelPosition: "topright",
-      useForInitialView: true
-    }
+      useForInitialView: true,
+    },
   },
   zurichHeavyTopLeft: {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [8.535035178065302, 47.37910644341264]
+      coordinates: [8.535035178065302, 47.37910644341264],
     },
     properties: {
       label: "obenlinks",
       type: "point",
       labelPosition: "topleft",
-      useForInitialView: true
-    }
+      useForInitialView: true,
+    },
   },
   zurichHeavyBottomLeft: {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [8.537571206688883, 47.37489577069226]
+      coordinates: [8.537571206688883, 47.37489577069226],
     },
     properties: {
       label: "untenlinks",
       type: "point",
       labelPosition: "bottomleft",
-      useForInitialView: true
-    }
+      useForInitialView: true,
+    },
   },
   zurichHeavyBottomRight: {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [8.54492448270321, 47.37463193971521]
+      coordinates: [8.54492448270321, 47.37463193971521],
     },
     properties: {
       label: "untenrechts",
       type: "point",
       labelPosition: "bottomright",
-      useForInitialView: true
-    }
+      useForInitialView: true,
+    },
   },
   tiranaLightTop: {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [19.816667, 41.31666667]
+      coordinates: [19.816667, 41.31666667],
     },
     properties: {
       label: "Tirana",
       type: "point",
       labelPosition: "top",
-      useForInitialView: true
-    }
+      useForInitialView: true,
+    },
   },
   yerevanLightBottom: {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [44.5, 40.16666667]
+      coordinates: [44.5, 40.16666667],
     },
     properties: {
       label: "Jerewan",
       type: "point",
       labelPosition: "bottom",
-      useForInitialView: true
-    }
+      useForInitialView: true,
+    },
   },
   sarajevoOnlyTop: {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [18.416667, 43.86666667]
+      coordinates: [18.416667, 43.86666667],
     },
     properties: {
       label: "Sarajevo",
       type: "point",
       labelPosition: "top",
-      useForInitialView: true
-    }
+      useForInitialView: true,
+    },
   },
   zagrebOnlyBottom: {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [16, 45.8]
+      coordinates: [16, 45.8],
     },
     properties: {
       label: "Zagreb",
       type: "point",
       labelPosition: "bottom",
-      useForInitialView: true
-    }
+      useForInitialView: true,
+    },
   },
   pragueLabelTop: {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [14.466667, 50.08333333]
+      coordinates: [14.466667, 50.08333333],
     },
     properties: {
       label: "Prag",
       type: "label",
       labelPosition: "top",
-      useForInitialView: true
-    }
+      useForInitialView: true,
+    },
   },
   tiflisLabelBottom: {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [44.833333, 41.68333333]
+      coordinates: [44.833333, 41.68333333],
     },
     properties: {
       label: "Tiflis",
       type: "label",
       labelPosition: "bottom",
-      useForInitialView: true
-    }
+      useForInitialView: true,
+    },
   },
   athensEventTop: {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [23.733333, 37.98333333]
+      coordinates: [23.733333, 37.98333333],
     },
     properties: {
       label: "Athen",
       type: "event",
       labelPosition: "top",
-      useForInitialView: true
-    }
+      useForInitialView: true,
+    },
   },
   budapestEventBottom: {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [19.083333, 47.5]
+      coordinates: [19.083333, 47.5],
     },
     properties: {
       label: "Budapest",
       type: "event",
       labelPosition: "bottom",
-      useForInitialView: true
-    }
+      useForInitialView: true,
+    },
   },
   bernEpicenter: {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [7.4514512, 46.9482713]
+      coordinates: [7.4514512, 46.9482713],
     },
     properties: {
       label: "Budapest",
       type: "epicenter",
       labelPosition: "top",
-      useForInitialView: true
-    }
+      useForInitialView: true,
+    },
   },
   romaniaCountry: {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [24.621384253754172, 45.97168005813427]
+      coordinates: [24.621384253754172, 45.97168005813427],
     },
     properties: {
       label: "Romania",
       type: "country",
       labelPosition: "top",
-      useForInitialView: true
-    }
+      useForInitialView: true,
+    },
   },
   bucharestCapital: {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [26.1, 44.43333333]
+      coordinates: [26.1, 44.43333333],
     },
     properties: {
       label: "Bucharest",
       type: "capital",
       labelPosition: "top",
-      useForInitialView: true
-    }
+      useForInitialView: true,
+    },
   },
   constantaCity: {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [28.63297432541819, 44.1628758880492]
+      coordinates: [28.63297432541819, 44.1628758880492],
     },
     properties: {
       label: "Constanta",
       type: "city",
       labelPosition: "top",
-      useForInitialView: true
-    }
+      useForInitialView: true,
+    },
   },
   blackSeaWater: {
     type: "Feature",
     geometry: {
       type: "Point",
-      coordinates: [30.019216343304322, 43.91501963355603]
+      coordinates: [30.019216343304322, 43.91501963355603],
     },
     properties: {
       label: "Schwarzes Meer",
       type: "water",
       labelPosition: "top",
-      useForInitialView: true
-    }
-  }
+      useForInitialView: true,
+    },
+  },
 };
 
 const features = {
@@ -332,45 +371,45 @@ const features = {
     type: "Feature",
     properties: {
       useForInitialView: true,
-      label: "Line capitals"
+      label: "Line capitals",
     },
     geometry: {
       type: "LineString",
       coordinates: [
         [23.316667, 42.69959515809203],
-        [26.1, 44.43333333]
-      ]
-    }
+        [26.1, 44.43333333],
+      ],
+    },
   },
   lineTiranaYerevan: {
     // line Tirana to Yerevan
     type: "Feature",
     properties: {
       useForInitialView: true,
-      label: "Line capitals"
+      label: "Line capitals",
     },
     geometry: {
       type: "LineString",
       coordinates: [
         [19.816667, 41.31666667],
-        [44.5, 40.16666667]
-      ]
-    }
+        [44.5, 40.16666667],
+      ],
+    },
   },
   lineSarajevoZagreb: {
     // line Sarajevo to Zagreb
     type: "Feature",
     properties: {
       useForInitialView: true,
-      label: "Line capitals"
+      label: "Line capitals",
     },
     geometry: {
       type: "LineString",
       coordinates: [
         [18.416667, 43.86666667],
-        [16, 45.8]
-      ]
-    }
+        [16, 45.8],
+      ],
+    },
   },
   orangePolygon: {
     // random hexagonal polygon orange
@@ -382,7 +421,7 @@ const features = {
       "stroke-width": 2,
       "stroke-opacity": 1,
       fill: "#ffbe3d",
-      "fill-opacity": 0.5
+      "fill-opacity": 0.5,
     },
     geometry: {
       type: "Polygon",
@@ -394,10 +433,10 @@ const features = {
           [21.59912109375, 43.26120612479979],
           [22.34619140625, 44.98034238084973],
           [22.17041015625, 46.30140615437332],
-          [19.35791015625, 46.649436163350245]
-        ]
-      ]
-    }
+          [19.35791015625, 46.649436163350245],
+        ],
+      ],
+    },
   },
   greenPolygon: {
     // random heptagonal polygon green
@@ -409,7 +448,7 @@ const features = {
       "stroke-width": 2,
       "stroke-opacity": 1,
       fill: "#36e058",
-      "fill-opacity": 0.5
+      "fill-opacity": 0.5,
     },
     geometry: {
       type: "Polygon",
@@ -423,17 +462,17 @@ const features = {
           [13.3154296875, 45.98169518512228],
           [13.271484375, 47.18971246448421],
           [12.65625, 48.516604348867475],
-          [10.0634765625, 49.095452162534826]
-        ]
-      ]
-    }
+          [10.0634765625, 49.095452162534826],
+        ],
+      ],
+    },
   },
   switzerlandPolygon: {
     // Switzerland
     type: "Feature",
     properties: {
       useForInitialView: true,
-      label: "Switzerland"
+      label: "Switzerland",
     },
     geometry: {
       type: "Polygon",
@@ -1188,14 +1227,14 @@ const features = {
           [8.603174682000088, 47.78731679300003],
           [8.604104858000142, 47.774397685000025],
           [8.607618856000101, 47.76225372300013],
-          [8.61743737800009, 47.75731862400008]
-        ]
-      ]
-    }
-  }
+          [8.61743737800009, 47.75731862400008],
+        ],
+      ],
+    },
+  },
 };
 
 module.exports = {
   points: points,
-  features: features
+  features: features,
 };
