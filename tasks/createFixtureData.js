@@ -14,19 +14,19 @@ function createMapPoint() {
       baseLayer: {
         style: "basic",
         layers: {
-          label: true
-        }
+          label: true,
+        },
       },
       minimap: {
         showMinimap: true,
         options: {
           type: "globe",
-          position: "bottom-right"
-        }
+          position: "bottom-right",
+        },
       },
       labelsBelowMap: false,
-      showLegend: true
-    }
+      showLegend: true,
+    },
   };
   return item;
 }
@@ -44,19 +44,19 @@ function createMapFeature() {
       baseLayer: {
         style: "basic",
         layers: {
-          label: true
-        }
+          label: true,
+        },
       },
       minimap: {
         showMinimap: true,
         options: {
           type: "globe",
-          position: "bottom-right"
-        }
+          position: "bottom-right",
+        },
       },
       labelsBelowMap: false,
-      showLegend: true
-    }
+      showLegend: true,
+    },
   };
   return item;
 }
@@ -72,26 +72,26 @@ function createMapFeatureCollection() {
     geojsonList: [
       {
         type: "FeatureCollection",
-        features: [features.orangePolygon, features.greenPolygon]
-      }
+        features: [features.orangePolygon, features.greenPolygon],
+      },
     ],
     options: {
       baseLayer: {
         style: "basic",
         layers: {
-          label: true
-        }
+          label: true,
+        },
       },
       minimap: {
         showMinimap: true,
         options: {
           type: "globe",
-          position: "bottom-right"
-        }
+          position: "bottom-right",
+        },
       },
       labelsBelowMap: false,
-      showLegend: true
-    }
+      showLegend: true,
+    },
   };
   return item;
 }
@@ -109,21 +109,21 @@ function createMapPoints() {
       baseLayer: {
         style: "nature",
         layers: {
-          label: true
-        }
+          label: true,
+        },
       },
       minimap: {
         showMinimap: true,
         options: {
           type: "globe",
-          position: "bottom-right"
-        }
+          position: "bottom-right",
+        },
       },
       labelsBelowMap: false,
-      showLegend: true
-    }
+      showLegend: true,
+    },
   };
-  Object.keys(points).forEach(point => {
+  Object.keys(points).forEach((point) => {
     item.geojsonList.push(points[point]);
   });
   return item;
@@ -160,21 +160,21 @@ function createMapFeatures() {
       baseLayer: {
         style: "nature",
         layers: {
-          label: false
-        }
+          label: false,
+        },
       },
       minimap: {
         showMinimap: true,
         options: {
           type: "globe",
-          position: "bottom-right"
-        }
+          position: "bottom-right",
+        },
       },
       labelsBelowMap: false,
-      showLegend: true
-    }
+      showLegend: true,
+    },
   };
-  Object.keys(features).forEach(feature => {
+  Object.keys(features).forEach((feature) => {
     item.geojsonList.push(features[feature]);
   });
   return item;
@@ -191,30 +191,30 @@ function createMapFeatureCollections() {
     geojsonList: [
       {
         type: "FeatureCollection",
-        features: [features.orangePolygon, features.greenPolygon]
+        features: [features.orangePolygon, features.greenPolygon],
       },
       {
         type: "FeatureCollection",
-        features: [features.lineSarajevoZagreb, features.lineTiranaYerevan]
-      }
+        features: [features.lineSarajevoZagreb, features.lineTiranaYerevan],
+      },
     ],
     options: {
       baseLayer: {
         style: "satellite",
         layers: {
-          label: true
-        }
+          label: true,
+        },
       },
       minimap: {
         showMinimap: true,
         options: {
           type: "globe",
-          position: "bottom-right"
-        }
+          position: "bottom-right",
+        },
       },
       labelsBelowMap: false,
-      showLegend: true
-    }
+      showLegend: true,
+    },
   };
   return item;
 }
@@ -227,8 +227,8 @@ function createMapPointsNoMinimap() {
     showMinimap: false,
     options: {
       type: "globe",
-      position: "bottom-right"
-    }
+      position: "bottom-right",
+    },
   };
   return item;
 }
@@ -254,25 +254,25 @@ function createLabelingPoints() {
       points.romaniaCountry,
       points.bucharestCapital,
       points.constantaCity,
-      points.blackSeaWater
+      points.blackSeaWater,
     ],
     options: {
       baseLayer: {
         style: "basic",
         layers: {
-          label: true
-        }
+          label: true,
+        },
       },
       minimap: {
         showMinimap: false,
         options: {
           type: "globe",
-          position: "bottom-right"
-        }
+          position: "bottom-right",
+        },
       },
       labelsBelowMap: false,
-      showLegend: true
-    }
+      showLegend: true,
+    },
   };
 }
 
@@ -283,8 +283,8 @@ function createMapLayerStreetsFew() {
   item.options.baseLayer = {
     style: "basic",
     layers: {
-      label: true
-    }
+      label: true,
+    },
   };
   return item;
 }
@@ -296,8 +296,8 @@ function createMapLayerStreetsNo() {
   item.options.baseLayer = {
     style: "basic",
     layers: {
-      label: true
-    }
+      label: true,
+    },
   };
   return item;
 }
@@ -309,8 +309,8 @@ function createMapLayerTerrain() {
   item.options.baseLayer = {
     style: "basic",
     layers: {
-      label: true
-    }
+      label: true,
+    },
   };
   return item;
 }
@@ -322,8 +322,8 @@ function createMapLayerSatellite() {
   item.options.baseLayer = {
     style: "basic",
     layers: {
-      label: true
-    }
+      label: true,
+    },
   };
   return item;
 }
@@ -339,26 +339,26 @@ function showAcronym() {
     geojsonList: [
       {
         type: "FeatureCollection",
-        features: [features.orangePolygon, features.greenPolygon]
-      }
+        features: [features.orangePolygon, features.greenPolygon],
+      },
     ],
     options: {
       baseLayer: {
         style: "basic",
         layers: {
-          label: true
-        }
+          label: true,
+        },
       },
       minimap: {
         showMinimap: true,
         options: {
           type: "globe",
-          position: "bottom-right"
-        }
+          position: "bottom-right",
+        },
       },
       labelsBelowMap: false,
-      showLegend: true
-    }
+      showLegend: true,
+    },
   };
   return item;
 }
@@ -376,19 +376,19 @@ function dontShowAcronym() {
       baseLayer: {
         style: "basic",
         layers: {
-          label: true
-        }
+          label: true,
+        },
       },
       minimap: {
         showMinimap: true,
         options: {
           type: "globe",
-          position: "bottom-right"
-        }
+          position: "bottom-right",
+        },
       },
       labelsBelowMap: false,
-      showLegend: true
-    }
+      showLegend: true,
+    },
   };
   return item;
 }
@@ -406,19 +406,19 @@ function antimeridian() {
       baseLayer: {
         style: "basic",
         layers: {
-          label: true
-        }
+          label: true,
+        },
       },
       minimap: {
         showMinimap: true,
         options: {
           type: "globe",
-          position: "bottom-right"
-        }
+          position: "bottom-right",
+        },
       },
       labelsBelowMap: false,
-      showLegend: true
-    }
+      showLegend: true,
+    },
   };
   return item;
 }
@@ -439,25 +439,25 @@ function labelPlacementTypePointHeavyLabel() {
       points.zurichHeavyTopLeft,
       points.zurichHeavyTopRight,
       points.zurichHeavyBottomLeft,
-      points.zurichHeavyBottomRight
+      points.zurichHeavyBottomRight,
     ],
     options: {
       baseLayer: {
         style: "basic",
         layers: {
-          label: true
-        }
+          label: true,
+        },
       },
       minimap: {
         showMinimap: false,
         options: {
           type: "globe",
-          position: "bottom-right"
-        }
+          position: "bottom-right",
+        },
       },
       labelsBelowMap: false,
-      showLegend: true
-    }
+      showLegend: true,
+    },
   };
   return item;
 }
@@ -478,8 +478,8 @@ function labelPlacementTypePointLightLabel() {
       points.zurichHeavyTopLeft,
       points.zurichHeavyTopRight,
       points.zurichHeavyBottomLeft,
-      points.zurichHeavyBottomRight
-    ].map(geojson => {
+      points.zurichHeavyBottomRight,
+    ].map((geojson) => {
       geojson.properties.type = "pointLightLabel";
       return geojson;
     }),
@@ -487,19 +487,19 @@ function labelPlacementTypePointLightLabel() {
       baseLayer: {
         style: "basic",
         layers: {
-          label: true
-        }
+          label: true,
+        },
       },
       minimap: {
         showMinimap: false,
         options: {
           type: "globe",
-          position: "bottom-right"
-        }
+          position: "bottom-right",
+        },
       },
       labelsBelowMap: false,
-      showLegend: true
-    }
+      showLegend: true,
+    },
   };
   return item;
 }
@@ -519,8 +519,8 @@ function labelPlacementTypeEvent() {
       points.zurichHeavyTopLeft,
       points.zurichHeavyTopRight,
       points.zurichHeavyBottomLeft,
-      points.zurichHeavyBottomRight
-    ].map(geojson => {
+      points.zurichHeavyBottomRight,
+    ].map((geojson) => {
       geojson.properties.type = "event";
       return geojson;
     }),
@@ -528,19 +528,60 @@ function labelPlacementTypeEvent() {
       baseLayer: {
         style: "basic",
         layers: {
-          label: true
-        }
+          label: true,
+        },
       },
       minimap: {
         showMinimap: false,
         options: {
           type: "globe",
-          position: "bottom-right"
-        }
+          position: "bottom-right",
+        },
       },
       labelsBelowMap: false,
-      showLegend: true
-    }
+      showLegend: true,
+    },
+  };
+  return item;
+}
+
+function countryHighlighting() {
+  const item = {
+    title: "FIXTURE: highlighting country with minimap",
+    subtitle: "subtitle",
+    sources: [],
+    notes: "",
+    acronym: "abc",
+    geojsonList: [
+      points.crimeaHeavyTop,
+      points.volgogradHeavyTop,
+      points.ukraineHeavyTop,
+    ].map((geojson) => {
+      geojson.properties.type = "event";
+      return geojson;
+    }),
+    options: {
+      dimension: { bbox: [], useDefaultAspectRatio: true },
+      baseLayer: {
+        style: "basic",
+        layers: {
+          label: true,
+        },
+      },
+      highlightRegion: [{ id: "Q159" }], // RU
+      //highlightRegion: [{ id: "Q212" }], // UA
+      minimap: {
+        showMinimap: true,
+        options: {
+          type: "region",
+          region: { id: "Q159" },
+          position: "bottom-right",
+        },
+      },
+      labelsBelowMap: false,
+      labelsBelowMapOneRow: false,
+      showLegend: false,
+    },
   };
   return item;
 }
@@ -566,5 +607,6 @@ module.exports = {
   antimeridian: antimeridian,
   labelPlacementTypePointHeavyLabel: labelPlacementTypePointHeavyLabel,
   labelPlacementTypePointLightLabel: labelPlacementTypePointLightLabel,
-  labelPlacementTypeEvent: labelPlacementTypeEvent
+  labelPlacementTypeEvent: labelPlacementTypeEvent,
+  countryHighlighting: countryHighlighting,
 };
