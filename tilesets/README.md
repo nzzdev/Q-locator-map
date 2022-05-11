@@ -40,6 +40,25 @@ The service can download or delete a tileset. It is designed to run once on a si
 }
 ```
 
+#### Tilesets Explained
+
+- `openmaptiles`: Contains all OpenStreetMap Layers (land, water, city-labels and more) of the whole planet
+- `contours`: Contains contours of the whole planet (only displayed between zoom lvl 9 and 14)
+- `hillshade`: Contains hillshades of the whole planet (and yes, that includes mountains..)
+- `regions`: Contains the regional borders for all countries and subregions
+
+#### Properties Explained
+
+- `url`: Direct link to the actual `.mbtiles` file of the provider (MapTiler, OSM-Regions)
+- `filename`: The filename of the `url` resource
+- `path`: Path to the already downloaded (!) `.mbtiles` file on your server
+  Boolean Flags (When set to `true`, runs once on docker image instantiation)
+- `delete`: Deletes (`unlink`) the file referenced in `path`
+- `download`: Downloads the file referenced in `url`
+- `transform`: Transforms labels in Tileset according to [mapping file](./mapping.json)
+  - This is only needed for the `openmaptiles` Tileset
+- `size`: Allows for a somewhat accurate progress bar during the download process
+
 ### Tileset URLs
 
 In order to update the tilesets, the following download URLs can be used:
@@ -53,3 +72,34 @@ The docker image can be built and uploaded by running the `build-docker.sh` scri
 
 1. Deploy `nzzonline/q-locator-map-tilesets` to a docker environment
 2. Set the ENV variables as described in the [configuration section](#configuration)
+
+### Deployment of Tilesets (Step-By-Step)
+
+#### A) OSM Tilesets
+
+1. Get the direct download links (right click, copy link address) for the following 3 Tilesets from MapTiler
+   - [OSM Tilesets](https://data.maptiler.com/downloads/tileset/osm/)
+   - [OSM Contour](https://data.maptiler.com/downloads/tileset/contours/)
+   - [OSM Hillshade](https://data.maptiler.com/downloads/tileset/hillshade/)
+2. Add the download links to the respectively named `TILESETS` property as `url` (see the [configuration section](#configuration))
+3. Also add the `filename` according to the direct download link filename
+4. (Optional) Add the `size` by evaluating the file size in bytes for each Tileset
+   - This allows for a somewhat accurate progressbar later on
+5. Add the flags `download` & `transform`, both set to `true`
+6. Add the flag `delete` set to `false`
+
+#### B) Regions Tileset
+
+1. Create a new release of [osm-regions](https://github.com/nzzdev/osm-regions) by following the [step-by-step readme](https://github.com/nzzdev/osm-regions/blob/master/STEPS.md).
+   (Subject to change)
+2. Manually upload the `.mbtiles` file to AWS
+3. Add the direct link, of the newly created AWS resource, to `TILESETS.regions` property as `url` (see the [configuration section](#configuration))
+4. Also add the `filename` according to the direct link filename
+5. (Optional) Add the `size` by evaluating the file size in bytes for each Tileset
+   - This allows for a somewhat accurate progressbar later on
+6. Add the flags `download` set to `true`
+7. Add the flag `delete` set to `false`
+
+#### B) Regions Tileset
+
+(WIP)
