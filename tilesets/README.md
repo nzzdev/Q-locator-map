@@ -40,14 +40,14 @@ The service can download or delete a tileset. It is designed to run once on a si
 }
 ```
 
-#### Tilesets Explained
+#### `TILESETS` Explained
 
 - `openmaptiles`: Contains all OpenStreetMap Layers (land, water, city-labels and more) of the whole planet
 - `contours`: Contains contours of the whole planet (only displayed between zoom lvl 9 and 14)
 - `hillshade`: Contains hillshades of the whole planet (and yes, that includes mountains..)
 - `regions`: Contains the regional borders for all countries and subregions
 
-#### Properties Explained
+#### `TILESETS` Properties Explained
 
 - `url`: Direct link to the actual `.mbtiles` file of the provider (MapTiler, OSM-Regions)
 - `filename`: The filename of the `url` resource
@@ -57,14 +57,7 @@ The service can download or delete a tileset. It is designed to run once on a si
 - `download`: Downloads the file referenced in `url`
 - `transform`: Transforms labels in Tileset according to [mapping file](./mapping.json)
   - This is only needed for the `openmaptiles` Tileset
-- `size`: Allows for a somewhat accurate progress bar during the download process
-
-### Tileset URLs
-
-In order to update the tilesets, the following download URLs can be used:
-
-- For OpenMapTiles: Get URLs from the [download page](https://openmaptiles.com/downloads/planet/) (login with MapTiler/OpenMapTiles account)
-- For regions: Create a new release of [osm-regions](https://github.com/nzzdev/osm-regions) and get tiles from there
+- `size`: Size of the `url` resource in bytes. Allows for a somewhat accurate progress bar during the download process
 
 ## Deployment
 
@@ -75,7 +68,7 @@ The docker image can be built and uploaded by running the `build-docker.sh` scri
 
 ### Deployment of Tilesets (Step-By-Step)
 
-#### A) OSM Tilesets
+#### A) OSM Tilesets Preparations
 
 1. Get the direct download links (right click, copy link address) for the following 3 Tilesets from MapTiler
    - [OSM Tilesets](https://data.maptiler.com/downloads/tileset/osm/)
@@ -85,21 +78,48 @@ The docker image can be built and uploaded by running the `build-docker.sh` scri
 3. Also add the `filename` according to the direct download link filename
 4. (Optional) Add the `size` by evaluating the file size in bytes for each Tileset
    - This allows for a somewhat accurate progressbar later on
-5. Add the flags `download` & `transform`, both set to `true`
-6. Add the flag `delete` set to `false`
+5. Add the flag `download` set to `true`
+6. (OSM Tilesets only!) Add the flag `transform` set to `true`
+7. Add the flag `delete` set to `false`
 
-#### B) Regions Tileset
+#### B) Regions Tileset Preparations
 
 1. Create a new release of [osm-regions](https://github.com/nzzdev/osm-regions) by following the [step-by-step readme](https://github.com/nzzdev/osm-regions/blob/master/STEPS.md).
-   (Subject to change)
-2. Manually upload the `.mbtiles` file to AWS
-3. Add the direct link, of the newly created AWS resource, to `TILESETS.regions` property as `url` (see the [configuration section](#configuration))
+2. (Subject to change) Manually upload the `.mbtiles` file to AWS
+3. Add the direct link, of the newly created AWS resource, to `TILESETS` `regions` property as `url` (see the [configuration section](#configuration))
 4. Also add the `filename` according to the direct link filename
 5. (Optional) Add the `size` by evaluating the file size in bytes for each Tileset
    - This allows for a somewhat accurate progressbar later on
 6. Add the flags `download` set to `true`
 7. Add the flag `delete` set to `false`
 
-#### B) Regions Tileset
+#### C) (Conditional) Build Docker
 
-(WIP)
+In case of code changes inside the [tilesets folder](./), a new docker image has to be created before deploying the actual Tilesets (`D)`).
+
+1. Raise [package.json](./package.json) & [Dockerfile](./Dockerfile) version
+2. Run `build-docker.sh`
+3. DO NOT DEPLOY YOUR DOCKER IMAGE YET
+
+#### D) Deploy new OSM & Regions Tilesets
+
+1. Go to your docker environment
+2. Make sure the `TILESETS` env variable is set according to Steps `A` & `B`, in your docker environment
+3. Deploy your (new) Docker Image on a single instance/node
+   - The docker instance will start downloading & processing your Tilesets
+   - NOTE: This process can take up to 2 or 3 days (mainly due to the `transform` process)
+   - Each `.mbtiles` file will be downloaded to `/data/<tileset-filename>`
+4. Go to your `Q-locator-map` docker image and change the `TILESETS` `path` for each Tileset to `/data/<tileset-filename>`
+   - Take your time to test the new tilesets before deleting the old ones in Step `E`
+
+#### E) Delete old Tilesets
+
+1. Go to your docker environment
+2. Change the `TILESETS` `path` for each Tileset to point to your old `.mbtiles` file
+3. Set the `download` (and `transform`) flag to `false`
+4. Set the `delete` flag to `true`
+5. Redeploy your docker image
+   - This triggers the action referenced by each flag
+   - This step can also be done manually in the shell
+6. After the successful deletion, set the `delete` flag to `false`
+7. Change the `path` back to point to your new `.mbtiles` file
