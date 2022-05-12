@@ -48,11 +48,12 @@
 
 {#if item.options.labelsBelowMap === true}
   <div
-    class="s-q-item__annotation-legend s-font-note {item.options
-      .labelsBelowMapOneRow === true
+    class="s-q-item__annotation-legend s-font-note {item.options.labelsBelowMapOneRow === true
       ? 'q-locator-map-labels--one-row'
       : ''}"
-  >
+    style="{item.options.labelsBelowMapOneRow === true
+      ? 'flex-flow: row wrap;'
+      : ''}">
     {#each numberedLabels as { id, text }}
       <div class="s-q-item__annotation-legend__item">
         <div class="s-q-item__annotation-legend__item__icon">
