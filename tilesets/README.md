@@ -53,6 +53,7 @@ The service can download or delete a tileset. It is designed to run once on a si
 - `filename`: The filename of the `url` resource
 - `path`: Path to the already downloaded (!) `.mbtiles` file on your server
   Boolean Flags (When set to `true`, runs once on docker image instantiation)
+  - For local development the path can also point to a local `.mbtiles` file
 - `delete`: Deletes (`unlink`) the file referenced in `path`
 - `download`: Downloads the file referenced in `url`
 - `transform`: Transforms labels in Tileset according to [mapping file](./mapping.json)

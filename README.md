@@ -37,22 +37,33 @@ Q locator map renders maps using vector tiles. The `TILESETS` env variable defin
 
 ```
 {
-  "openmaptiles": {
-    "path": "/data/openmaptiles.mbtiles"
-  },
-  "contours": {
-    "path": "/data/contours.mbtiles"
-  },
-  "hillshade": {
-    "url": "https://www.example.com/hillshade/{z}/{x}/{y}.png"
-  },
-  "regions": {
-    "url": "https://www.example.com/regions/{z}/{x}/{y}.pbf"
+  { "openmaptiles": {
+      "path": "/data/osm-2020-08-03-v3.11-planet-v1.2.0.mbtiles"
+    },
+    "contours": {
+      "path": "/data/contours-2019-04-10-planet.mbtiles"
+    },
+    "hillshade": {
+      "path": "/data/hillshade-2016-11-28-planet.mbtiles"
+    },
+    "regions": {
+      "path": "/data/regions-2020-01-15.mbtiles"
+    }
   }
 }
 ```
 
-A tileset can be defined as path to the [mbtiles](https://docs.mapbox.com/help/glossary/mbtiles/) file or as an url to an endpoint serving tiles.
+#### `TILESETS` Explained
+
+- `openmaptiles`: Contains all OpenStreetMap Layers (land, water, city-labels and more) of the whole planet
+- `contours`: Contains contours of the whole planet (only displayed between zoom lvl 9 and 14)
+- `hillshade`: Contains hillshades of the whole planet (and yes, that includes mountains..)
+- `regions`: Contains the regional borders for all countries and subregions
+
+#### `TILESETS` Properties Explained
+
+- `path`: Path to the (already downloaded) `.mbtiles` file on your server
+  - For local development the path can also point to a local `.mbtiles` file
 
 ### COUCHDB
 
@@ -299,6 +310,10 @@ There are three options for deployment:
 
 1. Deploy `nzzonline/q-locator-map` to a docker environment
 2. Set the ENV variables as described in the [configuration section](#configuration)
+
+### Deployment of Tilesets
+
+See [Deployment of Tilesets (Step-By-Step)](./tilesets/README.md)
 
 [to the top](#table-of-contents)
 
