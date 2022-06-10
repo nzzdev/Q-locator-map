@@ -9,7 +9,7 @@ for highlighting regions, should be updated as well, see [tilesets](../../../til
 
 ## Preparation
 
-Download simplified regions from the latest [osm-regions](https://github.com/nzzdev/osm-regions) release and place them in `/simplified-regions`.
+Download simplified regions from the latest [osm-regions](https://github.com/nzzdev/osm-regions) release and place them in `./simplified-regions`.
 
 ## Description
 

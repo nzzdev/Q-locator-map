@@ -1,10 +1,13 @@
 ## Service to manage tilesets for the Q Locator Maps tool
 
-The service can download or delete a tileset. It is designed to run once on a single instance. Each tileset has a flag download and delete. The service will download or delete the tileset depending on the value of the flag.
+Each tileset has a flag `download` and `delete`.
+The `transform` flag is deprecated and should not be used.
+The `filename` property is required for all flag actions.
+The service can `download` a tileset from the given `url` to the defined `path` or `delete` a local tileset with the given `path`.
+It is designed to run once on a single instance.
 
 ### Configuration
 
-- `ENV` must be set to `local` when running the service on a local machine
 - `TILESETS` is a JSON object with containing metadata for each tileset. See the example below:
 
 ```json
@@ -59,6 +62,39 @@ The service can download or delete a tileset. It is designed to run once on a si
 - `transform`: Transforms labels in Tileset according to [mapping file](./mapping.json)
   - This is only needed for the `openmaptiles` Tileset
 - `size`: Size of the `url` resource in bytes. Allows for a somewhat accurate progress bar during the download process
+
+## Update Tilesets (WIP)
+
+1. Create the `process.env.TILESETS` env variable as described above
+
+### Updating `openmaptiles`, `contours`, `hillshade` tilesets
+
+(2. Set `download` to `true` for each tilset object)
+(3. Evaluate the actual size in bytes of each tileset)
+(4. Set `size` to the evaluated byte size for each tilset object)
+
+2. Download the respective .mbtiles files
+
+- [`openmaptiles`](https://data.maptiler.com/downloads/tileset/osm/)
+- [`openmaptiles`](https://data.maptiler.com/downloads/tileset/contours/)
+- [`openmaptiles`](https://data.maptiler.com/downloads/tileset/hillshade/)
+
+- Get URLs from the [download page](https://openmaptiles.com/downloads/planet/) (login with MapTiler/OpenMapTiles account)
+
+### Updating `regions` tileset
+
+5. Create a new release of [osm-regions](https://github.com/nzzdev/osm-regions)
+6. Copy & paste
+
+- For regions: Create a new release of [osm-regions](https://github.com/nzzdev/osm-regions) and get tiles from there
+
+2.
+
+### Run service on local machine
+
+- Create a `data` folder in `/tilesets`
+- Place local tilesets in `data` folder
+- Add filenames of local tilesets to `TILESETS` env variable in `dev.js`
 
 ## Deployment
 

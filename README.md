@@ -311,9 +311,10 @@ There are three options for deployment:
 1. Deploy `nzzonline/q-locator-map` to a docker environment
 2. Set the ENV variables as described in the [configuration section](#configuration)
 
-### Deployment of Tilesets
+### Deployment Process (WIP)
 
-See [Deployment of Tilesets (Step-By-Step)](./tilesets/README.md)
+1. Follow the `Update Tilesets` Steps in the [Tilesets Readme](./tilesets/README.md)
+2.
 
 [to the top](#table-of-contents)
 
