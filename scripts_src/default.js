@@ -85,7 +85,8 @@ export default class LocatorMap {
           minimap.options.region.id !== ""))
     ) {
       let styleConfig = this.data.config.styleConfig.minimap;
-      styleConfig.textFont = this.data.config.styleConfig.fonts.fontSansRegular.name;
+      styleConfig.textFont =
+        this.data.config.styleConfig.fonts.fontSansRegular.name;
 
       let url = `${this.data.config.toolBaseUrl}/minimap/${
         minimap.options.type
@@ -174,6 +175,9 @@ export default class LocatorMap {
         attributionControl: false,
         fadeDuration: 0,
         fitBoundsOptions: { padding: 60, duration: 0 },
+        // Reduces performance but allows to export the map as a PNG
+        // TODO: Find a way to pass in this option from the request config
+        preserveDrawingBuffer: true,
       };
 
       if (this.data.config.zoom) {
