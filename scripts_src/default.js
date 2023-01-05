@@ -2,16 +2,31 @@ import mapboxgl from "mapbox-gl";
 import * as helpers from "./helpers.js";
 import MinimapControl from "./minimap.js";
 import ScaleControl from "./scale.js";
+
 export default class LocatorMap {
+
   constructor(element, data = {}) {
     if (element) {
       this.element = element;
       this.data = data;
-      this.width =
-        this.data.width || this.element.getBoundingClientRect().width;
+      this.width = this.data.width || this.element.getBoundingClientRect().width;
+
+      window[this.getWindowId()] = {};
+      
+      this.setIsLoaded(false);
       this.setHeight();
       this.createIntersectionObserver();
     }
+  }
+
+  getWindowId() {
+    if (!this.data.qId) return undefined;
+    return `_q_locator_map${this.data.qId}`.replace(/-/g, "");
+  }
+
+  setIsLoaded(isLoaded) {
+    const windowId = this.getWindowId();
+    if (windowId) window[windowId].isLoaded = isLoaded;
   }
 
   createIntersectionObserver() {
@@ -192,11 +207,13 @@ export default class LocatorMap {
       }
 
       this.map = new mapboxgl.Map(this.options);
+
       this.map.on("load", () => {
         this.preventLabelsAroundViewport();
         this.addControls();
         helpers.hightlightCountryLabels(this.map, this.data);
         this.element.parentNode.style.opacity = "1";
+        this.setIsLoaded(true);
       });
     });
   }
